@@ -95,6 +95,10 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 #login button.primary:hover{background:#00A04E}
 #login button.primary:disabled{opacity:.6}
 #login .row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:12.5px;color:var(--ink-2)}
+#login .ok{margin-top:12px;background:var(--good-bg);color:var(--good);border-radius:var(--r-sm);padding:9px 11px;font-size:12.5px;font-weight:600;line-height:1.45}
+#login .lnk{border:0;background:transparent;color:var(--brand);font-size:12.5px;font-weight:600;padding:0;text-decoration:underline}
+#login .lnk:hover{color:#00A04E}
+.saved.bad{color:var(--crit);font-weight:600}
 #login .err{margin-top:12px;background:var(--crit-bg);color:var(--crit);border-radius:var(--r-sm);padding:8px 10px;font-size:12.5px;font-weight:600}
 #login .note{margin-top:14px;padding-top:11px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.5}
 #login .opt{margin-top:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 10px;font-size:12px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
@@ -276,24 +280,24 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <h1 id="lgAppName">CRUZON Planner RH</h1>
       <p class="sub" id="lgSub">Acesso restrito — informe seu e-mail e senha.</p>
       <form id="lgForm">
-        <div id="lgNameWrap" class="hidden"><label for="lgName">Seu nome</label><input id="lgName" type="text" placeholder="Nome que aparece no topo"></div>
-        <label for="lgEmail">E-mail</label>
-        <input id="lgEmail" type="email" required placeholder="seu@email.com" autocomplete="username">
-        <label for="lgPass">Senha</label>
-        <input id="lgPass" type="password" required placeholder="••••••••" autocomplete="current-password">
+        <div id="lgNameWrap" class="hidden"><label for="lgName">Seu nome</label><input id="lgName" type="text" placeholder="Como você quer ser chamado"></div>
+        <div id="lgEmailWrap"><label for="lgEmail">E-mail</label><input id="lgEmail" type="email" placeholder="seu@email.com" autocomplete="username"></div>
+        <div id="lgPassWrap"><label for="lgPass" id="lgPassLbl">Senha</label><input id="lgPass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
         <div id="lgPass2Wrap" class="hidden"><label for="lgPass2">Confirmar senha</label><input id="lgPass2" type="password" autocomplete="new-password"></div>
-        <div id="lgMigWrap" class="opt hidden"><input type="checkbox" id="lgMig" checked style="margin-top:2px"><label for="lgMig" style="margin:0;text-transform:none;letter-spacing:0;font-weight:500;font-size:12px" id="lgMigLbl"></label></div>
-        <div id="lgSeedWrap" class="opt hidden"><input type="checkbox" id="lgSeed" style="margin-top:2px"><label for="lgSeed" style="margin:0;text-transform:none;letter-spacing:0;font-weight:500;font-size:12px">Carregar o modelo de exemplo (semana 07–13/09/2026 com 51 atividades)</label></div>
         <div id="lgErr" class="err hidden"></div>
+        <div id="lgOk" class="ok hidden"></div>
         <button class="primary" type="submit" id="lgBtn">Entrar</button>
         <div class="row">
-          <label style="display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font-weight:500;margin:0">
-            <input type="checkbox" id="lgRemember" style="width:auto" checked> Manter conectado
-          </label>
-          <span class="note" id="lgHint" style="margin:0"></span>
+          <button type="button" class="lnk" id="lgForgot">Esqueci minha senha</button>
+          <button type="button" class="lnk" id="lgToggle">Criar conta</button>
         </div>
       </form>
-      <p class="note" id="lgNote">Os dados de cada perfil são gravados criptografados (AES-256) neste navegador.</p>
+      <div id="lgPendente" class="hidden">
+        <div class="ok" style="display:block"><b id="lgPendenteTxt"></b></div>
+        <p class="note" style="border:0;padding-top:8px;margin-top:8px">Assim que o administrador liberar, entre normalmente com o mesmo e-mail e senha.</p>
+        <button class="primary" type="button" id="btnSairPendente">Voltar ao login</button>
+      </div>
+      <p class="note" id="lgNote">Seus dados ficam na nuvem, ligados à sua conta: você entra de qualquer computador e encontra tudo como deixou.</p>
   </div>
 </div>
 
@@ -389,15 +393,13 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
     <div class="viewhead"><h2>Equipe</h2>
       <div class="weeknav"><button data-nav="-1">‹</button><span class="lbl" id="teamWeekLbl">—</span><button data-nav="1">›</button><button data-nav="0" style="font-size:11.5px;font-weight:600">Hoje</button></div>
       <div class="spacer"></div>
-      <button class="btn" id="btnImportTeam">Importar arquivo de um colaborador</button>
-      <input type="file" id="fileTeam" accept="application/json,.json" class="hidden">
     </div>
     <div class="kpis" id="teamKpis"></div>
     <div class="card" style="margin-bottom:12px"><h3>Situação por pessoa — semana selecionada</h3><div id="tblTeam"></div></div>
     <div class="card"><h3>Planejadas x concluídas por pessoa</h3>
       <div class="legend"><span><i style="background:var(--s1)"></i>Planejadas</span><span><i style="background:var(--s3)"></i>Concluídas</span></div>
       <div id="chartTeam" style="padding:0 8px 10px"></div></div>
-    <p class="note" style="margin-top:8px">Cada pessoa gera o arquivo em <b>Ajustes → Enviar meus dados ao administrador</b> e te envia. O painel usa a foto mais recente que você importou de cada uma.</p>
+    <p class="note" style="margin-top:8px">O painel lê os dados direto da nuvem — ninguém precisa enviar arquivo. Perfis aguardando liberação aparecem em Ajustes → Perfis de acesso.</p>
   </section>
 
   <!-- AJUSTES -->
@@ -408,11 +410,10 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <div class="card">
         <h3>Backup e envio de dados</h3>
         <div style="padding:14px">
-          <p class="note" style="margin-top:0">Os dados ficam neste navegador, neste computador. Ao trocar de máquina ou limpar o navegador, restaure pelo backup.</p>
+          <p class="note" style="margin-top:0">Seus dados ficam na nuvem e acompanham o seu login. O backup serve para guardar uma cópia sua ou para trazer os dados da versão offline.</p>
           <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
             <button class="btn pri" id="btnExport">Exportar backup completo</button>
-            <button class="btn" id="btnImport">Restaurar backup</button>
-            <button class="btn" id="btnSnap">Enviar meus dados ao administrador</button>
+            <button class="btn" id="btnImport">Restaurar / importar backup</button>
             <button class="btn" id="btnCsv">Exportar semana (.csv)</button>
             <input type="file" id="fileImport" accept="application/json,.json" class="hidden">
           </div>
@@ -423,13 +424,12 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <h3>Minha conta</h3>
         <div class="formgrid">
           <div class="field"><label>Nome</label><input id="cfgName" type="text"></div>
-          <div class="field"><label>E-mail</label><input id="cfgEmail" type="email" disabled></div>
-          <div class="field"><label>Senha atual</label><input id="cfgPassOld" type="password" placeholder="••••••••"></div>
-          <div class="field"><label>Nova senha</label><input id="cfgPassNew" type="password" placeholder="mínimo 6 caracteres"></div>
+          <div class="field"><label>E-mail (login)</label><input id="cfgEmail" type="email" disabled></div>
+          <div class="field"><label>Nova senha (opcional)</label><input id="cfgPassNew" type="password" placeholder="mínimo 6 caracteres"></div>
         </div>
         <div style="padding:0 14px 14px;display:flex;gap:8px;align-items:center">
           <button class="btn pri" id="btnSaveAcc">Salvar</button>
-          <span class="note">Trocar a senha reembaralha a chave do cofre — os dados continuam intactos.</span>
+          <span class="note">A troca de senha vale para todos os computadores em que você entra.</span>
         </div>
       </div>
     </div>
@@ -473,23 +473,16 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
     <div class="card admin-only" style="margin-bottom:12px">
       <h3>Perfis de acesso <span class="badge">admin</span></h3>
       <div style="overflow:auto"><table class="tbl" id="tblUsers"></table></div>
-      <div class="formgrid" style="border-top:1px solid var(--line)">
-        <div class="field"><label>Nome</label><input id="nuName" type="text" placeholder="Nome do colaborador"></div>
-        <div class="field"><label>E-mail</label><input id="nuEmail" type="email" placeholder="pessoa@empresa.com"></div>
-        <div class="field"><label>Senha inicial</label><input id="nuPass" type="text" placeholder="mínimo 6 caracteres"></div>
-        <div class="field"><label>Perfil</label><select id="nuRole"><option value="user">Usuário</option><option value="admin">Administrador</option></select></div>
-      </div>
-      <div style="padding:0 14px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <label style="display:flex;gap:6px;align-items:center;font-size:12px;color:var(--ink-2)"><input type="checkbox" id="nuRules" checked> Copiar minhas recorrências para o novo perfil</label>
-        <button class="btn pri" id="btnAddUser">Criar perfil</button>
+      <div style="padding:12px 14px 14px">
+        <p class="note" style="margin:0">Novas pessoas criam o próprio acesso pela tela de login e ficam <b>aguardando liberação</b> — aparecem aqui destacadas em amarelo e só entram depois que você clicar em <b>Liberar acesso</b>. Desativar bloqueia na hora, sem apagar nada. Para excluir a conta em definitivo, use o painel do Supabase.</p>
       </div>
     </div>
 
     <div class="card">
       <h3>Zona de risco</h3>
       <div style="padding:14px">
-        <p class="note" style="margin-top:0">Apaga perfis, semanas e configurações deste navegador. Exporte um backup antes.</p>
-        <button class="btn danger" id="btnWipe" style="margin-top:10px">Apagar todos os dados</button>
+        <p class="note" style="margin-top:0">Apaga as suas semanas, empresas e recorrências desta conta na nuvem. Exporte um backup antes.</p>
+        <button class="btn danger" id="btnWipe" style="margin-top:10px">Apagar meus dados</button>
       </div>
     </div>
   </section>
@@ -546,12 +539,14 @@ async function open_(box,key){const pt=await SUB.decrypt({name:"AES-GCM",iv:ub64
 const sealJSON=(o,k)=>seal(ENC.encode(JSON.stringify(o)),k);
 const openJSON=async(b,k)=>JSON.parse(DEC.decode(await open_(b,k)));
 
-/* ======================= ESTADO ======================= */
-const AKEY="planner_app_v2", SKEY="planner_sess_v2", V1KEY="planner_lucas_v1", TKEY="planner_theme_v2";
-let APP=null, ME=null, DEK=null, MK=null, V=null;
-let CURWEEK=iso(mondayOf(new Date())), VIEW="dash", MIG=null;
+/* ======================= ESTADO + SUPABASE ======================= */
+const SB_URL="https://qflpwxyyzimlmnizgltl.supabase.co";
+const SB_KEY="sb_publishable_mRfAlyPRU2duHz0Y1ibRVg_zOmYA_xi";
+const SESSKEY="cruzon_sessao_v1", TKEY="planner_theme_v2", CACHEK="cruzon_cache_v1", CFGK="cruzon_app_v1";
+let SESSION=null, ME=null, PERFIL=null, V=null, APP={app:{}};
+let CURWEEK=iso(mondayOf(new Date())), VIEW="dash", OFFLINE=false;
 
-const SEED_TASKS=[{"d":0,"p":"Média","e":"CNA","t":"COMUNICAR WILLIAM NOVA PERICIA","due":"","pct":0},{"d":0,"p":"Média","e":"MINAS/SUZANA","t":"FAZER ANALISE AUDIENC. MG","due":"","pct":0},{"d":0,"p":"Média","e":"CNA","t":"NOME DOS APRENDIZE H.E FERIADO","due":"","pct":100},{"d":0,"p":"Média","e":"MINAS/SUZANA","t":"TROCO SUZANA","due":"","pct":0},{"d":0,"p":"Média","e":"CNA","t":"INSERIR RES. BEATRIZ CENTRAL","due":"","pct":0},{"d":0,"p":"Média","e":"MINAS/SUZANA","t":"ANALISAR E GUARDAR 7 ROAI MG","due":"","pct":0},{"d":0,"p":"Média","e":"MINAS/SUZANA","t":"NF CESTAS BASICAS MG","due":"","pct":100},{"d":0,"p":"Média","e":"CNA","t":"IMPUGNAÇÃO PERICIA ENITA","due":"","pct":100},{"d":0,"p":"Média","e":"CNA","t":"AVD LUCAS - TIRAR DUVIDAS JULIANA","due":"","pct":0},{"d":0,"p":"Média","e":"CNA","t":"PROGRAMAÇÃO FÉRIAS WOSH. PROJETO","due":"","pct":0},{"d":0,"p":"Alta","e":"CNA","t":"HOT BEACH BRU E LEANDRO","due":"","pct":0},{"d":1,"p":"Alta","e":"CNA","t":"NOVO PAT - CADASTRO SUPERM.","due":"","pct":0},{"d":1,"p":"Média","e":"MINAS/SUZANA","t":"ENVIO AGENTES NOCIVOS MINAS","due":"","pct":0},{"d":1,"p":"Média","e":"CNA","t":"ENVIO E-SOCIAL","due":"","pct":100},{"d":1,"p":"Média","e":"CNA","t":"ENVIO FGTS DIGITAL","due":"","pct":0},{"d":1,"p":"Média","e":"CNA","t":"ENVIO DCTFWEB","due":"","pct":0},{"d":1,"p":"Média","e":"MINAS/SUZANA","t":"ENVIO SST MINAS","due":"","pct":0},{"d":1,"p":"Média","e":"MINAS/SUZANA","t":"LEVANTAR BRINDE DIA CRIANÇAS MG","due":"","pct":0},{"d":1,"p":"Média","e":"MINAS/SUZANA","t":"INDICADORES FINANC SUZANA","due":"","pct":0},{"d":1,"p":"Média","e":"CNA","t":"CONF. MENSAL EXTRATOR DIRF","due":"","pct":0},{"d":2,"p":"Média","e":"CNA","t":"REUNIAO CONFRATERNIZAÇÃO","due":"","pct":100},{"d":2,"p":"Média","e":"CNA","t":"PLANILHA REEMB. TRAVADA THIAGO","due":"","pct":0},{"d":2,"p":"Média","e":"MINAS/SUZANA","t":"1 RESC. - HELBERT KEVEN - MG","due":"","pct":0},{"d":2,"p":"Média","e":"MINAS/SUZANA","t":"1 RESC - MARLI RIBEIRO - MG","due":"","pct":0},{"d":2,"p":"Média","e":"CNA","t":"CONFERIR PONTO ISA/LUIZA","due":"","pct":0},{"d":3,"p":"Média","e":"CNA","t":"LANÇAR ATEST+APONT. PROJETO","due":"","pct":0},{"d":3,"p":"Crítica","e":"CNA","t":"PRAZO ALEGAÇÕES ENITA 0 17/09","due":"2026-09-17","pct":0},{"d":3,"p":"Média","e":"MINAS/SUZANA","t":"VER VASO SANITARIO DESTILARIA","due":"","pct":0},{"d":3,"p":"Média","e":"MINAS/SUZANA","t":"DEMISSAO MINAS - REDUÇÃO BUSAO","due":"","pct":0},{"d":3,"p":"Média","e":"CNA","t":"ASOS TRANSFERENCIAS PROJETO","due":"","pct":0},{"d":3,"p":"Baixa","e":"MINAS/SUZANA","t":"PROTETOR SOLAR MG?","due":"","pct":0},{"d":3,"p":"Baixa","e":"MINAS/SUZANA","t":"CHAPEU ABA LARGA MG?","due":"","pct":0},{"d":3,"p":"Crítica","e":"MINAS/SUZANA","t":"CONFERIR NOVO PONTO MG","due":"","pct":0},{"d":3,"p":"Média","e":"CNA","t":"DIGITALIZAR ASO ABEL+MICHELE","due":"","pct":0},{"d":3,"p":"Média","e":"CNA","t":"SERGIO DUTRA+EDMILSON G - EPI CAMISETA","due":"","pct":0},{"d":4,"p":"Alta","e":"CNA","t":"13:00 - BARRACAO - DOAÇÃO PROD","due":"","pct":0},{"d":4,"p":"Média","e":"CNA","t":"ENVIO IMPOSTOS FINANCEIRO","due":"","pct":0},{"d":4,"p":"Média","e":"CNA","t":"IMPORTAR DET - CRED TRABALHADOR","due":"","pct":0},{"d":4,"p":"Média","e":"MINAS/SUZANA","t":"ADIANT DEST. FILIAL ENVIAR","due":"","pct":0},{"d":4,"p":"Média","e":"CNA","t":"KIT ABSENTEISMO 10/09","due":"2026-09-10","pct":0},{"d":4,"p":"Crítica","e":"MINAS/SUZANA","t":"REVISAR MARCAÇÕES MG PONTO","due":"","pct":0},{"d":4,"p":"Baixa","e":"MINAS/SUZANA","t":"LTCAT DEST. VAI INF. E-SOCIAL????","due":"","pct":0},{"d":4,"p":"Média","e":"MINAS/SUZANA","t":"DEMISSAO MINAS - TRANSF. P/ DEST.","due":"","pct":0},{"d":4,"p":"Baixa","e":"CNA","t":"DISPENSA GERA?","due":"","pct":0},{"d":4,"p":"Baixa","e":"MINAS/SUZANA","t":"COTAR LAUDO ERGONOMIGO MG?","due":"","pct":0},{"d":4,"p":"Crítica","e":"MINAS/SUZANA","t":"NOVO BKP SERV. PARTICULARES","due":"","pct":0},{"d":4,"p":"Média","e":"CNA","t":"COBRAR PLANO AÇÃO SAMUEL","due":"","pct":0},{"d":5,"p":"Média","e":"CNA","t":"SEGURO VIDA IVAN","due":"","pct":0},{"d":5,"p":"Média","e":"CNA","t":"RECOLHER ESPECIE 91 - ELISA S MOTA","due":"","pct":0},{"d":5,"p":"Média","e":"CNA","t":"VER INTEGRA LAUDO NR17 PGRTR","due":"","pct":0},{"d":5,"p":"Média","e":"MINAS/SUZANA","t":"CADASTRO ESTABILIDADE CIPA MINAS","due":"","pct":0}];
+const SEED_TASKS=[{"d":0,"p":"Alta","e":"CNA","t":"Separar documentos das admissões da semana","due":"","pct":0},{"d":0,"p":"Média","e":"CNA","t":"Conferir marcações de ponto","due":"","pct":0},{"d":1,"p":"Crítica","e":"CNA","t":"Envio e-Social — competência anterior","due":"","pct":0},{"d":2,"p":"Média","e":"CNA","t":"Reunião de alinhamento com a equipe","due":"","pct":100},{"d":3,"p":"Média","e":"MINAS/SUZANA","t":"Conferir ASOs pendentes","due":"","pct":25},{"d":3,"p":"Baixa","e":"MINAS/SUZANA","t":"Cotar treinamento de segurança","due":"","pct":0},{"d":4,"p":"Crítica","e":"CNA","t":"Enviar guias ao financeiro","due":"","pct":0},{"d":4,"p":"Alta","e":"MINAS/SUZANA","t":"Fechar indicadores da semana","due":"","pct":0}];
 const SEED_RULES=[
  {on:true,e:"CNA",t:"Envio e-Social (fechamento mensal)",p:"Crítica",freq:"Mensal",dia:7,mes:"",obs:"Competência do mês anterior"},
  {on:true,e:"CNA",t:"Envio FGTS Digital",p:"Crítica",freq:"Mensal",dia:7,mes:"",obs:"Guia + conferência antes do vencimento"},
@@ -570,34 +565,120 @@ const SEED_RULES=[
 ];
 const DEFCOLORS={a:"#2a78d6",b:"#eb6834"};
 function newPayload(opts){
-  const p={prefs:{theme:"brand",themeSet:1,font:"11.5",showSat:true,showSun:true,showRadar:true,opacity:14},companies:DEFCOMPS.map(c=>({id:uid(),...c})),weeks:{},rules:[],radar:[],meta:{backup:null,snap:null}};
-  if(opts&&opts.rules) p.rules=JSON.parse(JSON.stringify(opts.rules)).map(r=>({...r,id:uid()}));
-  else p.rules=SEED_RULES.map(r=>({id:uid(),...r}));
-  if(opts&&opts.seedTasks){
-    const wk=iso(mondayOf(new Date(2026,8,7)));
+  opts=opts||{};
+  const p={prefs:{theme:"brand",themeSet:1,font:"11.5",showSat:true,showSun:true,showRadar:true,opacity:14},
+           companies:DEFCOMPS.map(c=>({id:uid(),...c})),weeks:{},rules:[],radar:[],meta:{backup:null}};
+  p.rules=opts.rules?JSON.parse(JSON.stringify(opts.rules)).map(r=>({...r,id:uid()})):SEED_RULES.map(r=>({id:uid(),...r}));
+  if(opts.seedTasks){
+    const wk=iso(mondayOf(new Date()));
     p.weeks[wk]={tasks:SEED_TASKS.map(t=>({id:uid(),d:t.d,p:t.p,e:t.e,t:t.t,due:t.due,pct:t.pct,rec:null})),gen:{}};
     const mon0=fromISO(wk);
     p.rules.forEach(r=>occurrences(r,mon0).forEach(d=>{p.weeks[wk].gen[r.id+"@"+iso(d)]=1;}));
   }
-  if(opts&&opts.migrate){
-    const m=opts.migrate;
-    p.weeks=m.weeks||{}; if(m.rules&&m.rules.length) p.rules=m.rules;
-    if(m.prefs){p.prefs.font=m.prefs.font||"11.5";}
-  }
   return p;
 }
-function persist(){ try{ localStorage.setItem(AKEY,JSON.stringify(APP)); return true; }catch(e){ toast("Falha ao gravar neste navegador."); return false; } }
-let saveT=null, dirty=false, saving=false;
-function save(){ dirty=true; clearTimeout(saveT); saveT=setTimeout(flush,250); }
-async function flush(){
-  if(!V||!DEK||saving) return; saving=true;
-  try{ APP.vaults[ME.id]=await sealJSON(V,DEK); persist(); dirty=false;
-    const s=$("#savedTag"); s.textContent="Salvo ✓"; s.classList.add("on");
-    clearTimeout(s._h); s._h=setTimeout(()=>{s.textContent="Salvo";s.classList.remove("on");},1500);
-  }catch(e){ console.error(e); toast("Erro ao salvar."); } finally{ saving=false; }
+function normalizeV(){
+  V=V||{}; V.prefs=V.prefs||{}; V.weeks=V.weeks||{}; V.rules=V.rules||[]; V.radar=V.radar||[]; V.meta=V.meta||{};
+  if(!V.companies||!V.companies.length) V.companies=DEFCOMPS.map(c=>({id:uid(),...c}));
+  if(V.prefs.opacity==null) V.prefs.opacity=14;
+  if(!V.prefs.theme) {V.prefs.theme="brand";V.prefs.themeSet=1;}
+  if(!V.prefs.font) V.prefs.font="11.5";
 }
-window.addEventListener("beforeunload",e=>{ if(dirty){ flush(); e.preventDefault(); e.returnValue=""; } });
+
+/* ---------- identidade do app (por computador) ---------- */
+function loadCfg(){
+  APP={app:{name:"CRUZON Planner RH",logo:"",noLogo:false,showName:false,colors:{...DEFCOLORS}}};
+  try{const r=localStorage.getItem(CFGK); if(r) APP.app={...APP.app,...JSON.parse(r)};}catch(e){}
+}
+function persist(){ try{localStorage.setItem(CFGK,JSON.stringify(APP.app));}catch(e){} }
+
+/* ---------- chamadas ao Supabase ---------- */
+function setSession(d){
+  if(!d||!d.access_token) return;
+  SESSION={access_token:d.access_token,refresh_token:d.refresh_token||(SESSION&&SESSION.refresh_token),
+           expires_at:Date.now()+((d.expires_in||3600)*1000),user:d.user||(SESSION&&SESSION.user)||null};
+  try{localStorage.setItem(SESSKEY,JSON.stringify(SESSION));}catch(e){}
+}
+function clearSession(){ SESSION=null; try{localStorage.removeItem(SESSKEY);}catch(e){} }
+async function refreshSession(){
+  if(!SESSION||!SESSION.refresh_token) return false;
+  try{
+    const r=await fetch(SB_URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",
+      headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:SESSION.refresh_token})});
+    if(!r.ok) return false;
+    const d=await r.json();
+    if(!d||!d.access_token) return false;
+    setSession(d); return true;
+  }catch(e){ return false; }
+}
+async function sb(path,opts){
+  opts=opts||{};
+  if(!opts.noAuth&&SESSION&&SESSION.expires_at&&SESSION.expires_at-Date.now()<60000) await refreshSession();
+  const h={apikey:SB_KEY,"Content-Type":"application/json"};
+  if(!opts.noAuth&&SESSION) h.Authorization="Bearer "+SESSION.access_token;
+  Object.assign(h,opts.headers||{});
+  let r;
+  try{ r=await fetch(SB_URL+path,{method:opts.method||"GET",headers:h,body:opts.body}); }
+  catch(e){ const err=new Error("sem conexão"); err.offline=true; throw err; }
+  if(r.status===401&&!opts._retry&&!opts.noAuth&&SESSION&&SESSION.refresh_token){
+    if(await refreshSession()) return sb(path,{...opts,_retry:true});
+  }
+  const txt=await r.text(); let data=null;
+  try{ data=txt?JSON.parse(txt):null; }catch(e){ data=txt; }
+  if(!r.ok){
+    const msg=(data&&(data.error_description||data.msg||data.message||data.error))||("Erro "+r.status);
+    throw Object.assign(new Error(msg),{status:r.status,data});
+  }
+  return data;
+}
+const sbLogin  =(email,password)=>sb("/auth/v1/token?grant_type=password",{method:"POST",noAuth:true,body:JSON.stringify({email,password})});
+const sbSignup =(email,password,nome)=>sb("/auth/v1/signup",{method:"POST",noAuth:true,body:JSON.stringify({email,password,data:{nome}})});
+const sbRecover=(email)=>sb("/auth/v1/recover?redirect_to="+encodeURIComponent(location.origin+location.pathname),
+                            {method:"POST",noAuth:true,body:JSON.stringify({email})});
+const sbNewPass=(password)=>sb("/auth/v1/user",{method:"PUT",body:JSON.stringify({password})});
+const sbMe     =()=>sb("/auth/v1/user");
+
+/* ---------- perfil e cofre ---------- */
+async function carregaPerfil(){
+  const r=await sb("/rest/v1/perfis?select=*&id=eq."+ME.id);
+  PERFIL=(r&&r[0])||null;
+  if(PERFIL){ ME.name=PERFIL.nome||ME.email.split("@")[0]; ME.role=PERFIL.papel; ME.ativo=!!PERFIL.ativo; }
+  return PERFIL;
+}
+async function carregaCofre(){
+  const r=await sb("/rest/v1/cofres?select=dados,atualizado_em&user_id=eq."+ME.id);
+  const linha=(r&&r[0])||null;
+  V=(linha&&linha.dados&&linha.dados.weeks)?linha.dados:newPayload({});
+  normalizeV(); cacheLocal();
+}
+function cacheLocal(){ try{ localStorage.setItem(CACHEK+":"+ME.id,JSON.stringify(V)); }catch(e){} }
+function cacheRead(){ try{ const r=localStorage.getItem(CACHEK+":"+ME.id); return r?JSON.parse(r):null; }catch(e){ return null; } }
+async function gravaCofre(){
+  await sb("/rest/v1/cofres?on_conflict=user_id",{method:"POST",
+    headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+    body:JSON.stringify({user_id:ME.id,dados:V,atualizado_em:new Date().toISOString()})});
+}
+
+/* ---------- salvamento automático ---------- */
+let saveT=null, dirty=false, saving=false;
+function marcaSalvo(txt,ok,ruim){
+  const s=$("#savedTag"); if(!s) return;
+  s.textContent=txt; s.classList.toggle("on",!!ok); s.classList.toggle("bad",!!ruim);
+}
+function save(){ dirty=true; cacheLocal(); clearTimeout(saveT); saveT=setTimeout(flush,700); }
+async function flush(){
+  if(!V||!ME||saving) return; saving=true; marcaSalvo("Salvando…");
+  try{
+    await gravaCofre(); dirty=false; OFFLINE=false; marcaSalvo("Salvo ✓",true);
+    clearTimeout(saveT); saveT=setTimeout(()=>marcaSalvo("Sincronizado"),1600);
+  }catch(e){
+    OFFLINE=true; marcaSalvo("Sem conexão — tentando…",false,true);
+    clearTimeout(saveT); saveT=setTimeout(flush,15000);
+  }finally{ saving=false; }
+}
+window.addEventListener("beforeunload",e=>{ if(dirty){ e.preventDefault(); e.returnValue=""; } });
 document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden"&&dirty) flush(); });
+window.addEventListener("online",()=>{ if(dirty) flush(); });
 
 /* ======================= REGRAS / SEMANA ======================= */
 function occurrences(rule,mon){
@@ -681,96 +762,127 @@ $("#btnTheme").addEventListener("click",()=>{
 });
 if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(V&&V.prefs.theme==="auto")applyTheme();});
 
-/* ======================= LOGIN ======================= */
-function readV1(){
-  try{const raw=localStorage.getItem(V1KEY); if(!raw) return null;
-    const d=JSON.parse(raw); if(!d||!d.weeks) return null;
-    let n=0,w=0; Object.keys(d.weeks).forEach(k=>{w++;n+=(d.weeks[k].tasks||[]).filter(t=>t.t&&t.t.trim()).length;});
-    return n?{data:d,n,w}:null; }catch(e){ return null; }
-}
-function loadAPP(){
-  try{const raw=localStorage.getItem(AKEY); if(raw){APP=JSON.parse(raw); APP.app=APP.app||{}; APP.users=APP.users||[]; APP.vaults=APP.vaults||{}; APP.team=APP.team||{}; return;}}catch(e){console.warn(e);}
-  APP={v:2,app:{name:"CRUZON Planner RH",logo:"",noLogo:false,showName:false,colors:{...DEFCOLORS},opacity:14},master:{wraps:{}},users:[],vaults:{},team:{}};
-}
+/* ======================= LOGIN (Supabase Auth) ======================= */
+let LGMODE="login";   // login | signup | forgot | reset
+function lgMsg(el,txt){ const e=$(el); if(!txt){e.classList.add("hidden");return;} e.textContent=txt; e.classList.remove("hidden"); }
 function setupLogin(){
-  const novo=!APP.users.length;
+  const m=LGMODE;
   $("#lgAppName").textContent=APP.app.name||"CRUZON Planner RH";
-  $("#lgSub").textContent=novo?"Primeiro acesso: crie o perfil de administrador deste aplicativo.":"Acesso restrito — informe seu e-mail e senha.";
-  $("#lgBtn").textContent=novo?"Criar administrador e entrar":"Entrar";
-  $("#lgNameWrap").classList.toggle("hidden",!novo);
-  $("#lgPass2Wrap").classList.toggle("hidden",!novo);
-  $("#lgSeedWrap").classList.toggle("hidden",!novo||!!MIG);
-  $("#lgMigWrap").classList.toggle("hidden",!(novo&&MIG));
-  if(novo&&MIG) $("#lgMigLbl").textContent=`Importar as atividades da versão anterior encontradas neste navegador (${MIG.n} tarefa${MIG.n>1?"s":""} em ${MIG.w} semana${MIG.w>1?"s":""}).`;
-  $("#lgHint").textContent=novo?"":"Esqueceu a senha? Peça ao administrador.";
-  $("#lgNote").textContent=SUB?"Cada perfil é gravado criptografado (AES-256-GCM, chave derivada da senha com PBKDF2). O administrador possui uma chave-mestra e pode redefinir senhas.":"ATENÇÃO: este navegador não oferece a API de criptografia. Abra o arquivo no Chrome ou Edge.";
-  $("#lgBtn").disabled=!SUB;
-  setTimeout(()=>$(novo?"#lgName":"#lgPass").focus(),60);
+  $("#lgNameWrap").classList.toggle("hidden",m!=="signup");
+  $("#lgEmailWrap").classList.toggle("hidden",m==="reset");
+  $("#lgPassWrap").classList.toggle("hidden",m==="forgot");
+  $("#lgPass2Wrap").classList.toggle("hidden",m!=="signup"&&m!=="reset");
+  $("#lgForgot").classList.toggle("hidden",m!=="login");
+  $("#lgToggle").classList.toggle("hidden",m==="reset");
+  $("#lgPendente").classList.add("hidden");
+  $("#lgForm").classList.remove("hidden");
+  $("#lgSub").textContent={
+    login:"Acesso restrito — informe seu e-mail e senha.",
+    signup:"Crie o seu acesso. O administrador libera o uso em seguida.",
+    forgot:"Informe o e-mail cadastrado e enviaremos um link para você criar uma nova senha.",
+    reset:"Defina a sua nova senha de acesso."}[m];
+  $("#lgBtn").textContent={login:"Entrar",signup:"Criar acesso",forgot:"Enviar link de recuperação",reset:"Salvar nova senha"}[m];
+  $("#lgToggle").textContent=m==="login"?"Criar conta":"Já tenho acesso — entrar";
+  $("#lgPass").setAttribute("autocomplete",m==="login"?"current-password":"new-password");
+  $("#lgPassLbl").textContent=m==="reset"?"Nova senha":"Senha";
+  lgMsg("#lgErr",""); lgMsg("#lgOk","");
+  $("#lgBtn").disabled=false;
+  setTimeout(()=>{const f=m==="signup"?"#lgName":(m==="reset"?"#lgPass":"#lgEmail");const el=$(f);if(el)el.focus();},60);
 }
+$("#lgToggle").addEventListener("click",()=>{ LGMODE=LGMODE==="login"?"signup":"login"; setupLogin(); });
+$("#lgForgot").addEventListener("click",()=>{ LGMODE="forgot"; setupLogin(); });
 $("#lgForm").addEventListener("submit",async ev=>{
-  ev.preventDefault(); const err=$("#lgErr"); err.classList.add("hidden");
-  const email=$("#lgEmail").value.trim().toLowerCase(), pass=$("#lgPass").value;
-  const fail=m=>{err.textContent=m;err.classList.remove("hidden");};
-  const btn=$("#lgBtn"); btn.disabled=true; btn.textContent="Processando…";
+  ev.preventDefault(); lgMsg("#lgErr",""); lgMsg("#lgOk","");
+  const email=$("#lgEmail").value.trim().toLowerCase(), pass=$("#lgPass").value, btn=$("#lgBtn");
+  const antes=btn.textContent; btn.disabled=true; btn.textContent="Processando…";
   try{
-    if(!APP.users.length){
-      const name=$("#lgName").value.trim()||email.split("@")[0];
-      if(pass.length<6){btn.disabled=false;setupLogin();return fail("A senha do administrador precisa de pelo menos 6 caracteres.");}
-      if(pass!==$("#lgPass2").value){btn.disabled=false;setupLogin();return fail("As senhas não conferem.");}
-      const salt=b64(rnd(16)), KEK=await deriveKEK(pass,salt);
-      const rawDEK=rnd(32), rawMK=rnd(32);
-      const MKk=await rawKey(rawMK), DEKk=await rawKey(rawDEK);
-      const u={id:uid(),name,email,role:"admin",salt,wrapPass:await seal(rawDEK,KEK),wrapMaster:await seal(rawDEK,MKk),created:new Date().toISOString()};
-      APP.users.push(u); APP.master={wraps:{[u.id]:await seal(rawMK,KEK)}};
-      const opts={seedTasks:$("#lgSeed").checked};
-      if(MIG&&$("#lgMig").checked) opts.migrate=MIG.data;
-      const payload=newPayload(opts);
-      APP.vaults[u.id]=await sealJSON(payload,DEKk); persist();
-      ME={id:u.id,name:u.name,email:u.email,role:u.role}; DEK=DEKk; MK=MKk; V=payload;
-      keepSession(rawDEK,rawMK); openApp();
-    }else{
-      const u=APP.users.find(x=>x.email===email);
-      if(!u){btn.disabled=false;setupLogin();return fail("E-mail ou senha inválidos.");}
-      let rawDEK;
-      try{ const KEK=await deriveKEK(pass,u.salt); rawDEK=await open_(u.wrapPass,KEK);
-        DEK=await rawKey(rawDEK);
-        if(u.role==="admin"&&APP.master.wraps&&APP.master.wraps[u.id]){
-          const rawMK=await open_(APP.master.wraps[u.id],KEK); MK=await rawKey(rawMK); keepSession(rawDEK,rawMK);
-        } else { MK=null; keepSession(rawDEK,null); }
-      }catch(e){ btn.disabled=false; setupLogin(); return fail("E-mail ou senha inválidos."); }
-      ME={id:u.id,name:u.name,email:u.email,role:u.role};
-      V=await openJSON(APP.vaults[u.id],DEK); openApp();
+    if(LGMODE==="login"){
+      if(!email||!pass) throw new Error("Preencha e-mail e senha.");
+      setSession(await sbLogin(email,pass));
+      await entrar();
+    }else if(LGMODE==="signup"){
+      const nome=$("#lgName").value.trim();
+      if(!nome) throw new Error("Informe o seu nome.");
+      if(pass.length<6) throw new Error("A senha precisa de pelo menos 6 caracteres.");
+      if(pass!==$("#lgPass2").value) throw new Error("As senhas não conferem.");
+      const r=await sbSignup(email,pass,nome);
+      LGMODE="login"; setupLogin();
+      lgMsg("#lgOk", r&&r.access_token ? "Acesso criado. Aguarde a liberação do administrador."
+        : "Acesso criado. Confirme o e-mail que enviamos e aguarde a liberação do administrador.");
+    }else if(LGMODE==="forgot"){
+      if(!email) throw new Error("Informe o e-mail.");
+      await sbRecover(email);
+      LGMODE="login"; setupLogin();
+      lgMsg("#lgOk","Se este e-mail estiver cadastrado, o link de recuperação chegará em instantes. Verifique também o lixo eletrônico.");
+    }else if(LGMODE==="reset"){
+      if(pass.length<6) throw new Error("A senha precisa de pelo menos 6 caracteres.");
+      if(pass!==$("#lgPass2").value) throw new Error("As senhas não conferem.");
+      await sbNewPass(pass);
+      history.replaceState(null,"",location.pathname);
+      await entrar();
     }
-  }catch(e){ console.error(e); btn.disabled=false; setupLogin(); fail("Não foi possível concluir: "+e.message); }
+  }catch(e){
+    btn.disabled=false; btn.textContent=antes;
+    const msg=String(e.message||e);
+    lgMsg("#lgErr",
+      /Invalid login/i.test(msg)?"E-mail ou senha inválidos.":
+      /Email not confirmed/i.test(msg)?"Confirme o e-mail de cadastro antes de entrar.":
+      /already registered/i.test(msg)?"Já existe um acesso com esse e-mail.":
+      /sem conexão/i.test(msg)?"Sem conexão com o servidor. Verifique a internet.":
+      /rate limit|too many/i.test(msg)?"Muitas tentativas seguidas. Espere alguns minutos.":msg);
+  }
 });
-function keepSession(rawDEK,rawMK){
-  if(!$("#lgRemember").checked) return;
-  try{ sessionStorage.setItem(SKEY,JSON.stringify({uid:ME.id,dek:b64(rawDEK),mk:rawMK?b64(rawMK):null})); }catch(e){}
+function mostraPendente(txt){
+  $("#lgForm").classList.add("hidden");
+  $("#lgPendente").classList.remove("hidden");
+  $("#lgPendenteTxt").textContent=txt;
+  $("#lgSub").textContent="Cadastro recebido.";
+}
+$("#btnSairPendente").addEventListener("click",()=>{ clearSession(); LGMODE="login"; setupLogin(); });
+
+async function entrar(){
+  let u=(SESSION&&SESSION.user)||null;
+  if(!u||!u.id){ try{ u=await sbMe(); }catch(e){ if(e.offline) return semRede(); u=null; } }
+  if(!u||!u.id){ clearSession(); LGMODE="login"; setupLogin(); lgMsg("#lgErr","Sua sessão expirou. Entre novamente."); return; }
+  if(SESSION&&!SESSION.user){ SESSION.user=u; try{localStorage.setItem(SESSKEY,JSON.stringify(SESSION));}catch(e){} }
+  ME={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.nome)||(u.email||"").split("@")[0],role:"user",ativo:false};
+  try{ await carregaPerfil(); }catch(e){ if(e.offline) return semRede(); throw e; }
+  if(!PERFIL){ mostraPendente("Seu perfil está sendo criado. Recarregue a página em alguns segundos."); return; }
+  if(!ME.ativo){ mostraPendente("Seu acesso foi criado e está aguardando liberação do administrador."); return; }
+  try{ await carregaCofre(); }
+  catch(e){
+    const c=cacheRead();
+    if(c){ V=c; normalizeV(); OFFLINE=true; }
+    else if(e.offline) return semRede();
+    else throw e;
+  }
+  sb("/rest/v1/perfis?id=eq."+ME.id,{method:"PATCH",headers:{Prefer:"return=minimal"},
+     body:JSON.stringify({ultimo_acesso:new Date().toISOString(),nome:ME.name})}).catch(()=>{});
+  abreApp();
+}
+function semRede(){
+  lgMsg("#lgErr","Não consegui falar com o servidor. Verifique a internet e tente de novo.");
+  $("#lgBtn").disabled=false; $("#lgBtn").textContent="Entrar";
 }
 function clearUI(){
-  ["weekgrid","kpis","tblEmp","tblPri","chartDay","chartStatus","tblTop","tblRec","chartMonth","tblMonth","tblWeeks","teamKpis","tblTeam","chartTeam","tblUsers"]
-    .forEach(id=>{const el=document.getElementById(id); if(el) el.innerHTML="";});
+  ["weekgrid","kpis","tblEmp","tblPri","chartDay","chartStatus","tblTop","tblDue","tblRec","chartMonth","tblMonth",
+   "tblWeeks","teamKpis","tblTeam","chartTeam","tblUsers","tblComps"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML="";});
 }
-function openApp(){
+function abreApp(){
   clearUI();
-  if(V&&!V.prefs.themeSet){ V.prefs.theme="brand"; V.prefs.themeSet=1; save(); }
-  if(V&&!V.companies){ const c=(APP.app&&APP.app.colors)||{};
-    V.companies=[{id:uid(),nome:"CNA",cor:c.a||"#2a78d6"},{id:uid(),nome:"MINAS/SUZANA",cor:c.b||"#eb6834"}];
-    if(V.prefs.opacity==null) V.prefs.opacity=(APP.app&&APP.app.opacity!=null)?APP.app.opacity:14;
-    save(); }
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   $("#whoName").textContent=ME.name; $("#whoRole").textContent=ME.role==="admin"?"administrador":"usuário";
   $$(".admin-only").forEach(el=>el.classList.toggle("hidden",ME.role!=="admin"));
   $("#tabTeam").classList.toggle("hidden",ME.role!=="admin");
+  marcaSalvo(OFFLINE?"Sem conexão":"Sincronizado",false,OFFLINE);
   week(CURWEEK); applyTheme(); show("dash");
-  if(!SUB) toast("Criptografia indisponível neste navegador.");
 }
 $("#btnLogout").addEventListener("click",async()=>{
-  if(dirty) await flush();
-  try{sessionStorage.removeItem(SKEY);}catch(e){}
-  ME=null;DEK=null;MK=null;V=null;clearUI();
+  if(dirty){ try{ await flush(); }catch(e){} }
+  sb("/auth/v1/logout",{method:"POST"}).catch(()=>{});
+  clearSession(); ME=null; PERFIL=null; V=null; clearUI();
   $("#app").classList.add("hidden"); $("#login").classList.remove("hidden");
-  $("#lgPass").value=""; $("#lgErr").classList.add("hidden"); setupLogin();
+  $("#lgPass").value=""; $("#lgPass2").value=""; LGMODE="login"; setupLogin();
 });
 
 /* ======================= NAVEGAÇÃO ======================= */
@@ -1124,6 +1236,7 @@ function renderHist(){
 $("#tblWeeks").addEventListener("click",e=>{const k=e.target.dataset.go;if(k){CURWEEK=k;show("week");}});
 
 /* ======================= EQUIPE ======================= */
+let TEAM=[];
 function statsOf(weeks,k){
   const w=(weeks&&weeks[k])?weeks[k]:{tasks:[]};
   const T=(w.tasks||[]).filter(t=>t.t&&t.t.trim());
@@ -1131,36 +1244,48 @@ function statsOf(weeks,k){
   const cr=T.filter(t=>t.p==="Crítica"&&+t.pct<100).length;
   return{total:T.length,done:dn,late:lt,crit:cr,pct:T.length?Math.round(dn/T.length*100):0};
 }
-function renderTeam(){
+async function carregaEquipe(){
+  const perfis=await sb("/rest/v1/perfis?select=id,nome,email,papel,ativo,ultimo_acesso&order=nome");
+  const cofres=await sb("/rest/v1/cofres?select=user_id,dados,atualizado_em");
+  const mapa={}; (cofres||[]).forEach(c=>mapa[c.user_id]=c);
+  TEAM=(perfis||[]).map(p=>({...p,weeks:(mapa[p.id]&&mapa[p.id].dados&&mapa[p.id].dados.weeks)||{},
+                             radar:(mapa[p.id]&&mapa[p.id].dados&&mapa[p.id].dados.radar)||[],
+                             atualizado:mapa[p.id]?mapa[p.id].atualizado_em:null}));
+}
+async function renderTeam(){
   if(!V||ME.role!=="admin") return;
   $("#teamWeekLbl").textContent=weekLabel(CURWEEK);
-  const people=[{name:ME.name+" (você)",email:ME.email,upd:new Date().toISOString(),weeks:V.weeks}]
-    .concat(Object.values(APP.team||{}).map(s=>({name:s.name,email:s.email,upd:s.updatedAt,weeks:s.weeks})));
-  const st=people.map(p=>({p,s:statsOf(p.weeks,CURWEEK)}));
+  try{ await carregaEquipe(); }
+  catch(e){ $("#tblTeam").innerHTML='<div class="empty">Não consegui carregar a equipe agora.</div>'; return; }
+  const ativos=TEAM.filter(p=>p.ativo);
+  const st=ativos.map(p=>({p,s:statsOf(p.weeks,CURWEEK)}));
   const tot=st.reduce((a,x)=>({total:a.total+x.s.total,done:a.done+x.s.done,late:a.late+x.s.late,crit:a.crit+x.s.crit}),{total:0,done:0,late:0,crit:0});
-  $("#teamKpis").innerHTML=[["Pessoas",people.length,"perfis no painel",""],
-    ["Tarefas da equipe",tot.total,"na semana",""],["Concluídas",tot.done,(tot.total?Math.round(tot.done/tot.total*100):0)+"% do total","var(--good)"],
-    ["Atrasadas",tot.late,"prazo vencido","var(--crit)"],["Críticas em aberto",tot.crit,"exigem atenção","var(--serious)"]]
+  const pend=TEAM.filter(p=>!p.ativo).length;
+  $("#teamKpis").innerHTML=[["Pessoas ativas",ativos.length,"com acesso liberado",""],
+    ["Tarefas da equipe",tot.total,"na semana",""],
+    ["Concluídas",tot.done,(tot.total?Math.round(tot.done/tot.total*100):0)+"% do total","var(--good)"],
+    ["Atrasadas",tot.late,"prazo vencido","var(--crit)"],
+    ["Críticas em aberto",tot.crit,"exigem atenção","var(--serious)"],
+    ["Aguardando liberação",pend,"em Ajustes → Perfis",pend?"var(--serious)":""]]
     .map(([l,v,s,c])=>`<div class="kpi"><div class="l">${l}</div><div class="v"${c?` style="color:${c}"`:""}>${v}</div><div class="s">${s}</div></div>`).join("");
-  $("#tblTeam").innerHTML=`<table class="t"><thead><tr><th>Pessoa</th><th>E-mail</th><th class="num">Planej.</th><th class="num">Concl.</th><th class="num">Atras.</th><th class="num">Críticas</th><th style="width:120px">Progresso</th><th>Atualizado</th><th></th></tr></thead><tbody>`+
-    st.map((x,i)=>`<tr><td><b>${esc(x.p.name)}</b></td><td style="color:var(--ink-2)">${esc(x.p.email)}</td>
-      <td class="num">${x.s.total}</td><td class="num">${x.s.done}</td><td class="num"${x.s.late?' style="color:var(--crit);font-weight:700"':""}>${x.s.late}</td>
-      <td class="num">${x.s.crit}</td><td><div style="display:flex;align-items:center;gap:6px"><div class="minibar" style="flex:1"><i style="width:${x.s.pct}%"></i></div><span style="font-size:11px;font-variant-numeric:tabular-nums">${x.s.pct}%</span></div></td>
-      <td style="color:var(--muted);font-size:11.5px">${i===0?"agora":new Date(x.p.upd).toLocaleString("pt-BR")}</td>
-      <td>${i===0?"":`<button class="btn sm" data-delteam="${esc(x.p.email)}">remover</button>`}</td></tr>`).join("")+"</tbody></table>";
-  $("#chartTeam").innerHTML=groupedBars(st.map(x=>({label:x.p.name.split(" ")[0],a:x.s.total,b:x.s.done})),cvar("--s1"),cvar("--s3"),"Planejadas","Concluídas");
+  $("#tblTeam").innerHTML=st.length?`<table class="t"><thead><tr><th>Pessoa</th><th>E-mail</th><th class="num">Planej.</th><th class="num">Concl.</th><th class="num">Atras.</th><th class="num">Críticas</th><th style="width:120px">Progresso</th><th>Atualizado</th></tr></thead><tbody>`+
+    st.map(x=>`<tr><td><b>${esc(x.p.nome||x.p.email)}</b>${x.p.id===ME.id?' <span class="badge">você</span>':""}</td>
+      <td style="color:var(--ink-2)">${esc(x.p.email||"")}</td>
+      <td class="num">${x.s.total}</td><td class="num">${x.s.done}</td>
+      <td class="num"${x.s.late?' style="color:var(--crit);font-weight:700"':""}>${x.s.late}</td>
+      <td class="num">${x.s.crit}</td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="minibar" style="flex:1"><i style="width:${x.s.pct}%"></i></div><span style="font-size:11px;font-variant-numeric:tabular-nums">${x.s.pct}%</span></div></td>
+      <td style="color:var(--muted);font-size:11.5px">${x.p.atualizado?new Date(x.p.atualizado).toLocaleString("pt-BR"):"—"}</td></tr>`).join("")+"</tbody></table>"
+    :`<div class="empty">Nenhum perfil ativo além do seu.</div>`;
+  $("#chartTeam").innerHTML=groupedBars(st.map(x=>({label:(x.p.nome||x.p.email).split(" ")[0],a:x.s.total,b:x.s.done})),cvar("--s1"),cvar("--s3"),"Planejadas","Concluídas");
   bindTips($("#chartTeam"));
 }
-$("#tblTeam").addEventListener("click",e=>{const em=e.target.dataset.delteam;if(!em)return;
-  if(confirm("Remover "+em+" do painel da equipe?")){delete APP.team[em];persist();renderTeam();}});
-</script>
-<script>
-"use strict";
+
 /* ======================= AJUSTES ======================= */
 function renderCfg(){
   if(!V) return;
   $("#cfgName").value=ME.name; $("#cfgEmail").value=ME.email;
-  $("#cfgTheme").value=V.prefs.theme||"light"; $("#cfgFont").value=V.prefs.font||"11.5";
+  $("#cfgTheme").value=V.prefs.theme||"brand"; $("#cfgFont").value=V.prefs.font||"11.5";
   $("#lastBackup").textContent=V.meta&&V.meta.backup?"Último backup exportado em "+new Date(V.meta.backup).toLocaleString("pt-BR"):"Nenhum backup exportado ainda.";
   if(ME.role==="admin"){
     $("#cfgAppName").value=APP.app.name||"";
@@ -1171,14 +1296,36 @@ function renderCfg(){
   $("#cfgOpacLbl").textContent=$("#cfgOpac").value+"%";
   renderComps();
 }
-function renderUsers(){
-  $("#tblUsers").innerHTML=`<thead><tr><th>Nome</th><th>E-mail</th><th style="width:120px">Perfil</th><th style="width:110px">Criado em</th><th style="width:330px">Ações</th></tr></thead><tbody>`+
-    APP.users.map(u=>`<tr><td><b>${esc(u.name)}</b>${u.id===ME.id?' <span class="badge">você</span>':""}</td><td style="color:var(--ink-2)">${esc(u.email)}</td>
-      <td>${u.role==="admin"?'<span class="chip p-crit">Administrador</span>':'<span class="chip p-baixa">Usuário</span>'}</td>
-      <td style="color:var(--muted);font-size:11.5px">${u.created?briefY(u.created.slice(0,10)):""}</td>
-      <td style="display:flex;gap:6px;flex-wrap:wrap">${u.id===ME.id?'<span class="note">gerencie na sua conta</span>':
-        `<button class="btn sm" data-reset="${u.id}">Redefinir senha</button><button class="btn sm" data-see="${u.id}">Ver no painel</button><button class="btn sm danger" data-deluser="${u.id}">Excluir</button>`}</td></tr>`).join("")+"</tbody>";
+async function renderUsers(){
+  if(ME.role!=="admin") return;
+  $("#tblUsers").innerHTML='<tbody><tr><td class="empty">Carregando…</td></tr></tbody>';
+  let lista=[];
+  try{ lista=await sb("/rest/v1/perfis?select=*&order=ativo.asc,criado_em.asc"); }
+  catch(e){ $("#tblUsers").innerHTML='<tbody><tr><td class="empty">Não consegui carregar os perfis.</td></tr></tbody>'; return; }
+  $("#tblUsers").innerHTML=`<thead><tr><th>Nome</th><th>E-mail</th><th style="width:120px">Perfil</th><th style="width:110px">Situação</th><th style="width:130px">Último acesso</th><th style="width:210px">Ações</th></tr></thead><tbody>`+
+    lista.map(u=>`<tr${u.ativo?"":' style="background:var(--warn-bg)"'}>
+      <td><b>${esc(u.nome||"—")}</b>${u.id===ME.id?' <span class="badge">você</span>':""}</td>
+      <td style="color:var(--ink-2)">${esc(u.email||"")}</td>
+      <td>${u.papel==="admin"?'<span class="chip p-crit">Administrador</span>':'<span class="chip p-baixa">Usuário</span>'}</td>
+      <td>${u.ativo?'<span class="st st-ok">Ativo</span>':'<span class="st st-soon">Aguardando</span>'}</td>
+      <td style="color:var(--muted);font-size:11.5px">${u.ultimo_acesso?new Date(u.ultimo_acesso).toLocaleDateString("pt-BR"):"nunca"}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">${u.id===ME.id?'<span class="note">é você</span>':
+        (u.ativo?`<button class="btn sm" data-off="${u.id}">Desativar</button>`:`<button class="btn sm pri" data-on="${u.id}">Liberar acesso</button>`)+
+        `<button class="btn sm" data-papel="${u.id}" data-novo="${u.papel==="admin"?"user":"admin"}">${u.papel==="admin"?"Tornar usuário":"Tornar admin"}</button>`}</td></tr>`).join("")+"</tbody>";
 }
+$("#tblUsers").addEventListener("click",async e=>{
+  const on=e.target.dataset.on, off=e.target.dataset.off, papel=e.target.dataset.papel;
+  try{
+    if(on){ await sb("/rest/v1/perfis?id=eq."+on,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ativo:true})}); toast("Acesso liberado."); }
+    if(off){ if(!confirm("Desativar este acesso? A pessoa deixa de entrar, mas os dados dela ficam guardados.")) return;
+      await sb("/rest/v1/perfis?id=eq."+off,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ativo:false})}); toast("Acesso desativado."); }
+    if(papel){ const novo=e.target.dataset.novo;
+      if(!confirm(novo==="admin"?"Tornar esta pessoa administradora? Ela passa a ver o painel da equipe e gerenciar perfis.":"Rebaixar para usuário comum?")) return;
+      await sb("/rest/v1/perfis?id=eq."+papel,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({papel:novo})}); toast("Perfil atualizado."); }
+    if(on||off||papel) renderUsers();
+  }catch(err){ toast("Não foi possível: "+err.message); }
+});
+
 function compUso(nome){
   let n=0; Object.keys(V.weeks||{}).forEach(k=>(V.weeks[k].tasks||[]).forEach(t=>{if(t.e===nome&&t.t&&t.t.trim())n++;}));
   (V.radar||[]).forEach(t=>{if(t.e===nome&&t.t&&t.t.trim())n++;});
@@ -1244,144 +1391,107 @@ $("#btnLogoDel").addEventListener("click",()=>{APP.app.logo="";APP.app.noLogo=tr
 $("#btnLogoDefault").addEventListener("click",()=>{APP.app.logo="";APP.app.noLogo=false;persist();applyBranding();toast("Logotipo CRUZON restaurado.");});
 $("#cfgShowName").addEventListener("change",e=>{APP.app.showName=e.target.checked;persist();applyBranding();});
 
+
 /* --- conta --- */
 $("#btnSaveAcc").addEventListener("click",async()=>{
-  const u=APP.users.find(x=>x.id===ME.id), nm=$("#cfgName").value.trim();
-  const oldp=$("#cfgPassOld").value, newp=$("#cfgPassNew").value;
-  if(nm){u.name=nm;ME.name=nm;$("#whoName").textContent=nm;}
-  if(newp){
-    if(newp.length<6) return toast("A nova senha precisa de 6 caracteres.");
-    if(!oldp) return toast("Informe a senha atual.");
-    try{
-      const oldKEK=await deriveKEK(oldp,u.salt);
-      const rawDEK=await open_(u.wrapPass,oldKEK);
-      let rawMK=null; if(u.role==="admin"&&APP.master.wraps[u.id]) rawMK=await open_(APP.master.wraps[u.id],oldKEK);
-      u.salt=b64(rnd(16));
-      const nk=await deriveKEK(newp,u.salt);
-      u.wrapPass=await seal(rawDEK,nk);
-      if(rawMK) APP.master.wraps[u.id]=await seal(rawMK,nk);
-    }catch(e){ return toast("Senha atual incorreta."); }
-  }
-  persist(); $("#cfgPassOld").value=""; $("#cfgPassNew").value=""; renderUsers(); toast("Conta atualizada.");
+  const nm=$("#cfgName").value.trim(), np=$("#cfgPassNew").value;
+  try{
+    if(nm&&nm!==ME.name){
+      await sb("/rest/v1/perfis?id=eq."+ME.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({nome:nm})});
+      ME.name=nm; $("#whoName").textContent=nm; fillPrintHead();
+    }
+    if(np){
+      if(np.length<6) return toast("A nova senha precisa de 6 caracteres.");
+      await sbNewPass(np); $("#cfgPassNew").value="";
+    }
+    toast("Conta atualizada.");
+  }catch(e){ toast("Não foi possível: "+e.message); }
 });
 
-/* --- usuários (admin) --- */
-$("#btnAddUser").addEventListener("click",async()=>{
-  if(ME.role!=="admin"||!MK) return toast("Apenas o administrador cria perfis.");
-  const name=$("#nuName").value.trim(), email=$("#nuEmail").value.trim().toLowerCase(), pass=$("#nuPass").value;
-  if(!name||!email) return toast("Informe nome e e-mail.");
-  if(pass.length<6) return toast("A senha inicial precisa de 6 caracteres.");
-  if(APP.users.some(u=>u.email===email)) return toast("Já existe um perfil com esse e-mail.");
-  const salt=b64(rnd(16)), KEK=await deriveKEK(pass,salt), rawDEK=rnd(32), DEKk=await rawKey(rawDEK);
-  const u={id:uid(),name,email,role:$("#nuRole").value,salt,wrapPass:await seal(rawDEK,KEK),wrapMaster:await seal(rawDEK,MK),created:new Date().toISOString()};
-  if(u.role==="admin"){ const rawMK=new Uint8Array(await SUB.exportKey("raw",MK)); APP.master.wraps[u.id]=await seal(rawMK,KEK); }
-  APP.users.push(u);
-  APP.vaults[u.id]=await sealJSON(newPayload({rules:$("#nuRules").checked?V.rules:null}),DEKk);
-  persist(); $("#nuName").value="";$("#nuEmail").value="";$("#nuPass").value="";
-  renderUsers(); toast("Perfil criado para "+name+".");
-});
-$("#tblUsers").addEventListener("click",async e=>{
-  const rid=e.target.dataset.reset, did=e.target.dataset.deluser, sid=e.target.dataset.see;
-  if(rid){
-    if(!MK) return toast("Chave-mestra indisponível — entre novamente como administrador.");
-    const np=prompt("Nova senha para este perfil (mínimo 6 caracteres):"); if(!np) return;
-    if(np.length<6) return toast("Senha muito curta.");
-    const u=APP.users.find(x=>x.id===rid);
-    try{ const rawDEK=await open_(u.wrapMaster,MK); u.salt=b64(rnd(16));
-      const nk=await deriveKEK(np,u.salt); u.wrapPass=await seal(rawDEK,nk);
-      if(u.role==="admin"){ const rawMK=new Uint8Array(await SUB.exportKey("raw",MK)); APP.master.wraps[u.id]=await seal(rawMK,nk); }
-      persist(); toast("Senha redefinida. Informe a nova senha ao usuário.");
-    }catch(err){ toast("Não foi possível redefinir: "+err.message); }
-  }
-  if(sid){
-    if(!MK) return toast("Chave-mestra indisponível.");
-    const u=APP.users.find(x=>x.id===sid);
-    try{ const rawDEK=await open_(u.wrapMaster,MK); const k=await rawKey(rawDEK);
-      const p=await openJSON(APP.vaults[u.id],k);
-      APP.team[u.email]={name:u.name,email:u.email,updatedAt:new Date().toISOString(),weeks:p.weeks,radar:p.radar||[]};
-      persist(); toast(u.name+" adicionado ao painel Equipe."); }catch(err){ toast("Falha ao abrir o perfil."); }
-  }
-  if(did){
-    const u=APP.users.find(x=>x.id===did);
-    if(!confirm("Excluir o perfil de "+u.name+" e todos os dados dele? Esta ação não pode ser desfeita.")) return;
-    APP.users=APP.users.filter(x=>x.id!==did); delete APP.vaults[did]; if(APP.master.wraps) delete APP.master.wraps[did];
-    persist(); renderUsers(); toast("Perfil excluído.");
-  }
-});
-
-/* --- backups --- */
+/* --- backup e migração --- */
 function download(name,content,type){
   const b=new Blob([content],{type:type||"application/json;charset=utf-8"}),u=URL.createObjectURL(b);
   const a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(u);a.remove();},400);
 }
 $("#btnExport").addEventListener("click",async()=>{
-  await flush(); V.meta=V.meta||{}; V.meta.backup=new Date().toISOString(); await flush();
-  download("planner-backup-"+todayISO()+".json",JSON.stringify({type:"planner-backup-v2",app:APP},null,1));
-  renderCfg(); toast("Backup completo gerado (cofres criptografados).");
-});
-$("#btnSnap").addEventListener("click",()=>{
-  const snap={type:"planner-snapshot",name:ME.name,email:ME.email,updatedAt:new Date().toISOString(),weeks:V.weeks,radar:V.radar||[]};
-  download("planner-"+ME.email.split("@")[0]+"-"+todayISO()+".json",JSON.stringify(snap,null,1));
-  toast("Arquivo gerado. Envie ao administrador.");
-});
-$("#btnImport").addEventListener("click",()=>$("#fileImport").click());
-$("#fileImport").addEventListener("change",e=>{
-  const f=e.target.files[0]; if(!f) return; const r=new FileReader();
-  r.onload=()=>{ try{ const d=JSON.parse(r.result);
-      if(d.type==="planner-backup-v2"&&d.app){
-        if(!confirm("Restaurar o backup “"+f.name+"”?\nTodos os perfis e dados atuais deste navegador serão substituídos. Você precisará entrar novamente.")) return;
-        localStorage.setItem(AKEY,JSON.stringify(d.app)); sessionStorage.removeItem(SKEY); location.reload();
-      } else if(d.type==="planner-snapshot"){
-        if(ME.role!=="admin") return toast("Somente o administrador importa dados da equipe.");
-        APP.team[d.email]={name:d.name,email:d.email,updatedAt:d.updatedAt,weeks:d.weeks,radar:d.radar||[]};
-        persist(); toast(d.name+" atualizado no painel Equipe."); show("team");
-      } else if(d.weeks){
-        if(!confirm("Este arquivo é um backup da versão anterior. Importar as atividades para o SEU perfil, substituindo as atuais?")) return;
-        V.weeks=d.weeks||{}; if(d.rules)V.rules=d.rules; save(); toast("Atividades importadas."); show("dash");
-      } else alert("Arquivo não reconhecido.");
-    }catch(err){ alert("Arquivo inválido."); } };
-  r.readAsText(f); e.target.value="";
-});
-$("#btnImportTeam").addEventListener("click",()=>$("#fileTeam").click());
-$("#fileTeam").addEventListener("change",e=>{
-  const f=e.target.files[0]; if(!f) return; const r=new FileReader();
-  r.onload=()=>{ try{ const d=JSON.parse(r.result);
-      if(d.type!=="planner-snapshot") return alert("Escolha o arquivo gerado em “Enviar meus dados ao administrador”.");
-      APP.team[d.email]={name:d.name,email:d.email,updatedAt:d.updatedAt,weeks:d.weeks,radar:d.radar||[]};
-      persist(); renderTeam(); toast(d.name+" atualizado no painel.");
-    }catch(err){ alert("Arquivo inválido."); } };
-  r.readAsText(f); e.target.value="";
+  V.meta=V.meta||{}; V.meta.backup=new Date().toISOString();
+  try{ await flush(); }catch(e){}
+  download("cruzon-backup-"+todayISO()+".json",JSON.stringify({type:"cruzon-dados",usuario:ME.email,gerado:new Date().toISOString(),dados:V},null,1));
+  renderCfg(); toast("Backup gerado.");
 });
 $("#btnCsv").addEventListener("click",()=>{
   const k=CURWEEK,mon=fromISO(k),rows=[["Pessoa","Semana","Data","Dia","Empresa","Prioridade","Tarefa","Prazo","%","Status"]];
   weekTasks(k).slice().sort((a,b)=>a.d-b.d).forEach(t=>rows.push([ME.name,briefY(k),briefY(iso(addDays(mon,t.d))),DAYSFULL[t.d],t.e,t.p,t.t,briefY(t.due),t.pct+"%",statusOf(t)]));
   (V.radar||[]).filter(t=>t.t&&t.t.trim()).forEach(t=>rows.push([ME.name,briefY(k),"","No radar",t.e,t.p,t.t,briefY(t.due),t.pct+"%",statusOf(t)]));
-  download("planner-semana-"+k+".csv","﻿"+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(";")).join("\r\n"),"text/csv;charset=utf-8");
+  download("cruzon-semana-"+k+".csv","﻿"+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(";")).join("\r\n"),"text/csv;charset=utf-8");
   toast("CSV gerado.");
 });
-$("#btnWipe").addEventListener("click",()=>{
-  if(!confirm("Apagar TODOS os perfis e dados deste navegador?")) return;
+$("#btnImport").addEventListener("click",()=>$("#fileImport").click());
+$("#fileImport").addEventListener("change",e=>{
+  const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+  r.onload=async()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(d.type==="cruzon-dados"&&d.dados){
+        if(!confirm("Substituir os seus dados atuais pelo arquivo “"+f.name+"”?")) return;
+        V=d.dados; normalizeV(); save(); await flush(); applyTheme(); show("dash"); toast("Dados restaurados.");
+      }else if(d.type==="planner-backup-v2"&&d.app){        /* backup da versão offline (cofre criptografado) */
+        const perfis=(d.app.users||[]);
+        if(!perfis.length) return alert("Este backup não tem nenhum perfil.");
+        const email=(perfis.length===1?perfis[0].email:prompt("Qual e-mail do backup você quer importar?\n"+perfis.map(u=>"• "+u.email).join("\n"),perfis[0].email)||"").trim().toLowerCase();
+        const u=perfis.find(x=>x.email===email); if(!u) return alert("Perfil não encontrado no backup.");
+        const senha=prompt("Digite a SENHA que esse perfil usava no aplicativo offline:"); if(!senha) return;
+        let payload;
+        try{
+          const KEK=await deriveKEK(senha,u.salt);
+          const rawDEK=await open_(u.wrapPass,KEK);
+          payload=await openJSON(d.app.vaults[u.id],await rawKey(rawDEK));
+        }catch(err){ return alert("Senha incorreta para esse perfil."); }
+        if(!confirm("Importar as atividades de "+u.email+" para a sua conta? Os dados atuais serão substituídos.")) return;
+        V=payload; normalizeV(); save(); await flush(); applyTheme(); show("dash"); toast("Dados da versão offline importados.");
+      }else if(d.type==="planner-snapshot"&&d.weeks){
+        if(!confirm("Importar as semanas do arquivo “"+f.name+"”? Os dados atuais serão substituídos.")) return;
+        V.weeks=d.weeks||{}; V.radar=d.radar||[]; normalizeV(); save(); await flush(); show("dash"); toast("Semanas importadas.");
+      }else if(d.weeks){
+        if(!confirm("Arquivo de versão antiga. Importar as semanas?")) return;
+        V.weeks=d.weeks||{}; if(d.rules)V.rules=d.rules; normalizeV(); save(); await flush(); show("dash"); toast("Dados importados.");
+      }else alert("Arquivo não reconhecido.");
+    }catch(err){ alert("Arquivo inválido: "+err.message); }
+  };
+  r.readAsText(f); e.target.value="";
+});
+$("#btnWipe").addEventListener("click",async()=>{
+  if(!confirm("Apagar TODAS as suas atividades, empresas e recorrências desta conta?")) return;
   if(!confirm("Confirma? A ação não pode ser desfeita. Exporte um backup antes.")) return;
-  try{localStorage.removeItem(AKEY);localStorage.removeItem(V1KEY);sessionStorage.removeItem(SKEY);}catch(e){}
-  location.reload();
+  V=newPayload({}); save(); try{ await flush(); }catch(e){}
+  applyTheme(); show("dash"); toast("Dados apagados.");
 });
 
 /* ======================= INÍCIO ======================= */
 (async function init(){
-  loadAPP(); MIG=readV1();
-  var _t=localStorage.getItem(TKEY); document.documentElement.setAttribute("data-theme",["brand","light","dark"].indexOf(_t)>=0?_t:"brand");
-  applyBranding(); setupLogin();
-  let s=null; try{s=JSON.parse(sessionStorage.getItem(SKEY)||"null");}catch(e){}
-  if(s&&SUB){
-    const u=APP.users.find(x=>x.id===s.uid);
-    if(u&&APP.vaults[u.id]){
-      try{ DEK=await rawKey(ub64(s.dek)); MK=s.mk?await rawKey(ub64(s.mk)):null;
-        V=await openJSON(APP.vaults[u.id],DEK); ME={id:u.id,name:u.name,email:u.email,role:u.role};
-        openApp(); return; }catch(e){ try{sessionStorage.removeItem(SKEY);}catch(_){} }
-    }
+  loadCfg();
+  const _t=localStorage.getItem(TKEY);
+  document.documentElement.setAttribute("data-theme",["brand","light","dark"].indexOf(_t)>=0?_t:"brand");
+  applyBranding();
+  /* link de recuperação de senha vindo do e-mail */
+  const h=new URLSearchParams((location.hash||"").replace(/^#/,""));
+  if(h.get("access_token")&&(h.get("type")==="recovery"||h.get("type")==="invite")){
+    setSession({access_token:h.get("access_token"),refresh_token:h.get("refresh_token"),expires_in:+(h.get("expires_in")||3600)});
+    history.replaceState(null,"",location.pathname);
+    LGMODE="reset"; setupLogin(); return;
   }
+  if(h.get("error_description")){ LGMODE="login"; setupLogin(); lgMsg("#lgErr",decodeURIComponent(h.get("error_description")).replace(/\+/g," ")); history.replaceState(null,"",location.pathname); return; }
+  try{ const raw=localStorage.getItem(SESSKEY); if(raw) SESSION=JSON.parse(raw); }catch(e){}
+  if(SESSION&&SESSION.refresh_token){
+    LGMODE="login"; setupLogin();
+    $("#lgBtn").disabled=true; $("#lgBtn").textContent="Entrando…";
+    try{ if(await refreshSession()){ await entrar(); return; } }catch(e){}
+    $("#lgBtn").disabled=false; $("#lgBtn").textContent="Entrar";
+  }
+  LGMODE="login"; setupLogin();
 })();
+
 </script>
 </body>
 </html>
