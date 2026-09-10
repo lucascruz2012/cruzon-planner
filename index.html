@@ -157,6 +157,17 @@ html[data-theme="dark"] .day.radar .addbtn{color:#39E875}
 .dh{padding:6px 8px;border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;background:var(--surface-2)}
 .dh .n{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .dh .n em{font-style:normal;color:var(--muted);font-weight:600;font-size:10.5px}
+.dh .hdr{display:inline-flex;align-items:center;gap:5px}
+.sortbtn{border:1px solid var(--line-2);background:var(--surface);border-radius:5px;font-size:9px;line-height:1;padding:2px 4px;color:var(--muted);font-weight:700}
+.sortbtn:hover{border-color:var(--brand-2);color:var(--ink)}
+.sortbtn.desc{background:#A4161A;border-color:#A4161A;color:#fff}
+.sortbtn.asc{background:#17803F;border-color:#17803F;color:#fff}
+.day.radar .sortbtn{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.32);color:#fff}
+.day.radar .sortbtn.desc{background:#A4161A;border-color:#A4161A}
+.day.radar .sortbtn.asc{background:#17803F;border-color:#17803F}
+.sortall{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);white-space:nowrap}
+.sortall button{border:1px solid var(--line-2);background:var(--surface);border-radius:6px;font-size:10px;font-weight:700;padding:3px 8px;color:var(--ink-2)}
+.sortall button:hover{border-color:var(--brand-2);color:var(--ink)}
 .dh .meta{font-size:10px;color:var(--muted);margin-top:2px;display:flex;justify-content:space-between;gap:4px}
 .bar{height:3px;border-radius:2px;background:var(--surface-3);margin-top:4px;overflow:hidden}
 .bar > i{display:block;height:100%;border-radius:2px;background:var(--s3)}
@@ -244,7 +255,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
   @page{size:A4 landscape;margin:8mm}
   html[data-theme="dark"]{--plane:#fff;--surface:#fff;--surface-2:#fff;--surface-3:#eee;--ink:#000;--ink-2:#333;--line:#ddd;--line-2:#bbb;--done-bg:#cfeadc;--done-tx:#0a4429}
   body{background:#fff;font-size:9px}
-  header.top,.weeknav button,.addbtn,.task .del,.noprint,.legend,.toggle{display:none !important}
+  header.top,.weeknav button,.addbtn,.task .del,.noprint,.legend,.toggle,.sortbtn,.sortall{display:none !important}
   main{padding:0}
   #printhead{display:flex;align-items:center;gap:14px;padding:0 0 9px;margin:0 0 11px;border-bottom:2px solid #0C1F2B;break-inside:avoid;break-after:avoid}
   #printhead img{height:34px;width:auto;max-width:190px}
@@ -361,6 +372,11 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <button class="toggle noprint" id="tgSat" aria-pressed="true">Sábado <span class="cnt" id="cntSat"></span></button>
       <button class="toggle noprint" id="tgSun" aria-pressed="true">Domingo <span class="cnt" id="cntSun"></span></button>
       <button class="toggle noprint" id="tgRadar" aria-pressed="true">Radar <span class="cnt" id="cntRadar"></span></button>
+      <span class="sortall noprint" id="sortAll">Ordenar tudo:
+        <button data-all="" title="Voltar à ordem de cadastro">⇅</button>
+        <button data-all="desc" title="Criticidade: da maior para a menor">▼</button>
+        <button data-all="asc" title="Criticidade: da menor para a maior">▲</button>
+      </span>
       <button class="iconbtn noprint" id="btnCopyWeek">Levar pendências →</button>
     </div>
     <div class="weekgrid" id="weekgrid"></div>
@@ -936,6 +952,27 @@ function taskHTML(t){
     </div></div>`;
 }
 const autosize=el=>{el.style.height="auto";el.style.height=el.scrollHeight+"px";};
+const PRIRANK_ORD={"Crítica":4,"Alta":3,"Média":2,"Baixa":1};
+function sortMode(k){ return ((V.prefs&&V.prefs.sort)||{})[k]||""; }
+function ordena(lista,modo){
+  if(!modo) return lista;
+  return lista.slice().sort((a,b)=>{
+    const ca=(+a.pct>=100)?1:0, cb=(+b.pct>=100)?1:0;
+    if(ca!==cb) return ca-cb;                                   /* concluídas por último */
+    const ra=PRIRANK_ORD[a.p]||2, rb=PRIRANK_ORD[b.p]||2;
+    if(ra!==rb) return modo==="desc"? rb-ra : ra-rb;
+    const pa=a.due||"9999-12-31", pb=b.due||"9999-12-31";       /* desempate: prazo mais próximo */
+    return pa<pb?-1:(pa>pb?1:0);
+  });
+}
+function sortBtn(k){
+  const m=sortMode(k);
+  const ic=m==="desc"?"▼":(m==="asc"?"▲":"⇅");
+  const tt=m==="desc"?"Criticidade: maior → menor · clique para inverter"
+        :(m==="asc"?"Criticidade: menor → maior · clique para voltar ao manual"
+                   :"Ordenar por criticidade");
+  return `<button class="sortbtn ${m}" data-sortkey="${k}" title="${tt}">${ic}</button>`;
+}
 function visibleDays(){const d=[0,1,2,3,4];if(V.prefs.showSat!==false)d.push(5);if(V.prefs.showSun!==false)d.push(6);return d;}
 function findAny(id){
   const w=V.weeks[CURWEEK]; let t=w?w.tasks.find(x=>x.id===id):null;
@@ -962,22 +999,28 @@ function renderWeek(){
     const tot=ts.filter(t=>t.t&&t.t.trim()).length, dn=ts.filter(t=>+t.pct>=100&&t.t&&t.t.trim()).length;
     const pc=tot?Math.round(dn/tot*100):0;
     html+=`<div class="day${di===todayISO()?" today":""}${d>=5?" weekend":""}" data-day="${d}">
-      <div class="dh"><div class="n"><span>${DAYS[d]}</span><em>${brief(di)}</em></div>
+      <div class="dh"><div class="n"><span>${DAYS[d]}</span><span class="hdr">${sortBtn(d)}<em>${brief(di)}</em></span></div>
       <div class="meta"><span>${dn}/${tot} concluídas</span><span>${pc}%</span></div>
       <div class="bar"><i style="width:${pc}%"></i></div></div>
-      <div class="tasks">${ts.map(taskHTML).join("")}</div>
+      <div class="tasks">${ordena(ts,sortMode(d)).map(taskHTML).join("")}</div>
       <button class="addbtn" data-add="${d}">+ tarefa</button></div>`;
   });
   if(showR){
     const rt=V.radar, tot=rt.filter(t=>t.t&&t.t.trim()).length;
     html+=`<div class="day radar" data-day="radar">
-      <div class="dh"><div class="n"><span class="rdot"><i></i>NO RADAR</span><em>SEMPRE ON</em></div>
+      <div class="dh"><div class="n"><span class="rdot"><i></i>NO RADAR</span><span class="hdr">${sortBtn("radar")}<em>ON</em></span></div>
       <div class="meta"><span><b>${tot}</b> ${tot===1?"item":"itens"} aguardando</span><span>fixo</span></div></div>
-      <div class="tasks">${rt.map(taskHTML).join("")}</div>
+      <div class="tasks">${ordena(rt,sortMode("radar")).map(taskHTML).join("")}</div>
       <button class="addbtn" data-add="radar">+ item no radar</button></div>`;
   }
   g.innerHTML=html; $$(".task .txt",g).forEach(autosize);
 }
+$("#sortAll").addEventListener("click",e=>{
+  const m=e.target.dataset.all; if(m===undefined) return;
+  V.prefs.sort={}; [0,1,2,3,4,5,6,"radar"].forEach(k=>{ if(m) V.prefs.sort[k]=m; });
+  save(); renderWeek();
+  toast(m==="desc"?"Semana ordenada: criticidade maior → menor":(m==="asc"?"Semana ordenada: criticidade menor → maior":"Ordem de cadastro restaurada"));
+});
 ["tgSat","tgSun","tgRadar"].forEach((id,i)=>$("#"+id).addEventListener("click",()=>{
   const key=["showSat","showSun","showRadar"][i];
   V.prefs[key]=V.prefs[key]===false; save(); renderWeek();
@@ -1004,6 +1047,13 @@ $("#weekgrid").addEventListener("input",e=>{
   save();
 });
 $("#weekgrid").addEventListener("click",e=>{
+  const sk=e.target.dataset.sortkey;
+  if(sk!==undefined){
+    V.prefs.sort=V.prefs.sort||{};
+    const atual=V.prefs.sort[sk]||"";
+    V.prefs.sort[sk]= atual===""?"desc":(atual==="desc"?"asc":"");
+    save(); renderWeek(); return;
+  }
   const add=e.target.matches("[data-add]")?e.target.dataset.add:null, del=e.target.dataset.del;
   if(add!==null){
     const t={id:uid(),d:add==="radar"?null:+add,p:"Média",e:compNames()[0],t:"",due:"",pct:0,rec:null};
