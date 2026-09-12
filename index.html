@@ -86,21 +86,33 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 .hidden{display:none !important}
 
 /* ---------- LOGIN ---------- */
-#login{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:flex-end;padding:4vh 5vw;overflow:auto;background-color:#07131c}
+#login{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;overflow:auto;background-color:#07131c}
 .lgart{position:fixed;inset:0;overflow:hidden;z-index:0;background-color:#07131c}
-.lgart::before{content:"";position:absolute;inset:0;background-image:var(--lgbg);background-size:cover;background-position:center;transform:scale(1.55);transform-origin:2% 48%}
-.lgart::after{content:"";position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(4,16,22,0) 38%,rgba(4,16,22,.30) 64%,rgba(4,16,22,.58) 100%)}
-.lgpane{position:relative;z-index:1;flex:0 0 auto;width:min(408px,100%);background:var(--surface);border-radius:18px;padding:26px 30px 20px;box-shadow:0 34px 80px -18px rgba(0,0,0,.66),0 2px 12px rgba(0,0,0,.28)}
+.lgart::before{content:"";position:absolute;inset:0;background-image:var(--lgbg);background-size:cover;background-position:center center}
+.lgart::after{content:"";position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(4,16,22,0) 46%,rgba(4,16,22,.26) 72%,rgba(4,16,22,.50) 100%)}
+.lgmid{position:relative;z-index:1;flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;padding:3.4vh 5vw 1vh}
+.lgpane{flex:0 0 auto;width:min(400px,100%);background:var(--surface);border-radius:18px;padding:24px 30px 18px;box-shadow:0 34px 80px -18px rgba(0,0,0,.66),0 2px 12px rgba(0,0,0,.28)}
 .lgcard{width:100%;background:transparent;border-radius:0;padding:0;box-shadow:none}
+.lgbenefwrap{position:relative;z-index:1;flex:0 0 auto;width:100%;background:linear-gradient(180deg,rgba(4,16,22,0) 0%,rgba(4,16,22,.45) 45%,rgba(4,16,22,.72) 100%)}
+.lgbenef{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:22px 5vw 24px;max-width:1560px;width:100%;margin:0 auto}
+.bf{display:flex;align-items:center;gap:11px;color:#EAF2F0;font-size:clamp(11.5px,1.05vw,14.5px);font-weight:500;line-height:1.25;flex:1 1 0;min-width:0}
+.bf svg{width:clamp(24px,2.1vw,30px);height:clamp(24px,2.1vw,30px);flex:0 0 auto;stroke:#00E06A;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.bf + .bf{border-left:1px solid rgba(255,255,255,.18);padding-left:min(3.4vw,34px)}
 .lgcard .mark{display:block;width:min(228px,72%);height:auto;margin:2px auto 18px}
+@media(max-width:1040px){
+  .lgbenef{flex-wrap:wrap;justify-content:center;gap:10px 18px;padding:10px 20px 18px}
+  .bf{flex:0 0 calc(50% - 22px);font-size:12px}
+  .bf + .bf{border-left:0;padding-left:0}
+}
 @media(max-width:900px){
-  #login{justify-content:center;padding:18px 16px}
-  .lgart::before{transform:none;background-position:30% 26%}
-  .lgart::after{background:linear-gradient(180deg,rgba(6,20,28,.42) 0%,rgba(6,20,28,.66) 55%,rgba(6,20,28,.84) 100%)}
-  .lgpane{width:100%;max-width:520px;border-radius:16px;padding:22px 20px 20px}
+  .lgmid{justify-content:center;padding:16px}
+  .lgart::before{background-position:34% 28%}
+  .lgart::after{background:linear-gradient(180deg,rgba(6,20,28,.44) 0%,rgba(6,20,28,.66) 55%,rgba(6,20,28,.86) 100%)}
+  .lgpane{width:100%;max-width:520px;border-radius:16px;padding:22px 20px 18px}
   .lgcard .mark{width:min(200px,64%)}
 }
-@media(min-width:901px) and (max-height:720px){#login{align-items:flex-start;padding-top:3vh}}
+@media(max-width:560px){ .lgbenefwrap{display:none} }
+@media(min-width:901px) and (max-height:700px){ .lgbenefwrap{display:none} .lgmid{align-items:flex-start;padding-top:3vh} }
 #login h1{font-size:20px;margin:0 0 2px;letter-spacing:-.01em}
 #login .sub{color:var(--ink-2);font-size:12.5px;margin:0 0 16px}
 #login label{display:block;font-size:11.5px;font-weight:600;color:var(--ink-2);margin:11px 0 4px;text-transform:uppercase;letter-spacing:.04em}
@@ -398,6 +410,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
 <!-- ===================== LOGIN ===================== -->
 <div id="login">
   <div class="lgart" aria-hidden="true"></div>
+  <div class="lgmid">
   <div class="lgpane">
   <div class="lgcard">
     <img class="mark" id="lgLogo" alt="Logotipo">
@@ -425,6 +438,13 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <p class="note" style="border:0;padding-top:6px;margin-top:6px;text-align:center"><button type="button" class="lgpdlnk" id="lgpdAbrirLogin">Aviso de Privacidade e Termos de Uso</button></p>
   </div>
   </div>
+  </div>
+  <div class="lgbenefwrap"><div class="lgbenef" aria-hidden="true">
+    <div class="bf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2"/><path d="M7.8 12.2l2.9 2.9 5.5-5.9"/></svg><span>Centralize suas rotinas</span></div>
+    <div class="bf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12.6" r="8.4"/><path d="M12 7.9v4.9l3.3 2"/><path d="M9.6 3.4h4.8"/></svg><span>Não perca prazos</span></div>
+    <div class="bf"><svg viewBox="0 0 24 24"><path d="M4.6 19.4V13"/><path d="M10.2 19.4V8.2"/><path d="M15.8 19.4V4.6"/><path d="M21 19.4V10.6"/></svg><span>Tenha mais produtividade</span></div>
+    <div class="bf"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.8"/><path d="M4.8 20.2c0-3.7 3.2-6.1 7.2-6.1s7.2 2.4 7.2 6.1"/></svg><span>Foque no que gera valor</span></div>
+  </div></div>
 </div>
 
 
@@ -808,6 +828,7 @@ const openJSON=async(b,k)=>JSON.parse(DEC.decode(await open_(b,k)));
 const SB_URL="https://qflpwxyyzimlmnizgltl.supabase.co";
 const SB_KEY="sb_publishable_mRfAlyPRU2duHz0Y1ibRVg_zOmYA_xi";
 const SESSKEY="cruzon_sessao_v1", TKEY="planner_theme_v2", CACHEK="cruzon_cache_v1", CFGK="cruzon_app_v1";
+const APP_OFICIAL = "CruzOn Planner";   /* nome do produto: nunca usa o nome personalizado do usuario */
 let SESSION=null, ME=null, PERFIL=null, V=null, APP={app:{}};
 let CURWEEK=iso(mondayOf(new Date())), VIEW="dash", OFFLINE=false;
 
@@ -854,7 +875,7 @@ function normalizeV(){
 function loadCfg(){
   APP={app:{name:"CruzOn Planner",logo:"",noLogo:false,showName:false,colors:{...DEFCOLORS}}};
   try{const r=localStorage.getItem(CFGK); if(r) APP.app={...APP.app,...JSON.parse(r)};}catch(e){}
-  if(APP.app.name==="CRUZON Planner RH"||APP.app.name==="CRUZON Planner"){APP.app.name="CruzOn Planner";persist();}
+  if(APP.app.name==="CRUZON Planner RH"||APP.app.name==="CRUZON Planner"){APP.app.name=APP_OFICIAL;persist();}
 }
 function persist(){ try{localStorage.setItem(CFGK,JSON.stringify(APP.app));}catch(e){} }
 
@@ -997,7 +1018,7 @@ function logoSrc(forDark){
 function applyBranding(){
   const th=document.documentElement.getAttribute("data-theme"), dark=th==="dark";
   const pess=(V&&V.prefs&&V.prefs.nomeExib!=null)?String(V.prefs.nomeExib).trim():null;
-  const nm=(pess!==null&&pess!=="")?pess:(APP.app.name||"CruzOn Planner");
+  const nm=(pess!==null&&pess!=="")?pess:(APP.app.name||APP_OFICIAL);
   document.title=nm; $("#lgAppName").textContent=nm;
   const ini=nm.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase()||"CP";
   const hdrDark=(th==="brand"||th==="dark"), top=$("#topLogo"), src=hdrLogo(hdrDark);
@@ -1034,7 +1055,7 @@ let LGMODE="login";   // login | signup | forgot | reset
 function lgMsg(el,txt){ const e=$(el); if(!txt){e.classList.add("hidden");return;} e.textContent=txt; e.classList.remove("hidden"); }
 function setupLogin(){
   const m=LGMODE;
-  $("#lgAppName").textContent=APP.app.name||"CruzOn Planner";
+  $("#lgAppName").textContent=APP_OFICIAL;
   $("#lgNameWrap").classList.toggle("hidden",m!=="signup");
   $("#lgEmailWrap").classList.toggle("hidden",m==="reset");
   $("#lgPassWrap").classList.toggle("hidden",m==="forgot");
@@ -1309,7 +1330,7 @@ function zapLink(){
   const n = (CFGAPP.whatsapp || "").replace(/\D/g, "");
   if(!n) return "";
   const quem = (ME && ME.email) ? (" Sou " + (ME.name || "") + " (" + ME.email + ").") : "";
-  const txt = "Olá! Estou usando o " + (APP.app.name || "CruzOn Planner") + "." + quem;
+  const txt = "Olá! Estou usando o " + APP_OFICIAL + "." + quem;
   return "https://wa.me/" + n + "?text=" + encodeURIComponent(txt);
 }
 async function enviaRecado(texto){
@@ -1351,7 +1372,7 @@ async function renderRecados(){
   alvo.innerHTML = lista.map(r => {
     const q = (CFGAPP.whatsapp || "").replace(/\D/g, "");
     const resp = r.email ? '<a class="btn sm" href="mailto:' + esc(r.email) +
-      '?subject=' + encodeURIComponent("Sobre o seu recado no " + (APP.app.name || "CruzOn Planner")) + '">Responder por e-mail</a>' : "";
+      '?subject=' + encodeURIComponent("Sobre o seu recado no " + APP_OFICIAL) + '">Responder por e-mail</a>' : "";
     return '<div class="recado' + (r.lido ? "" : " novo") + '">' +
       '<div class="cab"><b>' + esc(r.nome || "—") + '</b><span>' + esc(r.email || "") + '</span>' +
       '<span style="margin-left:auto">' + new Date(r.criado_em).toLocaleString("pt-BR") + '</span></div>' +
@@ -1522,7 +1543,8 @@ $$("[data-nav]").forEach(b=>b.addEventListener("click",()=>{
 const VIEWNAMES={dash:"Dashboard da semana",week:"Planejamento semanal",rec:"Obrigações e rotinas recorrentes",hist:"Histórico de atividades",team:"Painel da equipe",cfg:"Ajustes"};
 function fillPrintHead(){
   if(!ME) return;
-  const nome=(APP.app&&APP.app.name)||"CruzOn Planner";
+  const pess=(V&&V.prefs&&V.prefs.nomeExib)?String(V.prefs.nomeExib).trim():"";
+  const nome=APP_OFICIAL+(pess?" · "+pess:"");
   const rel=VIEWNAMES[VIEW]||"Relatório";
   const per=(VIEW==="dash"||VIEW==="week"||VIEW==="team")?" — semana de "+weekLabel(CURWEEK):"";
   $("#phTitle").textContent=nome;
