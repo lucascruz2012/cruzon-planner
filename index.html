@@ -280,6 +280,24 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
   .kpi{padding:6px 8px}.kpi .v{font-size:17px}.kpi .l{font-size:7.5px}.kpi .s{font-size:7px}
   .grid2,.grid3{gap:6px} table.t td,table.t th{padding:3px 6px}
 }
+
+/* ---------- Aviso de privacidade (LGPD) ---------- */
+.lgpdwrap{position:fixed;inset:0;z-index:9999;background:rgba(11,11,11,.62);display:flex;align-items:center;justify-content:center;padding:16px}
+.lgpdwrap.hidden{display:none}
+.lgpdbox{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+.lgpdbox>header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.lgpdbox>header b{font-size:15.5px}
+.lgpdbox>header span{font-size:11.5px;color:var(--muted)}
+.lgpdtxt{padding:6px 20px 10px;overflow:auto;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.lgpdtxt h4{margin:16px 0 4px;font-size:13px;color:var(--ink)}
+.lgpdtxt p{margin:0 0 8px}
+.lgpdtxt .lgpdwarn{background:var(--warn-bg);border-left:3px solid var(--warn);padding:9px 11px;border-radius:0 7px 7px 0}
+.lgpdbox>footer{padding:13px 20px;border-top:1px solid var(--line);background:var(--surface-2);display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.lgpdchk{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--ink);max-width:430px;cursor:pointer}
+.lgpdchk input{margin-top:2px;flex:0 0 auto}
+.lgpdbtns{display:flex;gap:8px;align-items:center;margin-left:auto}
+.lgpdlnk{background:none;border:0;color:var(--brand-2);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer;padding:0}
+@media(max-width:560px){ .lgpdbtns{width:100%;justify-content:flex-end} }
 </style>
 </head>
 <body>
@@ -309,6 +327,24 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <button class="primary" type="button" id="btnSairPendente">Voltar ao login</button>
       </div>
       <p class="note" id="lgNote">Seus dados ficam na nuvem, ligados à sua conta: você entra de qualquer computador e encontra tudo como deixou.</p>
+      <p class="note" style="border:0;padding-top:6px;margin-top:6px;text-align:center"><button type="button" class="lgpdlnk" id="lgpdAbrirLogin">Aviso de Privacidade e Termos de Uso</button></p>
+  </div>
+</div>
+
+
+<!-- ============ AVISO DE PRIVACIDADE (LGPD) ============ -->
+<div id="lgpd" class="lgpdwrap hidden" role="dialog" aria-modal="true" aria-labelledby="lgpdTit">
+  <div class="lgpdbox">
+    <header><b id="lgpdTit">Aviso de Privacidade e Termos de Uso</b><span id="lgpdVer"></span></header>
+    <div class="lgpdtxt" id="lgpdTxt"></div>
+    <footer>
+      <label class="lgpdchk" id="lgpdChkWrap"><input type="checkbox" id="lgpdChk"> Li e concordo com o Aviso de Privacidade e com os Termos de Uso.</label>
+      <div class="lgpdbtns">
+        <button type="button" class="btn" id="lgpdSair">Sair</button>
+        <button type="button" class="btn pri" id="lgpdAceitar" disabled>Aceitar e continuar</button>
+        <button type="button" class="btn pri hidden" id="lgpdFechar">Fechar</button>
+      </div>
+    </footer>
   </div>
 </div>
 
@@ -491,6 +527,17 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <div style="overflow:auto"><table class="tbl" id="tblUsers"></table></div>
       <div style="padding:12px 14px 14px">
         <p class="note" style="margin:0">Novas pessoas criam o próprio acesso pela tela de login e ficam <b>aguardando liberação</b> — aparecem aqui destacadas em amarelo e só entram depois que você clicar em <b>Liberar acesso</b>. Desativar bloqueia na hora, sem apagar nada. Para excluir a conta em definitivo, use o painel do Supabase.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <h3>Privacidade e proteção de dados</h3>
+      <div style="padding:14px">
+        <p class="note" style="margin-top:0">Este aplicativo guarda dados pessoais seus e, dependendo do que você escreve nas tarefas, de outras pessoas. O aviso abaixo explica o que é tratado, onde fica guardado e quais são os seus direitos pela LGPD.</p>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center">
+          <button class="btn" id="btnVerPolitica">Ler o Aviso de Privacidade</button>
+          <span class="note" id="lgpdAceiteTag" style="border:0;padding:0;margin:0"></span>
+        </div>
       </div>
     </div>
 
@@ -857,6 +904,61 @@ function mostraPendente(txt){
 }
 $("#btnSairPendente").addEventListener("click",()=>{ clearSession(); LGMODE="login"; setupLogin(); });
 
+/* ================= AVISO DE PRIVACIDADE (LGPD) ================= */
+const POL_VER = "1.0 (setembro/2026)";
+const POL_HTML = "<h4>1. Quem é o responsável</h4>\n<p>O CruzOn Planner é operado por <b>Lucas Cruz</b>. Dúvidas, pedidos e reclamações sobre dados pessoais: <b>lucascruz2012@gmail.com</b>.</p>\n\n<h4>2. Quais dados são tratados</h4>\n<p><b>De você, usuário:</b> nome, e-mail, senha (guardada apenas de forma criptografada, nem o administrador consegue lê-la), data e hora do último acesso e a data em que você aceitou este aviso.</p>\n<p><b>Conteúdo que você digita:</b> descrição das tarefas, empresa, prazos, percentual de conclusão, criticidade e observações. Esse conteúdo pode conter dados de terceiros — por exemplo, o nome de um funcionário citado numa tarefa.</p>\n<p>Não há cookies de publicidade, rastreamento de navegação, perfilamento comportamental nem venda de dados a ninguém.</p>\n\n<h4>3. Para que os dados são usados</h4>\n<p>Exclusivamente para: permitir seu acesso e manter sua conta; guardar e sincronizar suas tarefas entre computadores; gerar indicadores e o relatório semanal de pendências enviado ao seu próprio e-mail; e permitir que o administrador autorize ou bloqueie acessos.</p>\n\n<h4>4. Onde os dados ficam guardados</h4>\n<p>Os dados ficam no Supabase, em servidores localizados no Brasil (região de São Paulo). O envio do relatório semanal é feito pela Brevo, que processa apenas o seu e-mail, o seu nome e o conteúdo da mensagem. A página do aplicativo é hospedada no GitHub Pages, que não recebe as suas tarefas.</p>\n\n<h4>5. O que fica no seu navegador</h4>\n<p>O aplicativo guarda no próprio navegador a sua sessão de login, o tema escolhido, o nome e o logotipo do aplicativo e uma cópia local das suas tarefas, para funcionar mesmo sem internet. Isso é necessário para o sistema operar; apagar os dados do navegador remove essa cópia local, sem afetar o que está na nuvem.</p>\n\n<h4>6. Por quanto tempo</h4>\n<p>Enquanto sua conta existir. Ao pedir a exclusão, a conta, o perfil e todas as tarefas são apagados definitivamente, salvo obrigação legal de guarda.</p>\n\n<h4>7. Seus direitos</h4>\n<p>A LGPD (Lei 13.709/2018, art. 18) garante a você: confirmar se há tratamento; acessar seus dados; corrigir dados incompletos ou desatualizados; pedir anonimização, bloqueio ou eliminação; pedir a portabilidade; saber com quem os dados são compartilhados; e revogar o consentimento. Basta escrever para <b>lucascruz2012@gmail.com</b>; o prazo de resposta é de até 15 dias.</p>\n<p>Você também pode exportar seus próprios dados a qualquer momento, sem pedir nada a ninguém, em <i>Ajustes &rsaquo; Exportar backup completo</i>.</p>\n\n<h4>8. Segurança</h4>\n<p>Todo o tráfego é criptografado (HTTPS). Cada usuário só enxerga as próprias tarefas, por regra aplicada no próprio banco de dados. Contas novas nascem bloqueadas e só passam a funcionar após liberação do administrador.</p>\n\n<h4>9. Sua responsabilidade ao preencher</h4>\n<p class=\"lgpdwarn\">Evite escrever dados pessoais desnecessários nas tarefas. Em especial, <b>não registre dados sensíveis</b> — diagnósticos, resultados de exames, condições de saúde, dados biométricos, filiação sindical, religião ou opinião política — nem números de documentos (CPF, RG, conta bancária). Quando precisar tratar de um assunto assim, prefira uma referência neutra, como “tratar pendência do exame periódico — matrícula 123”.</p>\n<p>Ao inserir dados de outras pessoas, você declara ter base legal para isso e assume, perante elas, o papel de responsável por esse tratamento.</p>\n\n<h4>10. Termos de uso</h4>\n<p>O acesso é pessoal e intransferível: não compartilhe sua senha. O uso é restrito a finalidades profissionais legítimas. O administrador pode suspender o acesso em caso de uso indevido. O serviço é oferecido no estado em que se encontra, sem garantia de disponibilidade ininterrupta; mantenha backups periódicos pela função de exportação. Este aviso pode ser atualizado, e nesse caso um novo aceite será solicitado no próximo acesso.</p>";
+let lgpdResolve = null;
+
+function lgpdMonta(){
+  if($("#lgpdTxt").innerHTML) return;
+  $("#lgpdTxt").innerHTML = POL_HTML;
+  $("#lgpdVer").textContent = "Versão " + POL_VER;
+}
+function lgpdLer(){                       /* só leitura, sem exigir aceite */
+  lgpdMonta();
+  $("#lgpdChkWrap").classList.add("hidden");
+  $("#lgpdAceitar").classList.add("hidden");
+  $("#lgpdSair").classList.add("hidden");
+  $("#lgpdFechar").classList.remove("hidden");
+  $("#lgpd").classList.remove("hidden");
+  $("#lgpdTxt").scrollTop = 0;
+}
+function lgpdPedirAceite(){               /* devolve true se aceitou */
+  lgpdMonta();
+  $("#lgpdChkWrap").classList.remove("hidden");
+  $("#lgpdAceitar").classList.remove("hidden");
+  $("#lgpdSair").classList.remove("hidden");
+  $("#lgpdFechar").classList.add("hidden");
+  $("#lgpdChk").checked = false;
+  $("#lgpdAceitar").disabled = true;
+  $("#lgpd").classList.remove("hidden");
+  $("#lgpdTxt").scrollTop = 0;
+  return new Promise(r => { lgpdResolve = r; });
+}
+function lgpdFecha(v){
+  $("#lgpd").classList.add("hidden");
+  const r = lgpdResolve; lgpdResolve = null;
+  if(r) r(v);
+}
+$("#lgpdChk").addEventListener("change", e => { $("#lgpdAceitar").disabled = !e.target.checked; });
+$("#lgpdAceitar").addEventListener("click", () => lgpdFecha(true));
+$("#lgpdSair").addEventListener("click", () => lgpdFecha(false));
+$("#lgpdFechar").addEventListener("click", () => lgpdFecha(false));
+$("#lgpdAbrirLogin").addEventListener("click", lgpdLer);
+$("#btnVerPolitica").addEventListener("click", lgpdLer);
+
+async function lgpdGarante(){
+  if(PERFIL && PERFIL.aceite_versao === POL_VER) return true;
+  const ok = await lgpdPedirAceite();
+  if(!ok) return false;
+  try{
+    await sb("/rest/v1/perfis?id=eq." + ME.id, {method:"PATCH", headers:{Prefer:"return=minimal"},
+      body: JSON.stringify({aceite_versao: POL_VER, aceite_em: new Date().toISOString()})});
+    if(PERFIL) PERFIL.aceite_versao = POL_VER;
+  }catch(e){ /* sem rede: pede de novo no próximo acesso */ }
+  return true;
+}
+
 async function entrar(){
   let u=(SESSION&&SESSION.user)||null;
   if(!u||!u.id){ try{ u=await sbMe(); }catch(e){ if(e.offline) return semRede(); u=null; } }
@@ -866,6 +968,7 @@ async function entrar(){
   try{ await carregaPerfil(); }catch(e){ if(e.offline) return semRede(); throw e; }
   if(!PERFIL){ mostraPendente("Seu perfil está sendo criado. Recarregue a página em alguns segundos."); return; }
   if(!ME.ativo){ mostraPendente("Seu acesso foi criado e está aguardando liberação do administrador."); return; }
+  if(!await lgpdGarante()){ clearSession(); ME=null; PERFIL=null; V=null; clearUI(); LGMODE="login"; setupLogin(); return; }
   try{ await carregaCofre(); }
   catch(e){
     const c=cacheRead();
@@ -887,6 +990,10 @@ function clearUI(){
 }
 function abreApp(){
   clearUI();
+  { const t=$("#lgpdAceiteTag");
+    if(t) t.textContent = (PERFIL && PERFIL.aceite_em)
+      ? "Aceito por você em " + new Date(PERFIL.aceite_em).toLocaleString("pt-BR") + " — versão " + (PERFIL.aceite_versao||"—") + "."
+      : ""; }
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   $("#whoName").textContent=ME.name; $("#whoRole").textContent=ME.role==="admin"?"administrador":"usuário";
   $$(".admin-only").forEach(el=>el.classList.toggle("hidden",ME.role!=="admin"));
