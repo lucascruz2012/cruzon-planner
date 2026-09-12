@@ -1283,10 +1283,27 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
     recado      : $("#cfgRecado").value.trim() || null,
     whatsapp    : $("#cfgZap").value.replace(/\D/g,"") || null
   };
+  const zap = corpo.whatsapp;
+  if(zap && (zap.length < 12 || zap.length > 15)){
+    toast("WhatsApp deve ter país + DDD + número, só dígitos. Ex.: 5514981584071");
+    return;
+  }
   try{
     await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(corpo)});
     Object.assign(CFGAPP, corpo); pintaCfgPlanos(); toast("Planos salvos.");
-  }catch(e){ toast("Não consegui salvar. Tente de novo."); }
+  }catch(e){
+    const m = (e && e.message) ? String(e.message) : "";
+    if(/whatsapp/i.test(m)){
+      const semZap = {...corpo}; delete semZap.whatsapp;
+      try{
+        await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(semZap)});
+        Object.assign(CFGAPP, semZap); pintaCfgPlanos();
+        toast("Salvei tudo, menos o WhatsApp: falta rodar o arquivo 12-recados.sql no Supabase.");
+        return;
+      }catch(e2){}
+    }
+    toast("Não consegui salvar: " + (m || "erro desconhecido"));
+  }
 });
 $("#btnVerPaywall").addEventListener("click", ()=> mostraPaywall(false));
 
