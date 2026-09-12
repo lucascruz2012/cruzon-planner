@@ -298,6 +298,28 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
 .lgpdbtns{display:flex;gap:8px;align-items:center;margin-left:auto}
 .lgpdlnk{background:none;border:0;color:var(--brand-2);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer;padding:0}
 @media(max-width:560px){ .lgpdbtns{width:100%;justify-content:flex-end} }
+
+/* ---------- Assinatura / periodo de teste ---------- */
+.pwwrap{position:fixed;inset:0;z-index:9998;background:var(--plane);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.pwwrap.hidden{display:none}
+.pwbox{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);width:min(720px,100%);padding:26px 26px 22px;text-align:center}
+.pwbox img{width:210px;max-width:60%;margin:0 auto 14px;display:block}
+.pwbox h2{margin:0 0 6px;font-size:19px;color:var(--ink)}
+.pwbox .pwsub{margin:0 auto 20px;font-size:13.5px;color:var(--ink-2);max-width:520px;line-height:1.55}
+.pwplans{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.pwplan{flex:1 1 210px;max-width:260px;border:1px solid var(--line);border-radius:12px;padding:16px 14px;background:var(--surface-2);text-align:center}
+.pwplan.best{border-color:var(--accent);box-shadow:0 0 0 2px rgba(27,175,122,.16)}
+.pwplan .pwtag{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700}
+.pwplan .pwval{font-size:26px;font-weight:800;color:var(--ink);margin:6px 0 2px;letter-spacing:-.5px}
+.pwplan .pwval small{font-size:12px;font-weight:600;color:var(--muted)}
+.pwplan .pwobs{font-size:11.5px;color:var(--ink-2);min-height:32px;margin-bottom:10px}
+.pwplan .btn{width:100%}
+.pwfoot{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.pwnote{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+.trialbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--warn-bg);border:1px solid var(--warn);color:var(--ink);border-radius:10px;padding:9px 13px;margin:0 0 12px;font-size:12.5px}
+.trialbar.hidden{display:none}
+.trialbar b{font-weight:700}
+.trialbar .btn{margin-left:auto}
 </style>
 </head>
 <body>
@@ -348,6 +370,36 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
   </div>
 </div>
 
+
+<!-- ============ ASSINATURA ============ -->
+<div id="paywall" class="pwwrap hidden">
+  <div class="pwbox">
+    <img id="pwLogo" alt="">
+    <h2 id="pwTit">Seu período de teste terminou</h2>
+    <p class="pwsub" id="pwSub">Suas tarefas continuam guardadas e intactas. Para voltar a editar, escolha um plano abaixo.</p>
+    <div class="pwplans">
+      <div class="pwplan" id="pwMensalBox">
+        <div class="pwtag">Mensal</div>
+        <div class="pwval" id="pwMensalVal">—</div>
+        <div class="pwobs">Cobrança mês a mês. Cancele quando quiser.</div>
+        <button class="btn pri" id="pwMensal">Assinar mensal</button>
+      </div>
+      <div class="pwplan best" id="pwAnualBox">
+        <div class="pwtag">Anual</div>
+        <div class="pwval" id="pwAnualVal">—</div>
+        <div class="pwobs" id="pwAnualObs">Um pagamento por ano, com desconto.</div>
+        <button class="btn pri" id="pwAnual">Assinar anual</button>
+      </div>
+    </div>
+    <div class="pwfoot">
+      <button class="btn" id="pwExport">Exportar meus dados</button>
+      <button class="btn" id="pwPolitica">Aviso de Privacidade</button>
+      <button class="btn" id="pwSair">Sair</button>
+    </div>
+    <p class="pwnote" id="pwRecado">Já pagou? O acesso é liberado assim que o pagamento é confirmado. Se demorar, fale com o administrador.</p>
+  </div>
+</div>
+
 <!-- ===================== APP ===================== -->
 <div id="app" class="hidden">
 <header class="top">
@@ -369,6 +421,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
 </header>
 
 <main>
+  <div class="trialbar hidden" id="trialBar"><span id="trialTxt"></span><button class="btn sm pri" id="trialBtn">Ver planos</button></div>
   <div id="printhead" aria-hidden="true">
     <img id="phLogo" alt="">
     <div class="phinfo"><b id="phTitle"></b><span id="phSub"></span></div>
@@ -527,6 +580,29 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <div style="overflow:auto"><table class="tbl" id="tblUsers"></table></div>
       <div style="padding:12px 14px 14px">
         <p class="note" style="margin:0">Novas pessoas criam o próprio acesso pela tela de login e ficam <b>aguardando liberação</b> — aparecem aqui destacadas em amarelo e só entram depois que você clicar em <b>Liberar acesso</b>. Desativar bloqueia na hora, sem apagar nada. Para excluir a conta em definitivo, use o painel do Supabase.</p>
+      </div>
+    </div>
+
+    <div class="card admin-only" style="margin-bottom:12px">
+      <h3>Planos e cobrança <span class="badge">admin</span></h3>
+      <div style="padding:14px">
+        <label style="display:flex;align-items:flex-start;gap:9px;cursor:pointer">
+          <input type="checkbox" id="cfgTeste" style="margin-top:3px">
+          <span><b>Novos usuários começam com período de teste</b><br>
+          <span class="note" style="border:0;padding:0;margin:0">Quando você liberar o acesso de alguém, a contagem começa. Terminado o prazo, a pessoa continua vendo e exportando os dados, mas só volta a editar assinando um plano. Com a chave desligada, quem você liberar usa sem prazo, como é hoje.</span></span>
+        </label>
+        <div class="formgrid" style="margin-top:14px">
+          <div class="field"><label>Dias de teste</label><input id="cfgTesteDias" type="number" min="1" max="365" step="1"></div>
+          <div class="field"><label>Preço mensal (R$)</label><input id="cfgPrecoMes" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>Preço anual (R$)</label><input id="cfgPrecoAno" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>Recado na tela de assinatura</label><input id="cfgRecado" type="text" placeholder="opcional"></div>
+          <div class="field"><label>Link de pagamento mensal</label><input id="cfgUrlMes" type="url" placeholder="https://..."></div>
+          <div class="field"><label>Link de pagamento anual</label><input id="cfgUrlAno" type="url" placeholder="https://..."></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center">
+          <button class="btn pri" id="btnSalvarPlanos">Salvar</button>
+          <button class="btn" id="btnVerPaywall">Ver como o usuário vê</button>
+        </div>
       </div>
     </div>
 
@@ -959,6 +1035,118 @@ async function lgpdGarante(){
   return true;
 }
 
+/* ================= PLANOS, TESTE E ASSINATURA ================= */
+let CFGAPP = {teste_ativo:false, teste_dias:14, preco_mensal:null, preco_anual:null, url_mensal:"", url_anual:"", recado:""};
+
+async function carregaCfgApp(){
+  try{
+    const r = await sb("/rest/v1/config_app?select=*&id=eq.1");
+    if(r && r[0]) CFGAPP = Object.assign(CFGAPP, r[0]);
+  }catch(e){}
+  return CFGAPP;
+}
+function moeda(v){
+  if(v===null||v===undefined||v==="") return "—";
+  return "R$ " + Number(v).toFixed(2).replace(".", ",");
+}
+/* situacao do usuario logado: cortesia | livre | teste | ativo | vencido */
+function situacao(){
+  if(!PERFIL) return "livre";
+  if(PERFIL.isento) return "cortesia";
+  if(!PERFIL.acesso_ate) return "livre";
+  const fim = new Date(PERFIL.acesso_ate);
+  if(fim > new Date()) return (PERFIL.plano === "teste") ? "teste" : "ativo";
+  return "vencido";
+}
+function diasRestantes(){
+  if(!PERFIL || !PERFIL.acesso_ate) return null;
+  return Math.ceil((new Date(PERFIL.acesso_ate) - new Date()) / 86400000);
+}
+function pintaPaywall(vencido){
+  const l = $("#pwLogo"), src = logoSrc(document.documentElement.getAttribute("data-theme")==="dark");
+  if(l){ if(src){ l.src = src; l.style.display=""; } else l.style.display="none"; }
+  $("#pwTit").textContent = vencido
+    ? (PERFIL && PERFIL.plano === "teste" ? "Seu período de teste terminou" : "Sua assinatura venceu")
+    : "Planos do CruzOn Planner";
+  $("#pwSub").textContent = vencido
+    ? "Suas tarefas continuam guardadas e intactas. Para voltar a editar, escolha um plano abaixo."
+    : "É assim que a tela aparece para quem está com o acesso vencido.";
+  $("#pwMensalVal").innerHTML = moeda(CFGAPP.preco_mensal) + ' <small>/mês</small>';
+  $("#pwAnualVal").innerHTML  = moeda(CFGAPP.preco_anual)  + ' <small>/ano</small>';
+  let obs = "Um pagamento por ano, com desconto.";
+  if(CFGAPP.preco_mensal > 0 && CFGAPP.preco_anual > 0){
+    const eq = CFGAPP.preco_anual / 12, ec = Math.round((1 - eq / CFGAPP.preco_mensal) * 100);
+    if(ec > 0) obs = "Equivale a " + moeda(eq.toFixed(2)) + " por mês — " + ec + "% de economia.";
+  }
+  $("#pwAnualObs").textContent = obs;
+  $("#pwMensal").disabled = !CFGAPP.url_mensal;
+  $("#pwAnual").disabled  = !CFGAPP.url_anual;
+  $("#pwMensalBox").classList.toggle("hidden", !CFGAPP.preco_mensal && !CFGAPP.url_mensal);
+  $("#pwAnualBox").classList.toggle("hidden",  !CFGAPP.preco_anual  && !CFGAPP.url_anual);
+  $("#pwRecado").textContent = CFGAPP.recado ||
+    "Já pagou? O acesso é liberado assim que o pagamento é confirmado. Se demorar, fale com o administrador.";
+}
+function mostraPaywall(vencido){
+  pintaPaywall(vencido);
+  $("#paywall").classList.remove("hidden");
+}
+function escondePaywall(){ $("#paywall").classList.add("hidden"); }
+
+$("#pwMensal").addEventListener("click", ()=>{ if(CFGAPP.url_mensal) window.open(CFGAPP.url_mensal, "_blank", "noopener"); });
+$("#pwAnual").addEventListener("click",  ()=>{ if(CFGAPP.url_anual)  window.open(CFGAPP.url_anual,  "_blank", "noopener"); });
+$("#pwPolitica").addEventListener("click", lgpdLer);
+$("#pwSair").addEventListener("click", ()=>{
+  sb("/auth/v1/logout",{method:"POST"}).catch(()=>{});
+  clearSession(); ME=null; PERFIL=null; V=null; clearUI(); escondePaywall();
+  $("#app").classList.add("hidden"); $("#login").classList.remove("hidden");
+  LGMODE="login"; setupLogin();
+});
+$("#pwExport").addEventListener("click", ()=>{
+  if(!V) return;
+  download("cruzon-backup-"+todayISO()+".json",
+    JSON.stringify({type:"cruzon-dados",usuario:ME.email,gerado:new Date().toISOString(),dados:V},null,1));
+});
+
+/* faixa de aviso dentro do app */
+function pintaTrialBar(){
+  const bar = $("#trialBar"); if(!bar) return;
+  const s = situacao(), d = diasRestantes();
+  if((s === "teste" || s === "ativo") && d !== null && d <= 5){
+    $("#trialTxt").innerHTML = (s === "teste" ? "Seu período de teste termina " : "Sua assinatura vence ") +
+      (d <= 0 ? "<b>hoje</b>." : (d === 1 ? "<b>amanhã</b>." : "em <b>" + d + " dias</b>."));
+    bar.classList.remove("hidden");
+  } else bar.classList.add("hidden");
+}
+$("#trialBtn").addEventListener("click", ()=> mostraPaywall(false));
+
+/* ---- painel do administrador ---- */
+function pintaCfgPlanos(){
+  if(!ME || ME.role !== "admin") return;
+  $("#cfgTeste").checked      = !!CFGAPP.teste_ativo;
+  $("#cfgTesteDias").value    = CFGAPP.teste_dias || 14;
+  $("#cfgPrecoMes").value     = CFGAPP.preco_mensal ?? "";
+  $("#cfgPrecoAno").value     = CFGAPP.preco_anual ?? "";
+  $("#cfgUrlMes").value       = CFGAPP.url_mensal || "";
+  $("#cfgUrlAno").value       = CFGAPP.url_anual || "";
+  $("#cfgRecado").value       = CFGAPP.recado || "";
+}
+$("#btnSalvarPlanos").addEventListener("click", async ()=>{
+  const corpo = {
+    teste_ativo : $("#cfgTeste").checked,
+    teste_dias  : Math.min(365, Math.max(1, parseInt($("#cfgTesteDias").value,10) || 14)),
+    preco_mensal: $("#cfgPrecoMes").value === "" ? null : +$("#cfgPrecoMes").value,
+    preco_anual : $("#cfgPrecoAno").value === "" ? null : +$("#cfgPrecoAno").value,
+    url_mensal  : $("#cfgUrlMes").value.trim() || null,
+    url_anual   : $("#cfgUrlAno").value.trim() || null,
+    recado      : $("#cfgRecado").value.trim() || null
+  };
+  try{
+    await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(corpo)});
+    Object.assign(CFGAPP, corpo); pintaCfgPlanos(); toast("Planos salvos.");
+  }catch(e){ toast("Não consegui salvar. Tente de novo."); }
+});
+$("#btnVerPaywall").addEventListener("click", ()=> mostraPaywall(false));
+
 async function entrar(){
   let u=(SESSION&&SESSION.user)||null;
   if(!u||!u.id){ try{ u=await sbMe(); }catch(e){ if(e.offline) return semRede(); u=null; } }
@@ -978,6 +1166,11 @@ async function entrar(){
   }
   sb("/rest/v1/perfis?id=eq."+ME.id,{method:"PATCH",headers:{Prefer:"return=minimal"},
      body:JSON.stringify({ultimo_acesso:new Date().toISOString(),nome:ME.name})}).catch(()=>{});
+  await carregaCfgApp();
+  if(situacao()==="vencido" && ME.role!=="admin"){
+    $("#login").classList.add("hidden"); $("#app").classList.add("hidden");
+    mostraPaywall(true); return;
+  }
   abreApp();
 }
 function semRede(){
@@ -989,7 +1182,7 @@ function clearUI(){
    "tblWeeks","teamKpis","tblTeam","chartTeam","tblUsers","tblComps"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML="";});
 }
 function abreApp(){
-  clearUI();
+  clearUI(); escondePaywall();
   { const t=$("#lgpdAceiteTag");
     if(t) t.textContent = (PERFIL && PERFIL.aceite_em)
       ? "Aceito por você em " + new Date(PERFIL.aceite_em).toLocaleString("pt-BR") + " — versão " + (PERFIL.aceite_versao||"—") + "."
@@ -999,7 +1192,7 @@ function abreApp(){
   $$(".admin-only").forEach(el=>el.classList.toggle("hidden",ME.role!=="admin"));
   $("#tabTeam").classList.toggle("hidden",ME.role!=="admin");
   marcaSalvo(OFFLINE?"Sem conexão":"Sincronizado",false,OFFLINE);
-  week(CURWEEK); applyTheme(); show("dash");
+  week(CURWEEK); applyTheme(); pintaTrialBar(); pintaCfgPlanos(); show("dash");
 }
 $("#btnLogout").addEventListener("click",async()=>{
   if(dirty){ try{ await flush(); }catch(e){} }
@@ -1454,26 +1647,58 @@ function renderCfg(){
   $("#cfgOpacLbl").textContent=$("#cfgOpac").value+"%";
   renderComps();
 }
+function seloPlano(u){
+  if(u.isento) return '<span class="chip p-baixa">Gratuito</span>';
+  if(!u.acesso_ate) return '<span class="note" style="border:0;padding:0">sem prazo</span>';
+  const fim=new Date(u.acesso_ate), d=Math.ceil((fim-new Date())/86400000);
+  const dt=fim.toLocaleDateString("pt-BR");
+  const nome=u.plano==="teste"?"Teste":(u.plano==="anual"?"Anual":(u.plano==="mensal"?"Mensal":"Acesso"));
+  if(d<0)  return '<span class="chip p-crit">Vencido</span><br><span class="note" style="border:0;padding:0">'+nome+' até '+dt+'</span>';
+  if(d<=5) return '<span class="chip p-alta">'+nome+'</span><br><span class="note" style="border:0;padding:0">vence '+dt+'</span>';
+  return '<span class="chip p-media">'+nome+'</span><br><span class="note" style="border:0;padding:0">até '+dt+'</span>';
+}
+function somaMeses(base,m){ const d=new Date(base); d.setMonth(d.getMonth()+m); return d; }
+
 async function renderUsers(){
   if(ME.role!=="admin") return;
   $("#tblUsers").innerHTML='<tbody><tr><td class="empty">Carregando…</td></tr></tbody>';
   let lista=[];
   try{ lista=await sb("/rest/v1/perfis?select=*&order=ativo.asc,criado_em.asc"); }
   catch(e){ $("#tblUsers").innerHTML='<tbody><tr><td class="empty">Não consegui carregar os perfis.</td></tr></tbody>'; return; }
-  $("#tblUsers").innerHTML=`<thead><tr><th>Nome</th><th>E-mail</th><th style="width:120px">Perfil</th><th style="width:110px">Situação</th><th style="width:130px">Último acesso</th><th style="width:210px">Ações</th></tr></thead><tbody>`+
+  $("#tblUsers").innerHTML=`<thead><tr><th>Nome</th><th>E-mail</th><th style="width:120px">Perfil</th><th style="width:110px">Acesso</th><th style="width:150px">Plano</th><th style="width:120px">Último acesso</th><th style="width:300px">Ações</th></tr></thead><tbody>`+
     lista.map(u=>`<tr${u.ativo?"":' style="background:var(--warn-bg)"'}>
       <td><b>${esc(u.nome||"—")}</b>${u.id===ME.id?' <span class="badge">você</span>':""}</td>
       <td style="color:var(--ink-2)">${esc(u.email||"")}</td>
       <td>${u.papel==="admin"?'<span class="chip p-crit">Administrador</span>':'<span class="chip p-baixa">Usuário</span>'}</td>
       <td>${u.ativo?'<span class="st st-ok">Ativo</span>':'<span class="st st-soon">Aguardando</span>'}</td>
+      <td>${seloPlano(u)}</td>
       <td style="color:var(--muted);font-size:11.5px">${u.ultimo_acesso?new Date(u.ultimo_acesso).toLocaleDateString("pt-BR"):"nunca"}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">${u.id===ME.id?'<span class="note">é você</span>':
         (u.ativo?`<button class="btn sm" data-off="${u.id}">Desativar</button>`:`<button class="btn sm pri" data-on="${u.id}">Liberar acesso</button>`)+
-        `<button class="btn sm" data-papel="${u.id}" data-novo="${u.papel==="admin"?"user":"admin"}">${u.papel==="admin"?"Tornar usuário":"Tornar admin"}</button>`}</td></tr>`).join("")+"</tbody>";
+        `<button class="btn sm" data-papel="${u.id}" data-novo="${u.papel==="admin"?"user":"admin"}">${u.papel==="admin"?"Tornar usuário":"Tornar admin"}</button>`+
+        `<button class="btn sm" data-free="${u.id}" data-novo2="${u.isento?"0":"1"}">${u.isento?"Cobrar":"Gratuito"}</button>`+
+        (u.isento?"":`<button class="btn sm" data-ren="${u.id}" data-meses="1">+1 mês</button><button class="btn sm" data-ren="${u.id}" data-meses="12">+1 ano</button>`)}</td></tr>`).join("")+"</tbody>";
 }
 $("#tblUsers").addEventListener("click",async e=>{
-  const on=e.target.dataset.on, off=e.target.dataset.off, papel=e.target.dataset.papel;
+  const on=e.target.dataset.on, off=e.target.dataset.off, papel=e.target.dataset.papel,
+        free=e.target.dataset.free, ren=e.target.dataset.ren;
   try{
+    if(free){
+      const vira=e.target.dataset.novo2==="1";
+      if(!confirm(vira?"Deixar esta pessoa usando de graça, sem prazo e sem cobrança?":"Voltar a cobrar desta pessoa? O acesso fica sem prazo até você definir uma validade."))return;
+      await sb("/rest/v1/perfis?id=eq."+free,{method:"PATCH",headers:{Prefer:"return=minimal"},
+        body:JSON.stringify(vira?{isento:true}:{isento:false,plano:null,acesso_ate:null})});
+      toast(vira?"Marcado como gratuito.":"Cortesia removida.");
+    }
+    if(ren){
+      const meses=+e.target.dataset.meses;
+      const lista=await sb("/rest/v1/perfis?select=acesso_ate&id=eq."+ren);
+      const atual=(lista&&lista[0]&&lista[0].acesso_ate)?new Date(lista[0].acesso_ate):null;
+      const base=(atual&&atual>new Date())?atual:new Date();
+      await sb("/rest/v1/perfis?id=eq."+ren,{method:"PATCH",headers:{Prefer:"return=minimal"},
+        body:JSON.stringify({acesso_ate:somaMeses(base,meses).toISOString(),plano:meses>=12?"anual":"mensal",isento:false})});
+      toast(meses>=12?"Mais um ano liberado.":"Mais um mês liberado.");
+    }
     if(on){ await sb("/rest/v1/perfis?id=eq."+on,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ativo:true})}); toast("Acesso liberado."); }
     if(off){ if(!confirm("Desativar este acesso? A pessoa deixa de entrar, mas os dados dela ficam guardados.")) return;
       await sb("/rest/v1/perfis?id=eq."+off,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({ativo:false})}); toast("Acesso desativado."); }
