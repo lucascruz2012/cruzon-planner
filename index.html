@@ -4,6 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CruzOn Planner</title>
+<meta name="description" content="Planner semanal de rotina: tarefas por dia, criticidade, prazos e relatório de pendências toda segunda-feira.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CruzOn Planner">
+<meta property="og:title" content="CruzOn Planner — sua rotina sempre ligada">
+<meta property="og:description" content="Rotina organizada, resultados reais. Tarefas por dia, criticidade, prazos e relatório semanal de pendências.">
+<meta property="og:url" content="https://lucascruz2012.github.io/cruzon-planner/">
+<meta property="og:image" content="https://lucascruz2012.github.io/cruzon-planner/capa.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CruzOn Planner — sua rotina sempre ligada">
+<meta name="twitter:description" content="Rotina organizada, resultados reais.">
+<meta name="twitter:image" content="https://lucascruz2012.github.io/cruzon-planner/capa.jpg">
 <link rel="icon" href="data:image/png;base64,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">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
@@ -320,6 +333,62 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
 .trialbar.hidden{display:none}
 .trialbar b{font-weight:700}
 .trialbar .btn{margin-left:auto}
+
+/* ---------- Falar com o administrador ---------- */
+.pwcontato{margin-top:20px;border-top:1px solid var(--line);padding-top:16px;text-align:left}
+.pwcontato h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);text-align:center}
+.pwcontato textarea{width:100%;min-height:74px;resize:vertical;font:inherit;font-size:13px;padding:10px 12px;border:1px solid var(--line-2);border-radius:9px;background:var(--surface-2);color:var(--ink)}
+.pwcontato textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(27,175,122,.15)}
+.pwcontato .linha{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;justify-content:center}
+.zap{background:#25D366;border-color:#25D366;color:#0b3d21;font-weight:700}
+.zap:hover{filter:brightness(1.05)}
+.recado{border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:9px;background:var(--surface-2)}
+.recado.novo{border-color:var(--accent);background:var(--good-bg)}
+.recado .cab{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:5px}
+.recado .cab b{font-size:13px;color:var(--ink)}
+.recado .txt{font-size:13px;color:var(--ink-2);white-space:pre-wrap;line-height:1.5}
+.recado .acoes{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+
+/* ---------- Sino de recados ---------- */
+.sino{position:relative;padding-left:11px;padding-right:11px;font-size:15px;line-height:1}
+.sino.hidden{display:none}
+.sinoqtd{position:absolute;top:-6px;right:-6px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#D03B3B;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #0C1F2B}
+.sinoqtd.hidden{display:none}
+.sino.tem{animation:sinobate 1.4s ease-in-out 2}
+@keyframes sinobate{0%,100%{transform:rotate(0)}15%{transform:rotate(12deg)}30%{transform:rotate(-10deg)}45%{transform:rotate(7deg)}60%{transform:rotate(-5deg)}}
+@media (prefers-reduced-motion: reduce){ .sino.tem{animation:none} }
+.lgpdtxt .lgpdintro{background:var(--surface-3);border-radius:9px;padding:11px 13px;margin:12px 0 4px;color:var(--ink-2)}
+.lgpdtxt h4{margin:18px 0 5px}
+
+/* ---------- Manual de uso ---------- */
+.manwrap{position:fixed;inset:0;z-index:9997;background:rgba(11,11,11,.62);display:flex;align-items:center;justify-content:center;padding:16px}
+.manwrap.hidden{display:none}
+.manbox{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);width:min(980px,100%);max-height:94vh;display:flex;flex-direction:column;overflow:hidden}
+.manbox>header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.manbox>header b{font-size:15.5px}
+.manbox>header .ver{font-size:11.5px;color:var(--muted)}
+.manbox>header .acoes{margin-left:auto;display:flex;gap:8px}
+.manindice{padding:10px 20px;border-bottom:1px solid var(--line);background:var(--surface-2);display:flex;gap:6px;flex-wrap:wrap}
+.manindice button{background:var(--surface);border:1px solid var(--line-2);color:var(--ink-2);border-radius:99px;padding:3px 11px;font:inherit;font-size:11.5px;cursor:pointer}
+.manindice button:hover{border-color:var(--accent);color:var(--ink)}
+.mantxt{padding:4px 24px 22px;overflow:auto;font-size:13.5px;line-height:1.62;color:var(--ink-2)}
+.mantxt .manintro{background:var(--surface-3);border-radius:9px;padding:11px 13px;margin:14px 0 6px}
+.mantxt h3{margin:26px 0 8px;font-size:15px;color:var(--ink);scroll-margin-top:12px;padding-top:6px;border-top:1px solid var(--line)}
+.mantxt h3:first-of-type{border-top:0}
+.mantxt p{margin:0 0 9px}
+.mantxt ul{margin:0 0 10px;padding-left:20px}
+.mantxt li{margin-bottom:5px}
+.mantxt figure{margin:14px 0 18px}
+.mantxt figure img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.mantxt figcaption{font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center}
+@media print{
+  .manwrap{position:static;background:none;padding:0;display:block}
+  .manbox{max-height:none;box-shadow:none;border:0;width:100%}
+  .manindice,.manbox>header .acoes{display:none}
+  .mantxt{overflow:visible;padding:0}
+  .mantxt h3{break-after:avoid}
+  .mantxt figure{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -377,6 +446,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
     <img id="pwLogo" alt="">
     <h2 id="pwTit">Seu período de teste terminou</h2>
     <p class="pwsub" id="pwSub">Suas tarefas continuam guardadas e intactas. Para voltar a editar, escolha um plano abaixo.</p>
+    <p class="pwnote hidden" id="pwPlanosVazio" style="font-size:13px;color:var(--ink-2);margin:0 0 16px">Os planos ainda não foram publicados. Use o campo abaixo para falar com o administrador.</p>
     <div class="pwplans">
       <div class="pwplan" id="pwMensalBox">
         <div class="pwtag">Mensal</div>
@@ -391,12 +461,38 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <button class="btn pri" id="pwAnual">Assinar anual</button>
       </div>
     </div>
+    <div class="pwcontato" id="pwContato">
+      <h4>Precisa falar comigo?</h4>
+      <textarea id="pwMsg" maxlength="2000" placeholder="Escreva aqui sua dúvida sobre planos, pagamento ou prazo."></textarea>
+      <div class="linha">
+        <button class="btn pri" id="pwEnviarMsg">Enviar recado</button>
+        <button class="btn zap hidden" id="pwZap">Falar no WhatsApp</button>
+      </div>
+      <p class="pwnote" id="pwMsgOk" style="text-align:center"></p>
+    </div>
+
     <div class="pwfoot">
       <button class="btn" id="pwExport">Exportar meus dados</button>
       <button class="btn" id="pwPolitica">Aviso de Privacidade</button>
       <button class="btn" id="pwSair">Sair</button>
     </div>
     <p class="pwnote" id="pwRecado">Já pagou? O acesso é liberado assim que o pagamento é confirmado. Se demorar, fale com o administrador.</p>
+  </div>
+</div>
+
+
+<!-- ============ MANUAL DE USO ============ -->
+<div id="manual" class="manwrap hidden" role="dialog" aria-modal="true" aria-labelledby="manTit">
+  <div class="manbox">
+    <header>
+      <b id="manTit">Manual de uso</b><span class="ver" id="manVer"></span>
+      <span class="acoes">
+        <button class="btn sm" id="manImprimir">Imprimir</button>
+        <button class="btn sm pri" id="manFechar">Fechar</button>
+      </span>
+    </header>
+    <div class="manindice" id="manIndice"></div>
+    <div class="mantxt" id="manTxt"></div>
   </div>
 </div>
 
@@ -412,6 +508,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
     <button role="tab" data-view="team" aria-selected="false" id="tabTeam">Equipe</button>
     <button role="tab" data-view="cfg" aria-selected="false">Ajustes</button>
   </nav>
+  <button class="iconbtn sino hidden" id="btnSino" title="Recados dos usuários" aria-label="Recados dos usuários">🔔<span class="sinoqtd hidden" id="sinoQtd">0</span></button>
   <div class="spacer"></div>
   <span class="saved" id="savedTag">Salvo</span>
   <div class="who"><b id="whoName">—</b><span id="whoRole"></span></div>
@@ -543,6 +640,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <div class="card">
         <h3>Aparência</h3>
         <div class="formgrid">
+          <div class="field"><label>Nome exibido ao lado do logotipo</label><input id="cfgNomeExib" type="text" maxlength="40" placeholder="Ex.: Recursos Humanos, Financeiro, Nome da empresa"><span class="note" style="border:0;padding:4px 0 0;margin:0">É só seu: aparece ao lado do logotipo, na aba do navegador e nos relatórios impressos. Deixe vazio para não exibir nada.</span></div>
           <div class="field"><label>Tema</label><select id="cfgTheme"><option value="brand">Identidade CruzOn</option><option value="light">Claro</option><option value="dark">Escuro</option><option value="auto">Automático (segue o sistema)</option></select></div>
           <div class="field"><label>Fonte da semana</label><select id="cfgFont"><option value="10">Muito compacto (10px)</option><option value="11.5">Compacto (11,5px)</option><option value="13">Normal (13px)</option></select></div>
         </div>
@@ -565,7 +663,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
     <div class="card admin-only" style="margin-bottom:12px">
       <h3>Identidade do aplicativo <span class="badge">admin</span></h3>
       <div class="formgrid">
-        <div class="field"><label>Nome do aplicativo</label><input id="cfgAppName" type="text" placeholder="Planner de Atividades"></div>
+        
         <div class="field"><label>Logotipo (PNG, JPG ou SVG — até 400 KB)</label><input id="cfgLogo" type="file" accept="image/*"></div>
       </div>
       <div class="preview" style="flex-wrap:wrap"><div class="box" id="logoPrev" style="width:150px;height:56px;padding:5px"></div>
@@ -584,6 +682,17 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
     </div>
 
     <div class="card admin-only" style="margin-bottom:12px">
+      <h3>Recados dos usuários <span class="badge">admin</span> <span class="chip p-crit hidden" id="recNovos"></span></h3>
+      <div style="padding:14px">
+        <div id="listaRecados"><p class="note" style="margin:0">Carregando…</p></div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn" id="btnRecRefresh">Atualizar</button>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer"><input type="checkbox" id="recTodos"> mostrar também os já lidos</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card admin-only" style="margin-bottom:12px">
       <h3>Planos e cobrança <span class="badge">admin</span></h3>
       <div style="padding:14px">
         <label style="display:flex;align-items:flex-start;gap:9px;cursor:pointer">
@@ -596,12 +705,24 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
           <div class="field"><label>Preço mensal (R$)</label><input id="cfgPrecoMes" type="number" min="0" step="0.01"></div>
           <div class="field"><label>Preço anual (R$)</label><input id="cfgPrecoAno" type="number" min="0" step="0.01"></div>
           <div class="field"><label>Recado na tela de assinatura</label><input id="cfgRecado" type="text" placeholder="opcional"></div>
+          <div class="field"><label>WhatsApp para contato</label><input id="cfgZap" type="text" inputmode="numeric" placeholder="5531999998888"><span class="note" style="border:0;padding:4px 0 0;margin:0">Só números, com país e DDD. Deixe vazio para esconder o botão.</span></div>
           <div class="field"><label>Link de pagamento mensal</label><input id="cfgUrlMes" type="url" placeholder="https://..."></div>
           <div class="field"><label>Link de pagamento anual</label><input id="cfgUrlAno" type="url" placeholder="https://..."></div>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center">
           <button class="btn pri" id="btnSalvarPlanos">Salvar</button>
           <button class="btn" id="btnVerPaywall">Ver como o usuário vê</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <h3>Manual de uso</h3>
+      <div style="padding:14px">
+        <p class="note" style="margin-top:0">Passo a passo completo de todas as abas, com imagens. É atualizado a cada nova funcionalidade do aplicativo.</p>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center">
+          <button class="btn pri" id="btnManual">Abrir o manual</button>
+          <span class="note" id="manVerTag" style="border:0;padding:0;margin:0"></span>
         </div>
       </div>
     </div>
@@ -870,7 +991,8 @@ function logoSrc(forDark){
 }
 function applyBranding(){
   const th=document.documentElement.getAttribute("data-theme"), dark=th==="dark";
-  const nm=APP.app.name||"CruzOn Planner";
+  const pess=(V&&V.prefs&&V.prefs.nomeExib!=null)?String(V.prefs.nomeExib).trim():null;
+  const nm=(pess!==null&&pess!=="")?pess:(APP.app.name||"CruzOn Planner");
   document.title=nm; $("#lgAppName").textContent=nm;
   const ini=nm.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase()||"CP";
   const hdrDark=(th==="brand"||th==="dark"), top=$("#topLogo"), src=hdrLogo(hdrDark);
@@ -878,7 +1000,7 @@ function applyBranding(){
     if(src){ top.className="mk"; top.innerHTML='<img src="'+src+'" alt="'+esc(nm)+'">'; }
     else { top.className="mk ini"; top.textContent=ini; }
   }
-  const tn=$("#topName"); if(tn){ tn.textContent=nm; tn.classList.toggle("hide",!!src&&!APP.app.showName); }
+  const tn=$("#topName"); if(tn){ tn.textContent=nm; tn.classList.toggle("hide", !nm || (!!src && !APP.app.showName && (pess===null||pess==="")) ); }
   const lg=$("#lgLogo"); if(lg){ const ls=logoSrc(dark); if(ls){lg.src=ls;lg.style.display="";} else lg.style.display="none"; lg.alt=nm; }
   const pv=$("#logoPrev"); if(pv){ const ps=logoSrc(dark); pv.innerHTML=ps?'<img src="'+ps+'" style="max-width:100%;max-height:100%">':esc(ini); }
 }
@@ -981,8 +1103,8 @@ function mostraPendente(txt){
 $("#btnSairPendente").addEventListener("click",()=>{ clearSession(); LGMODE="login"; setupLogin(); });
 
 /* ================= AVISO DE PRIVACIDADE (LGPD) ================= */
-const POL_VER = "1.0 (setembro/2026)";
-const POL_HTML = "<h4>1. Quem é o responsável</h4>\n<p>O CruzOn Planner é operado por <b>Lucas Cruz</b>. Dúvidas, pedidos e reclamações sobre dados pessoais: <b>lucascruz2012@gmail.com</b>.</p>\n\n<h4>2. Quais dados são tratados</h4>\n<p><b>De você, usuário:</b> nome, e-mail, senha (guardada apenas de forma criptografada, nem o administrador consegue lê-la), data e hora do último acesso e a data em que você aceitou este aviso.</p>\n<p><b>Conteúdo que você digita:</b> descrição das tarefas, empresa, prazos, percentual de conclusão, criticidade e observações. Esse conteúdo pode conter dados de terceiros — por exemplo, o nome de um funcionário citado numa tarefa.</p>\n<p>Não há cookies de publicidade, rastreamento de navegação, perfilamento comportamental nem venda de dados a ninguém.</p>\n\n<h4>3. Para que os dados são usados</h4>\n<p>Exclusivamente para: permitir seu acesso e manter sua conta; guardar e sincronizar suas tarefas entre computadores; gerar indicadores e o relatório semanal de pendências enviado ao seu próprio e-mail; e permitir que o administrador autorize ou bloqueie acessos.</p>\n\n<h4>4. Onde os dados ficam guardados</h4>\n<p>Os dados ficam no Supabase, em servidores localizados no Brasil (região de São Paulo). O envio do relatório semanal é feito pela Brevo, que processa apenas o seu e-mail, o seu nome e o conteúdo da mensagem. A página do aplicativo é hospedada no GitHub Pages, que não recebe as suas tarefas.</p>\n\n<h4>5. O que fica no seu navegador</h4>\n<p>O aplicativo guarda no próprio navegador a sua sessão de login, o tema escolhido, o nome e o logotipo do aplicativo e uma cópia local das suas tarefas, para funcionar mesmo sem internet. Isso é necessário para o sistema operar; apagar os dados do navegador remove essa cópia local, sem afetar o que está na nuvem.</p>\n\n<h4>6. Por quanto tempo</h4>\n<p>Enquanto sua conta existir. Ao pedir a exclusão, a conta, o perfil e todas as tarefas são apagados definitivamente, salvo obrigação legal de guarda.</p>\n\n<h4>7. Seus direitos</h4>\n<p>A LGPD (Lei 13.709/2018, art. 18) garante a você: confirmar se há tratamento; acessar seus dados; corrigir dados incompletos ou desatualizados; pedir anonimização, bloqueio ou eliminação; pedir a portabilidade; saber com quem os dados são compartilhados; e revogar o consentimento. Basta escrever para <b>lucascruz2012@gmail.com</b>; o prazo de resposta é de até 15 dias.</p>\n<p>Você também pode exportar seus próprios dados a qualquer momento, sem pedir nada a ninguém, em <i>Ajustes &rsaquo; Exportar backup completo</i>.</p>\n\n<h4>8. Segurança</h4>\n<p>Todo o tráfego é criptografado (HTTPS). Cada usuário só enxerga as próprias tarefas, por regra aplicada no próprio banco de dados. Contas novas nascem bloqueadas e só passam a funcionar após liberação do administrador.</p>\n\n<h4>9. Sua responsabilidade ao preencher</h4>\n<p class=\"lgpdwarn\">Evite escrever dados pessoais desnecessários nas tarefas. Em especial, <b>não registre dados sensíveis</b> — diagnósticos, resultados de exames, condições de saúde, dados biométricos, filiação sindical, religião ou opinião política — nem números de documentos (CPF, RG, conta bancária). Quando precisar tratar de um assunto assim, prefira uma referência neutra, como “tratar pendência do exame periódico — matrícula 123”.</p>\n<p>Ao inserir dados de outras pessoas, você declara ter base legal para isso e assume, perante elas, o papel de responsável por esse tratamento.</p>\n\n<h4>10. Termos de uso</h4>\n<p>O acesso é pessoal e intransferível: não compartilhe sua senha. O uso é restrito a finalidades profissionais legítimas. O administrador pode suspender o acesso em caso de uso indevido. O serviço é oferecido no estado em que se encontra, sem garantia de disponibilidade ininterrupta; mantenha backups periódicos pela função de exportação. Este aviso pode ser atualizado, e nesse caso um novo aceite será solicitado no próximo acesso.</p>";
+const POL_VER = "2.0 (setembro/2026)";
+const POL_HTML = "<p class=\"lgpdintro\">Este documento reúne o <b>Aviso de Privacidade</b> e os <b>Termos de Uso</b> do CruzOn Planner. Ele explica, em linguagem direta, quais dados o aplicativo trata, com que finalidade, por quanto tempo e quais são os seus direitos, em conformidade com a Lei nº 13.709/2018 (Lei Geral de Proteção de Dados).</p>\n\n<h4>1. Controlador e contato</h4>\n<p>O CruzOn Planner é operado por <b>Lucas Cruz</b>, que atua como controlador dos dados de cadastro e de acesso. Pedidos, dúvidas e reclamações relativos a dados pessoais devem ser dirigidos a <b>lucascruz2012@gmail.com</b>, canal que também exerce a função de encarregado pelo tratamento de dados.</p>\n\n<h4>2. Dados tratados</h4>\n<p><b>2.1. Dados de cadastro e uso.</b> Nome, endereço de e-mail, senha (armazenada exclusivamente sob forma criptografada e irrecuperável, inacessível inclusive ao administrador), data e hora do último acesso, situação do plano e registro do aceite deste documento.</p>\n<p><b>2.2. Conteúdo lançado pelo usuário.</b> Descrição das atividades, organização por empresa ou área, prazos, percentual de conclusão, nível de criticidade, anotações e itens recorrentes. O conteúdo é definido livremente por quem o insere e pode, conforme a natureza do trabalho, conter dados pessoais de terceiros.</p>\n<p><b>2.3. Dados não tratados.</b> O aplicativo não utiliza cookies de publicidade, não realiza rastreamento de navegação, não constrói perfis comportamentais, não emprega os dados para treinar sistemas automatizados e não comercializa, cede ou compartilha informações com terceiros para fins promocionais.</p>\n\n<h4>3. Finalidades e bases legais</h4>\n<p>Os dados de cadastro são tratados para autenticar o acesso, manter a conta, sincronizar o conteúdo entre dispositivos, apurar indicadores de produtividade individuais e enviar ao próprio titular o relatório periódico de pendências — com fundamento na <b>execução de contrato</b> (art. 7º, V) e no <b>legítimo interesse</b> na segurança e na melhoria do serviço (art. 7º, IX). O registro do aceite deste aviso ampara-se no <b>cumprimento de obrigação legal</b> (art. 7º, II).</p>\n\n<h4>4. Papéis quando há dados de terceiros</h4>\n<p>Ao lançar informações sobre outras pessoas, o usuário — ou a organização que ele representa — atua como <b>controlador</b> desse tratamento, cabendo-lhe definir finalidade e base legal e responder perante os titulares. O CruzOn Planner atua como <b>operador</b>, tratando tais dados apenas conforme as instruções do usuário e nos limites deste aviso.</p>\n\n<h4>5. Infraestrutura e compartilhamento</h4>\n<p>O banco de dados está hospedado no <b>Supabase</b>, em servidores localizados no Brasil. O disparo de mensagens automáticas é realizado pela <b>Brevo</b>, que recebe apenas nome, endereço de e-mail e o conteúdo da própria mensagem, e cujo processamento pode ocorrer fora do território nacional, nos termos dos arts. 33 a 36 da LGPD. A interface do aplicativo é distribuída pelo <b>GitHub Pages</b>, que não tem acesso ao conteúdo lançado. Nenhum outro compartilhamento ocorre, ressalvada requisição de autoridade competente.</p>\n\n<h4>6. Armazenamento local no dispositivo</h4>\n<p>Para funcionar com estabilidade e permitir consulta sem conexão, o aplicativo mantém no navegador do usuário: a sessão autenticada, as preferências de exibição, a identidade visual e uma cópia local do conteúdo. Trata-se de armazenamento estritamente necessário à prestação do serviço. A limpeza dos dados do navegador remove essa cópia sem afetar as informações mantidas na nuvem.</p>\n\n<h4>7. Prazo de guarda</h4>\n<p>Os dados permanecem armazenados enquanto a conta estiver ativa. Solicitada a exclusão, a conta, o perfil e todo o conteúdo associado são eliminados de forma definitiva, ressalvadas as hipóteses de guarda obrigatória previstas no art. 16 da LGPD. A suspensão do acesso por falta de pagamento não implica exclusão: o conteúdo permanece disponível para consulta e exportação.</p>\n\n<h4>8. Direitos do titular</h4>\n<p>Nos termos do art. 18 da LGPD, o titular pode, a qualquer tempo, requerer: confirmação da existência de tratamento; acesso aos dados; correção de informações incompletas, inexatas ou desatualizadas; anonimização, bloqueio ou eliminação de dados desnecessários ou tratados em desconformidade; portabilidade; informação sobre compartilhamentos; e revogação do consentimento. As solicitações devem ser enviadas para <b>lucascruz2012@gmail.com</b> e são respondidas em até 15 dias.</p>\n<p>Independentemente de solicitação, o próprio usuário pode extrair a íntegra do seu conteúdo, em formato legível por máquina, pela função <i>Ajustes &rsaquo; Exportar backup completo</i>.</p>\n\n<h4>9. Segurança</h4>\n<p>A comunicação trafega integralmente sob criptografia (HTTPS). O isolamento entre contas é aplicado no próprio banco de dados, de modo que cada usuário acessa exclusivamente o seu conteúdo. Contas recém-criadas permanecem bloqueadas até liberação expressa do administrador. Verificado incidente de segurança com risco relevante aos titulares, a comunicação prevista no art. 48 da LGPD será realizada.</p>\n\n<h4>10. Responsabilidade sobre o conteúdo lançado</h4>\n<p class=\"lgpdwarn\">Registre apenas os dados pessoais estritamente necessários à sua atividade. Recomenda-se <b>não inserir dados pessoais sensíveis</b> — informações sobre saúde, biometria, origem racial ou étnica, convicção religiosa, opinião política, filiação sindical ou vida sexual (art. 5º, II) — nem números de documentos oficiais, dados bancários ou credenciais de acesso. Havendo necessidade de referenciar assunto dessa natureza, prefira identificação indireta, como um código ou número de protocolo.</p>\n\n<h4>11. Termos de uso</h4>\n<p><b>11.1.</b> O acesso é pessoal e intransferível; o compartilhamento de credenciais é vedado e a responsabilidade por atos praticados na conta é do respectivo titular.</p>\n<p><b>11.2.</b> É vedado utilizar o aplicativo para finalidade ilícita, para armazenar conteúdo que viole direitos de terceiros ou de modo que comprometa a estabilidade do serviço.</p>\n<p><b>11.3.</b> O administrador pode suspender o acesso em caso de uso indevido ou de inadimplemento, observado o disposto no item 7.</p>\n<p><b>11.4.</b> O serviço é disponibilizado no estado em que se encontra, sem garantia de disponibilidade ininterrupta ou de ausência de falhas. Recomenda-se a extração periódica de backup pela função de exportação.</p>\n<p><b>11.5.</b> Este documento pode ser revisado a qualquer tempo. Havendo alteração relevante, nova versão será apresentada para aceite no acesso seguinte, e o uso continuado após o aceite implica concordância integral com os termos vigentes.</p>";
 let lgpdResolve = null;
 
 function lgpdMonta(){
@@ -1079,10 +1201,14 @@ function pintaPaywall(vencido){
     if(ec > 0) obs = "Equivale a " + moeda(eq.toFixed(2)) + " por mês — " + ec + "% de economia.";
   }
   $("#pwAnualObs").textContent = obs;
-  $("#pwMensal").disabled = !CFGAPP.url_mensal;
-  $("#pwAnual").disabled  = !CFGAPP.url_anual;
-  $("#pwMensalBox").classList.toggle("hidden", !CFGAPP.preco_mensal && !CFGAPP.url_mensal);
-  $("#pwAnualBox").classList.toggle("hidden",  !CFGAPP.preco_anual  && !CFGAPP.url_anual);
+  $("#pwMensal").textContent = CFGAPP.url_mensal ? "Assinar mensal" : "Quero o mensal";
+  $("#pwAnual").textContent  = CFGAPP.url_anual  ? "Assinar anual"  : "Quero o anual";
+  const temMes = !!(CFGAPP.preco_mensal || CFGAPP.url_mensal);
+  const temAno = !!(CFGAPP.preco_anual  || CFGAPP.url_anual);
+  $("#pwMensalBox").classList.toggle("hidden", !temMes);
+  $("#pwAnualBox").classList.toggle("hidden",  !temAno);
+  $("#pwPlanosVazio").classList.toggle("hidden", temMes || temAno);
+  const z = $("#pwZap"); if(z) z.classList.toggle("hidden", !zapLink());
   $("#pwRecado").textContent = CFGAPP.recado ||
     "Já pagou? O acesso é liberado assim que o pagamento é confirmado. Se demorar, fale com o administrador.";
 }
@@ -1092,8 +1218,15 @@ function mostraPaywall(vencido){
 }
 function escondePaywall(){ $("#paywall").classList.add("hidden"); }
 
-$("#pwMensal").addEventListener("click", ()=>{ if(CFGAPP.url_mensal) window.open(CFGAPP.url_mensal, "_blank", "noopener"); });
-$("#pwAnual").addEventListener("click",  ()=>{ if(CFGAPP.url_anual)  window.open(CFGAPP.url_anual,  "_blank", "noopener"); });
+function escolhePlano(qual){
+  const url = qual === "anual" ? CFGAPP.url_anual : CFGAPP.url_mensal;
+  if(url){ window.open(url, "_blank", "noopener"); return; }
+  const m = $("#pwMsg");
+  if(m){ m.value = "Quero contratar o plano " + (qual === "anual" ? "anual" : "mensal") + ". Como faço para pagar?";
+         m.focus(); m.scrollIntoView({behavior:"smooth", block:"center"}); }
+}
+$("#pwMensal").addEventListener("click", ()=> escolhePlano("mensal"));
+$("#pwAnual").addEventListener("click",  ()=> escolhePlano("anual"));
 $("#pwPolitica").addEventListener("click", lgpdLer);
 $("#pwSair").addEventListener("click", ()=>{
   sb("/auth/v1/logout",{method:"POST"}).catch(()=>{});
@@ -1129,6 +1262,7 @@ function pintaCfgPlanos(){
   $("#cfgUrlMes").value       = CFGAPP.url_mensal || "";
   $("#cfgUrlAno").value       = CFGAPP.url_anual || "";
   $("#cfgRecado").value       = CFGAPP.recado || "";
+  $("#cfgZap").value          = CFGAPP.whatsapp || "";
 }
 $("#btnSalvarPlanos").addEventListener("click", async ()=>{
   const corpo = {
@@ -1138,7 +1272,8 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
     preco_anual : $("#cfgPrecoAno").value === "" ? null : +$("#cfgPrecoAno").value,
     url_mensal  : $("#cfgUrlMes").value.trim() || null,
     url_anual   : $("#cfgUrlAno").value.trim() || null,
-    recado      : $("#cfgRecado").value.trim() || null
+    recado      : $("#cfgRecado").value.trim() || null,
+    whatsapp    : $("#cfgZap").value.replace(/\D/g,"") || null
   };
   try{
     await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(corpo)});
@@ -1146,6 +1281,147 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
   }catch(e){ toast("Não consegui salvar. Tente de novo."); }
 });
 $("#btnVerPaywall").addEventListener("click", ()=> mostraPaywall(false));
+
+/* ================= RECADOS ================= */
+function zapLink(){
+  const n = (CFGAPP.whatsapp || "").replace(/\D/g, "");
+  if(!n) return "";
+  const quem = (ME && ME.email) ? (" Sou " + (ME.name || "") + " (" + ME.email + ").") : "";
+  const txt = "Olá! Estou usando o " + (APP.app.name || "CruzOn Planner") + "." + quem;
+  return "https://wa.me/" + n + "?text=" + encodeURIComponent(txt);
+}
+async function enviaRecado(texto){
+  return sb("/rest/v1/recados", {method:"POST", headers:{Prefer:"return=minimal"},
+    body: JSON.stringify({user_id: ME.id, nome: ME.name || null, email: ME.email || null, texto: texto})});
+}
+$("#pwEnviarMsg").addEventListener("click", async ()=>{
+  const t = $("#pwMsg").value.trim();
+  if(t.length < 3){ $("#pwMsgOk").textContent = "Escreva sua mensagem antes de enviar."; return; }
+  $("#pwEnviarMsg").disabled = true;
+  try{
+    await enviaRecado(t);
+    $("#pwMsg").value = "";
+    $("#pwMsgOk").textContent = "Recado enviado. Vou receber por e-mail e respondo assim que possível.";
+  }catch(e){ $("#pwMsgOk").textContent = "Não consegui enviar agora. Tente de novo ou use o WhatsApp."; }
+  $("#pwEnviarMsg").disabled = false;
+});
+$("#pwZap").addEventListener("click", ()=>{ const u = zapLink(); if(u) window.open(u, "_blank", "noopener"); });
+
+/* ---- caixa de entrada do administrador ---- */
+async function renderRecados(){
+  if(!ME || ME.role !== "admin") return;
+  const alvo = $("#listaRecados"); if(!alvo) return;
+  const todos = $("#recTodos") && $("#recTodos").checked;
+  alvo.innerHTML = '<p class="note" style="margin:0">Carregando…</p>';
+  let lista = [];
+  try{
+    lista = await sb("/rest/v1/recados?select=*&order=criado_em.desc&limit=50" + (todos ? "" : "&lido=eq.false"));
+  }catch(e){ alvo.innerHTML = '<p class="note" style="margin:0">Não consegui carregar os recados.</p>'; return; }
+
+  const nlidos = lista.filter(r => !r.lido).length;
+  const selo = $("#recNovos");
+  if(selo){ selo.textContent = nlidos + (nlidos === 1 ? " novo" : " novos"); selo.classList.toggle("hidden", nlidos === 0); }
+
+  if(!lista.length){
+    alvo.innerHTML = '<p class="note" style="margin:0">' + (todos ? "Nenhum recado até agora." : "Nenhum recado novo.") + '</p>';
+    return;
+  }
+  alvo.innerHTML = lista.map(r => {
+    const q = (CFGAPP.whatsapp || "").replace(/\D/g, "");
+    const resp = r.email ? '<a class="btn sm" href="mailto:' + esc(r.email) +
+      '?subject=' + encodeURIComponent("Sobre o seu recado no " + (APP.app.name || "CruzOn Planner")) + '">Responder por e-mail</a>' : "";
+    return '<div class="recado' + (r.lido ? "" : " novo") + '">' +
+      '<div class="cab"><b>' + esc(r.nome || "—") + '</b><span>' + esc(r.email || "") + '</span>' +
+      '<span style="margin-left:auto">' + new Date(r.criado_em).toLocaleString("pt-BR") + '</span></div>' +
+      '<div class="txt">' + esc(r.texto) + '</div>' +
+      '<div class="acoes">' + resp +
+        (r.lido ? '<button class="btn sm" data-relido="' + r.id + '" data-v="0">Marcar como novo</button>'
+                : '<button class="btn sm pri" data-relido="' + r.id + '" data-v="1">Marcar como lido</button>') +
+        '<button class="btn sm danger" data-recdel="' + r.id + '">Excluir</button>' +
+      '</div></div>';
+  }).join("");
+}
+$("#listaRecados").addEventListener("click", async e=>{
+  const id = e.target.dataset.relido, del = e.target.dataset.recdel;
+  try{
+    if(id){
+      await sb("/rest/v1/recados?id=eq." + id, {method:"PATCH", headers:{Prefer:"return=minimal"},
+        body: JSON.stringify({lido: e.target.dataset.v === "1"})});
+      renderRecados(); checaRecados();
+    }
+    if(del){
+      if(!confirm("Excluir este recado em definitivo?")) return;
+      await sb("/rest/v1/recados?id=eq." + del, {method:"DELETE", headers:{Prefer:"return=minimal"}});
+      renderRecados(); checaRecados();
+    }
+  }catch(err){ toast("Não consegui atualizar o recado."); }
+});
+$("#btnRecRefresh").addEventListener("click", renderRecados);
+$("#recTodos").addEventListener("change", renderRecados);
+
+/* ---- sino de recados (admin) ---- */
+let RECTIMER = null, RECULT = 0;
+async function checaRecados(){
+  if(!ME || ME.role !== "admin") return;
+  let n = 0;
+  try{
+    const r = await sb("/rest/v1/recados?select=id&lido=eq.false&limit=200");
+    n = (r || []).length;
+  }catch(e){ return; }
+  const b = $("#btnSino"), q = $("#sinoQtd");
+  if(!b || !q) return;
+  b.classList.remove("hidden");
+  q.textContent = n > 99 ? "99+" : n;
+  q.classList.toggle("hidden", n === 0);
+  b.title = n === 0 ? "Nenhum recado novo" : (n === 1 ? "1 recado novo" : n + " recados novos");
+  if(n > RECULT){ b.classList.remove("tem"); void b.offsetWidth; b.classList.add("tem"); }
+  RECULT = n;
+}
+function ligaSino(){
+  if(!ME || ME.role !== "admin"){ const b=$("#btnSino"); if(b) b.classList.add("hidden"); return; }
+  checaRecados();
+  if(RECTIMER) clearInterval(RECTIMER);
+  RECTIMER = setInterval(checaRecados, 120000);
+}
+window.addEventListener("focus", ()=>{ if(ME && ME.role === "admin") checaRecados(); });
+$("#btnSino").addEventListener("click", ()=>{
+  show("cfg");
+  renderRecados();
+  setTimeout(()=>{ const el=$("#listaRecados"); if(el) el.scrollIntoView({behavior:"smooth", block:"center"}); }, 120);
+});
+
+/* ================= MANUAL DE USO ================= */
+const MAN_VER = "1.0";
+const MAN_DATA = "12/09/2026";
+const MAN_HTML = "<p class=\"manintro\">Este manual acompanha o aplicativo e é atualizado a cada nova funcionalidade. Percorra na ordem se for a sua primeira vez, ou use o índice acima para ir direto ao ponto.</p>\n\n<h3 id=\"m-visao\">1. O que é o CruzOn Planner</h3>\n<p>É um planejador de rotina semanal. Você registra o que precisa fazer, distribui pelos dias da semana, marca o nível de criticidade e o percentual concluído, e o aplicativo transforma isso em indicadores, histórico e um relatório de pendências que chega no seu e-mail.</p>\n<p>Ele não pressupõe nenhuma área específica: serve para quem cuida de pessoas, de contratos, de obras, de clientes ou de qualquer conjunto de tarefas com prazo e responsável. A divisão por <b>empresa</b> pode ser usada como setor, cliente, projeto ou unidade — quem define é você.</p>\n<p>Tudo o que você registra fica na sua conta, na nuvem. Você entra de qualquer computador e encontra o mesmo conteúdo.</p>\n\n<h3 id=\"m-entrar\">2. Primeiro acesso</h3>\n<p><b>Criar a conta.</b> Na tela de entrada, clique em <b>Criar conta</b>, informe nome, e-mail e senha. A conta nasce bloqueada: o administrador precisa liberar o acesso. Enquanto isso, você vê um aviso de espera.</p>\n<p><b>Esqueci a senha.</b> Clique em <b>Esqueci minha senha</b>, informe o e-mail e siga o link que chega na sua caixa de entrada.</p>\n<p><b>Aviso de Privacidade.</b> No primeiro acesso aparece o Aviso de Privacidade e os Termos de Uso. É preciso marcar a caixa de concordância para entrar. A data do seu aceite fica registrada e pode ser consultada depois em Ajustes.</p>\n<figure><img loading=\"lazy\" src=\"manual-login.jpg\" alt=\"Tela de entrada do aplicativo\"><figcaption>Tela de entrada: e-mail, senha, recuperação e criação de conta.</figcaption></figure>\n\n<h3 id=\"m-semana\">3. Aba Semana — o coração do aplicativo</h3>\n<p>É aqui que você trabalha no dia a dia. Cada coluna é um dia, e cada cartão é uma tarefa.</p>\n<p><b>Criar uma tarefa.</b> Clique em <b>+ tarefa</b> no rodapé da coluna do dia desejado. Escreva a descrição e preencha os campos do cartão.</p>\n<p><b>Campos de cada cartão:</b></p>\n<ul>\n  <li><b>Descrição</b> — texto livre, sem limite prático de tamanho. Clique sobre ele para editar.</li>\n  <li><b>Criticidade</b> — Crítica, Alta, Média ou Baixa. É o que ordena as listas e colore a etiqueta.</li>\n  <li><b>Empresa</b> — a lista vem do seu cadastro em Ajustes. A cor da borda do cartão segue a cor da empresa.</li>\n  <li><b>Prazo</b> — a data de vencimento. Tarefa com prazo passado e não concluída entra como atrasada.</li>\n  <li><b>Percentual</b> — de 0% a 100%. Ao chegar em 100% o cartão fica verde e a descrição é riscada.</li>\n</ul>\n<p><b>Mover uma tarefa de dia.</b> Arraste o cartão para outra coluna. Serve tanto para reorganizar a semana quanto para empurrar o que não deu tempo.</p>\n<p><b>Coluna No radar.</b> É a coluna fixa da direita, para o que ainda não tem dia marcado — ideias, pendências futuras, coisas que dependem de terceiros. Ela aparece igual em todas as semanas até você arrastar o item para um dia.</p>\n<p><b>Ordenar por criticidade.</b> No topo de cada coluna há um botão de ordenação. O primeiro clique põe as mais críticas em cima, o segundo inverte, o terceiro volta à ordem manual. O botão <b>Ordenar tudo</b> aplica de uma vez a todas as colunas. É só uma forma de visualizar: a posição real das tarefas não muda.</p>\n<p><b>Sábado e domingo.</b> Os botões no topo escondem ou mostram o fim de semana. Com eles escondidos, os cinco dias úteis ocupam a tela inteira.</p>\n<p><b>Levar pendências.</b> O botão leva para a semana seguinte tudo o que ficou aberto, sem precisar redigitar.</p>\n<figure><img loading=\"lazy\" src=\"manual-semana.jpg\" alt=\"Aba Semana com os dias e a coluna No radar\"><figcaption>A grade da semana, com criticidade colorida, percentual por tarefa e a coluna No radar à direita.</figcaption></figure>\n\n<h3 id=\"m-dash\">4. Aba Dashboard</h3>\n<p>Mostra como está a semana escolhida. Use as setas ao lado da data para navegar entre semanas e o botão <b>Hoje</b> para voltar à atual.</p>\n<p><b>Os indicadores do topo</b> respondem, em ordem: quanto da semana foi concluído, como isso se compara com a semana anterior, quantas tarefas existem, quantas estão concluídas, em andamento e não iniciadas, quantas estão atrasadas, quantas vencem hoje, quantas vieram de semanas anteriores, quantos prazos existem nos próximos 14 dias e quantos itens estão no radar.</p>\n<p><b>Os quadros abaixo</b> abrem o mesmo número por empresa e por criticidade, comparam planejado contra concluído em cada dia, mostram a distribuição por situação e listam as prioridades em aberto e os próximos prazos.</p>\n<p>Se um número parecer estranho, clique na semana correspondente: o Dashboard sempre reflete exatamente o que está na aba Semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-dash.jpg\" alt=\"Dashboard com indicadores e gráficos da semana\"><figcaption>Indicadores da semana, desempenho por empresa e por criticidade, e os próximos prazos.</figcaption></figure>\n\n<h3 id=\"m-rec\">5. Aba Recorrentes</h3>\n<p>Serve para o que se repete: obrigações mensais, conferências semanais, rotinas anuais. Cadastre uma vez e o aplicativo lança a tarefa sozinho na semana certa.</p>\n<p>Clique em <b>+ Nova recorrência</b> e preencha empresa, descrição, criticidade e frequência. Depois informe o dia:</p>\n<ul>\n  <li><b>Mensal e Anual</b> — o dia do mês (por exemplo, 7 para todo dia 7). No anual, informe também o mês.</li>\n  <li><b>Semanal</b> — o dia da semana, em número: 1 é segunda-feira e 7 é domingo.</li>\n</ul>\n<p>A caixa <b>Ativo</b> liga e desliga a recorrência sem apagá-la. Uma tarefa lançada por recorrência aparece na semana com a marca <b>rec</b> e pode ser editada normalmente — a alteração vale só para aquela semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-rec.jpg\" alt=\"Aba Recorrentes com a lista de rotinas cadastradas\"><figcaption>Cada linha é uma rotina que se repete sozinha na semana correspondente.</figcaption></figure>\n\n<h3 id=\"m-hist\">6. Aba Histórico</h3>\n<p>Alimentada automaticamente por todas as semanas já registradas. Traz a evolução mensal de planejadas contra concluídas, um resumo mês a mês e a lista de todas as semanas, com o botão <b>abrir</b> para ir direto a qualquer uma delas.</p>\n<p>É a aba certa para responder \"como foi o trimestre\" sem precisar abrir semana por semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-hist.jpg\" alt=\"Aba Histórico com gráfico de evolução mensal\"><figcaption>Evolução mensal e a lista de semanas registradas.</figcaption></figure>\n\n<h3 id=\"m-ajustes\">7. Aba Ajustes</h3>\n<p><b>Sua conta.</b> Altere seu nome e sua senha. A troca de senha vale para todos os computadores.</p>\n<p><b>Aparência.</b> Escolha o tema (Identidade, Claro, Escuro ou Automático), o tamanho da fonte da aba Semana e a intensidade da cor das empresas nos cartões.</p>\n<p><b>Nome exibido ao lado do logotipo.</b> Este campo é só seu: escreva o nome da sua empresa, do seu setor ou o que preferir, e ele aparece ao lado do logotipo, na aba do navegador e no cabeçalho das impressões. Deixe vazio para não exibir nada.</p>\n<p><b>Empresas.</b> Cadastre quantas quiser, com nome e cor. Renomear uma empresa atualiza automaticamente as tarefas já lançadas com ela.</p>\n<p><b>Backup.</b> <i>Exportar backup completo</i> gera um arquivo com tudo o que é seu; <i>Restaurar / importar</i> traz esse arquivo de volta; <i>Exportar semana</i> gera uma planilha da semana atual. Vale exportar de tempos em tempos, mesmo com os dados na nuvem.</p>\n<p><b>Privacidade.</b> Abre o Aviso de Privacidade a qualquer momento e mostra a data do seu aceite.</p>\n<p><b>Zona de risco.</b> Apaga todo o seu conteúdo na nuvem. Não tem volta — exporte um backup antes.</p>\n<figure><img loading=\"lazy\" src=\"manual-ajustes.jpg\" alt=\"Aba Ajustes com as opções de conta, aparência e empresas\"><figcaption>Ajustes reúne conta, aparência, empresas, backup, privacidade e o manual.</figcaption></figure>\n\n<h3 id=\"m-email\">8. Relatório semanal por e-mail</h3>\n<p>Toda segunda-feira, às 6h30, você recebe um e-mail com o fechamento da semana anterior: percentual concluído, quantidade de pendentes, atrasadas e itens no radar, a lista do que ficou em aberto com a criticidade e a empresa de cada item, os prazos dos próximos sete dias e uma frase de encerramento.</p>\n<p>Cada pessoa recebe apenas as próprias pendências. Se o e-mail não chegar, verifique a pasta de spam ou promoções e marque como \"não é spam\" — isso resolve para todos os envios seguintes.</p>\n\n<h3 id=\"m-print\">9. Impressão</h3>\n<p>O botão <b>Imprimir</b>, no topo, gera a versão em papel ou PDF do que estiver na tela. O cabeçalho sai com o logotipo, o nome exibido, o seu nome e a data da impressão.</p>\n<p>Para gerar um PDF, escolha \"Salvar como PDF\" no destino da impressão do navegador.</p>\n\n<h3 id=\"m-planos\">10. Período de teste, planos e recados</h3>\n<p>Se o administrador tiver ativado o período de teste, a contagem começa no dia em que o seu acesso é liberado. Nos últimos cinco dias aparece um aviso no topo do aplicativo.</p>\n<p>Terminado o prazo, o conteúdo continua guardado e disponível para consulta e exportação, mas a edição fica suspensa até a contratação de um plano. Na tela que aparece você pode escolher o plano, enviar um recado ao administrador ou falar por WhatsApp.</p>\n\n<h3 id=\"m-equipe\">11. Aba Equipe e funções do administrador</h3>\n<p>Visível apenas para quem é administrador. Reúne o panorama consolidado da equipe e a gestão de acessos.</p>\n<p>Em Ajustes, o administrador ainda controla: <b>Perfis de acesso</b> (liberar, desativar, promover a administrador, marcar como gratuito e renovar validade), <b>Recados dos usuários</b> (caixa de entrada, com sino de aviso no topo), <b>Planos e cobrança</b> (período de teste, preços, links de pagamento e WhatsApp) e a <b>Identidade do aplicativo</b> (logotipo).</p>\n\n<h3 id=\"m-duvidas\">12. Se algo não funcionar</h3>\n<p><b>O aplicativo não atualizou depois de uma novidade.</b> Pressione Ctrl+F5 para recarregar ignorando o que ficou guardado no navegador.</p>\n<p><b>Aparece \"Sem conexão\" no topo.</b> Você continua trabalhando normalmente: as alterações ficam guardadas no navegador e sobem sozinhas quando a internet voltar.</p>\n<p><b>Entrei e não vejo minhas tarefas.</b> Confira se entrou com o mesmo e-mail de sempre. Cada conta tem o seu próprio conteúdo.</p>\n<p><b>A sessão expirou.</b> É normal depois de muito tempo sem uso. Basta entrar de novo.</p>\n<p><b>Outra dúvida.</b> Fale com o administrador pelo canal informado na tela de planos ou pelo e-mail de contato do Aviso de Privacidade.</p>";
+function manMonta(){
+  if($("#manTxt").innerHTML) return;
+  $("#manTxt").innerHTML = MAN_HTML;
+  $("#manVer").textContent = "versão " + MAN_VER + " — " + MAN_DATA;
+  const tag = $("#manVerTag"); if(tag) tag.textContent = "Versão " + MAN_VER + " (" + MAN_DATA + ")";
+  $("#manIndice").innerHTML = [...$("#manTxt").querySelectorAll("h3")]
+    .map(x => '<button data-ir="' + x.id + '">' + esc(x.textContent) + '</button>').join("");
+  $("#manTxt").querySelectorAll("img").forEach(im => {
+    im.addEventListener("error", () => { const f = im.closest("figure"); if(f) f.style.display = "none"; });
+  });
+}
+function manAbre(){
+  manMonta();
+  $("#manual").classList.remove("hidden");
+  $("#manTxt").scrollTop = 0;
+}
+$("#btnManual").addEventListener("click", manAbre);
+$("#manFechar").addEventListener("click", () => $("#manual").classList.add("hidden"));
+$("#manImprimir").addEventListener("click", () => window.print());
+$("#manIndice").addEventListener("click", e => {
+  const id = e.target.dataset.ir; if(!id) return;
+  const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+});
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape"){
+    if(!$("#manual").classList.contains("hidden")) $("#manual").classList.add("hidden");
+  }
+});
 
 async function entrar(){
   let u=(SESSION&&SESSION.user)||null;
@@ -1182,7 +1458,7 @@ function clearUI(){
    "tblWeeks","teamKpis","tblTeam","chartTeam","tblUsers","tblComps"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML="";});
 }
 function abreApp(){
-  clearUI(); escondePaywall();
+  clearUI(); escondePaywall(); manMonta();
   { const t=$("#lgpdAceiteTag");
     if(t) t.textContent = (PERFIL && PERFIL.aceite_em)
       ? "Aceito por você em " + new Date(PERFIL.aceite_em).toLocaleString("pt-BR") + " — versão " + (PERFIL.aceite_versao||"—") + "."
@@ -1192,12 +1468,16 @@ function abreApp(){
   $$(".admin-only").forEach(el=>el.classList.toggle("hidden",ME.role!=="admin"));
   $("#tabTeam").classList.toggle("hidden",ME.role!=="admin");
   marcaSalvo(OFFLINE?"Sem conexão":"Sincronizado",false,OFFLINE);
-  week(CURWEEK); applyTheme(); pintaTrialBar(); pintaCfgPlanos(); show("dash");
+  week(CURWEEK); applyTheme(); pintaTrialBar(); pintaCfgPlanos();
+  if(ME.role==="admin"){ renderRecados(); ligaSino(); }
+  show("dash");
 }
 $("#btnLogout").addEventListener("click",async()=>{
   if(dirty){ try{ await flush(); }catch(e){} }
   sb("/auth/v1/logout",{method:"POST"}).catch(()=>{});
   clearSession(); ME=null; PERFIL=null; V=null; clearUI();
+  if(RECTIMER){ clearInterval(RECTIMER); RECTIMER=null; } RECULT=0;
+  const _s=$("#btnSino"); if(_s) _s.classList.add("hidden");
   $("#app").classList.add("hidden"); $("#login").classList.remove("hidden");
   $("#lgPass").value=""; $("#lgPass2").value=""; LGMODE="login"; setupLogin();
 });
@@ -1639,7 +1919,7 @@ function renderCfg(){
   $("#cfgTheme").value=V.prefs.theme||"brand"; $("#cfgFont").value=V.prefs.font||"11.5";
   $("#lastBackup").textContent=V.meta&&V.meta.backup?"Último backup exportado em "+new Date(V.meta.backup).toLocaleString("pt-BR"):"Nenhum backup exportado ainda.";
   if(ME.role==="admin"){
-    $("#cfgAppName").value=APP.app.name||"";
+    $("#cfgNomeExib").value=(V.prefs.nomeExib!=null)?V.prefs.nomeExib:"";
     $("#cfgShowName").checked=!!APP.app.showName;
     renderUsers();
   }
@@ -1763,7 +2043,7 @@ $("#cfgOpac").addEventListener("input",e=>{
 });
 $("#cfgTheme").addEventListener("change",e=>{V.prefs.theme=e.target.value;save();applyTheme();});
 $("#cfgFont").addEventListener("change",e=>{V.prefs.font=e.target.value;save();applyTheme();if(VIEW==="week")renderWeek();});
-$("#cfgAppName").addEventListener("input",e=>{APP.app.name=e.target.value||"CruzOn Planner";persist();applyBranding();});
+$("#cfgNomeExib").addEventListener("input",e=>{ V.prefs.nomeExib=e.target.value; save(); applyBranding(); });
 $("#cfgLogo").addEventListener("change",e=>{
   const f=e.target.files[0]; if(!f) return;
   if(f.size>400*1024){e.target.value="";return toast("Imagem muito grande (máx. 400 KB).");}
