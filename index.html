@@ -1068,6 +1068,7 @@ function newPayload(opts){
 }
 function normalizeV(){
   V=V||{}; V.prefs=V.prefs||{}; V.weeks=V.weeks||{}; V.rules=V.rules||[]; V.radar=V.radar||[]; V.meta=V.meta||{};
+  V.lixo=V.lixo||[];
   if(!V.companies||!V.companies.length) V.companies=DEFCOMPS.map(c=>({id:uid(),...c}));
   if(V.prefs.opacity==null) V.prefs.opacity=14;
   if(!V.prefs.theme) {V.prefs.theme="brand";V.prefs.themeSet=1;}
@@ -1139,14 +1140,178 @@ async function carregaCofre(){
   const r=await sb("/rest/v1/cofres?select=dados,atualizado_em&user_id=eq."+ME.id);
   const linha=(r&&r[0])||null;
   V=(linha&&linha.dados&&linha.dados.weeks)?linha.dados:newPayload({});
-  normalizeV(); cacheLocal();
+  TS_SYNC = linha&&linha.atualizado_em ? Date.parse(linha.atualizado_em) : 0;
+  normalizeV(); fixaBase(); cacheLocal();
 }
 function cacheLocal(){ try{ localStorage.setItem(CACHEK+":"+ME.id,JSON.stringify(V)); }catch(e){} }
 function cacheRead(){ try{ const r=localStorage.getItem(CACHEK+":"+ME.id); return r?JSON.parse(r):null; }catch(e){ return null; } }
+
+/* ======================= SINCRONIZAÇÃO ENTRE APARELHOS =======================
+   O cofre é uma linha só por usuário. Sem controle de versão, quem salvasse por
+   último apagava o trabalho do outro aparelho. Aqui cada item ganha um carimbo
+   de hora, o servidor recusa gravação em cima de versão mais nova, e o que
+   chega de fora é mesclado item a item.
+   ========================================================================== */
+let TS_SYNC = 0;          /* carimbo da última versão conhecida do servidor  */
+let BASE = null;          /* assinatura de cada item na última sincronização */
+let BASE_PREFS = "";
+let RPC_OK = true;        /* vira false se a função salva_cofre ainda não existe */
+let POLL = null;
+
+function itensCofre(v){
+  const out=[];
+  Object.keys((v&&v.weeks)||{}).forEach(k=>{
+    ((v.weeks[k]&&v.weeks[k].tasks)||[]).forEach(t=>{ if(t&&t.id) out.push({tipo:"t",id:t.id,sem:k,o:t}); });
+  });
+  ((v&&v.radar)||[]).forEach(t=>{ if(t&&t.id) out.push({tipo:"t",id:t.id,sem:"radar",o:t}); });
+  ((v&&v.rules)||[]).forEach(r=>{ if(r&&r.id) out.push({tipo:"r",id:r.id,sem:null,o:r}); });
+  ((v&&v.companies)||[]).forEach(c=>{ if(c&&c.id) out.push({tipo:"c",id:c.id,sem:null,o:c}); });
+  return out;
+}
+function assinaItem(it){ const o=Object.assign({},it.o); delete o.ts; return it.tipo+"|"+it.sem+"|"+JSON.stringify(o); }
+function assinaPrefs(v){ const o=Object.assign({},(v&&v.prefs)||{}); delete o.ts; return JSON.stringify(o); }
+function fixaBase(){
+  BASE=new Map(); itensCofre(V).forEach(it=>BASE.set(it.id,assinaItem(it)));
+  BASE_PREFS=assinaPrefs(V);
+}
+function carimbaMudancas(){
+  const agora=Date.now(); if(!BASE) fixaBase();
+  const vivos=new Set();
+  itensCofre(V).forEach(it=>{
+    vivos.add(it.id);
+    const a=assinaItem(it);
+    if(BASE.get(it.id)!==a) it.o.ts=agora;
+    else if(!it.o.ts) it.o.ts=TS_SYNC||agora;
+  });
+  V.lixo=V.lixo||[];
+  BASE.forEach((_,id)=>{ if(!vivos.has(id)&&!V.lixo.some(x=>x.id===id)) V.lixo.push({id:id,ts:agora}); });
+  if(assinaPrefs(V)!==BASE_PREFS) V.prefs.ts=agora;
+  const corte=agora-45*86400000;
+  V.lixo=V.lixo.filter(x=>(x.ts||0)>corte).slice(-600);
+}
+function tiraItem(v,id){
+  if(v.radar){ const k=v.radar.findIndex(x=>x&&x.id===id); if(k>=0) v.radar.splice(k,1); }
+  if(v.rules){ const k=v.rules.findIndex(x=>x&&x.id===id); if(k>=0) v.rules.splice(k,1); }
+  if(v.companies){ const k=v.companies.findIndex(x=>x&&x.id===id); if(k>=0) v.companies.splice(k,1); }
+  Object.keys(v.weeks||{}).forEach(k=>{
+    const a=(v.weeks[k]&&v.weeks[k].tasks)||[]; const p=a.findIndex(x=>x&&x.id===id); if(p>=0) a.splice(p,1);
+  });
+}
+function poeItem(v,it){
+  const o=JSON.parse(JSON.stringify(it.o));
+  if(it.tipo==="r"){ (v.rules=v.rules||[]).push(o); return; }
+  if(it.tipo==="c"){ (v.companies=v.companies||[]).push(o); return; }
+  if(it.sem==="radar"){ (v.radar=v.radar||[]).push(o); return; }
+  v.weeks=v.weeks||{}; v.weeks[it.sem]=v.weeks[it.sem]||{tasks:[],gen:{}};
+  v.weeks[it.sem].tasks=v.weeks[it.sem].tasks||[];
+  v.weeks[it.sem].tasks.push(o);
+}
+/* junta o que está neste aparelho (L) com o que veio do servidor (R) */
+function mesclaCofres(L,R){
+  L=L||{}; R=R||{};
+  const res=JSON.parse(JSON.stringify(R));
+  res.weeks=res.weeks||{}; res.rules=res.rules||[]; res.radar=res.radar||[];
+  res.companies=res.companies||[]; res.prefs=res.prefs||{}; res.meta=res.meta||{};
+  const lixoL=new Map(((L.lixo)||[]).map(x=>[x.id,x.ts||0]));
+  const lixoR=new Map(((R.lixo)||[]).map(x=>[x.id,x.ts||0]));
+  const mapL=new Map(itensCofre(L).map(i=>[i.id,i]));
+  const mapR=new Map(itensCofre(R).map(i=>[i.id,i]));
+
+  /* apagado aqui depois da última alteração de lá: sai */
+  mapR.forEach((i,id)=>{ const m=lixoL.get(id); if(m!=null&&m>=(i.o.ts||0)) tiraItem(res,id); });
+  /* o que existe aqui e é mais novo (ou é novo) entra */
+  mapL.forEach((i,id)=>{
+    const m=lixoR.get(id); if(m!=null&&m>=(i.o.ts||0)) return;   /* apagado lá depois */
+    const r=mapR.get(id);
+    if(!r){ poeItem(res,i); return; }
+    if((i.o.ts||0)>(r.o.ts||0)){ tiraItem(res,id); poeItem(res,i); }
+  });
+  /* marcas de recorrência já lançada: união das duas listas */
+  Object.keys(L.weeks||{}).forEach(k=>{
+    res.weeks[k]=res.weeks[k]||{tasks:[],gen:{}};
+    res.weeks[k].gen=Object.assign({},(L.weeks[k]&&L.weeks[k].gen)||{},res.weeks[k].gen||{});
+  });
+  /* preferências e backup: vence o carimbo mais novo */
+  if(((L.prefs&&L.prefs.ts)||0)>=((R.prefs&&R.prefs.ts)||0)) res.prefs=JSON.parse(JSON.stringify(L.prefs||{}));
+  if(((L.meta&&L.meta.ts)||0)>((R.meta&&R.meta.ts)||0)) res.meta=JSON.parse(JSON.stringify(L.meta||{}));
+  /* lixeira unificada */
+  const lx=new Map();
+  ((R.lixo)||[]).concat((L.lixo)||[]).forEach(x=>{ if(!lx.has(x.id)||lx.get(x.id)<(x.ts||0)) lx.set(x.id,x.ts||0); });
+  res.lixo=Array.from(lx).map(a=>({id:a[0],ts:a[1]}));
+  return res;
+}
 async function gravaCofre(){
+  carimbaMudancas();
+  if(!RPC_OK) return gravaCofreSimples();
+  let base = TS_SYNC ? new Date(TS_SYNC).toISOString() : null;
+  for(let volta=0; volta<3; volta++){
+    let r;
+    try{
+      r=await sb("/rest/v1/rpc/salva_cofre",{method:"POST",body:JSON.stringify({p_dados:V,p_base:base})});
+    }catch(e){
+      if(e&&(e.status===404||e.status===400)){ RPC_OK=false; return gravaCofreSimples(); }
+      throw e;
+    }
+    if(r&&r.ok===false){                     /* alguém gravou antes: mescla e tenta de novo */
+      V=mesclaCofres(V,r.dados); normalizeV();
+      TS_SYNC=Date.parse(r.ts); base=new Date(TS_SYNC).toISOString();
+      fixaBase();                            /* a versão mesclada vira a nova base */
+      cacheLocal(); refazTela(true);
+      continue;
+    }
+    TS_SYNC=r&&r.ts?Date.parse(r.ts):Date.now();
+    fixaBase(); return;
+  }
+  fixaBase();
+}
+async function gravaCofreSimples(){   /* enquanto a função salva_cofre não existir no banco */
+  const agora=new Date().toISOString();
   await sb("/rest/v1/cofres?on_conflict=user_id",{method:"POST",
     headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
-    body:JSON.stringify({user_id:ME.id,dados:V,atualizado_em:new Date().toISOString()})});
+    body:JSON.stringify({user_id:ME.id,dados:V,atualizado_em:agora})});
+  TS_SYNC=Date.parse(agora); fixaBase();
+}
+function editandoAgora(){
+  const a=document.activeElement;
+  if(!a||a===document.body) return false;
+  if(!/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return false;
+  return !a.closest("#login");
+}
+function refazTela(silencioso){
+  try{ applyBranding(); }catch(e){}
+  const f={dash:renderDash,week:renderWeek,rec:renderRec,hist:renderHist,team:renderTeam,cfg:renderCfg}[VIEW];
+  try{ if(f) f(); }catch(e){}
+  if(!silencioso){
+    marcaSalvo("Atualizado ✓",true);
+    clearTimeout(saveT); saveT=setTimeout(()=>marcaSalvo(OFFLINE?"Sem conexão":"Sincronizado",false,OFFLINE),1800);
+  }
+}
+async function verificaRemoto(){
+  if(!V||!ME||saving) return;
+  if(document.visibilityState!=="visible") return;
+  if(document.querySelector("#moveSheet:not(.hidden)")) return;
+  if(document.querySelector("#paywall:not(.hidden)")) return;
+  try{
+    const r=await sb("/rest/v1/cofres?select=atualizado_em&user_id=eq."+ME.id);
+    const ts=(r&&r[0]&&r[0].atualizado_em)?Date.parse(r[0].atualizado_em):0;
+    if(OFFLINE){ OFFLINE=false; marcaSalvo("Sincronizado"); if(dirty) flush(); }
+    if(!ts||ts<=TS_SYNC) return;
+    if(editandoAgora()) return;                 /* não puxa enquanto o usuário digita */
+    const f=await sb("/rest/v1/cofres?select=dados,atualizado_em&user_id=eq."+ME.id);
+    const linha=(f&&f[0])||null;
+    if(!linha||!linha.dados||!linha.dados.weeks) return;
+    const novoTs=Date.parse(linha.atualizado_em);
+    if(novoTs<=TS_SYNC) return;
+    if(dirty){ carimbaMudancas(); V=mesclaCofres(V,linha.dados); }
+    else V=linha.dados;
+    normalizeV(); TS_SYNC=novoTs; fixaBase(); cacheLocal(); refazTela();
+    if(dirty) flush();
+  }catch(e){ if(e&&e.offline){ OFFLINE=true; marcaSalvo("Sem conexão — tentando…",false,true); } }
+}
+function ligaSync(){
+  clearInterval(POLL);
+  POLL=setInterval(verificaRemoto,6000);
+  verificaRemoto();
 }
 
 /* ---------- salvamento automático ---------- */
@@ -1167,8 +1332,13 @@ async function flush(){
   }finally{ saving=false; }
 }
 window.addEventListener("beforeunload",e=>{ if(dirty){ e.preventDefault(); e.returnValue=""; } });
-document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden"&&dirty) flush(); });
-window.addEventListener("online",()=>{ if(dirty) flush(); });
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="hidden"){ if(dirty) flush(); return; }
+  verificaRemoto();                     /* voltou para a tela: busca o que mudou */
+});
+window.addEventListener("focus",()=>{ verificaRemoto(); });
+window.addEventListener("pageshow",()=>{ verificaRemoto(); });
+window.addEventListener("online",()=>{ OFFLINE=false; if(dirty) flush(); verificaRemoto(); });
 
 /* ======================= REGRAS / SEMANA ======================= */
 function occurrences(rule,mon){
@@ -1643,9 +1813,9 @@ $("#btnSino").addEventListener("click", ()=>{
 });
 
 /* ================= MANUAL DE USO ================= */
-const MAN_VER = "1.6";
-const MAN_DATA = "15/09/2026";
-const MAN_HTML = "<p class=\"manintro\">Este manual acompanha o aplicativo e é atualizado a cada nova funcionalidade. Percorra na ordem se for a sua primeira vez, ou use o índice acima para ir direto ao ponto.</p>\n\n<h3 id=\"m-visao\">1. O que é o CruzOn Planner</h3>\n<p>É um planejador de rotina semanal. Você registra o que precisa fazer, distribui pelos dias da semana, marca o nível de criticidade e o percentual concluído, e o aplicativo transforma isso em indicadores, histórico e um relatório de pendências que chega no seu e-mail.</p>\n<p>Ele não pressupõe nenhuma área específica: serve para quem cuida de pessoas, de contratos, de obras, de clientes ou de qualquer conjunto de tarefas com prazo e responsável. A divisão por <b>empresa</b> pode ser usada como setor, cliente, projeto ou unidade — quem define é você.</p>\n<p>Tudo o que você registra fica na sua conta, na nuvem. Você entra de qualquer computador e encontra o mesmo conteúdo.</p>\n\n<h3 id=\"m-entrar\">2. Primeiro acesso</h3>\n<p><b>Criar a conta.</b> Na tela de entrada, clique em <b>Criar conta</b>, informe nome, e-mail e senha. A conta nasce bloqueada: o administrador precisa liberar o acesso. Enquanto isso, você vê um aviso de espera.</p>\n<p><b>Esqueci a senha.</b> Clique em <b>Esqueci minha senha</b>, informe o e-mail e siga o link que chega na sua caixa de entrada.</p>\n<p><b>Aviso de Privacidade.</b> No primeiro acesso aparece o Aviso de Privacidade e os Termos de Uso. É preciso marcar a caixa de concordância para entrar. A data do seu aceite fica registrada e pode ser consultada depois em Ajustes.</p>\n<figure><img loading=\"lazy\" src=\"manual-login.jpg\" alt=\"Tela de entrada do aplicativo\"><figcaption>Tela de entrada: e-mail, senha, recuperação e criação de conta.</figcaption></figure>\n\n<h3 id=\"m-semana\">3. Aba Semana — o coração do aplicativo</h3>\n<p>É aqui que você trabalha no dia a dia. Cada coluna é um dia, e cada cartão é uma tarefa.</p>\n<p><b>Criar uma tarefa.</b> Clique em <b>+ tarefa</b> no rodapé da coluna do dia desejado. Escreva a descrição e preencha os campos do cartão.</p>\n<p><b>Campos de cada cartão:</b></p>\n<ul>\n  <li><b>Descrição</b> — texto livre, sem limite prático de tamanho. Clique sobre ele para editar.</li>\n  <li><b>Criticidade</b> — Crítica, Alta, Média ou Baixa. É o que ordena as listas e colore a etiqueta.</li>\n  <li><b>Empresa</b> — a lista vem do seu cadastro em Ajustes. A cor da borda do cartão segue a cor da empresa.</li>\n  <li><b>Prazo</b> — a data de vencimento. Tarefa com prazo passado e não concluída entra como atrasada.</li>\n  <li><b>Percentual</b> — de 0% a 100%. Ao chegar em 100% o cartão fica verde e a descrição é riscada.</li>\n</ul>\n<p><b>Mover uma tarefa de dia.</b> Arraste o cartão para outra coluna. Serve tanto para reorganizar a semana quanto para empurrar o que não deu tempo.</p>\n<p><b>Reagendar para qualquer data.</b> Passe o mouse sobre o cartão e clique no ícone de calendário, no canto superior direito. Escolha a data e a tarefa vai para lá, inclusive para outra semana — o prazo é atualizado junto. No celular o ícone fica sempre visível.</p>\n<p><b>As cores do cartão.</b> A cor de fundo vem sempre da empresa, do jeito que você cadastrou em Ajustes, e não muda por causa do prazo. Tarefa atrasada ganha contorno vermelho, o prazo em vermelho e a etiqueta <i>atrasada</i>; tarefa em 100% fica verde e com a descrição riscada.</p>\n<p><b>Coluna No radar.</b> É a coluna fixa da direita, para o que ainda não tem dia marcado — ideias, pendências futuras, coisas que dependem de terceiros. Ela aparece igual em todas as semanas até você arrastar o item para um dia.</p>\n<p><b>Ordenar por criticidade.</b> No topo de cada coluna há um botão de ordenação. O primeiro clique põe as mais críticas em cima, o segundo inverte, o terceiro volta à ordem manual. O botão <b>Ordenar tudo</b> aplica de uma vez a todas as colunas. É só uma forma de visualizar: a posição real das tarefas não muda.</p>\n<p><b>Sábado e domingo.</b> Os botões no topo escondem ou mostram o fim de semana. Com eles escondidos, os cinco dias úteis ocupam a tela inteira.</p>\n<p><b>Levar pendências.</b> O botão leva para a semana seguinte tudo o que ficou aberto, sem precisar redigitar.</p>\n<figure><img loading=\"lazy\" src=\"manual-semana.jpg\" alt=\"Aba Semana com os dias e a coluna No radar\"><figcaption>A grade da semana, com criticidade colorida, percentual por tarefa e a coluna No radar à direita.</figcaption></figure>\n\n<h3 id=\"m-dash\">4. Aba Dashboard</h3>\n<p>Mostra como está a semana escolhida. Use as setas ao lado da data para navegar entre semanas e o botão <b>Hoje</b> para voltar à atual.</p>\n<p><b>Os indicadores do topo</b> respondem, em ordem: quanto da semana foi concluído, como isso se compara com a semana anterior, quantas tarefas existem, quantas estão concluídas, em andamento e não iniciadas, quantas estão atrasadas, quantas vencem hoje, quantas vieram de semanas anteriores, quantos prazos existem nos próximos 14 dias e quantos itens estão no radar.</p>\n<p><b>Os quadros abaixo</b> abrem o mesmo número por empresa e por criticidade, comparam planejado contra concluído em cada dia, mostram a distribuição por situação e listam as prioridades em aberto e os próximos prazos.</p>\n<p>Se um número parecer estranho, clique na semana correspondente: o Dashboard sempre reflete exatamente o que está na aba Semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-dash.jpg\" alt=\"Dashboard com indicadores e gráficos da semana\"><figcaption>Indicadores da semana, desempenho por empresa e por criticidade, e os próximos prazos.</figcaption></figure>\n\n<h3 id=\"m-rec\">5. Aba Recorrentes</h3>\n<p>Serve para o que se repete: obrigações mensais, conferências semanais, rotinas anuais. Cadastre uma vez e o aplicativo lança a tarefa sozinho na semana certa.</p>\n<p>Clique em <b>+ Nova recorrência</b> e preencha empresa, descrição, criticidade e frequência. Depois informe o dia:</p>\n<ul>\n  <li><b>Mensal e Anual</b> — o dia do mês (por exemplo, 7 para todo dia 7). No anual, informe também o mês.</li>\n  <li><b>Semanal</b> — o dia da semana, em número: 1 é segunda-feira e 7 é domingo.</li>\n</ul>\n<p>A caixa <b>Ativo</b> liga e desliga a recorrência sem apagá-la. Uma tarefa lançada por recorrência aparece na semana com a marca <b>rec</b> e pode ser editada normalmente — a alteração vale só para aquela semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-rec.jpg\" alt=\"Aba Recorrentes com a lista de rotinas cadastradas\"><figcaption>Cada linha é uma rotina que se repete sozinha na semana correspondente.</figcaption></figure>\n\n<h3 id=\"m-hist\">6. Aba Histórico</h3>\n<p>Alimentada automaticamente por todas as semanas já registradas. Traz a evolução mensal de planejadas contra concluídas, um resumo mês a mês e a lista de todas as semanas, com o botão <b>abrir</b> para ir direto a qualquer uma delas.</p>\n<p>É a aba certa para responder \"como foi o trimestre\" sem precisar abrir semana por semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-hist.jpg\" alt=\"Aba Histórico com gráfico de evolução mensal\"><figcaption>Evolução mensal e a lista de semanas registradas.</figcaption></figure>\n\n<h3 id=\"m-ajustes\">7. Aba Ajustes</h3>\n<p><b>Sua conta.</b> Altere seu nome e sua senha. A troca de senha vale para todos os computadores.</p>\n<p><b>Aparência.</b> Escolha o tema (Identidade, Claro, Escuro ou Automático), o tamanho da fonte da aba Semana e a intensidade da cor das empresas nos cartões.</p>\n<p><b>Nome exibido ao lado do logotipo.</b> Este campo é só seu: escreva o nome da sua empresa, do seu setor ou o que preferir. Ele aparece ao lado do logotipo, na aba do navegador, no cabeçalho das impressões e também na tela de entrada deste aparelho. Deixe vazio para não exibir nada em lugar nenhum.</p>\n<p><b>Empresas.</b> Cadastre quantas quiser, com nome e cor. Renomear uma empresa atualiza automaticamente as tarefas já lançadas com ela.</p>\n<p><b>Backup.</b> <i>Exportar backup completo</i> gera um arquivo com tudo o que é seu; <i>Restaurar / importar</i> traz esse arquivo de volta; <i>Exportar semana</i> gera uma planilha da semana atual. Vale exportar de tempos em tempos, mesmo com os dados na nuvem.</p>\n<p><b>Privacidade.</b> Abre o Aviso de Privacidade a qualquer momento e mostra a data do seu aceite.</p>\n<p><b>Zona de risco.</b> Apaga todo o seu conteúdo na nuvem. Não tem volta — exporte um backup antes.</p>\n<figure><img loading=\"lazy\" src=\"manual-ajustes.jpg\" alt=\"Aba Ajustes com as opções de conta, aparência e empresas\"><figcaption>Ajustes reúne conta, aparência, empresas, backup, privacidade e o manual.</figcaption></figure>\n\n<h3 id=\"m-email\">8. Relatório por e-mail</h3>\n<p>Você recebe no seu e-mail um resumo só com as suas tarefas. Em <i>Ajustes &rsaquo; Relatório por e-mail</i> você escolhe <b>quais dias da semana</b> quer receber e <b>em que horário</b>, ou desliga o envio de vez. Cada pessoa configura o seu; ninguém vê as pendências de ninguém.</p>\n<p><b>O primeiro dia que você marcar na semana</b> traz o fechamento da semana anterior: percentual concluído, quantas ficaram pendentes, atrasadas e no radar, a lista do que sobrou com a criticidade e a empresa de cada item, e os prazos dos próximos sete dias.</p>\n<p><b>Nos demais dias</b> o e-mail mostra a semana em andamento: o que ainda está em aberto agora, o que já venceu e o que vence até o fim da semana. Assim cada envio traz informação nova em vez de repetir o anterior.</p>\n<p>Todo e-mail termina com uma frase de Provérbios, de Salmos ou de um autor cristão clássico. São mais de 160 frases no acervo, e a rotação é por envio: você não repete nenhuma dentro de um ano.</p>\n<p>O relatório é montado para ser lido igual em qualquer caixa: Outlook do trabalho, webmail corporativo, Gmail e celular. A largura é fixa e as informações ficam lado a lado, sem esticar na tela do computador.</p>\n<p>Se o e-mail não chegar, verifique a pasta de spam ou promoções e marque como \"não é spam\" — isso resolve para todos os envios seguintes.</p>\n\n<h3 id=\"m-print\">9. Impressão</h3>\n<p>O botão <b>Imprimir</b>, no topo, gera a versão em papel ou PDF do que estiver na tela. O cabeçalho sai com o logotipo, o nome exibido, o seu nome e a data da impressão.</p>\n<p>Para gerar um PDF, escolha \"Salvar como PDF\" no destino da impressão do navegador.</p>\n\n<h3 id=\"m-planos\">10. Período de teste, planos e recados</h3>\n<p>Se o administrador tiver ativado o período de teste, a contagem começa no dia em que o seu acesso é liberado. Nos últimos cinco dias aparece um aviso no topo do aplicativo.</p>\n<p>Terminado o prazo, o conteúdo continua guardado e disponível para consulta e exportação, mas a edição fica suspensa até a contratação de um plano. Na tela que aparece você pode escolher o plano, enviar um recado ao administrador ou falar por WhatsApp.</p>\n\n<h3 id=\"m-equipe\">11. Aba Equipe e funções do administrador</h3>\n<p>Visível apenas para quem é administrador. Reúne o panorama consolidado da equipe e a gestão de acessos.</p>\n<p>Em Ajustes, o administrador ainda controla: <b>Perfis de acesso</b> — liberar, desativar, promover a administrador, marcar como gratuito e ajustar a validade. Os botões <i>+1 mês</i> e <i>+1 ano</i> somam o período ao que ainda estiver valendo; <i>+ dias…</i> pergunta a quantidade exata, útil para estender um teste por alguns dias, <b>Recados dos usuários</b> (caixa de entrada, com sino de aviso no topo), <b>Planos e cobrança</b> (período de teste, preços, links de pagamento e WhatsApp) e a <b>Identidade do aplicativo</b> (logotipo).</p>\n\n<h3 id=\"m-celular\">12. No celular</h3>\n<p>A tela se reorganiza sozinha quando você abre pelo telefone. Nada precisa ser instalado: é o mesmo endereço do navegador.</p>\n<p><b>Navegação.</b> As abas passam para uma barra fixa no rodapé — Painel, Semana, Recorrentes, Histórico, Equipe e Ajustes. O topo fica só com o logotipo e os botões de tema e sair.</p>\n<p><b>Um dia por vez.</b> Na aba Semana aparece uma tira com os dias logo abaixo do cabeçalho, já aberta no dia de hoje. Toque em um dia para ver a lista dele ocupando a tela inteira — sem rolagem lateral e sem precisar aproximar a tela. A bolinha vermelha em cada dia mostra quantas tarefas ainda estão em aberto, e a tira termina com o <b>Radar</b>.</p>\n<p><b>Mudar uma tarefa de dia.</b> No computador você arrasta. No celular, <b>segure o dedo por meio segundo em qualquer ponto do cartão</b> — descrição, criticidade, empresa, prazo ou percentual, tanto faz: abre uma janela na parte de baixo com os dias da semana e o radar. Se você rolar a tela durante o toque, nada acontece; e o × de excluir continua funcionando com um toque simples. Toque no destino e pronto — a tela já muda para o dia escolhido, para você conferir.</p>\n<p><b>O resto.</b> Os campos de cada tarefa ficam em duas colunas, com área de toque maior. Os indicadores do Painel aparecem dois por linha, e as tabelas mais largas deslizam para o lado dentro do próprio quadro.</p>\n<p>Nada disso muda a versão de computador: é a mesma conta, os mesmos dados e a mesma sincronização.</p>\n<figure><img loading=\"lazy\" src=\"manual-celular.jpg\" alt=\"Aba Semana no celular e a janela de mover tarefa\"><figcaption>À esquerda, a tira de dias e as tarefas ocupando a tela inteira. À direita, a janela que abre ao segurar o dedo sobre uma tarefa.</figcaption></figure>\n\n<h3 id=\"m-instalar\">13. Instalar no celular</h3>\n<p>O CruzOn Planner pode ser instalado na tela inicial do aparelho. Não é aplicativo de loja: é o próprio site, que passa a abrir com ícone próprio, em tela cheia, sem a barra do navegador — e continua abrindo mesmo sem internet, mostrando o que já estava carregado.</p>\n<p><b>Como instalar.</b> Abra <i>Ajustes &rsaquo; Instalar no celular</i> e toque em <b>Instalar aplicativo</b>. Se o botão não aparecer, use o menu do navegador: no Android, os três pontinhos e depois <b>Instalar aplicativo</b>; no iPhone, o botão de compartilhar do Safari e depois <b>Adicionar à Tela de Início</b>.</p>\n<p><b>Atualizações são automáticas.</b> Toda vez que você abrir com internet, o aplicativo busca a versão mais recente sozinho. Não existe atualização para baixar.</p>\n\n<h3 id=\"m-duvidas\">14. Se algo não funcionar</h3>\n<p><b>O aplicativo não atualizou depois de uma novidade.</b> Pressione Ctrl+F5 para recarregar ignorando o que ficou guardado no navegador.</p>\n<p><b>Aparece \"Sem conexão\" no topo.</b> Você continua trabalhando normalmente: as alterações ficam guardadas no navegador e sobem sozinhas quando a internet voltar.</p>\n<p><b>Entrei e não vejo minhas tarefas.</b> Confira se entrou com o mesmo e-mail de sempre. Cada conta tem o seu próprio conteúdo.</p>\n<p><b>A sessão expirou.</b> É normal depois de muito tempo sem uso. Basta entrar de novo.</p>\n<p><b>Outra dúvida.</b> Fale com o administrador pelo canal informado na tela de planos ou pelo e-mail de contato do Aviso de Privacidade.</p>";
+const MAN_VER = "1.7";
+const MAN_DATA = "16/09/2026";
+const MAN_HTML = "<p class=\"manintro\">Este manual acompanha o aplicativo e é atualizado a cada nova funcionalidade. Percorra na ordem se for a sua primeira vez, ou use o índice acima para ir direto ao ponto.</p>\n\n<h3 id=\"m-visao\">1. O que é o CruzOn Planner</h3>\n<p>É um planejador de rotina semanal. Você registra o que precisa fazer, distribui pelos dias da semana, marca o nível de criticidade e o percentual concluído, e o aplicativo transforma isso em indicadores, histórico e um relatório de pendências que chega no seu e-mail.</p>\n<p>Ele não pressupõe nenhuma área específica: serve para quem cuida de pessoas, de contratos, de obras, de clientes ou de qualquer conjunto de tarefas com prazo e responsável. A divisão por <b>empresa</b> pode ser usada como setor, cliente, projeto ou unidade — quem define é você.</p>\n<p>Tudo o que você registra fica na sua conta, na nuvem. Você entra de qualquer computador e encontra o mesmo conteúdo.</p>\n\n<h3 id=\"m-entrar\">2. Primeiro acesso</h3>\n<p><b>Criar a conta.</b> Na tela de entrada, clique em <b>Criar conta</b>, informe nome, e-mail e senha. A conta nasce bloqueada: o administrador precisa liberar o acesso. Enquanto isso, você vê um aviso de espera.</p>\n<p><b>Esqueci a senha.</b> Clique em <b>Esqueci minha senha</b>, informe o e-mail e siga o link que chega na sua caixa de entrada.</p>\n<p><b>Aviso de Privacidade.</b> No primeiro acesso aparece o Aviso de Privacidade e os Termos de Uso. É preciso marcar a caixa de concordância para entrar. A data do seu aceite fica registrada e pode ser consultada depois em Ajustes.</p>\n<figure><img loading=\"lazy\" src=\"manual-login.jpg\" alt=\"Tela de entrada do aplicativo\"><figcaption>Tela de entrada: e-mail, senha, recuperação e criação de conta.</figcaption></figure>\n\n<h3 id=\"m-semana\">3. Aba Semana — o coração do aplicativo</h3>\n<p>É aqui que você trabalha no dia a dia. Cada coluna é um dia, e cada cartão é uma tarefa.</p>\n<p><b>Criar uma tarefa.</b> Clique em <b>+ tarefa</b> no rodapé da coluna do dia desejado. Escreva a descrição e preencha os campos do cartão.</p>\n<p><b>Campos de cada cartão:</b></p>\n<ul>\n  <li><b>Descrição</b> — texto livre, sem limite prático de tamanho. Clique sobre ele para editar.</li>\n  <li><b>Criticidade</b> — Crítica, Alta, Média ou Baixa. É o que ordena as listas e colore a etiqueta.</li>\n  <li><b>Empresa</b> — a lista vem do seu cadastro em Ajustes. A cor da borda do cartão segue a cor da empresa.</li>\n  <li><b>Prazo</b> — a data de vencimento. Tarefa com prazo passado e não concluída entra como atrasada.</li>\n  <li><b>Percentual</b> — de 0% a 100%. Ao chegar em 100% o cartão fica verde e a descrição é riscada.</li>\n</ul>\n<p><b>Mover uma tarefa de dia.</b> Arraste o cartão para outra coluna. Serve tanto para reorganizar a semana quanto para empurrar o que não deu tempo.</p>\n<p><b>Reagendar para qualquer data.</b> Passe o mouse sobre o cartão e clique no ícone de calendário, no canto superior direito. Escolha a data e a tarefa vai para lá, inclusive para outra semana — o prazo é atualizado junto. No celular o ícone fica sempre visível.</p>\n<p><b>As cores do cartão.</b> A cor de fundo vem sempre da empresa, do jeito que você cadastrou em Ajustes, e não muda por causa do prazo. Tarefa atrasada ganha contorno vermelho, o prazo em vermelho e a etiqueta <i>atrasada</i>; tarefa em 100% fica verde e com a descrição riscada.</p>\n<p><b>Coluna No radar.</b> É a coluna fixa da direita, para o que ainda não tem dia marcado — ideias, pendências futuras, coisas que dependem de terceiros. Ela aparece igual em todas as semanas até você arrastar o item para um dia.</p>\n<p><b>Ordenar por criticidade.</b> No topo de cada coluna há um botão de ordenação. O primeiro clique põe as mais críticas em cima, o segundo inverte, o terceiro volta à ordem manual. O botão <b>Ordenar tudo</b> aplica de uma vez a todas as colunas. É só uma forma de visualizar: a posição real das tarefas não muda.</p>\n<p><b>Sábado e domingo.</b> Os botões no topo escondem ou mostram o fim de semana. Com eles escondidos, os cinco dias úteis ocupam a tela inteira.</p>\n<p><b>Levar pendências.</b> O botão leva para a semana seguinte tudo o que ficou aberto, sem precisar redigitar.</p>\n<figure><img loading=\"lazy\" src=\"manual-semana.jpg\" alt=\"Aba Semana com os dias e a coluna No radar\"><figcaption>A grade da semana, com criticidade colorida, percentual por tarefa e a coluna No radar à direita.</figcaption></figure>\n\n<h3 id=\"m-dash\">4. Aba Dashboard</h3>\n<p>Mostra como está a semana escolhida. Use as setas ao lado da data para navegar entre semanas e o botão <b>Hoje</b> para voltar à atual.</p>\n<p><b>Os indicadores do topo</b> respondem, em ordem: quanto da semana foi concluído, como isso se compara com a semana anterior, quantas tarefas existem, quantas estão concluídas, em andamento e não iniciadas, quantas estão atrasadas, quantas vencem hoje, quantas vieram de semanas anteriores, quantos prazos existem nos próximos 14 dias e quantos itens estão no radar.</p>\n<p><b>Os quadros abaixo</b> abrem o mesmo número por empresa e por criticidade, comparam planejado contra concluído em cada dia, mostram a distribuição por situação e listam as prioridades em aberto e os próximos prazos.</p>\n<p>Se um número parecer estranho, clique na semana correspondente: o Dashboard sempre reflete exatamente o que está na aba Semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-dash.jpg\" alt=\"Dashboard com indicadores e gráficos da semana\"><figcaption>Indicadores da semana, desempenho por empresa e por criticidade, e os próximos prazos.</figcaption></figure>\n\n<h3 id=\"m-rec\">5. Aba Recorrentes</h3>\n<p>Serve para o que se repete: obrigações mensais, conferências semanais, rotinas anuais. Cadastre uma vez e o aplicativo lança a tarefa sozinho na semana certa.</p>\n<p>Clique em <b>+ Nova recorrência</b> e preencha empresa, descrição, criticidade e frequência. Depois informe o dia:</p>\n<ul>\n  <li><b>Mensal e Anual</b> — o dia do mês (por exemplo, 7 para todo dia 7). No anual, informe também o mês.</li>\n  <li><b>Semanal</b> — o dia da semana, em número: 1 é segunda-feira e 7 é domingo.</li>\n</ul>\n<p>A caixa <b>Ativo</b> liga e desliga a recorrência sem apagá-la. Uma tarefa lançada por recorrência aparece na semana com a marca <b>rec</b> e pode ser editada normalmente — a alteração vale só para aquela semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-rec.jpg\" alt=\"Aba Recorrentes com a lista de rotinas cadastradas\"><figcaption>Cada linha é uma rotina que se repete sozinha na semana correspondente.</figcaption></figure>\n\n<h3 id=\"m-hist\">6. Aba Histórico</h3>\n<p>Alimentada automaticamente por todas as semanas já registradas. Traz a evolução mensal de planejadas contra concluídas, um resumo mês a mês e a lista de todas as semanas, com o botão <b>abrir</b> para ir direto a qualquer uma delas.</p>\n<p>É a aba certa para responder \"como foi o trimestre\" sem precisar abrir semana por semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-hist.jpg\" alt=\"Aba Histórico com gráfico de evolução mensal\"><figcaption>Evolução mensal e a lista de semanas registradas.</figcaption></figure>\n\n<h3 id=\"m-ajustes\">7. Aba Ajustes</h3>\n<p><b>Sua conta.</b> Altere seu nome e sua senha. A troca de senha vale para todos os computadores.</p>\n<p><b>Aparência.</b> Escolha o tema (Identidade, Claro, Escuro ou Automático), o tamanho da fonte da aba Semana e a intensidade da cor das empresas nos cartões.</p>\n<p><b>Nome exibido ao lado do logotipo.</b> Este campo é só seu: escreva o nome da sua empresa, do seu setor ou o que preferir. Ele aparece ao lado do logotipo, na aba do navegador, no cabeçalho das impressões e também na tela de entrada deste aparelho. Deixe vazio para não exibir nada em lugar nenhum.</p>\n<p><b>Empresas.</b> Cadastre quantas quiser, com nome e cor. Renomear uma empresa atualiza automaticamente as tarefas já lançadas com ela.</p>\n<p><b>Backup.</b> <i>Exportar backup completo</i> gera um arquivo com tudo o que é seu; <i>Restaurar / importar</i> traz esse arquivo de volta; <i>Exportar semana</i> gera uma planilha da semana atual. Vale exportar de tempos em tempos, mesmo com os dados na nuvem.</p>\n<p><b>Privacidade.</b> Abre o Aviso de Privacidade a qualquer momento e mostra a data do seu aceite.</p>\n<p><b>Zona de risco.</b> Apaga todo o seu conteúdo na nuvem. Não tem volta — exporte um backup antes.</p>\n<figure><img loading=\"lazy\" src=\"manual-ajustes.jpg\" alt=\"Aba Ajustes com as opções de conta, aparência e empresas\"><figcaption>Ajustes reúne conta, aparência, empresas, backup, privacidade e o manual.</figcaption></figure>\n\n<h3 id=\"m-email\">8. Relatório por e-mail</h3>\n<p>Você recebe no seu e-mail um resumo só com as suas tarefas. Em <i>Ajustes &rsaquo; Relatório por e-mail</i> você escolhe <b>quais dias da semana</b> quer receber e <b>em que horário</b>, ou desliga o envio de vez. Cada pessoa configura o seu; ninguém vê as pendências de ninguém.</p>\n<p><b>O primeiro dia que você marcar na semana</b> traz o fechamento da semana anterior: percentual concluído, quantas ficaram pendentes, atrasadas e no radar, a lista do que sobrou com a criticidade e a empresa de cada item, e os prazos dos próximos sete dias.</p>\n<p><b>Nos demais dias</b> o e-mail mostra a semana em andamento: o que ainda está em aberto agora, o que já venceu e o que vence até o fim da semana. Assim cada envio traz informação nova em vez de repetir o anterior.</p>\n<p>Todo e-mail termina com uma frase de Provérbios, de Salmos ou de um autor cristão clássico. São mais de 160 frases no acervo, e a rotação é por envio: você não repete nenhuma dentro de um ano.</p>\n<p>O relatório é montado para ser lido igual em qualquer caixa: Outlook do trabalho, webmail corporativo, Gmail e celular. A largura é fixa e as informações ficam lado a lado, sem esticar na tela do computador.</p>\n<p>Se o e-mail não chegar, verifique a pasta de spam ou promoções e marque como \"não é spam\" — isso resolve para todos os envios seguintes.</p>\n\n<h3 id=\"m-print\">9. Impressão</h3>\n<p>O botão <b>Imprimir</b>, no topo, gera a versão em papel ou PDF do que estiver na tela. O cabeçalho sai com o logotipo, o nome exibido, o seu nome e a data da impressão.</p>\n<p>Para gerar um PDF, escolha \"Salvar como PDF\" no destino da impressão do navegador.</p>\n\n<h3 id=\"m-planos\">10. Período de teste, planos e recados</h3>\n<p>Se o administrador tiver ativado o período de teste, a contagem começa no dia em que o seu acesso é liberado. Nos últimos cinco dias aparece um aviso no topo do aplicativo.</p>\n<p>Terminado o prazo, o conteúdo continua guardado e disponível para consulta e exportação, mas a edição fica suspensa até a contratação de um plano. Na tela que aparece você pode escolher o plano, enviar um recado ao administrador ou falar por WhatsApp.</p>\n\n<h3 id=\"m-equipe\">11. Aba Equipe e funções do administrador</h3>\n<p>Visível apenas para quem é administrador. Reúne o panorama consolidado da equipe e a gestão de acessos.</p>\n<p>Em Ajustes, o administrador ainda controla: <b>Perfis de acesso</b> — liberar, desativar, promover a administrador, marcar como gratuito e ajustar a validade. Os botões <i>+1 mês</i> e <i>+1 ano</i> somam o período ao que ainda estiver valendo; <i>+ dias…</i> pergunta a quantidade exata, útil para estender um teste por alguns dias, <b>Recados dos usuários</b> (caixa de entrada, com sino de aviso no topo), <b>Planos e cobrança</b> (período de teste, preços, links de pagamento e WhatsApp) e a <b>Identidade do aplicativo</b> (logotipo).</p>\n\n<h3 id=\"m-celular\">12. No celular</h3>\n<p>A tela se reorganiza sozinha quando você abre pelo telefone. Nada precisa ser instalado: é o mesmo endereço do navegador.</p>\n<p><b>Navegação.</b> As abas passam para uma barra fixa no rodapé — Painel, Semana, Recorrentes, Histórico, Equipe e Ajustes. O topo fica só com o logotipo e os botões de tema e sair.</p>\n<p><b>Um dia por vez.</b> Na aba Semana aparece uma tira com os dias logo abaixo do cabeçalho, já aberta no dia de hoje. Toque em um dia para ver a lista dele ocupando a tela inteira — sem rolagem lateral e sem precisar aproximar a tela. A bolinha vermelha em cada dia mostra quantas tarefas ainda estão em aberto, e a tira termina com o <b>Radar</b>.</p>\n<p><b>Mudar uma tarefa de dia.</b> No computador você arrasta. No celular, <b>segure o dedo por meio segundo em qualquer ponto do cartão</b> — descrição, criticidade, empresa, prazo ou percentual, tanto faz: abre uma janela na parte de baixo com os dias da semana e o radar. Se você rolar a tela durante o toque, nada acontece; e o × de excluir continua funcionando com um toque simples. Toque no destino e pronto — a tela já muda para o dia escolhido, para você conferir.</p>\n<p><b>O resto.</b> Os campos de cada tarefa ficam em duas colunas, com área de toque maior. Os indicadores do Painel aparecem dois por linha, e as tabelas mais largas deslizam para o lado dentro do próprio quadro.</p>\n<p>Nada disso muda a versão de computador: é a mesma conta, os mesmos dados e a mesma sincronização.</p>\n<figure><img loading=\"lazy\" src=\"manual-celular.jpg\" alt=\"Aba Semana no celular e a janela de mover tarefa\"><figcaption>À esquerda, a tira de dias e as tarefas ocupando a tela inteira. À direita, a janela que abre ao segurar o dedo sobre uma tarefa.</figcaption></figure>\n\n<h3 id=\"m-instalar\">13. Instalar no celular</h3>\n<p>O CruzOn Planner pode ser instalado na tela inicial do aparelho. Não é aplicativo de loja: é o próprio site, que passa a abrir com ícone próprio, em tela cheia, sem a barra do navegador — e continua abrindo mesmo sem internet, mostrando o que já estava carregado.</p>\n<p><b>Como instalar.</b> Abra <i>Ajustes &rsaquo; Instalar no celular</i> e toque em <b>Instalar aplicativo</b>. Se o botão não aparecer, use o menu do navegador: no Android, os três pontinhos e depois <b>Instalar aplicativo</b>; no iPhone, o botão de compartilhar do Safari e depois <b>Adicionar à Tela de Início</b>.</p>\n<p><b>Atualizações são automáticas.</b> Toda vez que você abrir com internet, o aplicativo busca a versão mais recente sozinho. Não existe atualização para baixar.</p>\n\n<h3 id=\"m-sync\">14. Tudo em tempo real, em todos os aparelhos</h3>\n<p>Seu conteúdo fica na nuvem, não no aparelho. Computador, celular e tablet mostram a mesma semana, e o que você faz em um aparece no outro em poucos segundos, sem recarregar a página e sem apertar nada.</p>\n<p><b>Como funciona.</b> O aplicativo grava cada alteração poucos instantes depois de você fazê-la e, em paralelo, fica conferindo se mudou alguma coisa do outro lado. Quando encontra novidade, atualiza a tela sozinho e mostra <i>Atualizado</i> no topo, ao lado do seu nome.</p>\n<p><b>Enquanto você digita, nada muda na sua frente.</b> A atualização automática espera você terminar de preencher o campo, para não trocar o conteúdo embaixo do seu dedo.</p>\n<p><b>Mexendo nos dois ao mesmo tempo.</b> Se você concluir uma tarefa no celular enquanto reagenda outra no computador, as duas alterações são mantidas: o aplicativo junta as versões item a item, em vez de deixar a última gravação apagar a anterior. Quando a <i>mesma</i> tarefa é alterada nos dois, vale a alteração mais recente.</p>\n<p><b>Sem internet.</b> Você continua trabalhando: as alterações ficam guardadas no aparelho e sobem assim que a conexão voltar, já juntadas com o que os outros aparelhos fizeram nesse meio tempo.</p>\n<p><b>No aplicativo instalado no celular.</b> Ao trazer o aplicativo de volta para a tela, ele busca as novidades na hora — por isso você não encontra mais a semana desatualizada ao desbloquear o telefone.</p>\n\n<h3 id=\"m-duvidas\">15. Se algo não funcionar</h3>\n<p><b>O aplicativo não atualizou depois de uma novidade.</b> Pressione Ctrl+F5 para recarregar ignorando o que ficou guardado no navegador.</p>\n<p><b>Aparece \"Sem conexão\" no topo.</b> Você continua trabalhando normalmente: as alterações ficam guardadas no navegador e sobem sozinhas quando a internet voltar.</p>\n<p><b>O celular parece atrasado em relação ao computador.</b> Traga o aplicativo de volta para a tela: ele busca as novidades na hora. Se continuar diferente, confira se os dois estão na mesma semana e se o topo não está marcando <i>Sem conexão</i>.</p>\n<p><b>Entrei e não vejo minhas tarefas.</b> Confira se entrou com o mesmo e-mail de sempre. Cada conta tem o seu próprio conteúdo.</p>\n<p><b>A sessão expirou.</b> É normal depois de muito tempo sem uso. Basta entrar de novo.</p>\n<p><b>Outra dúvida.</b> Fale com o administrador pelo canal informado na tela de planos ou pelo e-mail de contato do Aviso de Privacidade.</p>";
 function manMonta(){
   if($("#manTxt").innerHTML) return;
   $("#manTxt").innerHTML = MAN_HTML;
@@ -1809,6 +1979,7 @@ function abreApp(){
   marcaSalvo(OFFLINE?"Sem conexão":"Sincronizado",false,OFFLINE);
   week(CURWEEK); applyTheme(); pintaTrialBar(); pintaCfgPlanos();
   if(ME.role==="admin"){ renderRecados(); ligaSino(); }
+  ligaSync();
   show("dash");
 }
 $("#btnLogout").addEventListener("click",async()=>{
@@ -1816,6 +1987,7 @@ $("#btnLogout").addEventListener("click",async()=>{
   sb("/auth/v1/logout",{method:"POST"}).catch(()=>{});
   clearSession(); ME=null; PERFIL=null; V=null; clearUI();
   if(RECTIMER){ clearInterval(RECTIMER); RECTIMER=null; } RECULT=0;
+  if(POLL){ clearInterval(POLL); POLL=null; }
   const _s=$("#btnSino"); if(_s) _s.classList.add("hidden");
   $("#app").classList.add("hidden"); $("#login").classList.remove("hidden");
   $("#lgPass").value=""; $("#lgPass2").value=""; LGMODE="login"; setupLogin();
