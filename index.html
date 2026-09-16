@@ -533,16 +533,22 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
   border-radius:99px;padding:2px 9px;font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase}
 @media(max-width:700px){ .task .atrasou{font-size:10px;padding:2px 9px} }
 
-.task .acoes{position:absolute;top:2px;right:2px;display:flex;gap:1px;align-items:center}
-.task .reag{border:0;background:transparent;color:var(--muted);padding:1px 2px;border-radius:5px;
-  line-height:0;opacity:0;cursor:pointer}
+.task .acoes{position:absolute;top:2px;right:2px;z-index:4;display:flex;gap:1px;align-items:center}
+.task .reag{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  border:0;background:transparent;color:var(--muted);padding:1px 2px;border-radius:5px;
+  line-height:0;opacity:0;pointer-events:none;cursor:pointer}
+.task:hover .reag,.task:focus-within .reag{opacity:1;pointer-events:auto}
+.task .reag .reagin{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;
+  border:0;padding:0;margin:0;background:transparent;cursor:pointer;font-size:10px}
+.task .reag .reagin::-webkit-calendar-picker-indicator{position:absolute;left:0;top:0;
+  width:100%;height:100%;margin:0;padding:0;opacity:0;cursor:pointer}
 .task .reag svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .task:hover .reag{opacity:1}
 .task .reag:hover{color:var(--brand-2);background:var(--surface-3)}
 .task .del{position:static !important}
 @media(max-width:700px){
   .task .acoes{top:4px;right:4px;gap:2px}
-  .task .reag{opacity:1;padding:5px}
+  .task .reag{opacity:1;pointer-events:auto;padding:5px}
   .task .reag svg{width:19px;height:19px}
   .task:hover .del,.task .del{opacity:1}
 }
@@ -958,7 +964,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
   <button data-view="cfg"><svg viewBox="0 0 24 24"><path d="M3.4 7.2h10.2M17.8 7.2h2.8M3.4 16.8h5.4M13 16.8h7.6"/><circle cx="15.6" cy="7.2" r="2.4"/><circle cx="10.8" cy="16.8" r="2.4"/></svg><span>Ajustes</span></button>
 </nav>
 
-<input type="date" id="reagData" style="position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px" tabindex="-1" aria-hidden="true">
+
 
 <div class="movesheet hidden" id="moveSheet" role="dialog" aria-modal="true">
   <div class="msbox">
@@ -1858,7 +1864,7 @@ function taskHTML(t){
   const done=+t.pct>=100, late=statusOf(t)==="Atrasada";
   return `<div class="task${done?" done":""}${late&&!done?" late":""}" data-id="${t.id}" draggable="true" style="--tint:${empFill(t.e)};--tint-solid:${compColor(t.e)}">
     <div class="acoes">
-      <button class="reag" data-reag="${t.id}" title="Reagendar para outro dia" aria-label="Reagendar"><svg viewBox="0 0 24 24"><rect x="3.4" y="5" width="17.2" height="15.6" rx="2.2"/><path d="M3.4 9.6h17.2M8.4 2.8v4.2M15.6 2.8v4.2"/><path d="M8.6 14.4h3.2M8.6 17.4h6.4"/></svg></button>
+      <span class="reag" title="Reagendar para outro dia"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.4" y="5" width="17.2" height="15.6" rx="2.2"/><path d="M3.4 9.6h17.2M8.4 2.8v4.2M15.6 2.8v4.2"/><path d="M8.6 14.4h3.2M8.6 17.4h6.4"/></svg><input type="date" class="reagin" data-reag="${t.id}" value="${dataReag(t)}" title="Reagendar para outro dia" aria-label="Reagendar tarefa"></span>
       <button class="del" data-del="${t.id}" title="Excluir">×</button>
     </div>${done?'<span class="okmark">✓</span>':""}
     <textarea class="txt" rows="1" data-f="t" placeholder="Descreva a atividade…">${esc(t.t)}</textarea>
@@ -2033,15 +2039,23 @@ MQ_MOB.addEventListener("change", () => { if(V && ME){ renderWeek(); pintaBotNav
 
 /* ============ REAGENDAR TAREFA ============ */
 let reagId = null;
-function abreReagendar(id){
-  const f = findAny(id); if(!f) return;
-  reagId = id;
-  const cx = $("#reagData");
-  cx.value = (f.t.due && /^\d{4}-\d{2}-\d{2}$/.test(f.t.due))
-    ? f.t.due
-    : (f.from === "radar" ? todayISO() : iso(addDays(fromISO(CURWEEK), f.t.d || 0)));
-  try{ if(cx.showPicker) { cx.showPicker(); return; } }catch(e){}
-  cx.focus(); cx.click();          /* navegadores sem showPicker */
+function dataReag(t){
+  if(t.due && /^\d{4}-\d{2}-\d{2}$/.test(t.due)) return t.due;
+  if(t.d === null || t.d === undefined) return todayISO();
+  return iso(addDays(fromISO(CURWEEK), t.d || 0));
+}
+function abreReagendar(id, el){
+  /* o campo de data mora dentro do próprio botão, então o calendário nativo
+     abre colado no ícone — em qualquer navegador, no computador e no celular */
+  let inp = null;
+  if(el && el.matches && el.matches("input.reagin")) inp = el;
+  else if(el && el.querySelector) inp = el.querySelector("input.reagin");
+  if(!inp && id) inp = document.querySelector('.task[data-id="' + id + '"] input.reagin');
+  if(!inp) return;
+  reagId = inp.dataset.reag;
+  inp.style.colorScheme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  try{ if(inp.showPicker){ inp.showPicker(); return; } }catch(err){}
+  inp.focus({preventScroll:true});
 }
 function reagenda(id, dataISO){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(dataISO || "")) return;
@@ -2069,8 +2083,12 @@ function reagenda(id, dataISO){
   }
   reagId = null;
 }
-$("#reagData").addEventListener("change", e => { if(reagId) reagenda(reagId, e.target.value); });
-$("#reagData").addEventListener("blur", () => { setTimeout(() => { reagId = null; }, 400); });
+$("#weekgrid").addEventListener("change", e => {
+  const inp = e.target.closest ? e.target.closest("input.reagin") : null;
+  if(!inp) return;
+  e.stopPropagation();
+  reagenda(inp.dataset.reag, inp.value);
+});
 
 function renderWeek(){
   const k=CURWEEK, w=week(k), mon=fromISO(k), g=$("#weekgrid");
@@ -2159,8 +2177,12 @@ $("#weekgrid").addEventListener("click",e=>{
     V.prefs.sort[sk]= atual===""?"desc":(atual==="desc"?"asc":"");
     save(); renderWeek(); return;
   }
-  const bReag=e.target.closest("[data-reag]");
-  if(bReag){ abreReagendar(bReag.dataset.reag); return; }
+  const bReag=e.target.closest ? e.target.closest(".reag") : null;
+  if(bReag){
+    /* clique direto no campo já abre o calendário; isto cobre o resto do ícone */
+    if(!(e.target.matches && e.target.matches("input.reagin"))) abreReagendar(null, bReag);
+    return;
+  }
   const add=e.target.matches("[data-add]")?e.target.dataset.add:null, del=e.target.dataset.del;
   if(add!==null){
     const t={id:uid(),d:add==="radar"?null:+add,p:"Média",e:compNames()[0],t:"",due:"",pct:0,rec:null};
