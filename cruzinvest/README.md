@@ -6,10 +6,16 @@ Acompanhamento da carteira de investimentos: patrimônio, rentabilidade, compara
 
 ## Primeiros passos
 
-1. Abra o endereço e crie seu **cofre** (nome + senha forte). Não existe recuperação de senha: guarde-a bem.
+1. Abra o endereço e crie seu **cofre** (nome, e-mail e senha forte; depois o login é por e-mail e senha). Não existe recuperação de senha: guarde-a bem.
 2. Em **Ajustes → Fonte de dados**, cole o token gratuito da [brapi.dev](https://brapi.dev/dashboard). Sem ele, só alguns ativos (PETR4, VALE3, ITUB4…) têm cotação.
    O plano gratuito não inclui proventos: o app detecta isso sozinho e usa só o que o plano libera. Registre ou importe dividendos e rendimentos na aba **Proventos** (planilha com Ativo, Data com/Pagamento e Valor por cota ou Valor total).
-3. Em **Lançamentos → Importar planilha**, cole ou envie um CSV com as colunas `Ativo; Quantidade; Preço` (opcionais: `Data`, `Operação`, `Taxas`, `Classe`).
+3. Em **Lançamentos → Importar da B3**, selecione de uma vez os arquivos Excel da Área do Investidor (investidor.b3.com.br):
+   - **Extratos → Negociação** (maior período disponível): compras e vendas;
+   - **Relatórios → Consolidado mensal** (pode mandar todos os meses; o mais recente confere a posição);
+   - **Extratos → Movimentação** (opcional): proventos, bonificações e desdobramentos.
+
+   Para cotas compradas antes do período do extrato de negociação, o app pede o preço médio atual (o da corretora ou do Investidor10) e calcula o resto.
+   Também é possível usar **Importar planilha** com um CSV `Ativo; Quantidade; Preço` (opcionais: `Data`, `Operação`, `Taxas`, `Classe`).
 4. Toque em ↻ para buscar cotações, indicadores e proventos. O app também atualiza sozinho ao abrir, se os dados estiverem velhos.
 5. Em **Ajustes → Backup**, baixe um backup criptografado de tempos em tempos.
 
