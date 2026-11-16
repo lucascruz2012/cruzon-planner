@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="brand">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CruzInvest</title>
+<meta name="description" content="CruzInvest: acompanhe sua carteira de investimentos, rentabilidade, proventos e a saúde dos fundamentos de cada ativo.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0C1F2B">
+<link rel="apple-touch-icon" href="../icone-apple.png">
+<link rel="icon" href="../icone-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CruzInvest">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ======================= TEMAS (mesmos do CruzOn Planner) ======================= */
+:root{
+  color-scheme: light;
+  --plane:#f4f5f3; --surface:#fcfcfb; --surface-2:#f7f7f5; --surface-3:#eeeeeb;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#6E6C66;
+  --line:#e1e0d9; --line-2:#c9c8c1; --ring:rgba(11,11,11,.10);
+  --brand:#184f95; --brand-2:#2a78d6; --accent:#1baf7a;
+  --hdr:#0C1F2B; --hdr-ink:#FFFFFF; --hdr-line:#1B3543;
+  --good:#0a7d0a; --warn:#a86f00; --serious:#c2562a; --crit:#c62f2f;
+  --good-bg:#e6f5e6; --warn-bg:#fdf3dc; --serious-bg:#fceee7; --crit-bg:#fbe6e6;
+  --c1:#2a78d6; --c2:#eb6834; --c3:#1baf7a; --c4:#eda100; --c5:#e87ba4; --c6:#008300; --c7:#6250d6; --c8:#e34948;
+  --pos:#0a7d0a; --neg:#c62f2f;
+  --shadow:0 1px 2px rgba(11,11,11,.05), 0 8px 24px -12px rgba(11,11,11,.18);
+  --r:12px; --r-sm:8px;
+  --f:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+html[data-theme="brand"]{
+  color-scheme:light;
+  --plane:#EDF1F4; --surface:#FFFFFF; --surface-2:#F5F8FA; --surface-3:#E9ECEF;
+  --ink:#0C1F2B; --ink-2:#263746; --muted:#566674;
+  --line:#E3E8EC; --line-2:#C7D1D9; --ring:rgba(12,31,43,.10);
+  --brand:#1E7A4E; --brand-2:#0C1F2B; --accent:#00C853;
+  --good:#1E7A4E; --good-bg:#E4F6EC;
+  --shadow:0 1px 2px rgba(12,31,43,.05),0 10px 26px -14px rgba(12,31,43,.25);
+}
+html[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0A141B; --surface:#12212B; --surface-2:#182A36; --surface-3:#1F3441;
+  --ink:#F2F7F9; --ink-2:#C6D4DC; --muted:#93A8B4;
+  --line:#243B48; --line-2:#33505F; --ring:rgba(255,255,255,.14);
+  --brand:#1E7A4E; --brand-2:#00C853; --accent:#39E875;
+  --hdr:#0A141B; --hdr-ink:#F2F7F9; --hdr-line:#243B48;
+  --good:#39E875; --warn:#FFC94D; --serious:#F0844F; --crit:#FF6B6B;
+  --good-bg:#12351F; --warn-bg:#3A2E10; --serious-bg:#3A2415; --crit-bg:#3E1B1B;
+  --c1:#3987e5; --c2:#d95926; --c3:#199e70; --c4:#c98500; --c5:#d55181; --c6:#0ca30c; --c7:#9085e9; --c8:#e66767;
+  --pos:#39E875; --neg:#FF6B6B;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 10px 26px -14px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{background:var(--plane);color:var(--ink);font-family:var(--f);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} a{color:var(--brand)}
+.hidden{display:none !important}
+.num{font-variant-numeric:tabular-nums}
+.pos{color:var(--pos)} .neg{color:var(--neg)} .mut{color:var(--muted)}
+
+/* ======================= LOGIN ======================= */
+#login{position:fixed;inset:0;z-index:100;display:flex;overflow:auto;background:#07131c}
+#login::before{content:"";position:fixed;inset:0;background:url(../login-bg.jpg) center/cover no-repeat;opacity:.9}
+#login::after{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(4,16,22,.15) 30%,rgba(4,16,22,.75) 100%)}
+.lgwrap{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:flex-end;padding:4vh 6vw}
+.lgpane{width:min(410px,100%);background:var(--surface);border-radius:18px;padding:26px 28px 20px;box-shadow:0 34px 80px -18px rgba(0,0,0,.66)}
+.brandmark{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.brandmark svg{width:38px;height:38px}
+.brandmark b{font-size:22px;letter-spacing:-.02em}
+.brandmark b span{color:#00A04E}
+#login h1{font-size:18px;margin:0 0 2px}
+#login .sub{color:var(--ink-2);font-size:12.5px;margin:0 0 12px}
+.fld label{display:block;font-size:11px;font-weight:600;color:var(--ink-2);margin:11px 0 4px;text-transform:uppercase;letter-spacing:.05em}
+.fld input,.fld select,.fld textarea{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:var(--r-sm);background:var(--surface-2)}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid #00A04E;outline-offset:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:var(--surface);font-weight:600;font-size:13px;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:#1E7A4E;border-color:#1E7A4E;color:#fff}
+.btn.primary:hover{background:#00A04E}
+.btn.danger{color:var(--crit);border-color:var(--crit)}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.block{width:100%;margin-top:16px;padding:12px}
+.msg{margin-top:12px;border-radius:var(--r-sm);padding:9px 11px;font-size:12.5px;font-weight:600}
+.msg.err{background:var(--crit-bg);color:var(--crit)} .msg.ok{background:var(--good-bg);color:var(--good)}
+.note{margin-top:14px;padding-top:11px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.5}
+.lnk{border:0;background:none;color:var(--brand);font-weight:600;font-size:12.5px;text-decoration:underline;padding:0}
+.meter{height:4px;border-radius:3px;background:var(--surface-3);margin-top:6px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--crit);transition:width .2s}
+@media(max-width:760px){ .lgwrap{justify-content:center;padding:16px} }
+
+/* ======================= TOPO ======================= */
+header.top{position:sticky;top:0;z-index:20;background:var(--hdr);color:var(--hdr-ink);border-bottom:1px solid var(--hdr-line)}
+.topin{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;letter-spacing:-.01em;color:#fff}
+.logo svg{width:28px;height:28px} .logo span{color:#39E875}
+nav.tabs{display:flex;gap:2px;background:rgba(255,255,255,.07);padding:3px;border-radius:10px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{border:0;background:transparent;color:rgba(255,255,255,.72);padding:7px 12px;border-radius:8px;font-weight:600;font-size:13px;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{background:rgba(0,200,83,.20);color:#fff;box-shadow:inset 0 0 0 1px rgba(57,232,117,.45)}
+.topact{display:flex;align-items:center;gap:8px}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:transparent;color:rgba(255,255,255,.86)}
+.iconbtn:hover{background:rgba(255,255,255,.10)}
+.iconbtn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn.spin svg{animation:spin 1s linear infinite} @keyframes spin{to{transform:rotate(360deg)}}
+.upd{font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap}
+@media(max-width:820px){ .topin{flex-wrap:wrap} nav.tabs{order:3;flex-basis:100%} .upd{display:none} }
+
+/* ======================= CONTEÚDO ======================= */
+main{max-width:1280px;margin:0 auto;padding:18px 16px 60px}
+.pghead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
+.pghead h2{margin:0;font-size:20px;letter-spacing:-.01em}
+.pghead p{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.two{grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;min-width:0}
+.card h3{margin:0 0 2px;font-size:14px}
+.card .cap{margin:0 0 12px;color:var(--muted);font-size:12px}
+.kpi .lb{font-size:11.5px;color:var(--ink-2);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.kpi .vl{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:4px}
+.kpi .sm{font-size:12px;color:var(--muted);margin-top:2px}
+.empty{text-align:center;padding:38px 16px;color:var(--ink-2)}
+.empty b{display:block;font-size:16px;color:var(--ink);margin-bottom:6px}
+.banner{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:var(--r-sm);font-size:12.5px;margin-bottom:14px;border:1px solid}
+.banner.warn{background:var(--warn-bg);border-color:transparent;color:var(--ink)}
+.banner.info{background:var(--surface);border-color:var(--line);color:var(--ink-2)}
+
+/* tabelas */
+.tbl-wrap{overflow-x:auto;margin:0 -16px;padding:0 16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-2);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap;cursor:default}
+th.sortable{cursor:pointer} th.sortable:hover{color:var(--ink)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.r,th.r{text-align:right}
+tbody tr.click{cursor:pointer} tbody tr.click:hover{background:var(--surface-2)}
+.tk{display:flex;align-items:center;gap:9px;font-weight:700}
+.tk img,.tk .ph{width:24px;height:24px;border-radius:6px;background:var(--surface-3);flex:0 0 auto;object-fit:contain}
+.tk small{display:block;font-weight:500;color:var(--muted);font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.pill.g{background:var(--good-bg);color:var(--good)} .pill.y{background:var(--warn-bg);color:var(--warn)}
+.pill.r{background:var(--crit-bg);color:var(--crit)} .pill.n{background:var(--surface-3);color:var(--ink-2)}
+.cls{font-size:11px;font-weight:600;color:var(--ink-2);background:var(--surface-3);padding:2px 7px;border-radius:5px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:var(--r-sm);overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:7px 11px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.seg button+button{border-left:1px solid var(--line-2)}
+.seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+
+/* gráficos */
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--f);font-size:11px;fill:var(--muted)}
+.chart .gridl{stroke:var(--line);stroke-width:1}
+.chart .axis{stroke:var(--line-2);stroke-width:1}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin:0 0 8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.hbars{display:flex;flex-direction:column;gap:9px}
+.hbar{display:grid;grid-template-columns:minmax(70px,120px) 1fr auto;gap:10px;align-items:center;font-size:12.5px}
+.hbar .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar .tr{height:12px;border-radius:0 4px 4px 0;background:transparent;position:relative}
+.hbar .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.hbar .vv{color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right;min-width:92px}
+#tip{position:fixed;z-index:200;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--line-2);box-shadow:var(--shadow);border-radius:8px;padding:7px 10px;font-size:12px;line-height:1.4;opacity:0;transition:opacity .1s;max-width:260px}
+#tip.on{opacity:1}
+#tip b{display:block;margin-bottom:2px}
+
+/* saúde */
+.health{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr));gap:12px}
+.hc{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:14px;cursor:pointer;box-shadow:var(--shadow)}
+.hc:hover{border-color:var(--line-2)}
+.hc.r{border-left:4px solid var(--crit)} .hc.y{border-left:4px solid var(--warn)} .hc.g{border-left:4px solid var(--good)} .hc.n{border-left:4px solid var(--line-2)}
+.hc .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.hc ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:12.5px}
+.hc li{display:flex;gap:7px;align-items:flex-start}
+.hc li .d{flex:0 0 auto;font-size:13px;line-height:1.3}
+.ind{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 10px}
+.ind div{background:var(--surface-2);border-radius:6px;padding:5px 7px;font-size:11px;color:var(--muted)}
+.ind b{display:block;color:var(--ink);font-size:13px;font-variant-numeric:tabular-nums}
+.sumrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+
+/* modal */
+.ov{position:fixed;inset:0;z-index:60;background:rgba(5,14,20,.55);display:flex;align-items:flex-start;justify-content:center;padding:5vh 12px;overflow:auto}
+.modal{width:min(720px,100%);background:var(--surface);border-radius:16px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);padding:20px}
+.modal .mh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.modal h3{margin:0;font-size:18px}
+.x{border:0;background:var(--surface-2);border-radius:8px;width:32px;height:32px;font-size:18px;line-height:1}
+.frm{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 12px}
+.acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap}
+.links{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;margin-top:4px}
+details{border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;margin-top:10px}
+details summary{cursor:pointer;font-weight:600;font-size:13px}
+.set{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:14px}
+.lims{display:grid;grid-template-columns:1fr 90px;gap:6px 10px;align-items:center;font-size:12.5px}
+.lims input{padding:6px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--surface-2);text-align:right;width:100%}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#0C1F2B;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;transition:.2s;z-index:300;pointer-events:none;max-width:calc(100% - 32px)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{max-width:1280px;margin:0 auto;padding:0 16px 30px;font-size:11.5px;color:var(--muted)}
+.alist{display:flex;flex-direction:column}
+.arow{padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.arow:hover{background:var(--surface-2)}
+.arow .hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.arow .atx{font-size:12.5px;color:var(--ink-2);margin:4px 0 0 33px}
+td:first-child,th:first-child{position:sticky;left:0;background:var(--surface);z-index:1}
+tbody tr.click:hover td:first-child{background:var(--surface-2)}
+@media(max-width:560px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px} .kpi{padding:12px} .kpi .lb{font-size:10.5px} .kpi .sm{font-size:11px}
+  .tk small{max-width:96px} td,th{padding:8px 7px} main{padding:14px 12px 50px} .pghead h2{font-size:18px} .seg{overflow-x:auto;max-width:100%} }
+@media(max-width:560px){ .ind{grid-template-columns:repeat(2,1fr)} .kpi .vl{font-size:19px} .hbar .vv{min-width:76px} }
+</style>
+</head>
+<body>
+
+<!-- ======================= LOGIN ======================= -->
+<div id="login">
+  <div class="lgwrap">
+    <div class="lgpane">
+      <div class="brandmark">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0C1F2B"/><path d="M9 27l7-8 5 5 10-12" fill="none" stroke="#39E875" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="12" r="2.6" fill="#39E875"/></svg>
+        <b>Cruz<span>Invest</span></b>
+      </div>
+
+      <form id="fCriar" class="hidden" autocomplete="off">
+        <h1>Criar seu cofre</h1>
+        <p class="sub">Primeiro acesso neste aparelho. Defina uma senha forte: ela protege sua carteira com criptografia.</p>
+        <div class="fld"><label for="cNome">Seu nome</label><input id="cNome" required maxlength="60" autocomplete="name"></div>
+        <div class="fld"><label for="cSenha">Senha (mín. 8 caracteres)</label><input id="cSenha" type="password" required minlength="8" autocomplete="new-password">
+          <div class="meter"><i id="cMeter"></i></div></div>
+        <div class="fld"><label for="cSenha2">Repita a senha</label><input id="cSenha2" type="password" required minlength="8" autocomplete="new-password"></div>
+        <div id="cErr" class="msg err hidden"></div>
+        <button class="btn primary block" type="submit">Criar cofre e entrar</button>
+        <div class="note">Seus dados ficam <b>criptografados (AES-256)</b> neste aparelho e nunca saem dele sem você pedir. <b>Não existe recuperação de senha</b>: guarde-a bem e faça backups em <i>Ajustes</i>.<br><button type="button" class="lnk" id="cRestaurar">Já tenho um backup — restaurar</button></div>
+      </form>
+
+      <form id="fEntrar" class="hidden" autocomplete="off">
+        <h1>Olá, <span id="eNome"></span></h1>
+        <p class="sub">Digite sua senha para abrir a carteira.</p>
+        <div class="fld"><label for="eSenha">Senha</label><input id="eSenha" type="password" required autocomplete="current-password"></div>
+        <div id="eErr" class="msg err hidden"></div>
+        <button class="btn primary block" type="submit" id="eBtn">Entrar</button>
+        <div class="note">O app se bloqueia sozinho após um período sem uso.<br>
+          <button type="button" class="lnk" id="eRestaurar">Restaurar backup</button> · <button type="button" class="lnk" id="eApagar">Esqueci a senha</button></div>
+      </form>
+      <input type="file" id="fileRestore" accept=".json,application/json" class="hidden">
+    </div>
+  </div>
+</div>
+
+<!-- ======================= APP ======================= -->
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="topin">
+      <div class="logo">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#14303f"/><path d="M9 27l7-8 5 5 10-12" fill="none" stroke="#39E875" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="12" r="2.6" fill="#39E875"/></svg>
+        Cruz<span>Invest</span>
+      </div>
+      <nav class="tabs" role="tablist" id="tabs">
+        <button data-v="painel">Painel</button>
+        <button data-v="carteira">Carteira</button>
+        <button data-v="saude">Saúde</button>
+        <button data-v="proventos">Proventos</button>
+        <button data-v="lanc">Lançamentos</button>
+        <button data-v="ajustes">Ajustes</button>
+      </nav>
+      <div class="topact">
+        <span class="upd" id="upd"></span>
+        <button class="iconbtn" id="bAtualizar" title="Atualizar cotações e indicadores" aria-label="Atualizar dados"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
+        <button class="iconbtn" id="bTema" title="Trocar tema" aria-label="Trocar tema"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+        <button class="iconbtn" id="bSair" title="Bloquear" aria-label="Bloquear"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+      </div>
+    </div>
+  </header>
+  <main id="main"></main>
+  <footer>CruzInvest é uma ferramenta de acompanhamento. Os alertas são filtros de atenção baseados em indicadores públicos e <b>não constituem recomendação de compra ou venda</b>. Dados: brapi.dev e Banco Central (SGS). Proventos exibidos em valor bruto.</footer>
+</div>
+
+<div id="tip"></div>
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* ======================= UTILITÁRIOS ======================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+const BRL=new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"});
+const BRL0=new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+const N2=new Intl.NumberFormat("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const N0=new Intl.NumberFormat("pt-BR",{maximumFractionDigits:6});
+const money=v=>v==null||isNaN(v)?"—":BRL.format(v);
+const money0=v=>v==null||isNaN(v)?"—":(Math.abs(v)>=100000?BRL0.format(v):BRL.format(v));
+const pct=(v,d=2)=>v==null||!isFinite(v)?"—":(v*100).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d})+"%";
+const spct=v=>v==null||!isFinite(v)?"—":(v>0?"+":"")+pct(v);
+const n2=v=>v==null||!isFinite(v)?"—":N2.format(v);
+const sgn=v=>v>0?"pos":v<0?"neg":"";
+const todayISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const isoOf=d=>{d=new Date(d);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const brDate=s=>s?s.slice(8,10)+"/"+s.slice(5,7)+"/"+s.slice(0,4):"—";
+const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+function parseNum(s){
+  if(typeof s==="number") return s;
+  s=String(s||"").trim().replace(/[R$\s%]/g,"");
+  if(!s) return NaN;
+  if(s.includes(",")&&s.includes(".")) s=s.lastIndexOf(",")>s.lastIndexOf(".")?s.replace(/\./g,"").replace(",","."):s.replace(/,/g,"");
+  else if(s.includes(",")) s=s.replace(",",".");
+  return parseFloat(s);
+}
+function parseDate(s){
+  s=String(s||"").trim();
+  let m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+  if(m){let y=+m[3]; if(y<100) y+=2000; return y+"-"+String(+m[2]).padStart(2,"0")+"-"+String(+m[1]).padStart(2,"0");}
+  m=s.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m) return m[0];
+  return "";
+}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2800);}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ======================= CRIPTOGRAFIA (mesmo padrão do CruzOn Planner) ======================= */
+const SUB=crypto.subtle, ENC=new TextEncoder(), DEC=new TextDecoder();
+const rnd=n=>crypto.getRandomValues(new Uint8Array(n));
+const b64=buf=>{const a=new Uint8Array(buf);let s="";for(let i=0;i<a.length;i+=8192)s+=String.fromCharCode(...a.subarray(i,i+8192));return btoa(s);};
+const ub64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const ITER=310000;
+async function deriveKey(pass,saltB64,iter){
+  const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
+  return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+async function seal(obj,key){const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(obj)));return{iv:b64(iv),ct:b64(ct)};}
+async function unseal(box,key){const pt=await SUB.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct));return JSON.parse(DEC.decode(pt));}
+
+/* ======================= COFRE ======================= */
+const VKEY="cruzinvest_cofre_v1", TKEY="cruzinvest_tema", FAILK="cruzinvest_falhas";
+let KEY=null, V=null, VIEW="painel", LOCKT=null, SAVET=null, BUSY=false;
+const DEF_LIM={
+  plMax:25, pvpMax:3, roeMin:8, divEbitdaY:3, divEbitdaR:4.5, liqMin:1, payoutMax:100, quedaMax:35, quedaDia:6,
+  fiiDyMin:6, fiiDyMax:16, fiiRendQuedaY:15, fiiRendQuedaR:30, fiiPvpMax:1.2, fiiPvpMin:0.7,
+  concY:20, concR:30
+};
+function newV(nome){return{v:1,perfil:{nome},prefs:{tema:"brand",lock:15,token:"",lim:{...DEF_LIM},autoHoras:6},lanc:[],ativos:{},mkt:{},cdi:null,macro:null,hist:[],meta:{criado:new Date().toISOString(),backup:null,upd:null}};}
+function normV(){
+  V.prefs=V.prefs||{}; V.prefs.lim={...DEF_LIM,...(V.prefs.lim||{})};
+  if(V.prefs.lock==null) V.prefs.lock=15; if(V.prefs.autoHoras==null) V.prefs.autoHoras=6;
+  V.lanc=V.lanc||[]; V.ativos=V.ativos||{}; V.mkt=V.mkt||{}; V.hist=V.hist||[]; V.meta=V.meta||{};
+}
+const readVault=()=>{try{return JSON.parse(localStorage.getItem(VKEY)||"null");}catch(e){return null;}};
+async function save(now){
+  clearTimeout(SAVET);
+  const go=async()=>{ if(!KEY||!V) return; const w=readVault(); if(!w) return;
+    w.box=await seal(V,KEY); w.nome=V.perfil.nome; w.upd=new Date().toISOString();
+    try{localStorage.setItem(VKEY,JSON.stringify(w));}catch(e){toast("Não foi possível salvar: armazenamento cheio.");} };
+  if(now) return go(); SAVET=setTimeout(go,400);
+}
+async function createVault(nome,pass,data){
+  const salt=b64(rnd(16)); const key=await deriveKey(pass,salt,ITER);
+  V=data||newV(nome); if(nome) V.perfil.nome=nome; normV();
+  const w={v:1,salt,iter:ITER,nome:V.perfil.nome,box:await seal(V,key)};
+  localStorage.setItem(VKEY,JSON.stringify(w)); KEY=key;
+}
+async function unlock(pass){
+  const w=readVault(); const key=await deriveKey(pass,w.salt,w.iter);
+  V=await unseal(w.box,key); KEY=key; normV();
+}
+function lock(){
+  clearTimeout(LOCKT); save(true).finally(()=>{KEY=null;V=null;$("#main").innerHTML="";$("#app").classList.add("hidden");showLogin();});
+}
+function armLock(){ clearTimeout(LOCKT); if(!V) return; const m=+V.prefs.lock||15; LOCKT=setTimeout(lock,m*60000); }
+["click","keydown","touchstart","scroll"].forEach(e=>addEventListener(e,()=>{if(KEY)armLock();},{passive:true}));
+
+/* ======================= LOGIN ======================= */
+function showLogin(){
+  $("#login").classList.remove("hidden");
+  const w=readVault();
+  $("#fCriar").classList.toggle("hidden",!!w); $("#fEntrar").classList.toggle("hidden",!w);
+  if(w){ $("#eNome").textContent=(w.nome||"").split(" ")[0]; $("#eSenha").value=""; setTimeout(()=>$("#eSenha").focus(),50); }
+  else setTimeout(()=>$("#cNome").focus(),50);
+}
+function strength(p){let s=0; if(p.length>=8)s++; if(p.length>=12)s++; if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++; if(/\d/.test(p))s++; if(/[^A-Za-z0-9]/.test(p))s++; return s;}
+$("#cSenha").addEventListener("input",e=>{const s=strength(e.target.value);const m=$("#cMeter");m.style.width=(s*20)+"%";m.style.background=s<3?"var(--crit)":s<4?"var(--c4)":"#00A04E";});
+$("#fCriar").addEventListener("submit",async e=>{
+  e.preventDefault(); const err=$("#cErr"); err.classList.add("hidden");
+  const nome=$("#cNome").value.trim(), p1=$("#cSenha").value, p2=$("#cSenha2").value;
+  const fail=m=>{err.textContent=m;err.classList.remove("hidden");};
+  if(p1.length<8) return fail("A senha precisa ter pelo menos 8 caracteres.");
+  if(strength(p1)<3) return fail("Senha fraca: misture letras maiúsculas, minúsculas, números ou símbolos.");
+  if(p1!==p2) return fail("As senhas não conferem.");
+  await createVault(nome,p1); enterApp(); toast("Cofre criado. Bem-vindo(a) ao CruzInvest!");
+});
+$("#fEntrar").addEventListener("submit",async e=>{
+  e.preventDefault(); const err=$("#eErr"), btn=$("#eBtn"); err.classList.add("hidden");
+  const f=JSON.parse(localStorage.getItem(FAILK)||'{"n":0,"t":0}');
+  const wait=f.n>=5?Math.ceil((f.t+30000*Math.pow(2,Math.min(f.n-5,5))-Date.now())/1000):0;
+  if(wait>0){err.textContent="Muitas tentativas. Aguarde "+wait+"s.";err.classList.remove("hidden");return;}
+  btn.disabled=true; btn.textContent="Abrindo…";
+  try{ await unlock($("#eSenha").value); localStorage.removeItem(FAILK); enterApp(); }
+  catch(x){ f.n++; f.t=Date.now(); localStorage.setItem(FAILK,JSON.stringify(f)); err.textContent="Senha incorreta."; err.classList.remove("hidden"); }
+  btn.disabled=false; btn.textContent="Entrar";
+});
+$("#eApagar").addEventListener("click",()=>{
+  if(!confirm("Sem a senha não é possível abrir os dados criptografados.\n\nVocê pode restaurar um backup (com a senha que ele tinha) ou APAGAR o cofre deste aparelho e começar do zero.\n\nApagar o cofre agora?")) return;
+  if(prompt('Digite APAGAR para confirmar')!=="APAGAR") return;
+  localStorage.removeItem(VKEY); localStorage.removeItem(FAILK); showLogin();
+});
+const pickRestore=()=>$("#fileRestore").click();
+$("#cRestaurar").addEventListener("click",pickRestore); $("#eRestaurar").addEventListener("click",pickRestore);
+$("#fileRestore").addEventListener("change",async e=>{
+  const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  try{
+    const w=JSON.parse(await f.text());
+    if(!w||!w.salt||!w.box) throw new Error("arquivo");
+    const pass=prompt("Senha do backup:"); if(!pass) return;
+    const key=await deriveKey(pass,w.salt,w.iter); const data=await unseal(w.box,key);
+    if(readVault()&&!confirm("Isto substitui o cofre atual deste aparelho. Continuar?")) return;
+    localStorage.setItem(VKEY,JSON.stringify({v:1,salt:w.salt,iter:w.iter,nome:data.perfil&&data.perfil.nome,box:w.box}));
+    KEY=key; V=data; normV(); enterApp(); toast("Backup restaurado.");
+  }catch(x){ alert(x.message==="arquivo"?"Arquivo de backup inválido.":"Senha incorreta ou backup corrompido."); }
+});
+
+function enterApp(){
+  $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
+  applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
+  const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
+  if(tickers().length&&old) atualizar(true);
+}
+
+/* ======================= TEMA ======================= */
+const TEMAS=["brand","light","dark"];
+function applyTheme(t){document.documentElement.setAttribute("data-theme",t);try{localStorage.setItem(TKEY,t);}catch(e){}
+  document.querySelector('meta[name="theme-color"]').content=t==="dark"?"#0A141B":"#0C1F2B";}
+try{applyTheme(localStorage.getItem(TKEY)||"brand");}catch(e){}
+$("#bTema").addEventListener("click",()=>{const i=(TEMAS.indexOf(V.prefs.tema)+1)%3;V.prefs.tema=TEMAS[i];applyTheme(V.prefs.tema);save();render();
+  toast("Tema: "+({brand:"CruzOn",light:"Claro",dark:"Escuro"})[V.prefs.tema]);});
+$("#bSair").addEventListener("click",lock);
+$("#bAtualizar").addEventListener("click",()=>atualizar(false));
+
+/* ======================= CLASSES DE ATIVO ======================= */
+const CLASSES=["Ação","FII","ETF","BDR","Renda fixa","Outro"];
+const ETFS=new Set("BOVA11 BOVV11 BOVB11 BOVX11 IVVB11 SMAL11 SMAC11 HASH11 GOLD11 DIVO11 SPXI11 NASD11 XINA11 ACWI11 EURP11 BBSD11 ECOO11 FIND11 MATB11 PIBB11 BRAX11 XBOV11 IMAB11 IRFM11 B5P211 FIXA11 LFTS11 TECK11 QBTC11 ETHE11 BITH11 DEFI11 META11 WEB311 USDB11 NTNS11 B5MB11 IB5M11 DEBB11 GOVE11 ESGB11 UTEC11 CMDB11 BITI11 QETH11".split(" "));
+function guessClass(tk){
+  tk=tk.toUpperCase();
+  if(ETFS.has(tk)) return "ETF";
+  if(/^[A-Z]{4}3[2-5]$/.test(tk)) return "BDR";
+  if(/^[A-Z]{4}11B?$/.test(tk)) return "FII";
+  if(/^[A-Z]{4}\d{1,2}F?$/.test(tk)) return "Ação";
+  return "Outro";
+}
+const isListed=c=>c!=="Renda fixa"&&c!=="Outro";
+const clsColor=c=>({"Ação":"var(--c1)","FII":"var(--c2)","ETF":"var(--c3)","BDR":"var(--c7)","Renda fixa":"var(--c4)","Outro":"var(--c5)"})[c]||"var(--c8)";
+function ativo(tk){ if(!V.ativos[tk]) V.ativos[tk]={cls:guessClass(tk),vp:null,manual:null,nota:""}; return V.ativos[tk]; }
+
+/* ======================= CÁLCULO DA CARTEIRA ======================= */
+const tickers=()=>[...new Set(V.lanc.map(l=>l.tk))];
+function sortedLanc(){return V.lanc.slice().sort((a,b)=>a.data<b.data?-1:a.data>b.data?1:(a.tipo==="C"?-1:1));}
+function qtyAt(tk,iso){let q=0;for(const l of V.lanc){if(l.tk===tk&&l.data<=iso)q+=l.tipo==="C"?l.qtd:-l.qtd;}return Math.max(0,q);}
+function proventosDe(tk){
+  const m=V.mkt[tk]; if(!m||!m.divs) return [];
+  const hoje=todayISO(), out=[];
+  for(const d of m.divs){
+    const com=d.com||d.ex; if(!com) continue;
+    const q=qtyAt(tk,com); if(q<=0) continue;
+    out.push({tk,label:d.label,com,pay:d.pay||"",rate:d.rate,qtd:q,valor:q*d.rate,recebido:!!d.pay&&d.pay<=hoje});
+  }
+  return out;
+}
+function carteira(){
+  const pos={}; let realizado=0;
+  for(const l of sortedLanc()){
+    const p=pos[l.tk]||(pos[l.tk]={tk:l.tk,qtd:0,custo:0,realizado:0,primeira:l.data});
+    if(l.tipo==="C"){ p.qtd+=l.qtd; p.custo+=l.qtd*l.preco+(l.taxa||0); }
+    else{ const pm=p.qtd>0?p.custo/p.qtd:0; const q=Math.min(l.qtd,p.qtd); const r=q*l.preco-(l.taxa||0)-q*pm;
+      p.realizado+=r; realizado+=r; p.custo-=q*pm; p.qtd-=q; if(p.qtd<1e-9){p.qtd=0;p.custo=0;} }
+  }
+  const lista=[]; let total=0, custo=0, provRec=0, prov12=0, provAReceber=0, diaVar=0;
+  const d12=isoOf(Date.now()-365*864e5);
+  for(const tk in pos){
+    const p=pos[tk], a=ativo(tk), m=V.mkt[tk]||{};
+    const provs=proventosDe(tk);
+    p.provRec=provs.filter(x=>x.recebido).reduce((s,x)=>s+x.valor,0);
+    p.prov12=provs.filter(x=>x.recebido&&x.pay>=d12).reduce((s,x)=>s+x.valor,0);
+    p.provFut=provs.filter(x=>!x.recebido).reduce((s,x)=>s+x.valor,0);
+    provRec+=p.provRec; prov12+=p.prov12; provAReceber+=p.provFut;
+    if(p.qtd<=0) continue;
+    p.cls=a.cls; p.pm=p.custo/p.qtd;
+    p.preco=a.cls==="Renda fixa"||a.cls==="Outro"?(a.manual!=null?a.manual/p.qtd:p.pm):(m.price!=null?m.price:null);
+    p.valor=p.preco!=null?p.preco*p.qtd:p.custo;
+    p.semPreco=p.preco==null;
+    p.ganho=p.valor-p.custo; p.ganhoPct=p.custo?p.ganho/p.custo:0;
+    p.retTotal=p.ganho+p.provRec+p.realizado; p.retTotalPct=p.custo?p.retTotal/p.custo:0;
+    p.chg=m.chg!=null&&isListed(a.cls)?m.chg/100:null;
+    if(p.chg!=null) diaVar+=p.valor-p.valor/(1+p.chg);
+    p.dy12=m.dy12; p.yoc=p.custo?p.prov12/p.custo:0;
+    p.nome=m.name||""; p.logo=m.logo||"";
+    total+=p.valor; custo+=p.custo; lista.push(p);
+  }
+  lista.forEach(p=>p.peso=total?p.valor/total:0);
+  lista.sort((a,b)=>b.valor-a.valor);
+  const ganho=total-custo, retTotal=ganho+provRec+realizado;
+  return {lista,total,custo,ganho,ganhoPct:custo?ganho/custo:0,realizado,provRec,prov12,provAReceber,retTotal,retTotalPct:custo?retTotal/custo:0,
+          dyCart:total?prov12/total:0,yoc:custo?prov12/custo:0,diaVar,diaPct:total?diaVar/(total-diaVar):0};
+}
+/* comparação com o CDI: mesmo dinheiro, mesmas datas */
+function cdiCompare(C){
+  if(!V.cdi||!V.cdi.serie||!V.lanc.length) return null;
+  const serie=V.cdi.serie; const lanc=sortedLanc(); let bal=0, i=0;
+  const first=lanc[0].data; if(!serie.length||(new Date(serie[0][0])-new Date(first))>10*864e5) return null;
+  let li=0;
+  for(const [d,r] of serie){
+    while(li<lanc.length&&lanc[li].data<=d){const l=lanc[li]; bal+=l.tipo==="C"?l.qtd*l.preco+(l.taxa||0):-(l.qtd*l.preco-(l.taxa||0)); li++;}
+    if(d>first) bal*=1+r/100;
+  }
+  while(li<lanc.length){const l=lanc[li]; bal+=l.tipo==="C"?l.qtd*l.preco+(l.taxa||0):-(l.qtd*l.preco-(l.taxa||0)); li++;}
+  const voce=C.total+C.provRec; return {cdi:bal,voce,dif:voce-bal};
+}
+
+/* ======================= DADOS DE MERCADO ======================= */
+async function brapi(tk,full){
+  const t=V.prefs.token?("&token="+encodeURIComponent(V.prefs.token)):"";
+  const q=full?"?modules=defaultKeyStatistics,financialData,summaryProfile&dividends=true":"?dividends=true";
+  const r=await fetch("https://brapi.dev/api/quote/"+encodeURIComponent(tk)+q+t);
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok||j.error) { const e=new Error(j.message||("HTTP "+r.status)); e.code=j.code||r.status; throw e; }
+  return j.results&&j.results[0];
+}
+function parseQuote(x,prev){
+  const ks=x.defaultKeyStatistics||{}, fd=x.financialData||{}, sp=x.summaryProfile||{};
+  const divs=((x.dividendsData&&x.dividendsData.cashDividends)||[]).map(d=>({
+    label:d.label, rate:+d.rate||0, com:d.lastDatePrior?isoOf(d.lastDatePrior):"", ex:d.exDate?isoOf(d.exDate):"", pay:d.paymentDate?isoOf(d.paymentDate):""
+  })).filter(d=>d.rate>0);
+  const seen=new Set(); const uniq=divs.filter(d=>{const k=d.label+d.com+d.pay+d.rate.toFixed(8);if(seen.has(k))return false;seen.add(k);return true;});
+  const d12=isoOf(Date.now()-365*864e5);
+  const s12=uniq.filter(d=>(d.com||d.ex)>=d12).reduce((s,d)=>s+d.rate,0);
+  const price=x.regularMarketPrice;
+  const net=fd.totalDebt!=null&&fd.totalCash!=null&&fd.ebitda?(fd.totalDebt-fd.totalCash)/fd.ebitda:null;
+  return {ts:Date.now(),name:x.longName||x.shortName||"",logo:x.logourl&&!/BRAPI\.svg$/i.test(x.logourl)?x.logourl:"",price,chg:x.regularMarketChangePercent,
+    high52:x.fiftyTwoWeekHigh,low52:x.fiftyTwoWeekLow,
+    pl:x.priceEarnings!=null?x.priceEarnings:(prev&&prev.pl),eps:x.earningsPerShare!=null?x.earningsPerShare:(prev&&prev.eps),
+    pvp:ks.priceToBook!=null?ks.priceToBook:(prev&&prev.pvp), vpa:ks.bookValue!=null?ks.bookValue:(prev&&prev.vpa),
+    roe:fd.returnOnEquity!=null?fd.returnOnEquity:(prev&&prev.roe), margem:ks.profitMargins!=null?ks.profitMargins:(fd.profitMargins!=null?fd.profitMargins:(prev&&prev.margem)),
+    divEbitda:net!=null?net:(prev&&prev.divEbitda), liq:fd.currentRatio!=null?fd.currentRatio:(prev&&prev.liq),
+    setor:sp.sector||(prev&&prev.setor)||"", industria:sp.industry||(prev&&prev.industria)||"",
+    divs:uniq.length?uniq:(prev&&prev.divs)||[], dy12:price?s12/price:null, div12:s12, full:!!(x.defaultKeyStatistics||x.financialData)};
+}
+async function atualizar(silent){
+  if(BUSY) return; const tks=tickers().filter(t=>isListed(ativo(t).cls));
+  const C=carteira(); const ativos=new Set(C.lista.map(p=>p.tk));
+  BUSY=true; $("#bAtualizar").classList.add("spin");
+  const erros=[]; let ok=0, semToken=false, semModulos=false;
+  const fila=tks.slice(); const N=Math.min(3,fila.length);
+  await Promise.all(Array.from({length:N},async()=>{
+    while(fila.length){
+      const tk=fila.shift();
+      if(!ativos.has(tk)&&V.mkt[tk]&&V.mkt[tk].divs&&Date.now()-V.mkt[tk].ts<7*864e5) continue; /* posição zerada: atualiza 1x/semana */
+      try{
+        let x; try{ x=await brapi(tk,true); }
+        catch(e){ if(/MODULE|PLAN|plano|módulo/i.test(e.message+e.code)){ semModulos=true; x=await brapi(tk,false);} else throw e; }
+        if(x){ V.mkt[tk]=parseQuote(x,V.mkt[tk]); ok++; }
+      }catch(e){ if(/TOKEN/i.test(e.code+e.message)) semToken=true; erros.push(tk+": "+e.message); }
+    }
+  }));
+  try{ await atualizarMacro(); }catch(e){ erros.push("Banco Central: "+e.message); }
+  V.meta.upd=new Date().toISOString();
+  const C2=carteira(); const hoje=todayISO();
+  if(C2.lista.length){ V.hist=V.hist.filter(h=>h.d!==hoje); V.hist.push({d:hoje,v:+C2.total.toFixed(2),c:+C2.custo.toFixed(2)}); V.hist.sort((a,b)=>a.d<b.d?-1:1); if(V.hist.length>1500) V.hist=V.hist.slice(-1500); }
+  BUSY=false; $("#bAtualizar").classList.remove("spin"); save(); render();
+  V._aviso=semToken?"token":semModulos?"modulos":(erros.length?"erros":null); V._erros=erros;
+  if(!silent||erros.length) toast(erros.length?("Atualizado com "+erros.length+" pendência(s)."+(semToken?" Cadastre o token da brapi em Ajustes.":"")):"Dados atualizados ("+ok+" ativos).");
+  render();
+}
+async function sgs(serie,qs){const r=await fetch("https://api.bcb.gov.br/dados/serie/bcdata.sgs."+serie+"/dados"+qs+(qs.includes("?")?"&":"?")+"formato=json");if(!r.ok) throw new Error("HTTP "+r.status);return r.json();}
+const br2iso=s=>s.slice(6,10)+"-"+s.slice(3,5)+"-"+s.slice(0,2), iso2br=s=>s.slice(8,10)+"/"+s.slice(5,7)+"/"+s.slice(0,4);
+async function atualizarMacro(){
+  const [selic,ipca]=await Promise.all([sgs(432,"/ultimos/1"),sgs(13522,"/ultimos/1")]);
+  V.macro={ts:Date.now(),selic:+selic[0].valor,ipca12:+ipca[0].valor,ipcaRef:ipca[0].data};
+  if(!V.lanc.length) return;
+  const first=sortedLanc()[0].data, lim=isoOf(Date.now()-3640*864e5);
+  const ini=first<lim?lim:first;
+  let serie=(V.cdi&&V.cdi.ini<=ini&&V.cdi.serie)||[];
+  const last=serie.length?serie[serie.length-1][0]:null;
+  const from=last?isoOf(new Date(last).getTime()+864e5*1.5):ini;
+  if(!last||from<=todayISO()){
+    const dados=await sgs(12,"?dataInicial="+iso2br(from)+"&dataFinal="+iso2br(todayISO())).catch(()=>[]);
+    if(!last) serie=[];
+    for(const d of dados){const k=br2iso(d.data); if(!last||k>last) serie.push([k,+d.valor]);}
+  }
+  V.cdi={ini:V.cdi&&V.cdi.ini<=ini?V.cdi.ini:ini,serie};
+}
+
+/* ======================= ANÁLISE DE SAÚDE ======================= */
+function saude(p,C){
+  const L=V.prefs.lim, m=V.mkt[p.tk]||{}, a=ativo(p.tk), f=[];
+  const add=(lv,t)=>f.push({lv,t});
+  const fin=/financial|banco|bank|seguro|insurance/i.test((m.setor||"")+" "+(m.industria||""));
+  if(isListed(a.cls)&&m.price==null) add("n","Sem cotação: clique em atualizar ou confira o ticker.");
+  if(p.peso*100>=L.concR) add("r","Concentração alta: "+pct(p.peso,1)+" da carteira.");
+  else if(p.peso*100>=L.concY) add("y","Concentração: "+pct(p.peso,1)+" da carteira.");
+  if(m.price&&m.high52&&isListed(a.cls)){const q=1-m.price/m.high52; if(q*100>=L.quedaMax) add("y","Cotação "+pct(q,0)+" abaixo da máxima de 52 semanas.");}
+  if(m.chg!=null&&m.chg<=-L.quedaDia&&isListed(a.cls)) add("y","Queda forte no último pregão ("+spct(m.chg/100)+"). Procure notícias.");
+  if(a.cls==="Ação"||a.cls==="BDR"){
+    if(!m.full&&m.price!=null) add("n","Indicadores fundamentalistas indisponíveis no seu plano da brapi.");
+    if(m.pl!=null){ if(m.pl<0) add("r","Empresa com prejuízo nos últimos 12 meses (P/L negativo)."); else if(m.pl>L.plMax) add("y","P/L de "+n2(m.pl)+": preço exigente frente ao lucro."); }
+    if(m.roe!=null){ if(m.roe<0) add("r","ROE negativo ("+pct(m.roe,1)+")."); else if(m.roe*100<L.roeMin) add("y","ROE baixo ("+pct(m.roe,1)+")."); }
+    if(m.margem!=null&&m.margem<0) add("r","Margem líquida negativa ("+pct(m.margem,1)+").");
+    if(m.pvp!=null&&m.pvp>L.pvpMax) add("y","P/VP de "+n2(m.pvp)+": acima do limite de "+n2(L.pvpMax)+".");
+    if(!fin&&m.divEbitda!=null){ if(m.divEbitda>=L.divEbitdaR) add("r","Dívida líquida/EBITDA de "+n2(m.divEbitda)+"x: endividamento alto."); else if(m.divEbitda>=L.divEbitdaY) add("y","Dívida líquida/EBITDA de "+n2(m.divEbitda)+"x."); }
+    if(!fin&&m.liq!=null&&m.liq<L.liqMin) add("y","Liquidez corrente de "+n2(m.liq)+": menos ativo que passivo de curto prazo.");
+    if(m.eps>0&&m.div12>0){const po=m.div12/m.eps; if(po*100>L.payoutMax) add("y","Payout de "+pct(po,0)+": distribui mais do que lucra.");}
+  }
+  if(a.cls==="FII"){
+    if(m.dy12!=null&&m.price){ if(m.dy12*100>L.fiiDyMax) add("y","DY 12m de "+pct(m.dy12,1)+": verifique se há rendimento não recorrente."); else if(m.dy12*100<L.fiiDyMin&&m.dy12>0) add("y","DY 12m de "+pct(m.dy12,1)+": abaixo do mínimo definido."); }
+    const r=(m.divs||[]).filter(d=>d.label!=="AMORTIZAÇÃO"&&d.label!=="AMORTIZACAO").sort((x,y)=>(y.com||y.ex)<(x.com||x.ex)?-1:1);
+    if(r.length>=6){ const u3=r.slice(0,3).reduce((s,d)=>s+d.rate,0)/3, ant=r.slice(3,12), ma=ant.reduce((s,d)=>s+d.rate,0)/ant.length;
+      if(ma>0){const q=1-u3/ma; if(q*100>=L.fiiRendQuedaR) add("r","Rendimento médio dos últimos 3 meses "+pct(q,0)+" menor que o histórico."); else if(q*100>=L.fiiRendQuedaY) add("y","Rendimento recente "+pct(q,0)+" abaixo da média anterior.");} }
+    const vp=a.vp||m.vpa; const pvp=vp&&m.price?m.price/vp:m.pvp;
+    if(pvp){ if(pvp>L.fiiPvpMax) add("y","P/VP de "+n2(pvp)+": pagando ágio sobre o patrimônio."); else if(pvp<L.fiiPvpMin) add("y","P/VP de "+n2(pvp)+": desconto forte, investigue o motivo (vacância, inadimplência, dívida)."); }
+    else add("n","Informe o VP por cota do fundo (no detalhe do ativo) para calcular o P/VP.");
+  }
+  const lv=f.some(x=>x.lv==="r")?"r":f.some(x=>x.lv==="y")?"y":f.length&&f.every(x=>x.lv==="n")&&m.price==null&&isListed(a.cls)?"n":"g";
+  return {lv,f};
+}
+const LVL={g:["g","Saudável","🟢"],y:["y","Atenção","🟡"],r:["r","Risco","🔴"],n:["n","Sem dados","⚪"]};
+const pill=lv=>`<span class="pill ${LVL[lv][0]}">${LVL[lv][2]} ${LVL[lv][1]}</span>`;
+
+/* ======================= TOOLTIP ======================= */
+const TIP=$("#tip");
+function tipOn(e,html){TIP.innerHTML=html;TIP.classList.add("on");tipMove(e);}
+function tipMove(e){const x=e.clientX,y=e.clientY,w=TIP.offsetWidth,h=TIP.offsetHeight;TIP.style.left=Math.min(innerWidth-w-8,Math.max(8,x+14))+"px";TIP.style.top=(y-h-12<8?y+16:y-h-12)+"px";}
+function tipOff(){TIP.classList.remove("on");}
+function bindTips(root){root.querySelectorAll("[data-tip]").forEach(el=>{
+  el.addEventListener("mouseenter",e=>tipOn(e,el.dataset.tip)); el.addEventListener("mousemove",tipMove); el.addEventListener("mouseleave",tipOff);
+  el.addEventListener("touchstart",e=>{tipOn(e.touches[0],el.dataset.tip);setTimeout(tipOff,2200);},{passive:true});});}
+
+/* ======================= GRÁFICOS (SVG) ======================= */
+const CW=()=>innerWidth<620?380:640;
+function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const n=v/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p;}
+const shortBRL=v=>Math.abs(v)>=1e6?"R$ "+(v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mi":Math.abs(v)>=1e3?"R$ "+(v/1e3).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mil":"R$ "+Math.round(v);
+function barChart(data,opt){ /* data: [{lb, v, v2, tip}] v=recebido (cor cheia), v2=a receber (mesma cor, clara) */
+  const W=CW(),H=220,pl=58,pr=8,pt=10,pb=26, iw=W-pl-pr, ih=H-pt-pb;
+  const max=niceMax(Math.max(...data.map(d=>(d.v||0)+(d.v2||0)),0));
+  const bw=iw/data.length, gap=Math.max(2,bw*.28);
+  let g=""; for(let i=0;i<=4;i++){const y=pt+ih-ih*i/4; g+=`<line class="gridl" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-8}" y="${y+4}" text-anchor="end">${shortBRL(max*i/4)}</text>`;}
+  let b=""; data.forEach((d,i)=>{const x=pl+i*bw+gap/2, w=bw-gap; const h1=ih*(d.v||0)/max, h2=ih*(d.v2||0)/max; const y1=pt+ih-h1;
+    const r=Math.min(4,w/2);
+    if(h1>0) b+=`<path d="${barPath(x,y1,w,h1,h2>0?0:r)}" fill="${opt.color}"/>`;
+    if(h2>0){const y2=y1-h2-(h1>0?2:0); b+=`<path d="${barPath(x,y2,w,h2,r)}" fill="${opt.color}" opacity=".38"/>`;}
+    b+=`<rect x="${pl+i*bw}" y="${pt}" width="${bw}" height="${ih}" fill="transparent" data-tip="${esc(d.tip)}"/>`;
+    if(data.length<=(W<500?8:14)||i%(data.length>20&&W<500?4:2)===0) b+=`<text x="${x+w/2}" y="${H-8}" text-anchor="middle">${esc(d.lb)}</text>`;});
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opt.aria)}">${g}<line class="axis" x1="${pl}" x2="${W-pr}" y1="${pt+ih}" y2="${pt+ih}"/>${b}</svg></div>`;
+}
+function barPath(x,y,w,h,r){r=Math.min(r,h);return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`;}
+function lineChart(series,opt){ /* series: [{name,color,pts:[[iso,v]]}] */
+  const W=CW(),H=220,pl=62,pr=10,pt=10,pb=26, iw=W-pl-pr, ih=H-pt-pb;
+  const all=series.flatMap(s=>s.pts.map(p=>p[1])); let mn=Math.min(...all), mx=Math.max(...all);
+  const pad=(mx-mn)*.1||mx*.05||1; mn=Math.max(0,mn-pad); mx=mx+pad;
+  const xs=series[0].pts.map(p=>p[0]); const t0=new Date(xs[0]).getTime(), t1=new Date(xs[xs.length-1]).getTime()||t0+1;
+  const X=d=>pl+iw*((new Date(d).getTime()-t0)/((t1-t0)||1)), Y=v=>pt+ih-ih*(v-mn)/(mx-mn);
+  let g=""; for(let i=0;i<=4;i++){const v=mn+(mx-mn)*i/4,y=Y(v); g+=`<line class="gridl" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-8}" y="${y+4}" text-anchor="end">${shortBRL(v)}</text>`;}
+  const nt=Math.min(W<500?4:6,xs.length); for(let i=0;i<nt;i++){const d=xs[Math.round(i*(xs.length-1)/Math.max(1,nt-1))]; g+=`<text x="${X(d)}" y="${H-8}" text-anchor="middle">${d.slice(8,10)}/${d.slice(5,7)}${xs.length>200?"/"+d.slice(2,4):""}</text>`;}
+  let l=""; series.forEach(s=>{l+=`<path d="${s.pts.map((p,i)=>(i?"L":"M")+X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)).join("")}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" ${s.dash?'stroke-dasharray="5 4"':""}/>`;});
+  const id="lc"+uid();
+  return `<div class="chart" id="${id}"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opt.aria)}">${g}<line class="axis" x1="${pl}" x2="${W-pr}" y1="${pt+ih}" y2="${pt+ih}"/>${l}
+    <line class="xh" x1="0" x2="0" y1="${pt}" y2="${pt+ih}" stroke="var(--line-2)" stroke-width="1" visibility="hidden"/>
+    ${series.map((s,i)=>`<circle class="xd${i}" r="4.5" fill="${s.color}" stroke="var(--surface)" stroke-width="2" visibility="hidden"/>`).join("")}
+    <rect class="hit" x="${pl}" y="${pt}" width="${iw}" height="${ih}" fill="transparent"/></svg></div>`
+;
+}
+function wireLine(id,series){
+  const el=document.getElementById(id); if(!el) return; const svg=el.querySelector("svg"), hit=svg.querySelector(".hit"), xh=svg.querySelector(".xh");
+  const W=CW(),pl=62,pr=10,pt=10,ih=220-10-26,iw=W-pl-pr;
+  const all=series.flatMap(s=>s.pts.map(p=>p[1])); let mn=Math.min(...all), mx=Math.max(...all); const pad=(mx-mn)*.1||mx*.05||1; mn=Math.max(0,mn-pad); mx+=pad;
+  const xs=series[0].pts.map(p=>p[0]); const t0=new Date(xs[0]).getTime(), t1=new Date(xs[xs.length-1]).getTime();
+  const X=d=>pl+iw*((new Date(d).getTime()-t0)/((t1-t0)||1)), Y=v=>pt+ih-ih*(v-mn)/(mx-mn);
+  const mv=e=>{const pt0=svg.createSVGPoint(); const ev=e.touches?e.touches[0]:e; pt0.x=ev.clientX; pt0.y=ev.clientY; const p=pt0.matrixTransform(svg.getScreenCTM().inverse());
+    let bi=0,bd=1e9; xs.forEach((d,i)=>{const dd=Math.abs(X(d)-p.x); if(dd<bd){bd=dd;bi=i;}});
+    const d=xs[bi]; xh.setAttribute("x1",X(d)); xh.setAttribute("x2",X(d)); xh.setAttribute("visibility","visible");
+    series.forEach((s,i)=>{const c=svg.querySelector(".xd"+i); c.setAttribute("cx",X(d)); c.setAttribute("cy",Y(s.pts[bi][1])); c.setAttribute("visibility","visible");});
+    tipOn(ev,`<b>${brDate(d)}</b>`+series.map(s=>`<span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${s.color};margin-right:5px"></span>${s.name}: <b style="display:inline">${money(s.pts[bi][1])}</b>`).join("<br>"));};
+  const out=()=>{xh.setAttribute("visibility","hidden"); series.forEach((s,i)=>svg.querySelector(".xd"+i).setAttribute("visibility","hidden")); tipOff();};
+  hit.addEventListener("mousemove",mv); hit.addEventListener("mouseleave",out); hit.addEventListener("touchmove",mv,{passive:true}); hit.addEventListener("touchend",()=>setTimeout(out,1500));
+}
+function hbars(rows){ /* rows: [{nm,v,color,tip,right}] */
+  const max=Math.max(...rows.map(r=>r.v),0)||1;
+  return `<div class="hbars">${rows.map(r=>`<div class="hbar" data-tip="${esc(r.tip)}"><span class="nm">${esc(r.nm)}</span><span class="tr"><i style="width:${(100*r.v/max).toFixed(2)}%;background:${r.color}"></i></span><span class="vv">${r.right}</span></div>`).join("")}</div>`;
+}
+
+/* ======================= NAVEGAÇÃO ======================= */
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-v]"); if(b) go(b.dataset.v);});
+function go(v){VIEW=v; $$("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false")); render(); scrollTo(0,0);}
+function render(){
+  if(!V) return; tipOff();
+  $("#upd").textContent=V.meta.upd?"Atualizado "+new Date(V.meta.upd).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
+  const fn={painel:vPainel,carteira:vCarteira,saude:vSaude,proventos:vProventos,lanc:vLanc,ajustes:vAjustes}[VIEW]||vPainel;
+  window._LS={}; const html=fn(); const main=$("#main"); main.innerHTML=html;
+  Object.entries(window._LS||{}).forEach(([id,sr])=>wireLine(id,sr));
+  bindTips(main); if(fn.after) fn.after(main);
+}
+function avisos(){
+  let h="";
+  if(V._aviso==="token") h+=`<div class="banner warn">⚠️ <div>A brapi exige um <b>token gratuito</b> para a maioria dos ativos. Crie em <a href="https://brapi.dev/dashboard" target="_blank" rel="noopener">brapi.dev</a> e cole em <b>Ajustes → Fonte de dados</b>.</div></div>`;
+  else if(V._aviso==="modulos") h+=`<div class="banner warn">⚠️ <div>Seu plano da brapi não libera os indicadores fundamentalistas (P/L, ROE, dívida). Cotações e proventos seguem funcionando.</div></div>`;
+  return h;
+}
+function emptyState(){return `<div class="card empty"><b>Sua carteira está vazia</b>Cadastre seus ativos em <b>Lançamentos</b>: um por um ou importando uma planilha (CSV) exportada do Investidor10, da B3 ou da sua corretora.<div style="margin-top:14px"><button class="btn primary" onclick="go('lanc')">Adicionar ativos</button></div></div>`;}
+
+/* ---------- PAINEL ---------- */
+function vPainel(){
+  const C=carteira(), nome=(V.perfil.nome||"").split(" ")[0];
+  const head=`<div class="pghead"><div><h2>Olá, ${esc(nome)}</h2><p>${new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"})}</p></div></div>`;
+  if(!C.lista.length) return head+avisos()+emptyState();
+  const cmp=cdiCompare(C); const S=C.lista.map(p=>({p,s:saude(p,C)}));
+  const nR=S.filter(x=>x.s.lv==="r").length, nY=S.filter(x=>x.s.lv==="y").length, nG=S.filter(x=>x.s.lv==="g").length;
+  const kp=(lb,vl,sm,cls)=>`<div class="card kpi"><div class="lb">${lb}</div><div class="vl num ${cls||""}">${vl}</div><div class="sm">${sm||""}</div></div>`;
+  let h=head+avisos()+`<div class="grid kpis">
+    ${kp("Patrimônio",money0(C.total),`Hoje: <span class="${sgn(C.diaVar)}">${C.diaVar?(C.diaVar>0?"+":"")+money(C.diaVar)+" ("+spct(C.diaPct)+")":"—"}</span>`)}
+    ${kp("Valor investido",money0(C.custo),C.lista.length+" ativos em carteira")}
+    ${kp("Rentabilidade",spct(C.retTotalPct),`<span class="${sgn(C.retTotal)}">${money(C.retTotal)}</span> com proventos`,sgn(C.retTotal))}
+    ${kp("Proventos 12 meses",money0(C.prov12),`DY ${pct(C.dyCart)} · YoC ${pct(C.yoc)}`)}
+    ${kp("vs. CDI",cmp?((cmp.dif>=0?"+":"")+money0(cmp.dif)):"—",cmp?`No CDI teria ${money0(cmp.cdi)}`:"Atualize para comparar",cmp?sgn(cmp.dif):"")}
+    ${kp("Saúde da carteira",`${nR?`<span class="neg">${nR} 🔴</span> `:""}${nY?`<span style="color:var(--warn)">${nY} 🟡</span> `:""}<span class="pos">${nG} 🟢</span>`,"risco · atenção · saudável")}
+  </div>`;
+  /* alertas */
+  const alertas=S.filter(x=>x.s.lv==="r"||x.s.lv==="y").sort((a,b)=>(a.s.lv==="r"?0:1)-(b.s.lv==="r"?0:1)||b.p.peso-a.p.peso).slice(0,6);
+  /* alocação por classe */
+  const porCls={}; C.lista.forEach(p=>porCls[p.cls]=(porCls[p.cls]||0)+p.valor);
+  const clsRows=CLASSES.filter(c=>porCls[c]).map(c=>({nm:c,v:porCls[c],color:clsColor(c),right:pct(porCls[c]/C.total,1),tip:`<b>${c}</b>${money(porCls[c])} · ${pct(porCls[c]/C.total,1)}`}));
+  const top=C.lista.slice(0,10); const resto=C.lista.slice(10).reduce((s,p)=>s+p.valor,0);
+  const atvRows=top.map(p=>({nm:p.tk,v:p.valor,color:clsColor(p.cls),right:pct(p.peso,1),tip:`<b>${p.tk}</b>${money(p.valor)} · ${pct(p.peso,1)} da carteira`}));
+  if(resto) atvRows.push({nm:"Outros ("+(C.lista.length-10)+")",v:resto,color:"var(--line-2)",right:pct(resto/C.total,1),tip:`<b>Outros</b>${money(resto)}`});
+  const clsUsadas=CLASSES.filter(c=>porCls[c]);
+  h+=`<div class="grid two" style="margin-top:14px">
+    <div class="card"><h3>Alertas prioritários</h3><p class="cap">Ativos com indicadores fora dos limites definidos em Ajustes.</p>
+      ${alertas.length?`<div class="alist">${alertas.map(x=>`<div class="arow" data-tk="${x.p.tk}"><div class="hd">${tkCell(x.p)}${pill(x.s.lv)}</div><div class="atx">${esc((x.s.f.find(f=>f.lv===x.s.lv)||x.s.f[0]).t)}${x.s.f.filter(f=>f.lv!=="n").length>1?` <span class="mut">+${x.s.f.filter(f=>f.lv!=="n").length-1} alerta(s)</span>`:""}</div></div>`).join("")}</div>`
+        :`<div class="empty" style="padding:22px">✅ Nenhum alerta no momento.</div>`}
+      <div style="margin-top:10px"><button class="btn" onclick="go('saude')">Ver análise completa</button></div></div>
+    <div class="card"><h3>Alocação por classe</h3><p class="cap">Distribuição do patrimônio atual.</p>${hbars(clsRows)}
+      <h3 style="margin-top:18px">Maiores posições</h3><p class="cap">Cor indica a classe do ativo.</p>
+      <div class="legend">${clsUsadas.map(c=>`<span><i style="background:${clsColor(c)}"></i>${c}</span>`).join("")}</div>${hbars(atvRows)}</div>
+  </div>`;
+  /* evolução + proventos */
+  const hist=V.hist.filter(x=>x.v>0);
+  let evo;
+  if(hist.length>=2){ const s=[{name:"Patrimônio",color:"var(--c1)",pts:hist.map(x=>[x.d,x.v])},{name:"Investido",color:"var(--muted)",dash:1,pts:hist.map(x=>[x.d,x.c])}];
+    const ch=lineChart(s,{aria:"Evolução do patrimônio"}); const id=ch.match(/id="(lc[^"]+)"/)[1]; window._LS[id]=s;
+    evo=`<div class="legend"><span><i style="background:var(--c1)"></i>Patrimônio</span><span><i style="background:var(--muted)"></i>Valor investido</span></div>`+ch; }
+  else evo=`<div class="empty" style="padding:26px">A evolução aparece a partir do segundo dia de uso: o CruzInvest guarda um retrato da carteira a cada atualização.</div>`;
+  h+=`<div class="grid two" style="margin-top:14px">
+    <div class="card"><h3>Evolução do patrimônio</h3><p class="cap">Registrada a cada atualização dos dados.</p>${evo}</div>
+    <div class="card"><h3>Proventos por mês</h3><p class="cap">Por data de pagamento, valor bruto. Barras claras: a receber.</p>${provChart(12)}</div>
+  </div>`;
+  if(V.macro) h+=`<div class="banner info" style="margin-top:14px">📊 <div>Selic meta: <b>${n2(V.macro.selic)}%</b> · IPCA 12 meses: <b>${n2(V.macro.ipca12)}%</b> (ref. ${esc(V.macro.ipcaRef)}) · DY da carteira: <b>${pct(C.dyCart)}</b> ${C.dyCart*100>V.macro.ipca12?"(acima da inflação)":"(abaixo da inflação)"}</div></div>`;
+  return h;
+}
+vPainel.after=m=>m.querySelectorAll("[data-tk]").forEach(r=>r.addEventListener("click",()=>detalhe(r.dataset.tk)));
+function tkCell(p){const m=V.mkt[p.tk]||{};return `<div class="tk">${m.logo?`<img src="${esc(m.logo)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph'}))">`:`<span class="ph"></span>`}<div>${esc(p.tk)}<small>${esc(m.name||ativo(p.tk).cls)}</small></div></div>`;}
+function provMensal(meses,fut){
+  const all=tickers().flatMap(proventosDe); const now=new Date(); const out=[];
+  for(let i=meses-1;i>=-(fut||0);i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1); const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+    const it=all.filter(x=>x.pay&&x.pay.slice(0,7)===k); const rec=it.filter(x=>x.recebido).reduce((s,x)=>s+x.valor,0), fu=it.filter(x=>!x.recebido).reduce((s,x)=>s+x.valor,0);
+    out.push({k,lb:MES[d.getMonth()]+(d.getMonth()===0||i===meses-1?"/"+String(d.getFullYear()).slice(2):""),v:rec,v2:fu,tip:`<b>${MES[d.getMonth()]}/${d.getFullYear()}</b>Recebido: ${money(rec)}${fu?"<br>A receber: "+money(fu):""}`});}
+  return out;
+}
+function provChart(m){const d=provMensal(m,3); if(!d.some(x=>x.v||x.v2)) return `<div class="empty" style="padding:26px">Sem proventos registrados. Atualize os dados para buscar o histórico de cada ativo.</div>`;
+  return `<div class="legend"><span><i style="background:var(--c3)"></i>Recebido</span><span><i style="background:var(--c3);opacity:.38"></i>A receber</span></div>`+barChart(d,{color:"var(--c3)",aria:"Proventos por mês"});}
+
+/* ---------- CARTEIRA ---------- */
+let SORT={k:"valor",d:-1}, FCLS="Todas";
+function vCarteira(){
+  const C=carteira(); if(!C.lista.length) return `<div class="pghead"><div><h2>Carteira</h2></div></div>`+emptyState();
+  const clsUsadas=["Todas",...CLASSES.filter(c=>C.lista.some(p=>p.cls===c))];
+  let L=C.lista.filter(p=>FCLS==="Todas"||p.cls===FCLS);
+  L.forEach(p=>p.sv=saude(p,C).lv);
+  const ord={r:0,y:1,n:2,g:3};
+  L.sort((a,b)=>{const k=SORT.k; let x=a[k],y=b[k]; if(k==="sv"){x=ord[x];y=ord[y];} if(typeof x==="string") return SORT.d*x.localeCompare(y); return SORT.d*((x==null?-1e18:x)-(y==null?-1e18:y));});
+  const sub=L.reduce((s,p)=>({v:s.v+p.valor,c:s.c+p.custo,g:s.g+p.ganho,pr:s.pr+p.prov12}),{v:0,c:0,g:0,pr:0});
+  const th=(k,t,r)=>`<th class="sortable ${r?"r":""}" data-k="${k}">${t}${SORT.k===k?(SORT.d<0?" ↓":" ↑"):""}</th>`;
+  return `<div class="pghead"><div><h2>Carteira</h2><p>Clique em um ativo para ver indicadores, proventos e lançamentos.</p></div>
+    <div class="toolbar"><div class="seg" id="fcls">${clsUsadas.map(c=>`<button aria-pressed="${c===FCLS}" data-c="${c}">${c}</button>`).join("")}</div></div></div>${avisos()}
+    <div class="card"><div class="tbl-wrap"><table><thead><tr>${th("tk","Ativo")}${th("sv","Saúde")}${th("qtd","Qtd",1)}${th("pm","Preço médio",1)}${th("preco","Cotação",1)}${th("chg","Dia",1)}${th("valor","Valor",1)}${th("ganhoPct","Valorização",1)}${th("dy12","DY 12m",1)}${th("prov12","Proventos 12m",1)}${th("peso","% carteira",1)}</tr></thead>
+    <tbody>${L.map(p=>`<tr class="click" data-tk="${p.tk}"><td>${tkCell(p)}</td><td>${pill(p.sv)}</td><td class="r num">${N0.format(p.qtd)}</td><td class="r num">${money(p.pm)}</td>
+      <td class="r num">${p.semPreco?'<span class="mut">—</span>':money(p.preco)}</td><td class="r num ${sgn(p.chg)}">${p.chg==null?"—":spct(p.chg)}</td><td class="r num"><b>${money(p.valor)}</b></td>
+      <td class="r num ${sgn(p.ganho)}">${spct(p.ganhoPct)}<br><small>${money(p.ganho)}</small></td><td class="r num">${p.dy12!=null?pct(p.dy12):"—"}</td><td class="r num">${money(p.prov12)}</td><td class="r num">${pct(p.peso,1)}</td></tr>`).join("")}</tbody>
+    <tfoot><tr><td colspan="6"><b>Total ${FCLS==="Todas"?"":FCLS}</b></td><td class="r num"><b>${money(sub.v)}</b></td><td class="r num ${sgn(sub.g)}"><b>${spct(sub.c?sub.g/sub.c:0)}</b><br><small>${money(sub.g)}</small></td><td></td><td class="r num"><b>${money(sub.pr)}</b></td><td class="r num">${pct(C.total?sub.v/C.total:0,1)}</td></tr></tfoot></table></div></div>
+    ${C.realizado?`<p class="mut" style="font-size:12px;margin-top:10px">Lucro/prejuízo realizado em vendas: <b class="${sgn(C.realizado)}">${money(C.realizado)}</b></p>`:""}`;
+}
+vCarteira.after=m=>{
+  m.querySelectorAll("th[data-k]").forEach(t=>t.addEventListener("click",()=>{const k=t.dataset.k; SORT=SORT.k===k?{k,d:-SORT.d}:{k,d:k==="tk"?1:-1}; render();}));
+  m.querySelectorAll("#fcls button").forEach(b=>b.addEventListener("click",()=>{FCLS=b.dataset.c;render();}));
+  m.querySelectorAll("tr[data-tk]").forEach(r=>r.addEventListener("click",()=>detalhe(r.dataset.tk)));
+};
+
+/* ---------- SAÚDE ---------- */
+let FSAU="todos";
+function vSaude(){
+  const C=carteira(); if(!C.lista.length) return `<div class="pghead"><div><h2>Saúde da carteira</h2></div></div>`+emptyState();
+  const S=C.lista.map(p=>({p,s:saude(p,C)})); const ord={r:0,y:1,n:2,g:3};
+  S.sort((a,b)=>ord[a.s.lv]-ord[b.s.lv]||b.p.peso-a.p.peso);
+  const cnt=k=>S.filter(x=>x.s.lv===k).length;
+  const L=S.filter(x=>FSAU==="todos"||x.s.lv===FSAU);
+  const ind=(p)=>{const m=V.mkt[p.tk]||{}, a=ativo(p.tk);
+    if(a.cls==="FII"){const vp=a.vp||m.vpa; return [["Cotação",money(m.price)],["DY 12m",pct(m.dy12)],["P/VP",vp&&m.price?n2(m.price/vp):(m.pvp?n2(m.pvp):"—")],["Último rend.",money((m.divs||[]).slice().sort((x,y)=>(y.com||"")<(x.com||"")?-1:1)[0]?.rate)]];}
+    if(!isListed(a.cls)) return [["Valor",money(p.valor)],["Investido",money(p.custo)],["Resultado",spct(p.ganhoPct)],["Peso",pct(p.peso,1)]];
+    return [["P/L",n2(m.pl)],["P/VP",n2(m.pvp)],["ROE",pct(m.roe,1)],["DY 12m",pct(m.dy12)]];};
+  return `<div class="pghead"><div><h2>Saúde da carteira</h2><p>Semáforo por ativo com base em indicadores e limites que você define em <b>Ajustes</b>.</p></div>
+    <div class="seg" id="fsau">${[["todos","Todos ("+S.length+")"],["r","🔴 Risco ("+cnt("r")+")"],["y","🟡 Atenção ("+cnt("y")+")"],["g","🟢 Saudável ("+cnt("g")+")"]].map(([k,t])=>`<button aria-pressed="${FSAU===k}" data-k="${k}">${t}</button>`).join("")}</div></div>${avisos()}
+    <div class="health">${L.map(({p,s})=>`<div class="hc ${s.lv}" data-tk="${p.tk}"><div class="hd">${tkCell(p)}${pill(s.lv)}</div>
+      <div class="ind">${ind(p).map(([a,b])=>`<div>${a}<b>${b}</b></div>`).join("")}</div>
+      <ul>${s.f.length?s.f.map(f=>`<li><span class="d">${LVL[f.lv][2]}</span><span>${esc(f.t)}</span></li>`).join(""):`<li><span class="d">🟢</span><span>Nenhum indicador fora dos limites.</span></li>`}</ul></div>`).join("")}</div>
+    <p class="mut" style="font-size:12px;margin-top:14px">Os alertas indicam onde vale olhar com mais cuidado (relatórios, fatos relevantes, notícias). Não são recomendação de compra ou venda.</p>`;
+}
+vSaude.after=m=>{m.querySelectorAll("#fsau button").forEach(b=>b.addEventListener("click",()=>{FSAU=b.dataset.k;render();}));
+  m.querySelectorAll(".hc[data-tk]").forEach(r=>r.addEventListener("click",()=>detalhe(r.dataset.tk)));};
+
+/* ---------- PROVENTOS ---------- */
+function vProventos(){
+  const C=carteira(); if(!V.lanc.length) return `<div class="pghead"><div><h2>Proventos</h2></div></div>`+emptyState();
+  const all=tickers().flatMap(proventosDe).sort((a,b)=>(b.pay||b.com)<(a.pay||a.com)?-1:1);
+  const fut=all.filter(x=>!x.recebido).sort((a,b)=>(a.pay||"9")<(b.pay||"9")?-1:1);
+  const ano=String(new Date().getFullYear()); const noAno=all.filter(x=>x.recebido&&x.pay.startsWith(ano)).reduce((s,x)=>s+x.valor,0);
+  const porTk={}; all.filter(x=>x.recebido&&x.pay>=isoOf(Date.now()-365*864e5)).forEach(x=>porTk[x.tk]=(porTk[x.tk]||0)+x.valor);
+  const rk=Object.entries(porTk).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const kp=(lb,vl,sm)=>`<div class="card kpi"><div class="lb">${lb}</div><div class="vl num">${vl}</div><div class="sm">${sm||""}</div></div>`;
+  const row=x=>`<tr><td><b>${esc(x.tk)}</b></td><td><span class="cls">${esc(x.label||"")}</span></td><td>${brDate(x.com)}</td><td>${x.pay?brDate(x.pay):"a definir"}</td><td class="r num">${N0.format(x.qtd)}</td><td class="r num">${money(x.rate)}</td><td class="r num"><b>${money(x.valor)}</b></td></tr>`;
+  const head=`<thead><tr><th>Ativo</th><th>Tipo</th><th>Data com</th><th>Pagamento</th><th class="r">Qtd</th><th class="r">Valor/cota</th><th class="r">Total</th></tr></thead>`;
+  return `<div class="pghead"><div><h2>Proventos</h2><p>Calculados pela quantidade que você tinha na data com. Valores brutos (JCP tem 15% de IR retido).</p></div></div>${avisos()}
+    <div class="grid kpis">${kp("Últimos 12 meses",money(C.prov12),"Média mensal "+money(C.prov12/12))}${kp("Em "+ano,money(noAno))}${kp("A receber",money(C.provAReceber),fut.length+" pagamentos anunciados")}${kp("Total recebido",money(C.provRec),"Desde o primeiro lançamento")}${kp("DY da carteira",pct(C.dyCart),"Yield on cost "+pct(C.yoc))}</div>
+    <div class="grid two" style="margin-top:14px"><div class="card"><h3>Proventos por mês</h3><p class="cap">Últimos 24 meses e próximos 3.</p>${(()=>{const d=provMensal(24,3);return d.some(x=>x.v||x.v2)?`<div class="legend"><span><i style="background:var(--c3)"></i>Recebido</span><span><i style="background:var(--c3);opacity:.38"></i>A receber</span></div>`+barChart(d,{color:"var(--c3)",aria:"Proventos por mês"}):`<div class="empty">Sem proventos.</div>`;})()}</div>
+      <div class="card"><h3>Quem mais pagou (12 meses)</h3><p class="cap">Total bruto recebido por ativo.</p>${rk.length?hbars(rk.map(([tk,v])=>({nm:tk,v,color:clsColor(ativo(tk).cls),right:money(v),tip:`<b>${tk}</b>${money(v)} · ${pct(C.prov12?v/C.prov12:0,1)} dos proventos`}))):`<div class="empty">Sem dados.</div>`}</div></div>
+    ${fut.length?`<div class="card" style="margin-top:14px"><h3>Próximos pagamentos</h3><div class="tbl-wrap"><table>${head}<tbody>${fut.map(row).join("")}</tbody></table></div></div>`:""}
+    <div class="card" style="margin-top:14px"><h3>Histórico</h3><div class="tbl-wrap"><table>${head}<tbody>${all.filter(x=>x.recebido).slice(0,200).map(row).join("")||`<tr><td colspan="7" class="mut">Nada ainda.</td></tr>`}</tbody></table></div></div>`;
+}
+
+/* ---------- LANÇAMENTOS ---------- */
+function vLanc(){
+  const L=sortedLanc().reverse();
+  return `<div class="pghead"><div><h2>Lançamentos</h2><p>Compras e vendas que formam sua carteira. Preço médio e rentabilidade são calculados a partir daqui.</p></div>
+    <div class="toolbar"><button class="btn primary" id="bNovo">+ Novo lançamento</button><button class="btn" id="bImport">Importar planilha</button>${L.length?`<button class="btn" id="bExportCsv">Exportar CSV</button>`:""}</div></div>
+    <div class="card">${L.length?`<div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Ativo</th><th>Classe</th><th>Operação</th><th class="r">Qtd</th><th class="r">Preço</th><th class="r">Taxas</th><th class="r">Total</th><th></th></tr></thead><tbody>
+      ${L.map(l=>`<tr><td>${brDate(l.data)}</td><td><b>${esc(l.tk)}</b></td><td><span class="cls">${esc(ativo(l.tk).cls)}</span></td><td>${l.tipo==="C"?'<span class="pos">Compra</span>':'<span class="neg">Venda</span>'}</td><td class="r num">${N0.format(l.qtd)}</td><td class="r num">${money(l.preco)}</td><td class="r num">${l.taxa?money(l.taxa):"—"}</td><td class="r num">${money(l.qtd*l.preco+(l.tipo==="C"?1:-1)*(l.taxa||0))}</td>
+      <td class="r"><button class="btn" data-ed="${l.id}" style="padding:5px 9px">Editar</button></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty"><b>Nenhum lançamento ainda</b>Use <b>+ Novo lançamento</b> ou <b>Importar planilha</b> para montar sua carteira.</div>`}</div>`;
+}
+vLanc.after=m=>{
+  $("#bNovo").addEventListener("click",()=>formLanc());
+  $("#bImport").addEventListener("click",importar);
+  const ex=$("#bExportCsv"); if(ex) ex.addEventListener("click",exportCsv);
+  m.querySelectorAll("[data-ed]").forEach(b=>b.addEventListener("click",()=>formLanc(V.lanc.find(l=>l.id===b.dataset.ed))));
+};
+function modal(html,onMount){
+  const ov=document.createElement("div"); ov.className="ov"; ov.innerHTML=`<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+  const close=()=>{ov.remove();document.removeEventListener("keydown",k);}; const k=e=>{if(e.key==="Escape")close();};
+  ov.addEventListener("mousedown",e=>{if(e.target===ov)close();}); document.addEventListener("keydown",k);
+  ov.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",close));
+  document.body.appendChild(ov); if(onMount) onMount(ov,close); return close;
+}
+function formLanc(l){
+  const ed=!!l; l=l||{tk:"",tipo:"C",data:todayISO(),qtd:"",preco:"",taxa:""};
+  modal(`<div class="mh"><h3>${ed?"Editar":"Novo"} lançamento</h3><button class="x" data-close aria-label="Fechar">×</button></div>
+    <form id="fl" class="frm" autocomplete="off">
+      <div class="fld"><label>Ticker</label><input name="tk" required value="${esc(l.tk)}" placeholder="ex.: ITSA4" style="text-transform:uppercase"></div>
+      <div class="fld"><label>Classe</label><select name="cls">${CLASSES.map(c=>`<option ${ed&&ativo(l.tk).cls===c?"selected":""}>${c}</option>`).join("")}</select></div>
+      <div class="fld"><label>Operação</label><select name="tipo"><option value="C" ${l.tipo==="C"?"selected":""}>Compra</option><option value="V" ${l.tipo==="V"?"selected":""}>Venda</option></select></div>
+      <div class="fld"><label>Data</label><input name="data" type="date" required value="${l.data}" max="${todayISO()}"></div>
+      <div class="fld"><label>Quantidade</label><input name="qtd" required inputmode="decimal" value="${l.qtd===""?"":N0.format(l.qtd)}"></div>
+      <div class="fld"><label>Preço unitário (R$)</label><input name="preco" required inputmode="decimal" value="${l.preco===""?"":n2(l.preco)}"></div>
+      <div class="fld"><label>Taxas (R$, opcional)</label><input name="taxa" inputmode="decimal" value="${l.taxa?n2(l.taxa):""}"></div>
+    </form>
+    <p class="mut" style="font-size:12px">Para renda fixa ou outros ativos sem cotação na bolsa, use quantidade 1 e o valor aplicado como preço. O valor atual é informado no detalhe do ativo.</p>
+    <div class="acts">${ed?`<button class="btn danger" id="lDel">Excluir</button>`:""}<button class="btn" data-close>Cancelar</button><button class="btn primary" id="lOk">Salvar</button></div>`,
+  (ov,close)=>{
+    const f=ov.querySelector("#fl"); const tkI=f.tk;
+    if(!ed) tkI.addEventListener("input",()=>{const t=tkI.value.trim().toUpperCase(); f.cls.value=V.ativos[t]?V.ativos[t].cls:guessClass(t);});
+    setTimeout(()=>tkI.focus(),30);
+    ov.querySelector("#lOk").addEventListener("click",()=>{
+      const tk=f.tk.value.trim().toUpperCase().replace(/\.SA$/,""), qtd=parseNum(f.qtd.value), preco=parseNum(f.preco.value), taxa=parseNum(f.taxa.value)||0, data=f.data.value;
+      if(!/^[A-Z0-9]{3,12}$/.test(tk)) return toast("Ticker inválido.");
+      if(!(qtd>0)) return toast("Quantidade inválida."); if(!(preco>=0)) return toast("Preço inválido."); if(!data) return toast("Informe a data.");
+      if(f.tipo.value==="V"){const disp=qtyAt(tk,data)+(ed&&l.tipo==="V"&&l.tk===tk?l.qtd:0); if(qtd>disp+1e-9) return toast("Você tinha só "+N0.format(disp)+" "+tk+" nessa data.");}
+      const obj={id:ed?l.id:uid(),tk,tipo:f.tipo.value,data,qtd,preco,taxa};
+      if(ed) V.lanc[V.lanc.findIndex(x=>x.id===l.id)]=obj; else V.lanc.push(obj);
+      ativo(tk).cls=f.cls.value; save(); close(); render(); toast("Lançamento salvo.");
+      if(!V.mkt[tk]&&isListed(f.cls.value)) atualizar(true);
+    });
+    const del=ov.querySelector("#lDel"); if(del) del.addEventListener("click",()=>{if(!confirm("Excluir este lançamento?"))return; V.lanc=V.lanc.filter(x=>x.id!==l.id); save(); close(); render();});
+  });
+}
+function importar(){
+  modal(`<div class="mh"><h3>Importar planilha</h3><button class="x" data-close aria-label="Fechar">×</button></div>
+    <p style="font-size:13px;margin-top:0">Aceita CSV ou texto colado do Excel. O CruzInvest reconhece as colunas pelo nome do cabeçalho:</p>
+    <ul style="font-size:12.5px;color:var(--ink-2);margin:0 0 10px;padding-left:18px">
+      <li><b>Ativo / Ticker / Código</b> (obrigatório)</li><li><b>Quantidade</b> (obrigatório)</li>
+      <li><b>Preço / Preço médio / Preço unitário</b> (obrigatório)</li><li><b>Data</b> e <b>Operação</b> (Compra/Venda), opcionais. Sem data, entra como posição de hoje.</li><li><b>Taxas</b> e <b>Classe</b>, opcionais</li></ul>
+    <div class="fld"><label>Arquivo CSV</label><input type="file" id="iFile" accept=".csv,.txt,text/csv"></div>
+    <div class="fld"><label>…ou cole aqui</label><textarea id="iTxt" rows="7" placeholder="Ativo;Quantidade;Preço médio&#10;ITSA4;500;9,85&#10;HGLG11;30;158,20"></textarea></div>
+    <div id="iPrev" style="font-size:12.5px;margin-top:10px"></div>
+    <label style="display:flex;gap:8px;align-items:center;font-size:12.5px;margin-top:10px"><input type="checkbox" id="iSub"> Substituir todos os lançamentos atuais</label>
+    <div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="iOk" disabled>Importar</button></div>`,
+  (ov,close)=>{
+    let rows=[];
+    const prev=()=>{ rows=parseCsv(ov.querySelector("#iTxt").value); const ok=rows.filter(r=>!r.err), bad=rows.filter(r=>r.err);
+      ov.querySelector("#iPrev").innerHTML=rows.length?`<b class="pos">${ok.length} lançamento(s) reconhecido(s)</b>${bad.length?` · <span class="neg">${bad.length} linha(s) ignorada(s)</span><br><span class="mut">${bad.slice(0,3).map(b=>esc(b.err)).join("<br>")}</span>`:""}
+        ${ok.length?`<div class="tbl-wrap" style="max-height:180px;overflow:auto;margin-top:6px"><table><tbody>${ok.slice(0,30).map(r=>`<tr><td>${r.tk}</td><td>${r.cls}</td><td>${r.tipo==="C"?"Compra":"Venda"}</td><td>${brDate(r.data)}</td><td class="r">${N0.format(r.qtd)}</td><td class="r">${money(r.preco)}</td></tr>`).join("")}</tbody></table></div>`:""}`:"";
+      ov.querySelector("#iOk").disabled=!ok.length; };
+    ov.querySelector("#iTxt").addEventListener("input",prev);
+    ov.querySelector("#iFile").addEventListener("change",async e=>{const f=e.target.files[0]; if(!f) return; let t=await f.text(); if(t.includes("�")){t=new TextDecoder("windows-1252").decode(await f.arrayBuffer());} ov.querySelector("#iTxt").value=t; prev();});
+    ov.querySelector("#iOk").addEventListener("click",()=>{
+      const ok=rows.filter(r=>!r.err); if(ov.querySelector("#iSub").checked){ if(!confirm("Apagar os "+V.lanc.length+" lançamentos atuais e importar os novos?")) return; V.lanc=[]; }
+      ok.forEach(r=>{V.lanc.push({id:uid(),tk:r.tk,tipo:r.tipo,data:r.data,qtd:r.qtd,preco:r.preco,taxa:r.taxa||0}); const a=ativo(r.tk); if(r.clsDada) a.cls=r.cls;});
+      save(); close(); toast(ok.length+" lançamento(s) importado(s). Buscando cotações…"); go("carteira"); atualizar(true);
+    });
+  });
+}
+function parseCsv(txt){
+  const lines=String(txt||"").replace(/\r/g,"").split("\n").filter(l=>l.trim()); if(lines.length<2) return [];
+  const sep=[";","\t",","].map(s=>[s,lines[0].split(s).length]).sort((a,b)=>b[1]-a[1])[0][0];
+  const split=l=>{const out=[];let cur="",q=false;for(const ch of l){if(ch==='"'){q=!q;continue;} if(ch===sep&&!q){out.push(cur);cur="";} else cur+=ch;} out.push(cur); return out.map(s=>s.trim());};
+  const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z ]/g,"").trim();
+  const H=split(lines[0]).map(norm);
+  const find=(...ks)=>H.findIndex(h=>ks.some(k=>h===k||h.startsWith(k)));
+  const iTk=find("ativo","ticker","codigo","papel","produto","acao","cod"), iQ=find("quantidade","qtd","qtde","quant"),
+        iP=find("preco medio","preco unitario","preco","pm","valor unitario","cotacao"), iD=find("data","dt"), iT=find("operacao","tipo","movimentacao","compra venda","cv","entrada saida"),
+        iF=find("taxa","custo","corretagem"), iC=find("classe","categoria","tipo de ativo");
+  if(iTk<0||iQ<0||iP<0) return [{err:"Cabeçalho não reconhecido: preciso das colunas Ativo, Quantidade e Preço."}];
+  const hoje=todayISO();
+  return lines.slice(1).map((l,ix)=>{
+    const c=split(l); let tk=(c[iTk]||"").toUpperCase().replace(/\.SA$/,"").trim(); tk=(tk.match(/^[A-Z0-9]{3,12}/)||[""])[0].replace(/F$/,(m)=>/^[A-Z]{4}\d{1,2}F$/.test(tk)?"":m);
+    const qtd=Math.abs(parseNum(c[iQ])), preco=parseNum(c[iP]), data=iD>=0?parseDate(c[iD])||hoje:hoje;
+    const tv=iT>=0?norm(c[iT]||""):"compra"; const tipo=/^(v|venda|saida|debito)/.test(tv)?"V":"C";
+    const clsTxt=iC>=0?(c[iC]||""):""; const clsM=CLASSES.find(k=>norm(k)===norm(clsTxt))||(/fii|imobili/i.test(clsTxt)?"FII":/acao|acoes/i.test(norm(clsTxt))?"Ação":/etf/i.test(clsTxt)?"ETF":/bdr/i.test(clsTxt)?"BDR":/renda fixa|tesouro|cdb|lci|lca|debenture/i.test(norm(clsTxt))?"Renda fixa":null);
+    if(!tk) return {err:"Linha "+(ix+2)+": sem ticker."}; if(!(qtd>0)) return {err:"Linha "+(ix+2)+": quantidade inválida."}; if(!(preco>=0)) return {err:"Linha "+(ix+2)+": preço inválido."};
+    return {tk,qtd,preco,data,tipo,taxa:iF>=0?Math.abs(parseNum(c[iF]))||0:0,cls:clsM||(V.ativos[tk]?V.ativos[tk].cls:guessClass(tk)),clsDada:!!clsM};
+  });
+}
+function download(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function exportCsv(){download("cruzinvest-lancamentos-"+todayISO()+".csv","﻿Data;Ativo;Classe;Operação;Quantidade;Preço;Taxas\n"+sortedLanc().map(l=>[brDate(l.data),l.tk,ativo(l.tk).cls,l.tipo==="C"?"Compra":"Venda",String(l.qtd).replace(".",","),String(l.preco).replace(".",","),String(l.taxa||0).replace(".",",")].join(";")).join("\n"),"text/csv;charset=utf-8");}
+
+/* ---------- DETALHE DO ATIVO ---------- */
+function detalhe(tk){
+  const C=carteira(); const p=C.lista.find(x=>x.tk===tk); if(!p) return; const m=V.mkt[tk]||{}, a=ativo(tk), s=saude(p,C);
+  const fii=a.cls==="FII"; const slug=tk.toLowerCase();
+  const i10=fii?`https://investidor10.com.br/fiis/${slug}/`:a.cls==="ETF"?`https://investidor10.com.br/etfs/${slug}/`:a.cls==="BDR"?`https://investidor10.com.br/bdrs/${slug}/`:`https://investidor10.com.br/acoes/${slug}/`;
+  const si=fii?`https://statusinvest.com.br/fundos-imobiliarios/${slug}`:`https://statusinvest.com.br/acoes/${slug}`;
+  const cell=(l,v)=>`<div>${l}<b>${v}</b></div>`;
+  const ind=fii?[cell("Cotação",money(m.price)),cell("DY 12m",pct(m.dy12)),cell("P/VP",(a.vp||m.vpa)&&m.price?n2(m.price/(a.vp||m.vpa)):n2(m.pvp)),cell("Rend. 12m/cota",money(m.div12)),cell("Mín. 52s",money(m.low52)),cell("Máx. 52s",money(m.high52)),cell("Var. dia",spct(m.chg!=null?m.chg/100:null)),cell("Peso",pct(p.peso,1))]
+    :isListed(a.cls)?[cell("Cotação",money(m.price)),cell("P/L",n2(m.pl)),cell("P/VP",n2(m.pvp)),cell("ROE",pct(m.roe,1)),cell("Margem líq.",pct(m.margem,1)),cell("Dív.líq/EBITDA",m.divEbitda!=null?n2(m.divEbitda)+"x":"—"),cell("DY 12m",pct(m.dy12)),cell("Liq. corrente",n2(m.liq)),cell("LPA",money(m.eps)),cell("Mín. 52s",money(m.low52)),cell("Máx. 52s",money(m.high52)),cell("Peso",pct(p.peso,1))]:[];
+  const provs=proventosDe(tk).sort((x,y)=>(y.pay||y.com)<(x.pay||x.com)?-1:1).slice(0,12);
+  const lan=V.lanc.filter(l=>l.tk===tk).sort((x,y)=>y.data<x.data?-1:1);
+  modal(`<div class="mh"><div>${tkCell(p)}${m.setor?`<div class="mut" style="font-size:12px;margin-top:4px">${esc(m.setor)}${m.industria?" · "+esc(m.industria):""}</div>`:""}</div><div style="display:flex;gap:8px;align-items:center">${pill(s.lv)}<button class="x" data-close aria-label="Fechar">×</button></div></div>
+    <div class="grid kpis" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px">
+      <div class="card kpi" style="padding:10px"><div class="lb">Posição</div><div class="vl num" style="font-size:17px">${money(p.valor)}</div><div class="sm">${N0.format(p.qtd)} × ${money(p.preco||p.pm)}</div></div>
+      <div class="card kpi" style="padding:10px"><div class="lb">Preço médio</div><div class="vl num" style="font-size:17px">${money(p.pm)}</div><div class="sm">Investido ${money(p.custo)}</div></div>
+      <div class="card kpi" style="padding:10px"><div class="lb">Valorização</div><div class="vl num ${sgn(p.ganho)}" style="font-size:17px">${spct(p.ganhoPct)}</div><div class="sm">${money(p.ganho)}</div></div>
+      <div class="card kpi" style="padding:10px"><div class="lb">Retorno c/ proventos</div><div class="vl num ${sgn(p.retTotal)}" style="font-size:17px">${spct(p.retTotalPct)}</div><div class="sm">Proventos ${money(p.provRec)}</div></div></div>
+    ${ind.length?`<div class="ind" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">${ind.join("")}</div>`:""}
+    <h3 style="font-size:14px;margin:12px 0 6px">Análise</h3>
+    <ul style="margin:0;padding:0;list-style:none;font-size:13px;display:flex;flex-direction:column;gap:5px">${s.f.length?s.f.map(f=>`<li>${LVL[f.lv][2]} ${esc(f.t)}</li>`).join(""):"<li>🟢 Nenhum indicador fora dos limites.</li>"}</ul>
+    <div class="links" style="margin-top:12px"><a href="${i10}" target="_blank" rel="noopener">Investidor10 ↗</a><a href="${si}" target="_blank" rel="noopener">Status Invest ↗</a>${fii?`<a href="https://fnet.bmfbovespa.com.br/fnet/publico/abrirGerenciadorDocumentosCVM" target="_blank" rel="noopener">Relatórios (Fundos.NET) ↗</a>`:`<a href="https://www.rad.cvm.gov.br/ENET/frmConsultaExternaCVM.aspx" target="_blank" rel="noopener">Fatos relevantes (CVM) ↗</a>`}</div>
+    <details ${!isListed(a.cls)||fii?"open":""}><summary>Configurações do ativo</summary><div class="frm" style="margin-top:4px">
+      <div class="fld"><label>Classe</label><select id="dCls">${CLASSES.map(c=>`<option ${a.cls===c?"selected":""}>${c}</option>`).join("")}</select></div>
+      ${fii?`<div class="fld"><label>VP por cota (R$)</label><input id="dVp" inputmode="decimal" value="${a.vp?n2(a.vp):""}" placeholder="${m.vpa?n2(m.vpa):"do relatório gerencial"}"></div>`:""}
+      ${!isListed(a.cls)?`<div class="fld"><label>Valor atual total (R$)</label><input id="dMan" inputmode="decimal" value="${a.manual!=null?n2(a.manual):""}" placeholder="saldo bruto hoje"></div>`:""}
+      <div class="fld" style="grid-column:1/-1"><label>Anotações (tese, motivo da compra)</label><textarea id="dNota" rows="2">${esc(a.nota||"")}</textarea></div></div>
+      <div class="acts" style="margin-top:8px"><button class="btn primary" id="dSave">Salvar</button></div></details>
+    ${provs.length?`<details><summary>Proventos recentes (${provs.length})</summary><div class="tbl-wrap"><table><tbody>${provs.map(x=>`<tr><td>${esc(x.label)}</td><td>com ${brDate(x.com)}</td><td>pgto ${x.pay?brDate(x.pay):"—"}</td><td class="r">${money(x.rate)}</td><td class="r"><b>${money(x.valor)}</b></td></tr>`).join("")}</tbody></table></div></details>`:""}
+    <details><summary>Lançamentos (${lan.length})</summary><div class="tbl-wrap"><table><tbody>${lan.map(l=>`<tr><td>${brDate(l.data)}</td><td>${l.tipo==="C"?"Compra":"Venda"}</td><td class="r">${N0.format(l.qtd)}</td><td class="r">${money(l.preco)}</td></tr>`).join("")}</tbody></table></div></details>`,
+  (ov,close)=>{ ov.querySelector("#dSave").addEventListener("click",()=>{
+    a.cls=ov.querySelector("#dCls").value; const vp=ov.querySelector("#dVp"); if(vp) a.vp=parseNum(vp.value)||null;
+    const mn=ov.querySelector("#dMan"); if(mn) a.manual=isNaN(parseNum(mn.value))?null:parseNum(mn.value);
+    a.nota=ov.querySelector("#dNota").value; save(); close(); render(); toast("Ativo atualizado."); }); });
+}
+
+/* ---------- AJUSTES ---------- */
+const LIMS=[["Ações","plMax","P/L máximo",""],["Ações","pvpMax","P/VP máximo",""],["Ações","roeMin","ROE mínimo","%"],["Ações","divEbitdaY","Dív.líq/EBITDA: atenção a partir de","x"],["Ações","divEbitdaR","Dív.líq/EBITDA: risco a partir de","x"],["Ações","liqMin","Liquidez corrente mínima",""],["Ações","payoutMax","Payout máximo","%"],
+  ["FIIs","fiiDyMin","DY 12m mínimo","%"],["FIIs","fiiDyMax","DY 12m máximo (possível não recorrente)","%"],["FIIs","fiiRendQuedaY","Queda do rendimento: atenção","%"],["FIIs","fiiRendQuedaR","Queda do rendimento: risco","%"],["FIIs","fiiPvpMax","P/VP máximo",""],["FIIs","fiiPvpMin","P/VP mínimo",""],
+  ["Carteira","concY","Concentração por ativo: atenção","%"],["Carteira","concR","Concentração por ativo: risco","%"],["Carteira","quedaMax","Queda desde a máxima de 52 semanas","%"],["Carteira","quedaDia","Queda em um pregão","%"]];
+function vAjustes(){
+  const w=readVault(); const grp=g=>LIMS.filter(l=>l[0]===g).map(([,k,t,u])=>`<span>${t}${u?` (${u})`:""}</span><input data-lim="${k}" inputmode="decimal" value="${n2(V.prefs.lim[k]).replace(/,00$/,"")}">`).join("");
+  return `<div class="pghead"><div><h2>Ajustes</h2><p>Personalize a análise, a segurança e a fonte de dados.</p></div></div>
+  <div class="set">
+    <div class="card"><h3>Fonte de dados</h3><p class="cap">Cotações, indicadores e proventos vêm da <b>brapi.dev</b>; Selic, IPCA e CDI, do <b>Banco Central</b>.</p>
+      <div class="fld"><label>Token da brapi</label><input id="aTok" type="password" value="${esc(V.prefs.token)}" placeholder="cole aqui seu token gratuito" autocomplete="off"></div>
+      <p class="mut" style="font-size:12px">Crie grátis em <a href="https://brapi.dev/dashboard" target="_blank" rel="noopener">brapi.dev/dashboard</a>. Sem token só alguns ativos (ex.: PETR4, VALE3, ITUB4) funcionam. O token fica criptografado no seu cofre.</p>
+      <div class="fld"><label>Atualizar automaticamente ao abrir, se os dados tiverem mais de</label><select id="aAuto">${[1,3,6,12,24].map(h=>`<option value="${h}" ${V.prefs.autoHoras==h?"selected":""}>${h} hora${h>1?"s":""}</option>`).join("")}</select></div>
+      <div class="acts"><button class="btn" id="aTestar">Testar conexão</button><button class="btn primary" id="aSalvaTok">Salvar</button></div>
+      ${V._erros&&V._erros.length?`<details><summary>Pendências da última atualização (${V._erros.length})</summary><ul style="font-size:12px;margin:6px 0 0;padding-left:18px">${V._erros.slice(0,20).map(e=>`<li>${esc(e)}</li>`).join("")}</ul></details>`:""}</div>
+    <div class="card"><h3>Segurança</h3><p class="cap">Seus dados ficam criptografados com AES-256 neste aparelho. A chave vem da sua senha (PBKDF2, ${N0.format(w.iter)} iterações) e nunca é gravada.</p>
+      <div class="fld"><label>Bloquear após inatividade</label><select id="aLock">${[5,10,15,30,60].map(m=>`<option value="${m}" ${V.prefs.lock==m?"selected":""}>${m} minutos</option>`).join("")}</select></div>
+      <div class="fld"><label>Seu nome</label><input id="aNome" value="${esc(V.perfil.nome)}" maxlength="60"></div>
+      <div class="acts"><button class="btn" id="aSenha">Trocar senha</button><button class="btn primary" id="aSalvaSeg">Salvar</button></div></div>
+    <div class="card"><h3>Limites da análise de saúde</h3><p class="cap">Quando um indicador passa destes valores, o ativo recebe um alerta 🟡 ou 🔴.</p>
+      ${["Ações","FIIs","Carteira"].map(g=>`<h4 style="margin:12px 0 6px;font-size:12.5px;color:var(--ink-2)">${g}</h4><div class="lims">${grp(g)}</div>`).join("")}
+      <div class="acts"><button class="btn" id="aLimRes">Restaurar padrões</button><button class="btn primary" id="aLimOk">Salvar limites</button></div></div>
+    <div class="card"><h3>Backup</h3><p class="cap">Gera um arquivo criptografado com toda a carteira. Para abrir em outro aparelho, use <b>Restaurar backup</b> na tela de entrada, com a mesma senha.</p>
+      <p style="font-size:12.5px">Último backup: <b>${V.meta.backup?new Date(V.meta.backup).toLocaleString("pt-BR"):"nunca"}</b></p>
+      <div class="acts" style="justify-content:flex-start"><button class="btn primary" id="aBackup">Baixar backup</button><button class="btn" id="aExport">Exportar lançamentos (CSV)</button></div>
+      <h3 style="margin-top:20px;color:var(--crit)">Zona de perigo</h3><p class="cap">Apaga a carteira deste aparelho. Não pode ser desfeito sem backup.</p>
+      <button class="btn danger" id="aApagar">Apagar todos os dados</button></div>
+  </div>`;
+}
+vAjustes.after=m=>{
+  $("#aSalvaTok").addEventListener("click",()=>{V.prefs.token=$("#aTok").value.trim(); V.prefs.autoHoras=+$("#aAuto").value; V._aviso=null; save(); toast("Fonte de dados salva."); atualizar(false);});
+  $("#aTestar").addEventListener("click",async()=>{const old=V.prefs.token; V.prefs.token=$("#aTok").value.trim(); const tk=tickers().find(t=>isListed(ativo(t).cls))||"BBAS3";
+    try{const x=await brapi(tk,true); toast("✅ Conexão ok: "+tk+" "+money(x.regularMarketPrice)+((x.defaultKeyStatistics||x.financialData)?" · com indicadores":""));}
+    catch(e){try{await brapi(tk,false); toast("✅ Cotações ok, mas seu plano não libera indicadores fundamentalistas.");}catch(e2){toast("❌ "+e2.message);}} V.prefs.token=old;});
+  $("#aSalvaSeg").addEventListener("click",()=>{V.prefs.lock=+$("#aLock").value; V.perfil.nome=$("#aNome").value.trim()||V.perfil.nome; save(); armLock(); toast("Segurança salva.");});
+  $("#aSenha").addEventListener("click",()=>modal(`<div class="mh"><h3>Trocar senha</h3><button class="x" data-close>×</button></div>
+    <div class="fld"><label>Senha atual</label><input type="password" id="s0"></div><div class="fld"><label>Nova senha</label><input type="password" id="s1"></div><div class="fld"><label>Repita a nova senha</label><input type="password" id="s2"></div>
+    <div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="sOk">Trocar</button></div>`,(ov,close)=>ov.querySelector("#sOk").addEventListener("click",async()=>{
+      const w=readVault(); try{await unseal(w.box,await deriveKey(ov.querySelector("#s0").value,w.salt,w.iter));}catch(e){return toast("Senha atual incorreta.");}
+      const p1=ov.querySelector("#s1").value; if(p1.length<8||strength(p1)<3) return toast("Nova senha fraca (mín. 8, misture tipos de caracteres)."); if(p1!==ov.querySelector("#s2").value) return toast("As senhas não conferem.");
+      await createVault(null,p1,V); close(); toast("Senha alterada. Faça um novo backup.");})));
+  $("#aLimOk").addEventListener("click",()=>{m.querySelectorAll("[data-lim]").forEach(i=>{const v=parseNum(i.value); if(isFinite(v)) V.prefs.lim[i.dataset.lim]=v;}); save(); toast("Limites salvos."); render();});
+  $("#aLimRes").addEventListener("click",()=>{V.prefs.lim={...DEF_LIM}; save(); render(); toast("Limites padrão restaurados.");});
+  $("#aBackup").addEventListener("click",async()=>{V.meta.backup=new Date().toISOString(); await save(true); const w=readVault();
+    download("cruzinvest-backup-"+todayISO()+".json",JSON.stringify({app:"CruzInvest",v:1,salt:w.salt,iter:w.iter,box:w.box,criado:V.meta.backup}),"application/json"); render(); toast("Backup baixado. Guarde em local seguro.");});
+  $("#aExport").addEventListener("click",exportCsv);
+  $("#aApagar").addEventListener("click",()=>{if(prompt("Isto apaga TODA a carteira deste aparelho.\nDigite APAGAR para confirmar:")!=="APAGAR") return; localStorage.removeItem(VKEY); KEY=null; V=null; location.reload();});
+};
+
+/* ======================= INÍCIO ======================= */
+if(!window.crypto||!crypto.subtle){document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">Este navegador não suporta criptografia segura. Abra o CruzInvest pelo endereço https:// em um navegador atualizado.</p>';}
+else showLogin();
+if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
