@@ -63,9 +63,17 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 
 /* ======================= LOGIN ======================= */
 #login{position:fixed;inset:0;z-index:100;display:flex;overflow:auto;background:#07131c}
-#login::before{content:"";position:fixed;inset:0;background:url(../login-bg.jpg) center/cover no-repeat;opacity:.9}
-#login::after{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(4,16,22,.15) 30%,rgba(4,16,22,.75) 100%)}
-.lgwrap{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:flex-end;padding:4vh 6vw}
+#login{background:radial-gradient(120% 90% at 15% 10%,#12384a 0%,#0a2230 45%,#06141c 100%)}
+.lgart{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.lgart svg{position:absolute;left:0;bottom:0;width:100%;height:78%}
+.lgwrap{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:space-between;gap:5vw;padding:4vh 6vw}
+.lghero{color:#EAF2F0;max-width:520px}
+.lghero h2{font-size:clamp(30px,4vw,52px);line-height:1.05;margin:0 0 16px;letter-spacing:-.02em;font-weight:700}
+.lghero h2 span{color:#39E875}
+.lghero p{font-size:15px;color:rgba(234,242,240,.72);margin:0 0 22px;line-height:1.5}
+.lghero ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:13.5px;color:rgba(234,242,240,.86)}
+.lghero li{display:flex;gap:10px;align-items:center}
+.lghero li i{width:8px;height:8px;border-radius:50%;background:#39E875;box-shadow:0 0 0 4px rgba(57,232,117,.15);flex:0 0 auto}
 .lgpane{width:min(410px,100%);background:var(--surface);border-radius:18px;padding:26px 28px 20px;box-shadow:0 34px 80px -18px rgba(0,0,0,.66)}
 .brandmark{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .brandmark svg{width:38px;height:38px}
@@ -87,9 +95,15 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 .msg.err{background:var(--crit-bg);color:var(--crit)} .msg.ok{background:var(--good-bg);color:var(--good)}
 .note{margin-top:14px;padding-top:11px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.5}
 .lnk{border:0;background:none;color:var(--brand);font-weight:600;font-size:12.5px;text-decoration:underline;padding:0}
+.pw{position:relative}
+.pw input{padding-right:44px !important}
+.eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:36px;height:34px;border:0;background:transparent;border-radius:6px;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.eye:hover{color:var(--ink);background:var(--surface-3)}
+.eye svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.chk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);margin-top:12px;cursor:pointer}
 .meter{height:4px;border-radius:3px;background:var(--surface-3);margin-top:6px;overflow:hidden}
 .meter i{display:block;height:100%;width:0;background:var(--crit);transition:width .2s}
-@media(max-width:760px){ .lgwrap{justify-content:center;padding:16px} }
+@media(max-width:860px){ .lgwrap{justify-content:center;padding:16px} .lghero{display:none} }
 
 /* ======================= TOPO ======================= */
 header.top{position:sticky;top:0;z-index:20;background:var(--hdr);color:var(--hdr-ink);border-bottom:1px solid var(--hdr-line)}
@@ -214,7 +228,17 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
 
 <!-- ======================= LOGIN ======================= -->
 <div id="login">
+  <div class="lgart" aria-hidden="true"><svg viewBox="0 0 1200 600" preserveAspectRatio="none">
+    <defs><linearGradient id="lgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#39E875" stop-opacity=".28"/><stop offset="1" stop-color="#39E875" stop-opacity="0"/></linearGradient></defs>
+    <g stroke="rgba(255,255,255,.05)" stroke-width="1"><line x1="0" x2="1200" y1="100" y2="100"/><line x1="0" x2="1200" y1="200" y2="200"/><line x1="0" x2="1200" y1="300" y2="300"/><line x1="0" x2="1200" y1="400" y2="400"/><line x1="0" x2="1200" y1="500" y2="500"/></g>
+    <g fill="rgba(57,232,117,.10)"><rect x="60" y="520" width="34" height="40" rx="4"/><rect x="140" y="474" width="34" height="86" rx="4"/><rect x="220" y="428" width="34" height="132" rx="4"/><rect x="300" y="472" width="34" height="88" rx="4"/><rect x="380" y="426" width="34" height="134" rx="4"/><rect x="460" y="470" width="34" height="90" rx="4"/><rect x="540" y="424" width="34" height="136" rx="4"/><rect x="620" y="378" width="34" height="182" rx="4"/><rect x="700" y="422" width="34" height="138" rx="4"/><rect x="780" y="376" width="34" height="184" rx="4"/><rect x="860" y="420" width="34" height="140" rx="4"/><rect x="940" y="374" width="34" height="186" rx="4"/><rect x="1020" y="328" width="34" height="232" rx="4"/><rect x="1100" y="372" width="34" height="188" rx="4"/></g>
+    <path d="M0,470 C120,450 180,480 260,420 S400,380 470,400 S600,300 690,320 S820,230 900,240 S1060,120 1200,90 L1200,600 L0,600Z" fill="url(#lgA)"/>
+    <path d="M0,470 C120,450 180,480 260,420 S400,380 470,400 S600,300 690,320 S820,230 900,240 S1060,120 1200,90" fill="none" stroke="#39E875" stroke-width="3"/>
+  </svg></div>
   <div class="lgwrap">
+    <div class="lghero"><h2>Seu patrimônio,<br><span>sob controle.</span></h2>
+      <p>Rentabilidade, proventos e a saúde de cada ativo da sua carteira, num só lugar.</p>
+      <ul><li><i></i>Semáforo de fundamentos por ativo</li><li><i></i>Proventos recebidos e a receber</li><li><i></i>Comparação com o CDI</li><li><i></i>Dados criptografados no seu aparelho</li></ul></div>
     <div class="lgpane">
       <div class="brandmark">
         <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0C1F2B"/><path d="M9 27l7-8 5 5 10-12" fill="none" stroke="#39E875" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="12" r="2.6" fill="#39E875"/></svg>
@@ -225,18 +249,21 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
         <h1>Criar seu cofre</h1>
         <p class="sub">Primeiro acesso neste aparelho. Defina uma senha forte: ela protege sua carteira com criptografia.</p>
         <div class="fld"><label for="cNome">Seu nome</label><input id="cNome" required maxlength="60" autocomplete="name"></div>
-        <div class="fld"><label for="cSenha">Senha (mín. 8 caracteres)</label><input id="cSenha" type="password" required minlength="8" autocomplete="new-password">
+        <div class="fld"><label for="cEmail">E-mail</label><input id="cEmail" type="email" required maxlength="120" autocomplete="email" placeholder="voce@exemplo.com"></div>
+        <div class="fld"><label for="cSenha">Senha (mín. 8 caracteres)</label><div class="pw"><input id="cSenha" type="password" required minlength="8" autocomplete="new-password"><button type="button" class="eye" aria-label="Mostrar senha" title="Mostrar senha"></button></div>
           <div class="meter"><i id="cMeter"></i></div></div>
-        <div class="fld"><label for="cSenha2">Repita a senha</label><input id="cSenha2" type="password" required minlength="8" autocomplete="new-password"></div>
+        <div class="fld"><label for="cSenha2">Repita a senha</label><div class="pw"><input id="cSenha2" type="password" required minlength="8" autocomplete="new-password"><button type="button" class="eye" aria-label="Mostrar senha" title="Mostrar senha"></button></div></div>
         <div id="cErr" class="msg err hidden"></div>
         <button class="btn primary block" type="submit">Criar cofre e entrar</button>
         <div class="note">Seus dados ficam <b>criptografados (AES-256)</b> neste aparelho e nunca saem dele sem você pedir. <b>Não existe recuperação de senha</b>: guarde-a bem e faça backups em <i>Ajustes</i>.<br><button type="button" class="lnk" id="cRestaurar">Já tenho um backup — restaurar</button></div>
       </form>
 
       <form id="fEntrar" class="hidden" autocomplete="off">
-        <h1>Olá, <span id="eNome"></span></h1>
-        <p class="sub">Digite sua senha para abrir a carteira.</p>
-        <div class="fld"><label for="eSenha">Senha</label><input id="eSenha" type="password" required autocomplete="current-password"></div>
+        <h1>Entrar</h1>
+        <p class="sub">Use o e-mail e a senha do seu cofre.</p>
+        <div class="fld"><label for="eEmail">E-mail</label><input id="eEmail" type="email" required maxlength="120" autocomplete="username"></div>
+        <div class="fld"><label for="eSenha">Senha</label><div class="pw"><input id="eSenha" type="password" required autocomplete="current-password"><button type="button" class="eye" aria-label="Mostrar senha" title="Mostrar senha"></button></div></div>
+        <label class="chk"><input type="checkbox" id="eLembrar" checked> Lembrar meu e-mail neste aparelho</label>
         <div id="eErr" class="msg err hidden"></div>
         <button class="btn primary block" type="submit" id="eBtn">Entrar</button>
         <div class="note">O app se bloqueia sozinho após um período sem uso.<br>
@@ -329,17 +356,36 @@ async function deriveKey(pass,saltB64,iter){
 async function seal(obj,key){const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(obj)));return{iv:b64(iv),ct:b64(ct)};}
 async function unseal(box,key){const pt=await SUB.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct));return JSON.parse(DEC.decode(pt));}
 
+/* ======================= E-MAIL E OLHO DA SENHA ======================= */
+const normEmail=e=>String(e||"").trim().toLowerCase();
+const okEmail=e=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(normEmail(e));
+async function emailHash(e){return b64(await SUB.digest("SHA-256",ENC.encode("cruzinvest:"+normEmail(e))));}
+const EYE_ON='<svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF='<svg viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6A17.3 17.3 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+function wireEyes(root){
+  (root||document).querySelectorAll("input[type=password]").forEach(i=>{
+    let w=i.parentElement; if(!w.classList.contains("pw")){ w=document.createElement("div"); w.className="pw"; i.replaceWith(w); w.appendChild(i);
+      const b=document.createElement("button"); b.type="button"; b.className="eye"; w.appendChild(b); }
+    const b=w.querySelector(".eye"); if(b._ok) return; b._ok=1; b.innerHTML=EYE_ON;
+    b.addEventListener("click",()=>{const show=i.type==="password"; i.type=show?"text":"password"; b.innerHTML=show?EYE_OFF:EYE_ON;
+      b.setAttribute("aria-label",show?"Ocultar senha":"Mostrar senha"); b.title=b.getAttribute("aria-label"); i.focus();});
+  });
+}
+const resetEyes=root=>(root||document).querySelectorAll(".pw input").forEach(i=>{if(i.type==="text"&&i.closest(".pw").querySelector(".eye")){i.type="password";i.closest(".pw").querySelector(".eye").innerHTML=EYE_ON;}});
+const EMAILK="cruzinvest_email";
+
 /* ======================= COFRE ======================= */
 const VKEY="cruzinvest_cofre_v1", TKEY="cruzinvest_tema", FAILK="cruzinvest_falhas";
 let KEY=null, V=null, VIEW="painel", LOCKT=null, SAVET=null, BUSY=false;
 const DEF_LIM={
-  plMax:25, pvpMax:3, roeMin:8, divEbitdaY:3, divEbitdaR:4.5, liqMin:1, payoutMax:100, quedaMax:35, quedaDia:6,
-  fiiDyMin:6, fiiDyMax:16, fiiRendQuedaY:15, fiiRendQuedaR:30, fiiPvpMax:1.2, fiiPvpMin:0.7,
+  plMax:25, pvpMax:3, roeMin:12, divEbitdaY:3, divEbitdaR:4.5, liqMin:1, payoutMax:100, quedaMax:35, quedaDia:6,
+  fiiDyMin:8, fiiDyMax:16, fiiRendQuedaY:15, fiiRendQuedaR:30, fiiPvpMax:1.2, fiiPvpMin:0.7,
   concY:20, concR:30
 };
 function newV(nome){return{v:1,perfil:{nome},prefs:{tema:"brand",lock:15,token:"",lim:{...DEF_LIM},autoHoras:6},lanc:[],ativos:{},mkt:{},cdi:null,macro:null,hist:[],meta:{criado:new Date().toISOString(),backup:null,upd:null}};}
 function normV(){
   V.prefs=V.prefs||{}; V.prefs.lim={...DEF_LIM,...(V.prefs.lim||{})};
+  if((V.prefs.limV||1)<2){ if(V.prefs.lim.roeMin===8) V.prefs.lim.roeMin=12; if(V.prefs.lim.fiiDyMin===6) V.prefs.lim.fiiDyMin=8; V.prefs.limV=2; } /* padrões revistos p/ Selic alta */
   if(V.prefs.lock==null) V.prefs.lock=15; if(V.prefs.autoHoras==null) V.prefs.autoHoras=6;
   V.provMan=V.provMan||[]; V.lanc=V.lanc||[]; V.ativos=V.ativos||{}; V.mkt=V.mkt||{}; V.hist=V.hist||[]; V.meta=V.meta||{};
 }
@@ -347,19 +393,22 @@ const readVault=()=>{try{return JSON.parse(localStorage.getItem(VKEY)||"null");}
 async function save(now){
   clearTimeout(SAVET);
   const go=async()=>{ if(!KEY||!V) return; const w=readVault(); if(!w) return;
-    w.box=await seal(V,KEY); w.nome=V.perfil.nome; w.upd=new Date().toISOString();
+    w.box=await seal(V,KEY); delete w.nome; if(V.perfil.email) w.eh=await emailHash(V.perfil.email); w.upd=new Date().toISOString();
     try{localStorage.setItem(VKEY,JSON.stringify(w));}catch(e){toast("Não foi possível salvar: armazenamento cheio.");} };
   if(now) return go(); SAVET=setTimeout(go,400);
 }
-async function createVault(nome,pass,data){
+async function createVault(nome,pass,data,email){
   const salt=b64(rnd(16)); const key=await deriveKey(pass,salt,ITER);
-  V=data||newV(nome); if(nome) V.perfil.nome=nome; normV();
-  const w={v:1,salt,iter:ITER,nome:V.perfil.nome,box:await seal(V,key)};
+  V=data||newV(nome); if(nome) V.perfil.nome=nome; if(email) V.perfil.email=normEmail(email); normV();
+  const w={v:1,salt,iter:ITER,box:await seal(V,key)}; if(V.perfil.email) w.eh=await emailHash(V.perfil.email);
   localStorage.setItem(VKEY,JSON.stringify(w)); KEY=key;
 }
-async function unlock(pass){
-  const w=readVault(); const key=await deriveKey(pass,w.salt,w.iter);
+async function unlock(email,pass){
+  const w=readVault();
+  if(w.eh&&w.eh!==await emailHash(email)) throw new Error("credenciais");
+  const key=await deriveKey(pass,w.salt,w.iter);
   V=await unseal(w.box,key); KEY=key; normV();
+  if(!w.eh){ if(!V.perfil.email) V.perfil.email=normEmail(email); await save(true); } /* cofres antigos: grava o e-mail no 1º acesso */
 }
 function lock(){
   clearTimeout(LOCKT); save(true).finally(()=>{KEY=null;V=null;$("#main").innerHTML="";$("#app").classList.add("hidden");showLogin();});
@@ -372,19 +421,23 @@ function showLogin(){
   $("#login").classList.remove("hidden");
   const w=readVault();
   $("#fCriar").classList.toggle("hidden",!!w); $("#fEntrar").classList.toggle("hidden",!w);
-  if(w){ $("#eNome").textContent=(w.nome||"").split(" ")[0]; $("#eSenha").value=""; setTimeout(()=>$("#eSenha").focus(),50); }
+  resetEyes($("#login"));
+  if(w){ let lem=""; try{lem=localStorage.getItem(EMAILK)||"";}catch(e){}
+    $("#eEmail").value=lem; $("#eLembrar").checked=!!lem||!localStorage.getItem(EMAILK+"_off"); $("#eSenha").value="";
+    setTimeout(()=>(lem?$("#eSenha"):$("#eEmail")).focus(),50); }
   else setTimeout(()=>$("#cNome").focus(),50);
 }
 function strength(p){let s=0; if(p.length>=8)s++; if(p.length>=12)s++; if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++; if(/\d/.test(p))s++; if(/[^A-Za-z0-9]/.test(p))s++; return s;}
 $("#cSenha").addEventListener("input",e=>{const s=strength(e.target.value);const m=$("#cMeter");m.style.width=(s*20)+"%";m.style.background=s<3?"var(--crit)":s<4?"var(--c4)":"#00A04E";});
 $("#fCriar").addEventListener("submit",async e=>{
   e.preventDefault(); const err=$("#cErr"); err.classList.add("hidden");
-  const nome=$("#cNome").value.trim(), p1=$("#cSenha").value, p2=$("#cSenha2").value;
+  const nome=$("#cNome").value.trim(), email=$("#cEmail").value, p1=$("#cSenha").value, p2=$("#cSenha2").value;
   const fail=m=>{err.textContent=m;err.classList.remove("hidden");};
+  if(!okEmail(email)) return fail("Informe um e-mail válido.");
   if(p1.length<8) return fail("A senha precisa ter pelo menos 8 caracteres.");
   if(strength(p1)<3) return fail("Senha fraca: misture letras maiúsculas, minúsculas, números ou símbolos.");
   if(p1!==p2) return fail("As senhas não conferem.");
-  await createVault(nome,p1); enterApp(); toast("Cofre criado. Bem-vindo(a) ao CruzInvest!");
+  await createVault(nome,p1,null,email); try{localStorage.setItem(EMAILK,normEmail(email));}catch(x){} enterApp(); toast("Cofre criado. Bem-vindo(a) ao CruzInvest!");
 });
 $("#fEntrar").addEventListener("submit",async e=>{
   e.preventDefault(); const err=$("#eErr"), btn=$("#eBtn"); err.classList.add("hidden");
@@ -392,8 +445,12 @@ $("#fEntrar").addEventListener("submit",async e=>{
   const wait=f.n>=5?Math.ceil((f.t+30000*Math.pow(2,Math.min(f.n-5,5))-Date.now())/1000):0;
   if(wait>0){err.textContent="Muitas tentativas. Aguarde "+wait+"s.";err.classList.remove("hidden");return;}
   btn.disabled=true; btn.textContent="Abrindo…";
-  try{ await unlock($("#eSenha").value); localStorage.removeItem(FAILK); enterApp(); }
-  catch(x){ f.n++; f.t=Date.now(); localStorage.setItem(FAILK,JSON.stringify(f)); err.textContent="Senha incorreta."; err.classList.remove("hidden"); }
+  const email=$("#eEmail").value;
+  if(!okEmail(email)){err.textContent="Informe um e-mail válido.";err.classList.remove("hidden");btn.disabled=false;btn.textContent="Entrar";return;}
+  try{ await unlock(email,$("#eSenha").value); localStorage.removeItem(FAILK);
+    try{ if($("#eLembrar").checked){localStorage.setItem(EMAILK,normEmail(email));localStorage.removeItem(EMAILK+"_off");} else {localStorage.removeItem(EMAILK);localStorage.setItem(EMAILK+"_off","1");} }catch(x){}
+    enterApp(); }
+  catch(x){ f.n++; f.t=Date.now(); localStorage.setItem(FAILK,JSON.stringify(f)); err.textContent="E-mail ou senha incorretos."; err.classList.remove("hidden"); }
   btn.disabled=false; btn.textContent="Entrar";
 });
 $("#eApagar").addEventListener("click",()=>{
@@ -411,7 +468,8 @@ $("#fileRestore").addEventListener("change",async e=>{
     const pass=prompt("Senha do backup:"); if(!pass) return;
     const key=await deriveKey(pass,w.salt,w.iter); const data=await unseal(w.box,key);
     if(readVault()&&!confirm("Isto substitui o cofre atual deste aparelho. Continuar?")) return;
-    localStorage.setItem(VKEY,JSON.stringify({v:1,salt:w.salt,iter:w.iter,nome:data.perfil&&data.perfil.nome,box:w.box}));
+    const nv={v:1,salt:w.salt,iter:w.iter,box:w.box}; if(data.perfil&&data.perfil.email) nv.eh=await emailHash(data.perfil.email);
+    localStorage.setItem(VKEY,JSON.stringify(nv));
     KEY=key; V=data; normV(); enterApp(); toast("Backup restaurado.");
   }catch(x){ alert(x.message==="arquivo"?"Arquivo de backup inválido.":"Senha incorreta ou backup corrompido."); }
 });
@@ -450,6 +508,7 @@ function ativo(tk){ if(!V.ativos[tk]) V.ativos[tk]={cls:guessClass(tk),vp:null,m
 
 /* ======================= CÁLCULO DA CARTEIRA ======================= */
 const tickers=()=>[...new Set(V.lanc.map(l=>l.tk))];
+const provTks=()=>[...new Set([...tickers(),...(V.provMan||[]).map(d=>d.tk)])];
 function sortedLanc(){return V.lanc.slice().sort((a,b)=>a.data<b.data?-1:a.data>b.data?1:(a.tipo==="C"?-1:1));}
 function qtyAt(tk,iso){let q=0;for(const l of V.lanc){if(l.tk===tk&&l.data<=iso)q+=l.tipo==="C"?l.qtd:-l.qtd;}return Math.max(0,q);}
 /* proventos: brapi (se o plano permitir) + registrados/importados por você */
@@ -458,7 +517,8 @@ function mk(tk){
   const m=V.mkt[tk]||{}, man=(V.provMan||[]).filter(d=>d.tk===tk);
   if(!man.length&&m.dy12!==undefined) return m;
   const seen=new Set(), divs=[];
-  [...man,...(m.divs||[])].forEach(d=>{const k=divKey(d); if(!seen.has(k)){seen.add(k); divs.push(d);}});
+  const pays=new Set(man.map(d=>d.pay+"|"+(+d.rate).toFixed(4)));
+  [...man,...(m.divs||[]).filter(d=>!pays.has(d.pay+"|"+(+d.rate).toFixed(4)))].forEach(d=>{const k=divKey(d); if(!seen.has(k)){seen.add(k); divs.push(d);}});
   const d12=isoOf(Date.now()-365*864e5), s12=divs.filter(d=>(d.com||d.ex)>=d12).reduce((a,d)=>a+d.rate,0);
   return {...m,divs,div12:s12,dy12:m.price&&s12?s12/m.price:(m.price?0:null)};
 }
@@ -708,7 +768,7 @@ function render(){
   const fn={painel:vPainel,carteira:vCarteira,saude:vSaude,proventos:vProventos,lanc:vLanc,ajustes:vAjustes}[VIEW]||vPainel;
   window._LS={}; const html=fn(); const main=$("#main"); main.innerHTML=html;
   Object.entries(window._LS||{}).forEach(([id,sr])=>wireLine(id,sr));
-  bindTips(main); if(fn.after) fn.after(main);
+  bindTips(main); wireEyes(main); if(fn.after) fn.after(main);
 }
 function avisos(){
   let h="";
@@ -716,7 +776,7 @@ function avisos(){
   else if((V.prefs.nivel||0)>0&&!(V.provMan||[]).length) h+=`<div class="banner warn">ℹ️ <div>O plano gratuito da brapi ${(V.prefs.nivel===2)?"libera só cotações (sem indicadores nem proventos)":"não inclui proventos"}. Registre ou importe seus dividendos e rendimentos na aba <b>Proventos</b> para calcular DY e renda passiva. <button class="lnk" onclick="go('proventos')">Ir para Proventos</button></div></div>`;
   return h;
 }
-function emptyState(){return `<div class="card empty"><b>Sua carteira está vazia</b>Cadastre seus ativos em <b>Lançamentos</b>: um por um ou importando uma planilha (CSV) exportada do Investidor10, da B3 ou da sua corretora.<div style="margin-top:14px"><button class="btn primary" onclick="go('lanc')">Adicionar ativos</button></div></div>`;}
+function emptyState(){return `<div class="card empty"><b>Sua carteira está vazia</b>Cadastre seus ativos em <b>Lançamentos</b>: o jeito mais fácil é <b>Importar da B3</b> com os extratos em Excel da Área do Investidor.<div style="margin-top:14px"><button class="btn primary" onclick="go('lanc')">Adicionar ativos</button></div></div>`;}
 
 /* ---------- PAINEL ---------- */
 function vPainel(){
@@ -767,9 +827,9 @@ function vPainel(){
   return h;
 }
 vPainel.after=m=>m.querySelectorAll("[data-tk]").forEach(r=>r.addEventListener("click",()=>detalhe(r.dataset.tk)));
-function tkCell(p){const m=mk(p.tk);return `<div class="tk">${m.logo?`<img src="${esc(m.logo)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph'}))">`:`<span class="ph"></span>`}<div>${esc(p.tk)}<small>${esc(m.name||ativo(p.tk).cls)}</small></div></div>`;}
+function tkCell(p){const m=mk(p.tk);return `<div class="tk">${m.logo?`<img src="${esc(m.logo)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph'}))">`:`<span class="ph"></span>`}<div>${esc(p.tk)}<small>${esc(m.name||ativo(p.tk).nome||ativo(p.tk).cls)}</small></div></div>`;}
 function provMensal(meses,fut){
-  const all=tickers().flatMap(proventosDe); const now=new Date(); const out=[];
+  const all=provTks().flatMap(proventosDe); const now=new Date(); const out=[];
   for(let i=meses-1;i>=-(fut||0);i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1); const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
     const it=all.filter(x=>x.pay&&x.pay.slice(0,7)===k); const rec=it.filter(x=>x.recebido).reduce((s,x)=>s+x.valor,0), fu=it.filter(x=>!x.recebido).reduce((s,x)=>s+x.valor,0);
     out.push({k,lb:MES[d.getMonth()]+(d.getMonth()===0||i===meses-1?"/"+String(d.getFullYear()).slice(2):""),v:rec,v2:fu,tip:`<b>${MES[d.getMonth()]}/${d.getFullYear()}</b>Recebido: ${money(rec)}${fu?"<br>A receber: "+money(fu):""}`});}
@@ -829,7 +889,7 @@ vSaude.after=m=>{m.querySelectorAll("#fsau button").forEach(b=>b.addEventListene
 /* ---------- PROVENTOS ---------- */
 function vProventos(){
   const C=carteira(); if(!V.lanc.length) return `<div class="pghead"><div><h2>Proventos</h2></div></div>`+emptyState();
-  const all=tickers().flatMap(proventosDe).sort((a,b)=>(b.pay||b.com)<(a.pay||a.com)?-1:1);
+  const all=provTks().flatMap(proventosDe).sort((a,b)=>(b.pay||b.com)<(a.pay||a.com)?-1:1);
   const fut=all.filter(x=>!x.recebido).sort((a,b)=>(a.pay||"9")<(b.pay||"9")?-1:1);
   const ano=String(new Date().getFullYear()); const noAno=all.filter(x=>x.recebido&&x.pay.startsWith(ano)).reduce((s,x)=>s+x.valor,0);
   const porTk={}; all.filter(x=>x.recebido&&x.pay>=isoOf(Date.now()-365*864e5)).forEach(x=>porTk[x.tk]=(porTk[x.tk]||0)+x.valor);
@@ -929,11 +989,156 @@ function parseProvCsv(txt){
   });
 }
 
+/* ======================= IMPORTAÇÃO B3 (Área do Investidor) ======================= */
+const XLSX_URL="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+function loadXLSX(){ if(window.XLSX) return Promise.resolve(); return new Promise((ok,ko)=>{const sc=document.createElement("script"); sc.src=XLSX_URL; sc.onload=ok; sc.onerror=()=>ko(new Error("Não foi possível carregar o leitor de Excel. Verifique a internet.")); document.head.appendChild(sc);});}
+const nrm=x=>String(x==null?"":x).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ").trim();
+const tkB3=x=>{ let t=String(x||"").toUpperCase().trim().split(/[\s-]/)[0]; if(/^[A-Z]{4}\d{1,2}F$/.test(t)) t=t.slice(0,-1); return /^[A-Z0-9]{4}\d{1,2}B?$/.test(t)?t:""; };
+const numB3=v=>typeof v==="number"?v:parseNum(String(v==null?"":v).replace(/^-$/,""));
+const MESES={janeiro:1,fevereiro:2,marco:3,abril:4,maio:5,junho:6,julho:7,agosto:8,setembro:9,outubro:10,novembro:11,dezembro:12};
+function dataB3(v){ if(typeof v==="number"&&window.XLSX){const d=XLSX.SSF.parse_date_code(v); return d?d.y+"-"+String(d.m).padStart(2,"0")+"-"+String(d.d).padStart(2,"0"):"";} return parseDate(v); }
+function dataDoArquivo(nome){
+  const n=nrm(nome); let m=n.match(/(\d{4})-(\d{2})-(\d{2})/); if(m) return m[1]+"-"+m[2]+"-"+m[3];
+  m=n.match(/(\d{4})-([a-z]+)/); if(m&&MESES[m[2]]) return isoOf(new Date(+m[1],MESES[m[2]],0));
+  return "";
+}
+function bizBack(iso,n){const d=new Date(iso+"T12:00:00"); while(n>0){d.setDate(d.getDate()-1); const w=d.getDay(); if(w>0&&w<6) n--;} return isoOf(d);}
+const col=(H,...ks)=>{for(const k of ks){const i=H.indexOf(k); if(i>=0) return i;} for(const k of ks){const i=H.findIndex(h=>h.startsWith(k)); if(i>=0) return i;} return -1;};
+const rfTk=nome=>String(nome).toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9]/g,"").replace(/^TESOURO/,"TD").slice(0,12);
+const labelProv=t=>{t=nrm(t); return /juros/.test(t)?"JCP":/rendimento/.test(t)?"RENDIMENTO":/amortiza/.test(t)?"AMORTIZAÇÃO":"DIVIDENDO";};
+
+async function lerArquivosB3(files){
+  await loadXLSX();
+  const P={trades:[],pos:null,provs:[],eventos:[],rf:[],lidos:[],avisos:[]};
+  for(const f of files){
+    const wb=XLSX.read(await f.arrayBuffer(),{type:"array"}); const tipos=[];
+    let posArq=null; const dArq=dataDoArquivo(f.name)||todayISO();
+    for(const nome of wb.SheetNames){
+      const rows=XLSX.utils.sheet_to_json(wb.Sheets[nome],{header:1,raw:true,defval:""}).filter(r=>r.some(c=>String(c).trim()!==""));
+      if(rows.length<2) continue; const H=rows[0].map(nrm), body=rows.slice(1), sn=nrm(nome);
+      if(H.includes("data do negocio")){ /* Negociação */
+        const iD=col(H,"data do negocio"),iT=col(H,"tipo de movimentacao"),iM=col(H,"mercado"),iC=col(H,"codigo de negociacao"),iQ=col(H,"quantidade"),iP=col(H,"preco");
+        let n=0; body.forEach(r=>{ if(/opcao|termo|futuro/.test(nrm(r[iM]))) return; const tk=tkB3(r[iC]), q=numB3(r[iQ]), pr=numB3(r[iP]), d=dataB3(r[iD]);
+          if(!tk||!(q>0)||!(pr>=0)||!d) return; P.trades.push({tk,tipo:/venda/.test(nrm(r[iT]))?"V":"C",data:d,qtd:q,preco:pr}); n++; });
+        tipos.push(n+" negociações");
+      } else if(H.includes("entrada/saida")){ /* Movimentação */
+        const iES=col(H,"entrada/saida"),iD=col(H,"data"),iM=col(H,"movimentacao"),iPr=col(H,"produto"),iQ=col(H,"quantidade"),iU=col(H,"preco unitario"),iV=col(H,"valor da operacao");
+        let np=0, ne=0; body.forEach(r=>{ const mv=nrm(r[iM]), cr=/credito/.test(nrm(r[iES])), tk=tkB3(r[iPr]), d=dataB3(r[iD]), q=numB3(r[iQ]);
+          if(!tk||!d) return;
+          if(cr&&/^(rendimento|dividendo|juros sobre capital|amortizacao)/.test(mv)){ let u=numB3(r[iU]); const v=numB3(r[iV]); if(!(u>0)&&v>0&&q>0) u=v/q; if(u>0&&q>0){P.provs.push({tk,label:labelProv(mv),pay:d,rate:u,qtd:q}); np++;} }
+          else if(cr&&/bonificacao|desdobr/.test(mv)&&q>0&&!/leilao/.test(mv)){ const u=numB3(r[iU]); P.eventos.push({tk,data:d,qtd:q,preco:u>0?u:0,mov:r[iM]}); ne++; }
+          else if(/grupamento/.test(mv)) P.avisos.push("Grupamento em "+tk+" ("+brDate(d)+"): confira a quantidade depois de importar.");
+        });
+        tipos.push(np+" proventos"+(ne?", "+ne+" eventos (bonificação/desdobro)":""));
+      } else if(H.includes("tipo de evento")&&H.includes("pagamento")){ /* Proventos recebidos */
+        const iPr=col(H,"produto"),iPg=col(H,"pagamento"),iT=col(H,"tipo de evento"),iQ=col(H,"quantidade"),iU=col(H,"preco unitario"),iV=col(H,"valor liquido");
+        let n=0; body.forEach(r=>{const tk=tkB3(r[iPr]), d=dataB3(r[iPg]), q=numB3(r[iQ]); let u=numB3(r[iU]); const v=numB3(r[iV]); if(!(u>0)&&v>0&&q>0) u=v/q;
+          if(tk&&d&&u>0&&q>0){P.provs.push({tk,label:labelProv(r[iT]),pay:d,rate:u,qtd:q}); n++;}});
+        tipos.push(n+" proventos");
+      } else if(H.includes("codigo de negociacao")&&H.includes("quantidade")&&!H.some(h=>h.startsWith("periodo"))){ /* Posição */
+        const iC=col(H,"codigo de negociacao"),iQ=col(H,"quantidade"),iF=col(H,"preco de fechamento"),iPr=col(H,"produto");
+        posArq=posArq||{data:dArq,q:{},preco:{},cls:{},nome:{}}; let n=0;
+        body.forEach(r=>{const tk=tkB3(r[iC]), q=numB3(r[iQ]); if(!tk||!(q>0)) return; posArq.q[tk]=(posArq.q[tk]||0)+q; posArq.preco[tk]=numB3(r[iF]);
+          posArq.cls[tk]=/etf/.test(sn)?"ETF":/bdr/.test(sn)?"BDR":/fundo|fii|fiagro/.test(sn)&&/11B?$/.test(tk)?"FII":guessClass(tk); n++;});
+        tipos.push(n+" posições");
+      } else if(H.includes("produto")&&H.includes("valor atualizado")&&(/tesouro|renda fixa/.test(sn))){ /* Tesouro / renda fixa */
+        const iPr=col(H,"produto"),iA=col(H,"valor aplicado"),iV=col(H,"valor atualizado"); let n=0;
+        body.forEach(r=>{const nome=String(r[iPr]||"").trim(), v=numB3(r[iV]); if(!nome||!(v>0)) return; const tk=rfTk(nome); if(!tk) return; P.rf.push({tk,nome,valor:v,aplicado:numB3(r[iA])>0?numB3(r[iA]):v,data:dArq}); n++;});
+        if(n) tipos.push(n+" títulos de renda fixa");
+      }
+    }
+    if(posArq&&(!P.pos||posArq.data>P.pos.data)) P.pos=posArq;
+    P.lidos.push({nome:f.name,tipos:tipos.length?tipos.join(", "):"nada reconhecido"});
+  }
+  P.trades.sort((a,b)=>a.data<b.data?-1:a.data>b.data?1:0);
+  /* o mesmo provento aparece no consolidado (valor arredondado) e na movimentação: fica o mais preciso */
+  const dec=v=>{const t=String(v); return t.includes(".")?t.split(".")[1].length:0;}; const uniq=[];
+  P.provs.forEach(d=>{const o=uniq.find(x=>x.tk===d.tk&&x.pay===d.pay&&x.label===d.label&&Math.abs(x.qtd-d.qtd)<1e-9&&Math.abs(x.rate-d.rate)<=0.0051);
+    if(!o) uniq.push({...d}); else if(dec(d.rate)>dec(o.rate)) o.rate=d.rate;});
+  P.provs=uniq;
+  return P;
+}
+/* preço médio final de um ativo dado o preço do lote anterior x (usado para descobrir x a partir do PM atual) */
+function pmFinal(ops,x){let q=0,c=0; ops.forEach(o=>{ if(o.tipo==="C"){c+=o.qtd*(o.ini?x:o.preco); q+=o.qtd;} else {const pm=q?c/q:0; const k=Math.min(o.qtd,q); c-=k*pm; q-=k;} }); return {q,pm:q>1e-9?c/q:null};}
+function planoB3(P,substituir){
+  const base=substituir?[]:V.lanc.map(l=>({...l}));
+  const have={}; base.forEach(l=>{const k=l.data+l.tk+l.tipo+l.qtd+"|"+(+l.preco).toFixed(4); have[k]=(have[k]||0)+1;});
+  const novos=[]; let dup=0;
+  [...P.trades,...P.eventos.map(e=>({tk:e.tk,tipo:"C",data:e.data,qtd:e.qtd,preco:e.preco,evt:e.mov}))].forEach(t=>{
+    const k=t.data+t.tk+t.tipo+t.qtd+"|"+(+t.preco).toFixed(4); if(have[k]>0){have[k]--; dup++; return;} novos.push(t);});
+  const todos=[...base,...novos].sort((a,b)=>a.data<b.data?-1:a.data>b.data?1:(a.tipo==="C"?-1:1));
+  const ini=[]; const inicio=todos.length?bizBack(todos[0].data,1):(P.pos?P.pos.data:todayISO());
+  if(P.pos){
+    const corte=bizBack(P.pos.data,2); const tks=new Set([...Object.keys(P.pos.q),...todos.map(t=>t.tk)]);
+    tks.forEach(tk=>{
+      if(/^TD|^RF/.test(tk)&&!P.pos.q[tk]) return;
+      const net=todos.filter(t=>t.tk===tk&&t.data<=corte).reduce((s,t)=>s+(t.tipo==="C"?t.qtd:-t.qtd),0);
+      const diff=+((P.pos.q[tk]||0)-net).toFixed(6);
+      if(diff>1e-6){ const ops=[{tk,tipo:"C",qtd:diff,ini:1},...todos.filter(t=>t.tk===tk)]; const f=pmFinal(ops,0);
+        ini.push({tk,qtd:diff,data:inicio,qHoje:f.q,ops,sug:(todos.find(t=>t.tk===tk&&t.tipo==="C")||{}).preco||P.pos.preco[tk]||0}); }
+      else if(diff<-1e-6) P.avisos.push(tk+": a B3 mostra "+N0.format(P.pos.q[tk]||0)+" na posição, menos do que as negociações indicam ("+N0.format(net)+"). Confira depois de importar.");
+    });
+  }
+  return {novos,dup,ini,inicio};
+}
+function importarB3(){
+  modal(`<div class="mh"><h3>Importar da B3</h3><button class="x" data-close aria-label="Fechar">×</button></div>
+    <p style="font-size:13px;margin-top:0">Na <b>Área do Investidor da B3</b> (investidor.b3.com.br), baixe em Excel e selecione aqui, todos de uma vez:</p>
+    <ol style="font-size:12.5px;color:var(--ink-2);margin:0 0 10px;padding-left:18px;line-height:1.6">
+      <li><b>Extratos → Negociação</b>, no maior período disponível: compras e vendas.</li>
+      <li><b>Relatórios → Consolidado mensal</b> mais recente (ou <b>Extratos → Posição</b>): confere a quantidade de cada ativo.</li>
+      <li><b>Extratos → Movimentação</b>, opcional: proventos, bonificações e desdobramentos.</li></ol>
+    <div class="fld"><label>Arquivos Excel da B3</label><input type="file" id="bFiles" accept=".xlsx,.xls" multiple></div>
+    <div id="bRes" style="margin-top:12px;font-size:12.5px"></div>
+    <div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="bOk" disabled>Importar</button></div>`,
+  (ov,close)=>{
+    let P=null, plan=null; const res=ov.querySelector("#bRes"), ok=ov.querySelector("#bOk");
+    const desenha=()=>{
+      const sub=ov.querySelector("#bSub")?ov.querySelector("#bSub").checked:true;
+      plan=planoB3(P,sub);
+      const provNovos=P.provs.length;
+      res.innerHTML=`<div class="banner info" style="margin:0 0 10px;display:block">${P.lidos.map(l=>`📄 <b>${esc(l.nome)}</b>: ${esc(l.tipos)}`).join("<br>")}</div>
+        <label class="chk" style="margin:0 0 10px"><input type="checkbox" id="bSub" ${sub?"checked":""}> Substituir os lançamentos e proventos atuais (recomendado: a B3 tem o histórico oficial)</label>
+        <p style="margin:0 0 8px"><b class="pos">${plan.novos.length} lançamento(s)</b> e <b class="pos">${provNovos} provento(s)</b> serão importados${plan.dup?` · ${plan.dup} já existiam`:""}${P.rf.length?` · ${P.rf.length} título(s) de renda fixa`:""}.</p>
+        ${!P.pos?`<div class="banner warn" style="margin:0 0 8px">⚠️ <div>Sem relatório de posição: ativos comprados antes de <b>${brDate(plan.inicio)}</b> ficariam de fora. Inclua o <b>Consolidado mensal</b> mais recente.</div></div>`:""}
+        ${plan.ini.length?`<div class="banner warn" style="margin:0 0 8px;display:block">✍️ <b>${plan.ini.length} ativo(s) têm cotas compradas antes de ${brDate(plan.inicio)}</b>, fora do período das negociações. Informe o <b>preço médio atual</b> (o que aparece na corretora ou no Investidor10). Para ativos já vendidos, informe o preço médio que você pagou. Em branco, o app usa uma estimativa.</div>
+          <div class="tbl-wrap"><table><thead><tr><th>Ativo</th><th class="r">Cotas antes</th><th class="r">Cotas hoje</th><th class="r">Preço médio (R$)</th></tr></thead><tbody>
+          ${plan.ini.map((x,i)=>`<tr><td><b>${x.tk}</b></td><td class="r">${N0.format(x.qtd)}</td><td class="r">${N0.format(x.qHoje)}</td><td class="r"><input data-ini="${i}" inputmode="decimal" placeholder="${n2(x.sug)}" style="width:110px;padding:6px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--surface-2);text-align:right"></td></tr>`).join("")}</tbody></table></div>`:""}
+        ${P.avisos.length?`<details><summary>Observações (${P.avisos.length})</summary><ul style="margin:6px 0 0;padding-left:18px">${P.avisos.map(a=>`<li>${esc(a)}</li>`).join("")}</ul></details>`:""}`;
+      ov.querySelector("#bSub").addEventListener("change",desenha);
+      ok.disabled=!(plan.novos.length||plan.ini.length||P.provs.length||P.rf.length);
+    };
+    ov.querySelector("#bFiles").addEventListener("change",async e=>{
+      const fs=[...e.target.files]; if(!fs.length) return; res.innerHTML="Lendo arquivos…"; ok.disabled=true;
+      try{ P=await lerArquivosB3(fs); P.avisos=[...new Set(P.avisos)]; desenha(); }catch(x){ res.innerHTML=`<div class="msg err">${esc(x.message)}</div>`; }
+    });
+    ok.addEventListener("click",()=>{
+      const sub=ov.querySelector("#bSub").checked;
+      if(sub&&(V.lanc.length||V.provMan.length)&&!confirm("Substituir os "+V.lanc.length+" lançamentos e "+V.provMan.length+" proventos atuais pelos dados da B3?")) return;
+      const est=[];
+      const iniL=plan.ini.map((x,i)=>{ const v=parseNum(ov.querySelector(`[data-ini="${i}"]`).value); let preco;
+        if(v>0&&x.qHoje>1e-9){ const f0=pmFinal(x.ops,0).pm, f1=pmFinal(x.ops,1).pm; preco=f1!==f0?(v-f0)/(f1-f0):v; if(!(preco>0)){preco=v; est.push(x.tk);} }
+        else if(v>0) preco=v; else {preco=x.sug; est.push(x.tk);}
+        return {id:uid(),tk:x.tk,tipo:"C",data:x.data,qtd:x.qtd,preco:+preco.toFixed(6),taxa:0,obs:"Saldo anterior ao extrato da B3"}; });
+      if(sub){V.lanc=[]; V.provMan=[];}
+      [...iniL,...plan.novos.map(t=>({id:uid(),tk:t.tk,tipo:t.tipo,data:t.data,qtd:t.qtd,preco:t.preco,taxa:0,obs:t.evt||""}))].forEach(l=>V.lanc.push(l));
+      const hp=new Set(V.provMan.map(d=>d.tk+"|"+d.pay+"|"+(+d.rate).toFixed(6))); let np=0;
+      P.provs.forEach(d=>{const k=d.tk+"|"+d.pay+"|"+(+d.rate).toFixed(6); if(hp.has(k)) return; hp.add(k); V.provMan.push({id:uid(),tk:d.tk,label:d.label,com:d.pay,pay:d.pay,rate:d.rate,qtdFix:d.qtd}); np++;});
+      P.rf.forEach(r=>{ if(!V.lanc.some(l=>l.tk===r.tk)) V.lanc.push({id:uid(),tk:r.tk,tipo:"C",data:r.data,qtd:1,preco:r.aplicado,taxa:0}); const a=ativo(r.tk); a.cls="Renda fixa"; a.manual=r.valor; a.nome=r.nome; });
+      if(P.pos) Object.entries(P.pos.cls).forEach(([tk,c])=>{ativo(tk).cls=c;});
+      V.lanc.forEach(l=>ativo(l.tk));
+      save(); close(); go("carteira");
+      toast("Importado: "+(iniL.length+plan.novos.length)+" lançamentos e "+np+" proventos."+(est.length?" Preço estimado: "+est.join(", ")+".":""));
+      atualizar(true);
+    });
+  });
+}
+
 /* ---------- LANÇAMENTOS ---------- */
 function vLanc(){
   const L=sortedLanc().reverse();
   return `<div class="pghead"><div><h2>Lançamentos</h2><p>Compras e vendas que formam sua carteira. Preço médio e rentabilidade são calculados a partir daqui.</p></div>
-    <div class="toolbar"><button class="btn primary" id="bNovo">+ Novo lançamento</button><button class="btn" id="bImport">Importar planilha</button>${L.length?`<button class="btn" id="bExportCsv">Exportar CSV</button>`:""}</div></div>
+    <div class="toolbar"><button class="btn primary" id="bB3">Importar da B3</button><button class="btn" id="bNovo">+ Novo lançamento</button><button class="btn" id="bImport">Importar planilha</button>${L.length?`<button class="btn" id="bExportCsv">Exportar CSV</button>`:""}</div></div>
     <div class="card">${L.length?`<div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Ativo</th><th>Classe</th><th>Operação</th><th class="r">Qtd</th><th class="r">Preço</th><th class="r">Taxas</th><th class="r">Total</th><th></th></tr></thead><tbody>
       ${L.map(l=>`<tr><td>${brDate(l.data)}</td><td><b>${esc(l.tk)}</b></td><td><span class="cls">${esc(ativo(l.tk).cls)}</span></td><td>${l.tipo==="C"?'<span class="pos">Compra</span>':'<span class="neg">Venda</span>'}</td><td class="r num">${N0.format(l.qtd)}</td><td class="r num">${money(l.preco)}</td><td class="r num">${l.taxa?money(l.taxa):"—"}</td><td class="r num">${money(l.qtd*l.preco+(l.tipo==="C"?1:-1)*(l.taxa||0))}</td>
       <td class="r"><button class="btn" data-ed="${l.id}" style="padding:5px 9px">Editar</button></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty"><b>Nenhum lançamento ainda</b>Use <b>+ Novo lançamento</b> ou <b>Importar planilha</b> para montar sua carteira.</div>`}</div>`;
@@ -941,6 +1146,7 @@ function vLanc(){
 vLanc.after=m=>{
   $("#bNovo").addEventListener("click",()=>formLanc());
   $("#bImport").addEventListener("click",importar);
+  $("#bB3").addEventListener("click",importarB3);
   const ex=$("#bExportCsv"); if(ex) ex.addEventListener("click",exportCsv);
   m.querySelectorAll("[data-ed]").forEach(b=>b.addEventListener("click",()=>formLanc(V.lanc.find(l=>l.id===b.dataset.ed))));
 };
@@ -949,7 +1155,7 @@ function modal(html,onMount){
   const close=()=>{ov.remove();document.removeEventListener("keydown",k);}; const k=e=>{if(e.key==="Escape")close();};
   ov.addEventListener("mousedown",e=>{if(e.target===ov)close();}); document.addEventListener("keydown",k);
   ov.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",close));
-  document.body.appendChild(ov); if(onMount) onMount(ov,close); return close;
+  document.body.appendChild(ov); wireEyes(ov); if(onMount) onMount(ov,close); return close;
 }
 function formLanc(l){
   const ed=!!l; l=l||{tk:"",tipo:"C",data:todayISO(),qtd:"",preco:"",taxa:""};
@@ -1084,6 +1290,7 @@ function vAjustes(){
     <div class="card"><h3>Segurança</h3><p class="cap">Seus dados ficam criptografados com AES-256 neste aparelho. A chave vem da sua senha (PBKDF2, ${N0.format(w.iter)} iterações) e nunca é gravada.</p>
       <div class="fld"><label>Bloquear após inatividade</label><select id="aLock">${[5,10,15,30,60].map(m=>`<option value="${m}" ${V.prefs.lock==m?"selected":""}>${m} minutos</option>`).join("")}</select></div>
       <div class="fld"><label>Seu nome</label><input id="aNome" value="${esc(V.perfil.nome)}" maxlength="60"></div>
+      <div class="fld"><label>E-mail (login e relatórios)</label><input id="aEmail" type="email" value="${esc(V.perfil.email||"")}" maxlength="120" autocomplete="email"></div>
       <div class="acts"><button class="btn" id="aSenha">Trocar senha</button><button class="btn primary" id="aSalvaSeg">Salvar</button></div></div>
     <div class="card"><h3>Limites da análise de saúde</h3><p class="cap">Quando um indicador passa destes valores, o ativo recebe um alerta 🟡 ou 🔴.</p>
       ${["Ações","FIIs","Carteira"].map(g=>`<h4 style="margin:12px 0 6px;font-size:12.5px;color:var(--ink-2)">${g}</h4><div class="lims">${grp(g)}</div>`).join("")}
@@ -1102,7 +1309,11 @@ vAjustes.after=m=>{
     try{const x=await brapiNivel(tk); const n=V.prefs.nivel||0;
       toast("✅ Conexão ok: "+tk+" "+money(x.regularMarketPrice)+[" · indicadores e proventos liberados"," · indicadores ok; proventos: registre ou importe na aba Proventos"," · só cotações no seu plano"][n]);}
     catch(e){V.prefs.nivel=oldN; toast("❌ "+e.message);} V.prefs.token=old; save();});
-  $("#aSalvaSeg").addEventListener("click",()=>{V.prefs.lock=+$("#aLock").value; V.perfil.nome=$("#aNome").value.trim()||V.perfil.nome; save(); armLock(); toast("Segurança salva.");});
+  $("#aSalvaSeg").addEventListener("click",()=>{V.prefs.lock=+$("#aLock").value; V.perfil.nome=$("#aNome").value.trim()||V.perfil.nome;
+    const em=$("#aEmail").value; if(!okEmail(em)) return toast("Informe um e-mail válido.");
+    const mudou=normEmail(em)!==V.perfil.email; V.perfil.email=normEmail(em);
+    try{ if(localStorage.getItem(EMAILK)) localStorage.setItem(EMAILK,V.perfil.email); }catch(x){}
+    save(); armLock(); toast(mudou?"Salvo. Use o novo e-mail no próximo login.":"Segurança salva.");});
   $("#aSenha").addEventListener("click",()=>modal(`<div class="mh"><h3>Trocar senha</h3><button class="x" data-close>×</button></div>
     <div class="fld"><label>Senha atual</label><input type="password" id="s0"></div><div class="fld"><label>Nova senha</label><input type="password" id="s1"></div><div class="fld"><label>Repita a nova senha</label><input type="password" id="s2"></div>
     <div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="sOk">Trocar</button></div>`,(ov,close)=>ov.querySelector("#sOk").addEventListener("click",async()=>{
@@ -1119,7 +1330,7 @@ vAjustes.after=m=>{
 
 /* ======================= INÍCIO ======================= */
 if(!window.crypto||!crypto.subtle){document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">Este navegador não suporta criptografia segura. Abra o CruzInvest pelo endereço https:// em um navegador atualizado.</p>';}
-else showLogin();
+else { wireEyes($("#login")); showLogin(); }
 if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
