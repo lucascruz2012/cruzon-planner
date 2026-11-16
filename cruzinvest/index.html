@@ -378,13 +378,14 @@ const EMAILK="cruzinvest_email";
 const VKEY="cruzinvest_cofre_v1", TKEY="cruzinvest_tema", FAILK="cruzinvest_falhas";
 let KEY=null, V=null, VIEW="painel", LOCKT=null, SAVET=null, BUSY=false;
 const DEF_LIM={
-  plMax:25, pvpMax:3, roeMin:8, divEbitdaY:3, divEbitdaR:4.5, liqMin:1, payoutMax:100, quedaMax:35, quedaDia:6,
-  fiiDyMin:6, fiiDyMax:16, fiiRendQuedaY:15, fiiRendQuedaR:30, fiiPvpMax:1.2, fiiPvpMin:0.7,
+  plMax:25, pvpMax:3, roeMin:12, divEbitdaY:3, divEbitdaR:4.5, liqMin:1, payoutMax:100, quedaMax:35, quedaDia:6,
+  fiiDyMin:8, fiiDyMax:16, fiiRendQuedaY:15, fiiRendQuedaR:30, fiiPvpMax:1.2, fiiPvpMin:0.7,
   concY:20, concR:30
 };
 function newV(nome){return{v:1,perfil:{nome},prefs:{tema:"brand",lock:15,token:"",lim:{...DEF_LIM},autoHoras:6},lanc:[],ativos:{},mkt:{},cdi:null,macro:null,hist:[],meta:{criado:new Date().toISOString(),backup:null,upd:null}};}
 function normV(){
   V.prefs=V.prefs||{}; V.prefs.lim={...DEF_LIM,...(V.prefs.lim||{})};
+  if((V.prefs.limV||1)<2){ if(V.prefs.lim.roeMin===8) V.prefs.lim.roeMin=12; if(V.prefs.lim.fiiDyMin===6) V.prefs.lim.fiiDyMin=8; V.prefs.limV=2; } /* padrões revistos p/ Selic alta */
   if(V.prefs.lock==null) V.prefs.lock=15; if(V.prefs.autoHoras==null) V.prefs.autoHoras=6;
   V.provMan=V.provMan||[]; V.lanc=V.lanc||[]; V.ativos=V.ativos||{}; V.mkt=V.mkt||{}; V.hist=V.hist||[]; V.meta=V.meta||{};
 }
