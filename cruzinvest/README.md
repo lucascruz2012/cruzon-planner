@@ -8,6 +8,7 @@ Acompanhamento da carteira de investimentos: patrimônio, rentabilidade, compara
 
 1. Abra o endereço e crie seu **cofre** (nome + senha forte). Não existe recuperação de senha: guarde-a bem.
 2. Em **Ajustes → Fonte de dados**, cole o token gratuito da [brapi.dev](https://brapi.dev/dashboard). Sem ele, só alguns ativos (PETR4, VALE3, ITUB4…) têm cotação.
+   O plano gratuito não inclui proventos: o app detecta isso sozinho e usa só o que o plano libera. Registre ou importe dividendos e rendimentos na aba **Proventos** (planilha com Ativo, Data com/Pagamento e Valor por cota ou Valor total).
 3. Em **Lançamentos → Importar planilha**, cole ou envie um CSV com as colunas `Ativo; Quantidade; Preço` (opcionais: `Data`, `Operação`, `Taxas`, `Classe`).
 4. Toque em ↻ para buscar cotações, indicadores e proventos. O app também atualiza sozinho ao abrir, se os dados estiverem velhos.
 5. Em **Ajustes → Backup**, baixe um backup criptografado de tempos em tempos.
