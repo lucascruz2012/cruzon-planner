@@ -43,6 +43,20 @@ Os avisos também aparecem no **sino** do Planner (recados que começam com 🔔
 
 Para mandar **cópia** para outro e-mail (por exemplo, de um sócio): no Planner, **Ajustes › Planos e cobrança › E-mail em cópia nos avisos** (depois de rodar `supabase/17-aviso-copia.sql`).
 
+## Plano B: o Supabase aciona o vigia
+
+Se o agendamento do GitHub não rodar sozinho (em **Actions** não aparecem rodadas "schedule"), o Supabase aciona o vigia a cada 10 minutos:
+
+1. **Token do GitHub:** foto do perfil › **Settings** › **Developer settings** › **Personal access tokens** › **Fine-grained tokens** › **Generate new token**.
+   - Nome: `Vigia CruzOn`. Validade: a maior disponível (anote a data para renovar).
+   - **Repository access:** *Only select repositories* › `cruzon-planner`.
+   - **Permissions › Repository permissions › Actions:** *Read and write*.
+   - **Generate token** e copie (aparece uma vez só). Não cole em chat nem em código.
+2. No Supabase, **SQL Editor**: cole o arquivo [`supabase/18-vigia-pelo-supabase.sql`](../supabase/18-vigia-pelo-supabase.sql), troque `COLE_AQUI_O_TOKEN` pelo token e clique em **Run**.
+3. Em até 10 minutos aparecem rodadas novas em **Actions › Avisos para o administrador**.
+
+Quando o token vencer, gere outro e rode o arquivo de novo com o token novo.
+
 ## Bom saber
 - O GitHub pausa rotinas agendadas de repositórios sem nenhuma alteração por 60 dias. Se os avisos pararem, abra **Actions** e clique em **Enable workflow**.
 - Se o envio falhar, a execução fica vermelha e a próxima tenta de novo a mesma janela de tempo, então nada se perde.
