@@ -4,7 +4,7 @@
   "description": "Planejador semanal de rotina: tarefas por dia, criticidade, prazos e relatório de pendências por e-mail.",
   "id": "/cruzon-planner/",
   "start_url": "./index.html",
-  "scope": "./",
+  "scope": "./index.html",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0C1F2B",
