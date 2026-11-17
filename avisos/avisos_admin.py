@@ -33,6 +33,7 @@ SB_URL = "https://qflpwxyyzimlmnizgltl.supabase.co"
 SITE = "https://lucascruz2012.github.io/cruzon-planner/"
 APPS = {"planner": "CruzOn Planner", "finance": "CruzOn Finance", "invest": "CruzInvest"}
 BR = timezone(timedelta(hours=-3))
+MARCA_SINO = "🔔 "
 
 
 def env(nome):
@@ -46,9 +47,13 @@ def pede(url, headers=None, data=None, metodo=None):
         return json.loads(corpo) if corpo else None
 
 
-def sb(caminho):
+def sb(caminho, corpo=None):
     chave = env("SUPABASE_SERVICE_KEY")
-    return pede(SB_URL + caminho, {"apikey": chave, "Authorization": "Bearer " + chave})
+    h = {"apikey": chave, "Authorization": "Bearer " + chave}
+    if corpo is None:
+        return pede(SB_URL + caminho, h)
+    h.update({"Content-Type": "application/json", "Prefer": "return=minimal"})
+    return pede(SB_URL + caminho, h, json.dumps(corpo).encode("utf-8"), "POST")
 
 
 def iso(dt):
@@ -112,6 +117,7 @@ def eventos(desde, ate):
         meta = u.get("user_metadata") or {}
         quem = por_codigo.get(str(meta.get("ref") or "")[:10])
         ev["cadastros"].append({
+            "id": u.get("id"),
             "nome": meta.get("nome") or meta.get("name") or "",
             "email": u.get("email") or "",
             "app": APPS.get(meta.get("app") or "planner", "CruzOn Planner"),
@@ -119,10 +125,10 @@ def eventos(desde, ate):
             "indicou": ((quem.get("user_metadata") or {}).get("nome") or quem.get("email")) if quem else "",
         })
     janela = f"and=(acesso_ate.gt.{iso(desde)},acesso_ate.lte.{iso(ate)})"
-    for p in sb("/rest/v1/perfis?select=nome,email,plano,acesso_ate,isento&" + janela) or []:
+    for p in sb("/rest/v1/perfis?select=id,nome,email,plano,acesso_ate,isento&" + janela) or []:
         if p.get("isento"):
             continue
-        item = {"nome": p.get("nome") or "", "email": p.get("email") or "", "plano": p.get("plano") or "", "quando": quando(p.get("acesso_ate")), "app": "CruzOn Planner"}
+        item = {"id": p.get("id"), "nome": p.get("nome") or "", "email": p.get("email") or "", "plano": p.get("plano") or "", "quando": quando(p.get("acesso_ate")), "app": "CruzOn Planner"}
         (ev["testes"] if p.get("plano") == "teste" else ev["vencidos"]).append(item)
     try:  # Finance e CruzInvest (tabela app_acessos, arquivo supabase/15-acesso-por-app.sql)
         por_id = {u["id"]: u for u in us}
@@ -130,7 +136,7 @@ def eventos(desde, ate):
             if a.get("isento") or a.get("bloqueado"):
                 continue
             u = por_id.get(a.get("user_id")) or {}
-            item = {"nome": (u.get("user_metadata") or {}).get("nome") or "", "email": u.get("email") or "", "plano": a.get("plano") or "",
+            item = {"id": a.get("user_id"), "nome": (u.get("user_metadata") or {}).get("nome") or "", "email": u.get("email") or "", "plano": a.get("plano") or "",
                     "quando": quando(a.get("acesso_ate")), "app": APPS.get(a.get("app"), a.get("app") or "")}
             (ev["testes"] if a.get("plano") == "teste" else ev["vencidos"]).append(item)
     except Exception as e:
@@ -138,6 +144,8 @@ def eventos(desde, ate):
     try:
         filtro = f"and=(criado_em.gt.{iso(desde)},criado_em.lte.{iso(ate)})"
         for r in sb("/rest/v1/recados?select=nome,email,texto,criado_em&order=criado_em.asc&" + filtro) or []:
+            if (r.get("texto") or "").startswith(MARCA_SINO):  # avisos que o próprio vigia colocou no sino
+                continue
             ev["recados"].append({"nome": r.get("nome") or "", "email": r.get("email") or "", "texto": r.get("texto") or "", "quando": quando(r.get("criado_em"))})
     except Exception as e:
         print("Aviso: não consegui ler os recados:", type(e).__name__)
@@ -202,6 +210,25 @@ def manda_whatsapp(assunto, texto):
     return True
 
 
+def sino(ev):
+    """Coloca os avisos também no sino do Planner (recados do administrador)."""
+    linhas = []
+    for c in ev["cadastros"]:
+        linhas.append((c, f"Novo cadastro no {c['app']}" + (f", indicado por {c['indicou']}" if c["indicou"] else "") + ". O período de teste começa no primeiro uso."))
+    for t in ev["testes"]:
+        linhas.append((t, f"O período de teste do {t.get('app', 'CruzOn Planner')} terminou. Bom momento para oferecer a assinatura."))
+    for t in ev["vencidos"]:
+        linhas.append((t, f"O plano {t['plano'] or ''} do {t.get('app', 'CruzOn Planner')} venceu.".replace("plano  do", "plano do")))
+    corpo = [{"user_id": x.get("id"), "nome": x.get("nome") or None, "email": x.get("email") or None, "texto": MARCA_SINO + txt} for x, txt in linhas if x.get("id")]
+    if not corpo:
+        return
+    try:
+        sb("/rest/v1/recados", corpo)
+        print(f"Sino: {len(corpo)} aviso(s).")
+    except Exception as e:
+        print("Aviso: não consegui colocar no sino:", type(e).__name__)
+
+
 def main():
     if not env("SUPABASE_SERVICE_KEY"):
         print("Falta o segredo SUPABASE_SERVICE_KEY. Nada a fazer.")
@@ -211,7 +238,12 @@ def main():
     ev = eventos(desde, agora)
     total, assunto, texto, html = monta(ev)
     print(f"Janela: {iso(desde)} a {iso(agora)} · " + ", ".join(f"{k}: {len(v)}" for k, v in ev.items()))
-    if not total:
+    teste = env("AVISO_TESTE").lower() == "true"
+    if teste and not total:
+        assunto = "CruzOn: teste do vigia (tudo funcionando)"
+        texto = f"Este é um e-mail de teste. O vigia conseguiu ler o Supabase e enviar e-mail.\nNa última janela ({br(desde)} a {br(agora)}) não houve novidades."
+        html = f"<div style='font-family:Arial,sans-serif;color:#263746'><h3 style='color:#0C1F2B'>✅ O vigia está funcionando</h3><p>{escape(texto)}</p><p>A partir de agora você recebe aqui os cadastros novos, os testes que terminam, os planos que vencem e os avisos de pagamento por Pix.</p></div>"
+    elif not total:
         return 0
     configurado = bool(env("GMAIL_APP_PASSWORD") or env("CALLMEBOT_APIKEY"))
     enviou = False
@@ -220,6 +252,8 @@ def main():
             enviou = envio() or enviou
         except Exception as e:
             print("Falha ao enviar:", type(e).__name__)
+    if total and (enviou or not configurado):
+        sino(ev)
     # se havia como enviar e nada saiu, a execução falha e a próxima tenta de novo a mesma janela
     return 1 if configurado and not enviou else 0
 
