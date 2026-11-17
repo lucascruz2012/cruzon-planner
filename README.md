@@ -1,6 +1,10 @@
 # CRUZON Planner RH
 
 > Neste repositório também está o **CruzInvest** (pasta [`cruzinvest/`](cruzinvest/README.md)), app de acompanhamento da carteira de investimentos.
+>
+> E o **CruzOn Finance** (pasta [`finance/`](finance/README.md)), gestão financeira pessoal: receitas, despesas, cartões, orçamentos e metas. Endereço: `https://lucascruz2012.github.io/cruzon-planner/finance/`
+>
+> **Página de apresentação** dos três apps (para indicações): [`conheca/`](conheca/index.html) · **Avisos para o administrador** por e-mail/WhatsApp: [`avisos/LEIA-ME.md`](avisos/LEIA-ME.md) · **Pix na assinatura**: rode [`supabase/14-pix.sql`](supabase/14-pix.sql) uma vez. **Assinatura do Finance e do CruzInvest** (teste e acesso por app): rode [`supabase/15-acesso-por-app.sql`](supabase/15-acesso-por-app.sql) uma vez. **Teste automático no Planner** (sem precisar liberar): rode [`supabase/16-planner-teste-automatico.sql`](supabase/16-planner-teste-automatico.sql) uma vez. **E-mail em cópia nos avisos**: rode [`supabase/17-aviso-copia.sql`](supabase/17-aviso-copia.sql) uma vez.
 
 Aplicativo de planejamento semanal de atividades de RH/DP — arquivo único, sem instalação e sem servidor.
 

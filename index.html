@@ -359,6 +359,54 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
 .trialbar b{font-weight:700}
 .trialbar .btn{margin-left:auto}
 
+/* ---------- Pix na tela de assinatura ---------- */
+.pwplan{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.pwplan.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(27,175,122,.22);background:var(--surface)}
+.pwpix{display:flex;gap:18px;align-items:center;text-align:left;border:1px solid var(--accent);border-radius:14px;padding:16px;margin:0 0 6px;background:var(--surface-2)}
+.pwpix.hidden{display:none}
+.pwqr{flex:0 0 188px;width:188px;height:188px;background:#fff;border-radius:12px;padding:8px;border:1px solid var(--line)}
+.pwqr svg{width:100%;height:100%;display:block}
+.pwpix-r{flex:1;min-width:0}
+.pwpix-tag{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:800}
+.pwpix-val{font-size:24px;font-weight:800;color:var(--ink);margin:2px 0 8px;letter-spacing:-.5px}
+.pwsteps{margin:0 0 10px;padding-left:18px;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.pwcopia{display:flex;gap:6px;margin-bottom:9px}
+.pwcopia input{flex:1;min-width:0;font:inherit;font-size:11.5px;padding:7px 9px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink-2)}
+.pwpix .zap{width:100%}
+.pwurg{font-size:12.5px;font-weight:700;color:var(--ink);background:var(--good-bg);border-radius:9px;padding:8px 12px;margin:0 auto 14px;display:inline-block}
+@media (max-width:560px){.pwpix{flex-direction:column;text-align:center}.pwsteps{text-align:left}.pwqr{flex-basis:auto}}
+
+/* ---------- Acesso por app (administrador) ---------- */
+.planos3{display:flex;flex-direction:column;gap:5px}
+.planos3>div{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.planos3 small{font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:700}
+.acwrap{position:fixed;inset:0;z-index:9997;background:rgba(12,31,43,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.acbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);width:min(620px,100%);padding:16px 18px;max-height:92vh;overflow:auto}
+.acbox header{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.acbox header b{font-size:16px;color:var(--ink)}
+.acbox header span{color:var(--ink-2);font-size:13px}
+.acrow{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:8px;background:var(--surface-2)}
+.acnome b{display:block;font-size:13.5px;margin-bottom:3px;color:var(--ink)}
+.acbtns{display:flex;gap:6px;flex-wrap:wrap}
+.acbox footer{display:flex;justify-content:flex-end;margin-top:6px}
+
+/* ---------- Família CruzOn e indicação ---------- */
+.ecos{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+.ecos h4{margin:0 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);text-align:center}
+.ecos .ecosub{font-size:12.5px;color:var(--ink-2);text-align:center;margin:0 0 12px}
+.ecogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.eco{display:flex;gap:11px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--surface-2);text-align:left;color:inherit;text-decoration:none}
+.eco img{width:46px;height:46px;border-radius:11px;flex:0 0 46px;box-shadow:0 3px 10px rgba(12,31,43,.18)}
+.eco b{display:block;font-size:13.5px;color:var(--ink)}
+.eco small{display:block;font-size:11.5px;color:var(--ink-2);line-height:1.35}
+.eco .ecolk{display:flex;gap:10px;margin-top:5px;font-size:11.5px;font-weight:700}
+.eco .ecolk a{color:var(--accent);text-decoration:none}
+.eco .ecolk a:hover{text-decoration:underline}
+.eco.aqui{border-color:var(--accent)}
+.eco .aqui-tag{font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.6px}
+.indica{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.indica input{flex:1 1 260px;min-width:0;font:inherit;font-size:12.5px;padding:8px 10px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface-2);color:var(--ink)}
+
 /* ---------- Falar com o administrador ---------- */
 .pwcontato{margin-top:20px;border-top:1px solid var(--line);padding-top:16px;text-align:left}
 .pwcontato h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);text-align:center}
@@ -616,6 +664,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <p class="note" style="border:0;padding-top:8px;margin-top:8px">Assim que o administrador liberar, entre normalmente com o mesmo e-mail e senha.</p>
         <button class="primary" type="button" id="btnSairPendente">Voltar ao login</button>
       </div>
+      <p class="note" style="border:0;padding:0;margin:10px 0 0;text-align:center"><a class="lgpdlnk" id="lgConheca" href="conheca/?app=planner" style="text-decoration:none">Ainda não conhece? Veja como o app funciona →</a></p>
       <p class="note" id="lgNote">Seus dados ficam na nuvem, ligados à sua conta: você entra de qualquer computador e encontra tudo como deixou.</p>
       <p class="note" style="border:0;padding-top:6px;margin-top:6px;text-align:center"><button type="button" class="lgpdlnk" id="lgpdAbrirLogin">Aviso de Privacidade e Termos de Uso</button></p>
   </div>
@@ -653,6 +702,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
     <img id="pwLogo" alt="">
     <h2 id="pwTit">Seu período de teste terminou</h2>
     <p class="pwsub" id="pwSub">Suas tarefas continuam guardadas e intactas. Para voltar a editar, escolha um plano abaixo.</p>
+    <div class="pwurg hidden" id="pwUrg">Pague com Pix em 1 minuto e volte a editar ainda hoje.</div>
     <p class="pwnote hidden" id="pwPlanosVazio" style="font-size:13px;color:var(--ink-2);margin:0 0 16px">Os planos ainda não foram publicados. Use o campo abaixo para falar com o administrador.</p>
     <div class="pwplans">
       <div class="pwplan" id="pwMensalBox">
@@ -666,6 +716,21 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <div class="pwval" id="pwAnualVal">—</div>
         <div class="pwobs" id="pwAnualObs">Um pagamento por ano, com desconto.</div>
         <button class="btn pri" id="pwAnual">Assinar anual</button>
+      </div>
+    </div>
+    <div class="pwpix hidden" id="pwPix">
+      <div class="pwqr" id="pwQr" role="img" aria-label="QR code do Pix"></div>
+      <div class="pwpix-r">
+        <div class="pwpix-tag">Pague com Pix · <span id="pwPixPlano">plano anual</span></div>
+        <div class="pwpix-val" id="pwPixVal">—</div>
+        <ol class="pwsteps">
+          <li>No app do seu banco, escolha <b>Pix › Ler QR code</b> ou use o <b>Pix copia e cola</b>.</li>
+          <li>Confira o valor e o recebedor <b id="pwPixNome"></b> e pague.</li>
+          <li>Toque em <b>Enviar comprovante</b>. O acesso é liberado assim que o pagamento é confirmado.</li>
+        </ol>
+        <div class="pwcopia"><input id="pwPixCod" readonly aria-label="Código Pix copia e cola"><button class="btn sm" id="pwPixCopiar" type="button">Copiar código</button></div>
+        <button class="btn zap" id="pwComprovante" type="button">Já paguei: enviar comprovante no WhatsApp</button>
+        <p class="pwnote" id="pwPixOk" style="margin:8px 0 0;text-align:center"></p>
       </div>
     </div>
     <div class="pwcontato" id="pwContato">
@@ -684,6 +749,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <button class="btn" id="pwSair">Sair</button>
     </div>
     <p class="pwnote" id="pwRecado">Já pagou? O acesso é liberado assim que o pagamento é confirmado. Se demorar, fale com o administrador.</p>
+    <div class="ecos" id="pwEcos"></div>
   </div>
 </div>
 
@@ -925,7 +991,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <h3>Perfis de acesso <span class="badge">admin</span></h3>
       <div style="overflow:auto"><table class="tbl" id="tblUsers"></table></div>
       <div style="padding:12px 14px 14px">
-        <p class="note" style="margin:0">Novas pessoas criam o próprio acesso pela tela de login e ficam <b>aguardando liberação</b> — aparecem aqui destacadas em amarelo e só entram depois que você clicar em <b>Liberar acesso</b>. Desativar bloqueia na hora, sem apagar nada. Para excluir a conta em definitivo, use o painel do Supabase.</p>
+        <p class="note" style="margin:0">Quem se cadastra já entra e começa o <b>período de teste</b> no primeiro uso de cada app; você recebe o aviso no sino e por e-mail. Quem estiver <b>aguardando</b> (cadastros antigos) aparece em amarelo e só entra depois que você clicar em <b>Liberar acesso</b>. <b>Desativar</b> bloqueia na hora, sem apagar nada. Para excluir a conta em definitivo, use o painel do Supabase.</p>
       </div>
     </div>
 
@@ -946,17 +1012,29 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <label style="display:flex;align-items:flex-start;gap:9px;cursor:pointer">
           <input type="checkbox" id="cfgTeste" style="margin-top:3px">
           <span><b>Novos usuários começam com período de teste</b><br>
-          <span class="note" style="border:0;padding:0;margin:0">Quando você liberar o acesso de alguém, a contagem começa. Terminado o prazo, a pessoa continua vendo e exportando os dados, mas só volta a editar assinando um plano. Com a chave desligada, quem você liberar usa sem prazo, como é hoje.</span></span>
+          <span class="note" style="border:0;padding:0;margin:0">Vale para os três apps: o teste de cada app começa no primeiro uso, sem precisar de liberação (cadastros antigos que estavam aguardando começam quando você libera). Terminado o prazo, a pessoa continua vendo e exportando os dados, mas só volta a editar assinando um plano. Com a chave desligada, quem você liberar usa sem prazo, como é hoje.</span></span>
         </label>
         <div class="formgrid" style="margin-top:14px">
           <div class="field"><label>Dias de teste</label><input id="cfgTesteDias" type="number" min="1" max="365" step="1"></div>
-          <div class="field"><label>Preço mensal (R$)</label><input id="cfgPrecoMes" type="number" min="0" step="0.01"></div>
-          <div class="field"><label>Preço anual (R$)</label><input id="cfgPrecoAno" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>Planner: preço mensal (R$)</label><input id="cfgPrecoMes" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>Planner: preço anual (R$)</label><input id="cfgPrecoAno" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>Finance: preço mensal (R$)</label><input id="cfgPrecoMesFin" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>Finance: preço anual (R$)</label><input id="cfgPrecoAnoFin" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>CruzInvest: preço mensal (R$)</label><input id="cfgPrecoMesInv" type="number" min="0" step="0.01"></div>
+          <div class="field"><label>CruzInvest: preço anual (R$)</label><input id="cfgPrecoAnoInv" type="number" min="0" step="0.01"></div>
           <div class="field"><label>Recado na tela de assinatura</label><input id="cfgRecado" type="text" placeholder="opcional"></div>
           <div class="field"><label>WhatsApp para contato</label><input id="cfgZap" type="text" inputmode="numeric" placeholder="5531999998888"><span class="note" style="border:0;padding:4px 0 0;margin:0">Só números, com país e DDD. Deixe vazio para esconder o botão.</span></div>
           <div class="field"><label>Link de pagamento mensal</label><input id="cfgUrlMes" type="url" placeholder="https://..."></div>
           <div class="field"><label>Link de pagamento anual</label><input id="cfgUrlAno" type="url" placeholder="https://..."></div>
+          <div class="field"><label>E-mail em cópia nos avisos</label><input id="cfgAvisoCc" type="text" inputmode="email" placeholder="opcional; separe vários com vírgula"><span class="note" style="border:0;padding:4px 0 0;margin:0">Recebe também os e-mails do vigia: cadastros, testes que terminam, planos vencidos e pagamentos por Pix.</span></div>
         </div>
+        <div class="formgrid" style="margin-top:4px;border-top:1px solid var(--line);padding-top:12px">
+          <div class="field"><label>Tipo da chave Pix</label><select id="cfgPixTipo"><option value="cel">Celular</option><option value="doc">CPF ou CNPJ</option><option value="email">E-mail</option><option value="evp">Chave aleatória</option></select></div>
+          <div class="field"><label>Chave Pix</label><input id="cfgPix" type="text" placeholder="Deixe vazio para não mostrar o Pix" autocomplete="off"></div>
+          <div class="field"><label>Nome de quem recebe</label><input id="cfgPixNome" type="text" maxlength="25" placeholder="Como aparece no banco"></div>
+          <div class="field"><label>Cidade de quem recebe</label><input id="cfgPixCidade" type="text" maxlength="15" placeholder="Ex.: Marilia"></div>
+        </div>
+        <p class="note" style="margin:6px 0 0">Com a chave Pix preenchida, a tela de assinatura mostra o <b>QR code com o valor do plano</b> e o botão para a pessoa mandar o comprovante no seu WhatsApp. Os links de pagamento, se preenchidos, continuam valendo no lugar do Pix.</p>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center">
           <button class="btn pri" id="btnSalvarPlanos">Salvar</button>
           <button class="btn" id="btnVerPaywall">Ver como o usuário vê</button>
@@ -982,6 +1060,18 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
             <span class="note" id="relTxt" style="border:0;padding:0;margin:0"></span>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="card" id="cardIndica" style="margin-bottom:12px">
+      <h3>Indique para um amigo</h3>
+      <div style="padding:14px">
+        <p class="note" style="margin-top:0">Gostou do CruzOn? Mande o seu link para amigos e colegas. Quem abrir conhece o app com as telas de verdade e cria a conta já com a sua indicação.</p>
+        <div class="indica"><input id="indLink" readonly aria-label="Seu link de indicação">
+          <button class="btn" id="indCopiar" type="button">Copiar link</button>
+          <button class="btn zap" id="indZap" type="button">Enviar no WhatsApp</button>
+          <button class="btn hidden" id="indShare" type="button">Compartilhar…</button></div>
+        <div class="ecos" id="cfgEcos" style="margin-top:16px"></div>
       </div>
     </div>
 
@@ -1050,6 +1140,1826 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
 </div>
 <div class="tip" id="tip"></div>
 <div class="toast" id="toast"></div>
+<script>/* ===== assinatura.js (cópia de cruzon-finance-projeto/src/assinatura.js) ===== */
+/* CruzOn: teste, assinatura e Pix por app (CruzOn Finance e CruzInvest).
+   Fonte única: cruzon-finance-projeto/src/assinatura.js. O CruzInvest usa uma cópia idêntica
+   (cruzon-planner/cruzinvest/index.html, bloco "assinatura.js"): ao mudar aqui, copie para lá.
+   Depende do banco: supabase/15-acesso-por-app.sql (funções app_acesso e app_planos).
+   Uso: const est = await CruzonAssinatura.consulta({app:'finance', sb, uid});
+        if (CruzonAssinatura.bloqueia(est)) CruzonAssinatura.paywall({...}); */
+window.CruzonAssinatura = (function () {
+  'use strict';
+  const SITE = 'https://lucascruz2012.github.io/cruzon-planner/';
+  const NOMES = { finance: 'CruzOn Finance', invest: 'CruzInvest', planner: 'CruzOn Planner' };
+  const $ = (s, r) => (r || document).querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const moeda = v => (v === null || v === undefined || v === '' || isNaN(+v)) ? '—' : 'R$ ' + Number(v).toFixed(2).replace('.', ',');
+
+  /* ---------- Pix (BR Code do Banco Central) ---------- */
+  const campo = (id, v) => { v = String(v); return id + String(v.length).padStart(2, '0') + v; };
+  const txt = (s, max) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9 ]/g, '').toUpperCase().trim().slice(0, max).trim();
+  function crc16(s) { let c = 0xFFFF; for (let i = 0; i < s.length; i++) { c ^= s.charCodeAt(i) << 8; for (let j = 0; j < 8; j++) c = (c & 0x8000) ? ((c << 1) ^ 0x1021) & 0xFFFF : (c << 1) & 0xFFFF; } return c.toString(16).toUpperCase().padStart(4, '0'); }
+  function pix(chave, nome, cidade, valor, txid) {
+    const p = campo('00', '01') + campo('26', campo('00', 'br.gov.bcb.pix') + campo('01', chave)) + campo('52', '0000') + campo('53', '986') +
+      (valor > 0 ? campo('54', Number(valor).toFixed(2)) : '') + campo('58', 'BR') + campo('59', txt(nome, 25) || 'CRUZON') + campo('60', txt(cidade, 15) || 'BRASIL') +
+      campo('62', campo('05', String(txid || '***').replace(/[^A-Za-z0-9]/g, '').slice(0, 25) || '***')) + '6304';
+    return p + crc16(p);
+  }
+  function qr(texto) { try { const q = qrcode(0, 'M'); q.addData(texto); q.make(); return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); } catch (e) { return ''; } }
+
+  /* ---------- situação do acesso ---------- */
+  function situacao(a) {
+    if (!a) return 'livre';
+    if (a.bloqueado) return 'bloqueado';
+    if (a.isento) return 'cortesia';
+    if (!a.acesso_ate) return 'livre';
+    return new Date(a.acesso_ate) > new Date() ? (a.plano === 'teste' ? 'teste' : 'ativo') : 'vencido';
+  }
+  const chave = (app, uid) => 'cruzon_acesso_' + app + '_' + uid;
+  /* sb(path, opts) é a função do app que já envia a sessão do Supabase */
+  async function consulta({ app, sb, uid }) {
+    let a = null, planos = null, origem = 'nuvem';
+    try {
+      a = await sb('/rest/v1/rpc/app_acesso', { method: 'POST', body: JSON.stringify({ p_app: app }) });
+      try { planos = await sb('/rest/v1/rpc/app_planos', { method: 'POST', body: JSON.stringify({ p_app: app }) }); } catch (e) { }
+      try { localStorage.setItem(chave(app, uid), JSON.stringify({ a, planos, em: Date.now() })); } catch (e) { }
+    } catch (e) {
+      const semFuncao = e && (e.status === 404 || /PGRST202|42883|Could not find the function/i.test((e.code || '') + ' ' + e.message));
+      if (semFuncao) return { app, sit: 'livre', semBanco: true };
+      try { const c = JSON.parse(localStorage.getItem(chave(app, uid)) || 'null'); if (c) { a = c.a; planos = c.planos; origem = 'cópia'; } } catch (x) { }
+      if (!a) return { app, sit: 'livre', offline: true };
+    }
+    const fim = a && a.acesso_ate ? new Date(a.acesso_ate) : null;
+    return { app, a, planos: planos || {}, origem, sit: situacao(a), fim, dias: fim ? Math.ceil((fim - new Date()) / 864e5) : null };
+  }
+  const bloqueia = est => !!est && (est.sit === 'vencido' || est.sit === 'bloqueado');
+
+  /* ---------- estilos (uma vez) ---------- */
+  function estilos() {
+    if ($('#cza-css')) return;
+    const st = document.createElement('style'); st.id = 'cza-css';
+    st.textContent = `
+.cza{position:fixed;inset:0;z-index:9990;background:rgba(12,31,43,.72);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:18px;overflow:auto;font-family:Montserrat,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#0C1F2B}
+.cza-box{background:#fff;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.35);width:min(720px,100%);padding:24px 22px 20px;text-align:center;margin:auto}
+.cza-ic{width:58px;height:58px;border-radius:15px;margin:0 auto 10px;display:block;box-shadow:0 8px 20px rgba(12,31,43,.2)}
+.cza h2{margin:0 0 6px;font-size:20px}
+.cza .sub{margin:0 auto 14px;font-size:13.5px;color:#4A5B68;max-width:520px;line-height:1.55}
+.cza .urg{display:inline-block;font-size:12.5px;font-weight:700;background:#DDF3E6;color:#14532D;border-radius:9px;padding:8px 12px;margin:0 0 14px}
+.cza-plans{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.cza-plan{flex:1 1 200px;max-width:270px;border:1px solid #E1E7EC;border-radius:13px;padding:14px;background:#F6F9FB;cursor:pointer;transition:.15s;font:inherit;color:inherit}
+.cza-plan.sel{border-color:#00C853;box-shadow:0 0 0 3px rgba(0,200,83,.2);background:#fff}
+.cza-plan small{display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#6B7B87;font-weight:800}
+.cza-plan b{display:block;font-size:24px;margin:5px 0 2px;letter-spacing:-.5px}
+.cza-plan b i{font-style:normal;font-size:12px;color:#6B7B87;font-weight:600}
+.cza-plan span{display:block;font-size:11.5px;color:#4A5B68;min-height:30px}
+.cza-pix[hidden],.cza-row[hidden]{display:none}
+.cza-pix{display:flex;gap:16px;align-items:center;text-align:left;border:1px solid #00C853;border-radius:14px;padding:14px;background:#F6F9FB;margin-bottom:6px}
+.cza-qr{flex:0 0 176px;width:176px;height:176px;background:#fff;border:1px solid #E1E7EC;border-radius:12px;padding:8px}
+.cza-qr svg{width:100%;height:100%;display:block}
+.cza-pix .r{flex:1;min-width:0}
+.cza-tag{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:#1E7A4E;font-weight:800}
+.cza-pix .val{font-size:22px;font-weight:800;margin:2px 0 8px}
+.cza-pix ol{margin:0 0 10px;padding-left:18px;font-size:12.5px;color:#4A5B68;line-height:1.55}
+.cza-cp{display:flex;gap:6px;margin-bottom:8px}
+.cza-cp input{flex:1;min-width:0;font:inherit;font-size:11.5px;padding:8px 9px;border:1px solid #C7D1D9;border-radius:8px;color:#4A5B68;background:#fff}
+.cza-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:inherit;font-weight:700;font-size:13px;border-radius:10px;padding:10px 14px;border:1px solid #C7D1D9;background:#fff;color:#0C1F2B;cursor:pointer;text-decoration:none}
+.cza-btn.pri{background:#1E7A4E;border-color:#1E7A4E;color:#fff}
+.cza-btn.zap{background:#25D366;border-color:#25D366;color:#0b3d21;width:100%}
+.cza-btn.sm{padding:7px 10px;font-size:12px}
+.cza .ok{font-size:12px;color:#1E7A4E;margin:8px 0 0;text-align:center;min-height:1em}
+.cza-ct{margin-top:16px;border-top:1px solid #E1E7EC;padding-top:14px;text-align:left}
+.cza-ct h4,.cza-fam h4{margin:0 0 8px;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#6B7B87;text-align:center}
+.cza-ct textarea{width:100%;min-height:64px;font:inherit;font-size:13px;padding:9px 11px;border:1px solid #C7D1D9;border-radius:9px;resize:vertical;box-sizing:border-box}
+.cza-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:9px}
+.cza-foot{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.cza-vazio{font-size:13px;color:#4A5B68;margin:0 0 12px}
+.cza-faixa{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:200;display:flex;gap:10px;align-items:center;background:#0C1F2B;color:#fff;border-radius:12px;padding:9px 10px 9px 14px;box-shadow:0 10px 30px rgba(0,0,0,.3);font:600 12.5px Montserrat,system-ui,sans-serif;max-width:calc(100% - 24px)}
+.cza-faixa button{font:inherit;font-weight:800;background:#00C853;color:#0C1F2B;border:0;border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap}
+.cza-faixa .x{background:transparent;color:#A9BCC7;padding:4px 6px}
+.cza-ro{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:300;background:#B07408;color:#fff;font:700 12.5px Montserrat,system-ui,sans-serif;padding:8px 8px 8px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:flex;gap:10px;align-items:center;white-space:nowrap}
+.cza-ro button{font:inherit;font-weight:800;background:#fff;color:#0C1F2B;border:0;border-radius:8px;padding:6px 10px;cursor:pointer}
+@media (max-width:560px){.cza-pix{flex-direction:column;text-align:center}.cza-pix ol{text-align:left}.cza-faixa,.cza-ro{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}`;
+    document.head.appendChild(st);
+  }
+
+  /* ---------- tela de assinatura ---------- */
+  let plano = 'anual';
+  function fecha() { const e = $('#cza'); if (e) e.remove(); }
+  /* o: {est, nomeApp, icone, me:{id,email,nome}, sb, preview, onExport, onSair, onVer} */
+  function paywall(o) {
+    estilos(); fecha();
+    const est = o.est || {}, pl = est.planos || {}, nome = o.nomeApp || NOMES[est.app] || 'CruzOn';
+    const temM = +pl.preco_mensal > 0 || !!pl.url_mensal, temA = +pl.preco_anual > 0 || !!pl.url_anual, temPix = !!(pl.pix_chave && String(pl.pix_chave).trim());
+    if (!temA) plano = 'mensal'; else if (!temM) plano = 'anual';
+    const bloq = est.sit === 'bloqueado';
+    const tit = o.titulo ? o.titulo : o.preview ? 'Planos do ' + nome : bloq ? 'Seu acesso ao ' + nome + ' está pausado' : (est.a && est.a.plano === 'teste' ? 'Seu período de teste do ' + nome + ' terminou' : 'Sua assinatura do ' + nome + ' venceu');
+    const sub = o.sub ? o.sub : o.preview ? 'É assim que a tela aparece para quem está com o acesso vencido.' : bloq ? 'Seus dados continuam guardados. Fale com o administrador para voltar a usar.' : 'Seus dados continuam guardados e intactos. Para voltar a lançar e editar, escolha um plano.';
+    let eco = '';
+    if (pl.preco_anual > 0 && pl.preco_mensal > 0) { const e = Math.round((1 - pl.preco_anual / 12 / pl.preco_mensal) * 100); if (e > 0) eco = 'Equivale a ' + moeda(pl.preco_anual / 12) + ' por mês: ' + e + '% de economia.'; }
+    const el = document.createElement('div'); el.id = 'cza'; el.className = 'cza'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+    el.innerHTML = `<div class="cza-box">
+      ${o.icone ? `<img class="cza-ic" src="${o.icone}" alt="">` : ''}
+      <h2>${esc(tit)}</h2><p class="sub">${esc(sub)}</p>
+      ${!bloq && temPix && (temM || temA) ? '<div class="urg">Pague com Pix em 1 minuto e volte a usar ainda hoje.</div>' : ''}
+      ${!bloq && (temM || temA) ? `<div class="cza-plans">
+        ${temM ? `<button type="button" class="cza-plan" data-pl="mensal"><small>Mensal</small><b>${moeda(pl.preco_mensal)} <i>/mês</i></b><span>Cobrança mês a mês. Cancele quando quiser.</span></button>` : ''}
+        ${temA ? `<button type="button" class="cza-plan" data-pl="anual"><small>Anual</small><b>${moeda(pl.preco_anual)} <i>/ano</i></b><span>${esc(eco || 'Um pagamento por ano, com desconto.')}</span></button>` : ''}
+      </div>` : (!bloq ? '<p class="cza-vazio">Os planos ainda não foram publicados. Use o campo abaixo para falar com o administrador.</p>' : '')}
+      ${!bloq && temPix && (temM || temA) ? `<div class="cza-pix"><div class="cza-qr" id="cza-qr" role="img" aria-label="QR code do Pix"></div><div class="r">
+        <div class="cza-tag">Pague com Pix · <span id="cza-pl"></span></div><div class="val" id="cza-val"></div>
+        <ol><li>No app do seu banco, escolha <b>Pix › Ler QR code</b> ou use o <b>Pix copia e cola</b>.</li><li>Confira o valor e o recebedor${pl.pix_nome ? ' <b>(' + esc(pl.pix_nome) + ')</b>' : ''} e pague.</li><li>Toque em <b>Enviar comprovante</b>. O acesso é liberado assim que o pagamento é confirmado.</li></ol>
+        <div class="cza-cp"><input id="cza-cod" readonly aria-label="Código Pix copia e cola"><button type="button" class="cza-btn sm" id="cza-copiar">Copiar código</button></div>
+        <button type="button" class="cza-btn zap" id="cza-comp">${pl.whatsapp ? 'Já paguei: enviar comprovante no WhatsApp' : 'Já paguei: avisar o administrador'}</button>
+        <p class="ok" id="cza-ok"></p></div></div>` : ''}
+      <div class="cza-row" id="cza-linkbox" hidden><a class="cza-btn pri" id="cza-link" target="_blank" rel="noopener">Ir para o pagamento</a></div>
+      <div class="cza-ct"><h4>Precisa falar comigo?</h4><textarea id="cza-msg" maxlength="2000" placeholder="Escreva aqui sua dúvida sobre planos, pagamento ou prazo."></textarea>
+        <div class="cza-row"><button type="button" class="cza-btn pri" id="cza-env">Enviar recado</button>${pl.whatsapp ? '<button type="button" class="cza-btn" id="cza-zap" style="background:#25D366;border-color:#25D366;color:#0b3d21">Falar no WhatsApp</button>' : ''}</div>
+        <p class="ok" id="cza-ok2"></p></div>
+      <div class="cza-foot">
+        ${o.onVer ? `<button type="button" class="cza-btn" id="cza-ver">${o.preview ? 'Fechar' : 'Ver meus dados (só leitura)'}</button>` : ''}
+        ${o.onExport && !o.preview ? '<button type="button" class="cza-btn" id="cza-exp">Baixar backup</button>' : ''}
+        ${o.onSair && !o.preview ? '<button type="button" class="cza-btn" id="cza-sair">Sair</button>' : ''}
+      </div>
+      ${pl.recado ? `<p class="sub" style="margin:12px auto 0;font-size:12px">${esc(pl.recado)}</p>` : ''}
+    </div>`;
+    document.body.appendChild(el);
+    const pintaPix = () => {
+      el.querySelectorAll('.cza-plan').forEach(b => b.classList.toggle('sel', b.dataset.pl === plano));
+      const url = pl['url_' + plano], lb = $('#cza-linkbox', el), px = $('.cza-pix', el);
+      lb.hidden = !url; if (url) $('#cza-link', el).href = url; if (px) px.hidden = !!url;
+      if (!$('#cza-qr', el) || url) return;
+      const v = +(plano === 'anual' ? pl.preco_anual : pl.preco_mensal) || 0;
+      const cod = pix(pl.pix_chave, pl.pix_nome, pl.pix_cidade, v, (est.app || 'CRUZON').toUpperCase() + (plano === 'anual' ? 'ANUAL' : 'MENSAL'));
+      $('#cza-qr', el).innerHTML = qr(cod); $('#cza-cod', el).value = cod;
+      $('#cza-pl', el).textContent = 'plano ' + plano; $('#cza-val', el).textContent = moeda(v); $('#cza-ok', el).textContent = '';
+    };
+    pintaPix();
+    el.querySelectorAll('.cza-plan').forEach(b => b.onclick = () => { plano = b.dataset.pl; pintaPix(); });
+    const recado = async texto => { if (!o.sb || !o.me) return; await o.sb('/rest/v1/recados', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ user_id: o.me.id, nome: o.me.nome || null, email: o.me.email || null, texto }) }); };
+    const zap = t => window.open('https://wa.me/' + String(pl.whatsapp).replace(/\D/g, '') + '?text=' + encodeURIComponent(t), '_blank', 'noopener');
+    const quem = o.me ? ((o.me.nome || '') + ' (' + (o.me.email || '') + ')') : '';
+    const cp = $('#cza-copiar', el); if (cp) cp.onclick = () => { const i = $('#cza-cod', el); i.select(); const ok = () => { $('#cza-ok', el).textContent = 'Código copiado. Cole no app do banco, em Pix › Copia e cola.'; }; try { navigator.clipboard.writeText(i.value).then(ok, () => { document.execCommand('copy'); ok(); }); } catch (e) { document.execCommand('copy'); ok(); } };
+    const comp = $('#cza-comp', el); if (comp) comp.onclick = async () => {
+      const v = moeda(plano === 'anual' ? pl.preco_anual : pl.preco_mensal);
+      if (pl.whatsapp) zap('Olá! Paguei o plano ' + plano + ' do ' + nome + ' (' + v + ') por Pix. Sou ' + quem + '. Segue o comprovante:');
+      try { await recado('💰 [' + nome + '] Pagamento por Pix informado: plano ' + plano + ' (' + v + ').' + (pl.whatsapp ? ' O comprovante foi enviado pelo WhatsApp.' : '')); } catch (e) { }
+      $('#cza-ok', el).textContent = pl.whatsapp ? 'Anexe a imagem do comprovante na conversa do WhatsApp que abriu. Assim que o pagamento for confirmado, o acesso é liberado.' : 'Aviso enviado. Assim que o pagamento for confirmado, o acesso é liberado.';
+    };
+    $('#cza-env', el).onclick = async () => { const t = $('#cza-msg', el).value.trim(); if (!t) return $('#cza-msg', el).focus();
+      try { await recado('[' + nome + '] ' + t); $('#cza-msg', el).value = ''; $('#cza-ok2', el).textContent = 'Recado enviado. Você recebe a resposta por e-mail ou WhatsApp.'; } catch (e) { $('#cza-ok2', el).textContent = 'Não foi possível enviar agora. Tente pelo WhatsApp.'; } };
+    const z = $('#cza-zap', el); if (z) z.onclick = () => zap('Olá! Estou usando o ' + nome + '. Sou ' + quem + '.');
+    const ver = $('#cza-ver', el); if (ver) ver.onclick = () => { fecha(); o.onVer(); };
+    const ex = $('#cza-exp', el); if (ex) ex.onclick = () => o.onExport();
+    const sa = $('#cza-sair', el); if (sa) sa.onclick = () => { fecha(); o.onSair(); };
+  }
+
+  /* faixa discreta nos últimos 5 dias do teste ou do plano */
+  function faixa(est, nomeApp, onPlanos) {
+    estilos(); const v = $('#cza-faixa'); if (v) v.remove();
+    if (!est || !(est.sit === 'teste' || est.sit === 'ativo') || est.dias === null || est.dias > 5) return;
+    try { if (sessionStorage.getItem('cza-faixa-' + est.app) === '1') return; } catch (e) { }
+    const el = document.createElement('div'); el.id = 'cza-faixa'; el.className = 'cza-faixa';
+    el.innerHTML = `<span>${est.sit === 'teste' ? 'Seu teste do ' + esc(nomeApp) + ' termina' : 'Sua assinatura vence'} ${est.dias <= 0 ? '<b>hoje</b>' : est.dias === 1 ? '<b>amanhã</b>' : 'em <b>' + est.dias + ' dias</b>'}.</span><button type="button">Ver planos</button><button type="button" class="x" aria-label="Fechar">✕</button>`;
+    el.querySelector('button').onclick = onPlanos;
+    el.querySelector('.x').onclick = () => { el.remove(); try { sessionStorage.setItem('cza-faixa-' + est.app, '1'); } catch (e) { } };
+    document.body.appendChild(el);
+  }
+  /* aviso no topo enquanto a pessoa navega só para ler */
+  function somenteLeitura(on, onPlanos) {
+    estilos(); const v = $('#cza-ro'); if (v) v.remove(); if (!on) return;
+    const el = document.createElement('div'); el.id = 'cza-ro'; el.className = 'cza-ro';
+    el.innerHTML = 'Somente leitura: o acesso venceu <button type="button">Ver planos</button>';
+    el.querySelector('button').onclick = onPlanos; document.body.appendChild(el);
+  }
+  function limpa() { fecha(); ['#cza-faixa', '#cza-ro'].forEach(s => { const e = $(s); if (e) e.remove(); }); }
+  return { consulta, bloqueia, paywall, faixa, somenteLeitura, limpa, fecha, pix, situacao, moeda };
+})();
+
+</script>
+<script>/* qrcode-generator 1.4.4 (Kazuhiko Arase, licença MIT): QR code do Pix */
+var qrcode = function() {
+/**
+* qrcode
+* @param typeNumber 1 to 40
+* @param errorCorrectionLevel 'L','M','Q','H'
+*/
+var qrcode = function(typeNumber, errorCorrectionLevel) {
+var PAD0 = 0xEC;
+var PAD1 = 0x11;
+var _typeNumber = typeNumber;
+var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+var _modules = null;
+var _moduleCount = 0;
+var _dataCache = null;
+var _dataList = [];
+var _this = {};
+var makeImpl = function(test, maskPattern) {
+_moduleCount = _typeNumber * 4 + 17;
+_modules = function(moduleCount) {
+var modules = new Array(moduleCount);
+for (var row = 0; row < moduleCount; row += 1) {
+modules[row] = new Array(moduleCount);
+for (var col = 0; col < moduleCount; col += 1) {
+modules[row][col] = null;
+}
+}
+return modules;
+}(_moduleCount);
+setupPositionProbePattern(0, 0);
+setupPositionProbePattern(_moduleCount - 7, 0);
+setupPositionProbePattern(0, _moduleCount - 7);
+setupPositionAdjustPattern();
+setupTimingPattern();
+setupTypeInfo(test, maskPattern);
+if (_typeNumber >= 7) {
+setupTypeNumber(test);
+}
+if (_dataCache == null) {
+_dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+}
+mapData(_dataCache, maskPattern);
+};
+var setupPositionProbePattern = function(row, col) {
+for (var r = -1; r <= 7; r += 1) {
+if (row + r <= -1 || _moduleCount <= row + r) continue;
+for (var c = -1; c <= 7; c += 1) {
+if (col + c <= -1 || _moduleCount <= col + c) continue;
+if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+|| (0 <= c && c <= 6 && (r == 0 || r == 6) )
+|| (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+_modules[row + r][col + c] = true;
+} else {
+_modules[row + r][col + c] = false;
+}
+}
+}
+};
+var getBestMaskPattern = function() {
+var minLostPoint = 0;
+var pattern = 0;
+for (var i = 0; i < 8; i += 1) {
+makeImpl(true, i);
+var lostPoint = QRUtil.getLostPoint(_this);
+if (i == 0 || minLostPoint > lostPoint) {
+minLostPoint = lostPoint;
+pattern = i;
+}
+}
+return pattern;
+};
+var setupTimingPattern = function() {
+for (var r = 8; r < _moduleCount - 8; r += 1) {
+if (_modules[r][6] != null) {
+continue;
+}
+_modules[r][6] = (r % 2 == 0);
+}
+for (var c = 8; c < _moduleCount - 8; c += 1) {
+if (_modules[6][c] != null) {
+continue;
+}
+_modules[6][c] = (c % 2 == 0);
+}
+};
+var setupPositionAdjustPattern = function() {
+var pos = QRUtil.getPatternPosition(_typeNumber);
+for (var i = 0; i < pos.length; i += 1) {
+for (var j = 0; j < pos.length; j += 1) {
+var row = pos[i];
+var col = pos[j];
+if (_modules[row][col] != null) {
+continue;
+}
+for (var r = -2; r <= 2; r += 1) {
+for (var c = -2; c <= 2; c += 1) {
+if (r == -2 || r == 2 || c == -2 || c == 2
+|| (r == 0 && c == 0) ) {
+_modules[row + r][col + c] = true;
+} else {
+_modules[row + r][col + c] = false;
+}
+}
+}
+}
+}
+};
+var setupTypeNumber = function(test) {
+var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+for (var i = 0; i < 18; i += 1) {
+var mod = (!test && ( (bits >> i) & 1) == 1);
+_modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+}
+for (var i = 0; i < 18; i += 1) {
+var mod = (!test && ( (bits >> i) & 1) == 1);
+_modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+}
+};
+var setupTypeInfo = function(test, maskPattern) {
+var data = (_errorCorrectionLevel << 3) | maskPattern;
+var bits = QRUtil.getBCHTypeInfo(data);
+for (var i = 0; i < 15; i += 1) {
+var mod = (!test && ( (bits >> i) & 1) == 1);
+if (i < 6) {
+_modules[i][8] = mod;
+} else if (i < 8) {
+_modules[i + 1][8] = mod;
+} else {
+_modules[_moduleCount - 15 + i][8] = mod;
+}
+}
+for (var i = 0; i < 15; i += 1) {
+var mod = (!test && ( (bits >> i) & 1) == 1);
+if (i < 8) {
+_modules[8][_moduleCount - i - 1] = mod;
+} else if (i < 9) {
+_modules[8][15 - i - 1 + 1] = mod;
+} else {
+_modules[8][15 - i - 1] = mod;
+}
+}
+_modules[_moduleCount - 8][8] = (!test);
+};
+var mapData = function(data, maskPattern) {
+var inc = -1;
+var row = _moduleCount - 1;
+var bitIndex = 7;
+var byteIndex = 0;
+var maskFunc = QRUtil.getMaskFunction(maskPattern);
+for (var col = _moduleCount - 1; col > 0; col -= 2) {
+if (col == 6) col -= 1;
+while (true) {
+for (var c = 0; c < 2; c += 1) {
+if (_modules[row][col - c] == null) {
+var dark = false;
+if (byteIndex < data.length) {
+dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+}
+var mask = maskFunc(row, col - c);
+if (mask) {
+dark = !dark;
+}
+_modules[row][col - c] = dark;
+bitIndex -= 1;
+if (bitIndex == -1) {
+byteIndex += 1;
+bitIndex = 7;
+}
+}
+}
+row += inc;
+if (row < 0 || _moduleCount <= row) {
+row -= inc;
+inc = -inc;
+break;
+}
+}
+}
+};
+var createBytes = function(buffer, rsBlocks) {
+var offset = 0;
+var maxDcCount = 0;
+var maxEcCount = 0;
+var dcdata = new Array(rsBlocks.length);
+var ecdata = new Array(rsBlocks.length);
+for (var r = 0; r < rsBlocks.length; r += 1) {
+var dcCount = rsBlocks[r].dataCount;
+var ecCount = rsBlocks[r].totalCount - dcCount;
+maxDcCount = Math.max(maxDcCount, dcCount);
+maxEcCount = Math.max(maxEcCount, ecCount);
+dcdata[r] = new Array(dcCount);
+for (var i = 0; i < dcdata[r].length; i += 1) {
+dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+}
+offset += dcCount;
+var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+var modPoly = rawPoly.mod(rsPoly);
+ecdata[r] = new Array(rsPoly.getLength() - 1);
+for (var i = 0; i < ecdata[r].length; i += 1) {
+var modIndex = i + modPoly.getLength() - ecdata[r].length;
+ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+}
+}
+var totalCodeCount = 0;
+for (var i = 0; i < rsBlocks.length; i += 1) {
+totalCodeCount += rsBlocks[i].totalCount;
+}
+var data = new Array(totalCodeCount);
+var index = 0;
+for (var i = 0; i < maxDcCount; i += 1) {
+for (var r = 0; r < rsBlocks.length; r += 1) {
+if (i < dcdata[r].length) {
+data[index] = dcdata[r][i];
+index += 1;
+}
+}
+}
+for (var i = 0; i < maxEcCount; i += 1) {
+for (var r = 0; r < rsBlocks.length; r += 1) {
+if (i < ecdata[r].length) {
+data[index] = ecdata[r][i];
+index += 1;
+}
+}
+}
+return data;
+};
+var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+var buffer = qrBitBuffer();
+for (var i = 0; i < dataList.length; i += 1) {
+var data = dataList[i];
+buffer.put(data.getMode(), 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+data.write(buffer);
+}
+var totalDataCount = 0;
+for (var i = 0; i < rsBlocks.length; i += 1) {
+totalDataCount += rsBlocks[i].dataCount;
+}
+if (buffer.getLengthInBits() > totalDataCount * 8) {
+throw 'code length overflow. ('
++ buffer.getLengthInBits()
++ '>'
++ totalDataCount * 8
++ ')';
+}
+if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+buffer.put(0, 4);
+}
+while (buffer.getLengthInBits() % 8 != 0) {
+buffer.putBit(false);
+}
+while (true) {
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(PAD0, 8);
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(PAD1, 8);
+}
+return createBytes(buffer, rsBlocks);
+};
+_this.addData = function(data, mode) {
+mode = mode || 'Byte';
+var newData = null;
+switch(mode) {
+case 'Numeric' :
+newData = qrNumber(data);
+break;
+case 'Alphanumeric' :
+newData = qrAlphaNum(data);
+break;
+case 'Byte' :
+newData = qr8BitByte(data);
+break;
+case 'Kanji' :
+newData = qrKanji(data);
+break;
+default :
+throw 'mode:' + mode;
+}
+_dataList.push(newData);
+_dataCache = null;
+};
+_this.isDark = function(row, col) {
+if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+throw row + ',' + col;
+}
+return _modules[row][col];
+};
+_this.getModuleCount = function() {
+return _moduleCount;
+};
+_this.make = function() {
+if (_typeNumber < 1) {
+var typeNumber = 1;
+for (; typeNumber < 40; typeNumber++) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+var buffer = qrBitBuffer();
+for (var i = 0; i < _dataList.length; i++) {
+var data = _dataList[i];
+buffer.put(data.getMode(), 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+data.write(buffer);
+}
+var totalDataCount = 0;
+for (var i = 0; i < rsBlocks.length; i++) {
+totalDataCount += rsBlocks[i].dataCount;
+}
+if (buffer.getLengthInBits() <= totalDataCount * 8) {
+break;
+}
+}
+_typeNumber = typeNumber;
+}
+makeImpl(false, getBestMaskPattern() );
+};
+_this.createTableTag = function(cellSize, margin) {
+cellSize = cellSize || 2;
+margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+var qrHtml = '';
+qrHtml += '<table style="';
+qrHtml += ' border-width: 0px; border-style: none;';
+qrHtml += ' border-collapse: collapse;';
+qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+qrHtml += '">';
+qrHtml += '<tbody>';
+for (var r = 0; r < _this.getModuleCount(); r += 1) {
+qrHtml += '<tr>';
+for (var c = 0; c < _this.getModuleCount(); c += 1) {
+qrHtml += '<td style="';
+qrHtml += ' border-width: 0px; border-style: none;';
+qrHtml += ' border-collapse: collapse;';
+qrHtml += ' padding: 0px; margin: 0px;';
+qrHtml += ' width: ' + cellSize + 'px;';
+qrHtml += ' height: ' + cellSize + 'px;';
+qrHtml += ' background-color: ';
+qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+qrHtml += ';';
+qrHtml += '"/>';
+}
+qrHtml += '</tr>';
+}
+qrHtml += '</tbody>';
+qrHtml += '</table>';
+return qrHtml;
+};
+_this.createSvgTag = function(cellSize, margin, alt, title) {
+var opts = {};
+if (typeof arguments[0] == 'object') {
+opts = arguments[0];
+cellSize = opts.cellSize;
+margin = opts.margin;
+alt = opts.alt;
+title = opts.title;
+}
+cellSize = cellSize || 2;
+margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+alt.text = alt.text || null;
+alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+title = (typeof title === 'string') ? {text: title} : title || {};
+title.text = title.text || null;
+title.id = (title.text) ? title.id || 'qrcode-title' : null;
+var size = _this.getModuleCount() * cellSize + margin * 2;
+var c, mc, r, mr, qrSvg='', rect;
+rect = 'l' + cellSize + ',0 0,' + cellSize +
+' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+qrSvg += '>';
+qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+escapeXml(title.text) + '</title>' : '';
+qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+escapeXml(alt.text) + '</description>' : '';
+qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+qrSvg += '<path d="';
+for (r = 0; r < _this.getModuleCount(); r += 1) {
+mr = r * cellSize + margin;
+for (c = 0; c < _this.getModuleCount(); c += 1) {
+if (_this.isDark(r, c) ) {
+mc = c*cellSize+margin;
+qrSvg += 'M' + mc + ',' + mr + rect;
+}
+}
+}
+qrSvg += '" stroke="transparent" fill="black"/>';
+qrSvg += '</svg>';
+return qrSvg;
+};
+_this.createDataURL = function(cellSize, margin) {
+cellSize = cellSize || 2;
+margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+var size = _this.getModuleCount() * cellSize + margin * 2;
+var min = margin;
+var max = size - margin;
+return createDataURL(size, size, function(x, y) {
+if (min <= x && x < max && min <= y && y < max) {
+var c = Math.floor( (x - min) / cellSize);
+var r = Math.floor( (y - min) / cellSize);
+return _this.isDark(r, c)? 0 : 1;
+} else {
+return 1;
+}
+} );
+};
+_this.createImgTag = function(cellSize, margin, alt) {
+cellSize = cellSize || 2;
+margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+var size = _this.getModuleCount() * cellSize + margin * 2;
+var img = '';
+img += '<img';
+img += '\u0020src="';
+img += _this.createDataURL(cellSize, margin);
+img += '"';
+img += '\u0020width="';
+img += size;
+img += '"';
+img += '\u0020height="';
+img += size;
+img += '"';
+if (alt) {
+img += '\u0020alt="';
+img += escapeXml(alt);
+img += '"';
+}
+img += '/>';
+return img;
+};
+var escapeXml = function(s) {
+var escaped = '';
+for (var i = 0; i < s.length; i += 1) {
+var c = s.charAt(i);
+switch(c) {
+case '<': escaped += '&lt;'; break;
+case '>': escaped += '&gt;'; break;
+case '&': escaped += '&amp;'; break;
+case '"': escaped += '&quot;'; break;
+default : escaped += c; break;
+}
+}
+return escaped;
+};
+var _createHalfASCII = function(margin) {
+var cellSize = 1;
+margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+var size = _this.getModuleCount() * cellSize + margin * 2;
+var min = margin;
+var max = size - margin;
+var y, x, r1, r2, p;
+var blocks = {
+'██': '█',
+'█ ': '▀',
+' █': '▄',
+'  ': ' '
+};
+var blocksLastLineNoMargin = {
+'██': '▀',
+'█ ': '▀',
+' █': ' ',
+'  ': ' '
+};
+var ascii = '';
+for (y = 0; y < size; y += 2) {
+r1 = Math.floor((y - min) / cellSize);
+r2 = Math.floor((y + 1 - min) / cellSize);
+for (x = 0; x < size; x += 1) {
+p = '█';
+if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+p = ' ';
+}
+if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+p += ' ';
+}
+else {
+p += '█';
+}
+ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+}
+ascii += '\n';
+}
+if (size % 2 && margin > 0) {
+return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+}
+return ascii.substring(0, ascii.length-1);
+};
+_this.createASCII = function(cellSize, margin) {
+cellSize = cellSize || 1;
+if (cellSize < 2) {
+return _createHalfASCII(margin);
+}
+cellSize -= 1;
+margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+var size = _this.getModuleCount() * cellSize + margin * 2;
+var min = margin;
+var max = size - margin;
+var y, x, r, p;
+var white = Array(cellSize+1).join('██');
+var black = Array(cellSize+1).join('  ');
+var ascii = '';
+var line = '';
+for (y = 0; y < size; y += 1) {
+r = Math.floor( (y - min) / cellSize);
+line = '';
+for (x = 0; x < size; x += 1) {
+p = 1;
+if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+p = 0;
+}
+line += p ? white : black;
+}
+for (r = 0; r < cellSize; r += 1) {
+ascii += line + '\n';
+}
+}
+return ascii.substring(0, ascii.length-1);
+};
+_this.renderTo2dContext = function(context, cellSize) {
+cellSize = cellSize || 2;
+var length = _this.getModuleCount();
+for (var row = 0; row < length; row++) {
+for (var col = 0; col < length; col++) {
+context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+}
+}
+}
+return _this;
+};
+qrcode.stringToBytesFuncs = {
+'default' : function(s) {
+var bytes = [];
+for (var i = 0; i < s.length; i += 1) {
+var c = s.charCodeAt(i);
+bytes.push(c & 0xff);
+}
+return bytes;
+}
+};
+qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+/**
+* @param unicodeData base64 string of byte array.
+* [16bit Unicode],[16bit Bytes], ...
+* @param numChars
+*/
+qrcode.createStringToBytes = function(unicodeData, numChars) {
+var unicodeMap = function() {
+var bin = base64DecodeInputStream(unicodeData);
+var read = function() {
+var b = bin.read();
+if (b == -1) throw 'eof';
+return b;
+};
+var count = 0;
+var unicodeMap = {};
+while (true) {
+var b0 = bin.read();
+if (b0 == -1) break;
+var b1 = read();
+var b2 = read();
+var b3 = read();
+var k = String.fromCharCode( (b0 << 8) | b1);
+var v = (b2 << 8) | b3;
+unicodeMap[k] = v;
+count += 1;
+}
+if (count != numChars) {
+throw count + ' != ' + numChars;
+}
+return unicodeMap;
+}();
+var unknownChar = '?'.charCodeAt(0);
+return function(s) {
+var bytes = [];
+for (var i = 0; i < s.length; i += 1) {
+var c = s.charCodeAt(i);
+if (c < 128) {
+bytes.push(c);
+} else {
+var b = unicodeMap[s.charAt(i)];
+if (typeof b == 'number') {
+if ( (b & 0xff) == b) {
+bytes.push(b);
+} else {
+bytes.push(b >>> 8);
+bytes.push(b & 0xff);
+}
+} else {
+bytes.push(unknownChar);
+}
+}
+}
+return bytes;
+};
+};
+var QRMode = {
+MODE_NUMBER :    1 << 0,
+MODE_ALPHA_NUM : 1 << 1,
+MODE_8BIT_BYTE : 1 << 2,
+MODE_KANJI :     1 << 3
+};
+var QRErrorCorrectionLevel = {
+L : 1,
+M : 0,
+Q : 3,
+H : 2
+};
+var QRMaskPattern = {
+PATTERN000 : 0,
+PATTERN001 : 1,
+PATTERN010 : 2,
+PATTERN011 : 3,
+PATTERN100 : 4,
+PATTERN101 : 5,
+PATTERN110 : 6,
+PATTERN111 : 7
+};
+var QRUtil = function() {
+var PATTERN_POSITION_TABLE = [
+[],
+[6, 18],
+[6, 22],
+[6, 26],
+[6, 30],
+[6, 34],
+[6, 22, 38],
+[6, 24, 42],
+[6, 26, 46],
+[6, 28, 50],
+[6, 30, 54],
+[6, 32, 58],
+[6, 34, 62],
+[6, 26, 46, 66],
+[6, 26, 48, 70],
+[6, 26, 50, 74],
+[6, 30, 54, 78],
+[6, 30, 56, 82],
+[6, 30, 58, 86],
+[6, 34, 62, 90],
+[6, 28, 50, 72, 94],
+[6, 26, 50, 74, 98],
+[6, 30, 54, 78, 102],
+[6, 28, 54, 80, 106],
+[6, 32, 58, 84, 110],
+[6, 30, 58, 86, 114],
+[6, 34, 62, 90, 118],
+[6, 26, 50, 74, 98, 122],
+[6, 30, 54, 78, 102, 126],
+[6, 26, 52, 78, 104, 130],
+[6, 30, 56, 82, 108, 134],
+[6, 34, 60, 86, 112, 138],
+[6, 30, 58, 86, 114, 142],
+[6, 34, 62, 90, 118, 146],
+[6, 30, 54, 78, 102, 126, 150],
+[6, 24, 50, 76, 102, 128, 154],
+[6, 28, 54, 80, 106, 132, 158],
+[6, 32, 58, 84, 110, 136, 162],
+[6, 26, 54, 82, 110, 138, 166],
+[6, 30, 58, 86, 114, 142, 170]
+];
+var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+var _this = {};
+var getBCHDigit = function(data) {
+var digit = 0;
+while (data != 0) {
+digit += 1;
+data >>>= 1;
+}
+return digit;
+};
+_this.getBCHTypeInfo = function(data) {
+var d = data << 10;
+while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+}
+return ( (data << 10) | d) ^ G15_MASK;
+};
+_this.getBCHTypeNumber = function(data) {
+var d = data << 12;
+while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+}
+return (data << 12) | d;
+};
+_this.getPatternPosition = function(typeNumber) {
+return PATTERN_POSITION_TABLE[typeNumber - 1];
+};
+_this.getMaskFunction = function(maskPattern) {
+switch (maskPattern) {
+case QRMaskPattern.PATTERN000 :
+return function(i, j) { return (i + j) % 2 == 0; };
+case QRMaskPattern.PATTERN001 :
+return function(i, j) { return i % 2 == 0; };
+case QRMaskPattern.PATTERN010 :
+return function(i, j) { return j % 3 == 0; };
+case QRMaskPattern.PATTERN011 :
+return function(i, j) { return (i + j) % 3 == 0; };
+case QRMaskPattern.PATTERN100 :
+return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+case QRMaskPattern.PATTERN101 :
+return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+case QRMaskPattern.PATTERN110 :
+return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+case QRMaskPattern.PATTERN111 :
+return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+default :
+throw 'bad maskPattern:' + maskPattern;
+}
+};
+_this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+var a = qrPolynomial([1], 0);
+for (var i = 0; i < errorCorrectLength; i += 1) {
+a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+}
+return a;
+};
+_this.getLengthInBits = function(mode, type) {
+if (1 <= type && type < 10) {
+switch(mode) {
+case QRMode.MODE_NUMBER    : return 10;
+case QRMode.MODE_ALPHA_NUM : return 9;
+case QRMode.MODE_8BIT_BYTE : return 8;
+case QRMode.MODE_KANJI     : return 8;
+default :
+throw 'mode:' + mode;
+}
+} else if (type < 27) {
+switch(mode) {
+case QRMode.MODE_NUMBER    : return 12;
+case QRMode.MODE_ALPHA_NUM : return 11;
+case QRMode.MODE_8BIT_BYTE : return 16;
+case QRMode.MODE_KANJI     : return 10;
+default :
+throw 'mode:' + mode;
+}
+} else if (type < 41) {
+switch(mode) {
+case QRMode.MODE_NUMBER    : return 14;
+case QRMode.MODE_ALPHA_NUM : return 13;
+case QRMode.MODE_8BIT_BYTE : return 16;
+case QRMode.MODE_KANJI     : return 12;
+default :
+throw 'mode:' + mode;
+}
+} else {
+throw 'type:' + type;
+}
+};
+_this.getLostPoint = function(qrcode) {
+var moduleCount = qrcode.getModuleCount();
+var lostPoint = 0;
+for (var row = 0; row < moduleCount; row += 1) {
+for (var col = 0; col < moduleCount; col += 1) {
+var sameCount = 0;
+var dark = qrcode.isDark(row, col);
+for (var r = -1; r <= 1; r += 1) {
+if (row + r < 0 || moduleCount <= row + r) {
+continue;
+}
+for (var c = -1; c <= 1; c += 1) {
+if (col + c < 0 || moduleCount <= col + c) {
+continue;
+}
+if (r == 0 && c == 0) {
+continue;
+}
+if (dark == qrcode.isDark(row + r, col + c) ) {
+sameCount += 1;
+}
+}
+}
+if (sameCount > 5) {
+lostPoint += (3 + sameCount - 5);
+}
+}
+};
+for (var row = 0; row < moduleCount - 1; row += 1) {
+for (var col = 0; col < moduleCount - 1; col += 1) {
+var count = 0;
+if (qrcode.isDark(row, col) ) count += 1;
+if (qrcode.isDark(row + 1, col) ) count += 1;
+if (qrcode.isDark(row, col + 1) ) count += 1;
+if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+if (count == 0 || count == 4) {
+lostPoint += 3;
+}
+}
+}
+for (var row = 0; row < moduleCount; row += 1) {
+for (var col = 0; col < moduleCount - 6; col += 1) {
+if (qrcode.isDark(row, col)
+&& !qrcode.isDark(row, col + 1)
+&&  qrcode.isDark(row, col + 2)
+&&  qrcode.isDark(row, col + 3)
+&&  qrcode.isDark(row, col + 4)
+&& !qrcode.isDark(row, col + 5)
+&&  qrcode.isDark(row, col + 6) ) {
+lostPoint += 40;
+}
+}
+}
+for (var col = 0; col < moduleCount; col += 1) {
+for (var row = 0; row < moduleCount - 6; row += 1) {
+if (qrcode.isDark(row, col)
+&& !qrcode.isDark(row + 1, col)
+&&  qrcode.isDark(row + 2, col)
+&&  qrcode.isDark(row + 3, col)
+&&  qrcode.isDark(row + 4, col)
+&& !qrcode.isDark(row + 5, col)
+&&  qrcode.isDark(row + 6, col) ) {
+lostPoint += 40;
+}
+}
+}
+var darkCount = 0;
+for (var col = 0; col < moduleCount; col += 1) {
+for (var row = 0; row < moduleCount; row += 1) {
+if (qrcode.isDark(row, col) ) {
+darkCount += 1;
+}
+}
+}
+var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+lostPoint += ratio * 10;
+return lostPoint;
+};
+return _this;
+}();
+var QRMath = function() {
+var EXP_TABLE = new Array(256);
+var LOG_TABLE = new Array(256);
+for (var i = 0; i < 8; i += 1) {
+EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i += 1) {
+EXP_TABLE[i] = EXP_TABLE[i - 4]
+^ EXP_TABLE[i - 5]
+^ EXP_TABLE[i - 6]
+^ EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i += 1) {
+LOG_TABLE[EXP_TABLE[i] ] = i;
+}
+var _this = {};
+_this.glog = function(n) {
+if (n < 1) {
+throw 'glog(' + n + ')';
+}
+return LOG_TABLE[n];
+};
+_this.gexp = function(n) {
+while (n < 0) {
+n += 255;
+}
+while (n >= 256) {
+n -= 255;
+}
+return EXP_TABLE[n];
+};
+return _this;
+}();
+function qrPolynomial(num, shift) {
+if (typeof num.length == 'undefined') {
+throw num.length + '/' + shift;
+}
+var _num = function() {
+var offset = 0;
+while (offset < num.length && num[offset] == 0) {
+offset += 1;
+}
+var _num = new Array(num.length - offset + shift);
+for (var i = 0; i < num.length - offset; i += 1) {
+_num[i] = num[i + offset];
+}
+return _num;
+}();
+var _this = {};
+_this.getAt = function(index) {
+return _num[index];
+};
+_this.getLength = function() {
+return _num.length;
+};
+_this.multiply = function(e) {
+var num = new Array(_this.getLength() + e.getLength() - 1);
+for (var i = 0; i < _this.getLength(); i += 1) {
+for (var j = 0; j < e.getLength(); j += 1) {
+num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+}
+}
+return qrPolynomial(num, 0);
+};
+_this.mod = function(e) {
+if (_this.getLength() - e.getLength() < 0) {
+return _this;
+}
+var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+var num = new Array(_this.getLength() );
+for (var i = 0; i < _this.getLength(); i += 1) {
+num[i] = _this.getAt(i);
+}
+for (var i = 0; i < e.getLength(); i += 1) {
+num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+}
+return qrPolynomial(num, 0).mod(e);
+};
+return _this;
+};
+var QRRSBlock = function() {
+var RS_BLOCK_TABLE = [
+[1, 26, 19],
+[1, 26, 16],
+[1, 26, 13],
+[1, 26, 9],
+[1, 44, 34],
+[1, 44, 28],
+[1, 44, 22],
+[1, 44, 16],
+[1, 70, 55],
+[1, 70, 44],
+[2, 35, 17],
+[2, 35, 13],
+[1, 100, 80],
+[2, 50, 32],
+[2, 50, 24],
+[4, 25, 9],
+[1, 134, 108],
+[2, 67, 43],
+[2, 33, 15, 2, 34, 16],
+[2, 33, 11, 2, 34, 12],
+[2, 86, 68],
+[4, 43, 27],
+[4, 43, 19],
+[4, 43, 15],
+[2, 98, 78],
+[4, 49, 31],
+[2, 32, 14, 4, 33, 15],
+[4, 39, 13, 1, 40, 14],
+[2, 121, 97],
+[2, 60, 38, 2, 61, 39],
+[4, 40, 18, 2, 41, 19],
+[4, 40, 14, 2, 41, 15],
+[2, 146, 116],
+[3, 58, 36, 2, 59, 37],
+[4, 36, 16, 4, 37, 17],
+[4, 36, 12, 4, 37, 13],
+[2, 86, 68, 2, 87, 69],
+[4, 69, 43, 1, 70, 44],
+[6, 43, 19, 2, 44, 20],
+[6, 43, 15, 2, 44, 16],
+[4, 101, 81],
+[1, 80, 50, 4, 81, 51],
+[4, 50, 22, 4, 51, 23],
+[3, 36, 12, 8, 37, 13],
+[2, 116, 92, 2, 117, 93],
+[6, 58, 36, 2, 59, 37],
+[4, 46, 20, 6, 47, 21],
+[7, 42, 14, 4, 43, 15],
+[4, 133, 107],
+[8, 59, 37, 1, 60, 38],
+[8, 44, 20, 4, 45, 21],
+[12, 33, 11, 4, 34, 12],
+[3, 145, 115, 1, 146, 116],
+[4, 64, 40, 5, 65, 41],
+[11, 36, 16, 5, 37, 17],
+[11, 36, 12, 5, 37, 13],
+[5, 109, 87, 1, 110, 88],
+[5, 65, 41, 5, 66, 42],
+[5, 54, 24, 7, 55, 25],
+[11, 36, 12, 7, 37, 13],
+[5, 122, 98, 1, 123, 99],
+[7, 73, 45, 3, 74, 46],
+[15, 43, 19, 2, 44, 20],
+[3, 45, 15, 13, 46, 16],
+[1, 135, 107, 5, 136, 108],
+[10, 74, 46, 1, 75, 47],
+[1, 50, 22, 15, 51, 23],
+[2, 42, 14, 17, 43, 15],
+[5, 150, 120, 1, 151, 121],
+[9, 69, 43, 4, 70, 44],
+[17, 50, 22, 1, 51, 23],
+[2, 42, 14, 19, 43, 15],
+[3, 141, 113, 4, 142, 114],
+[3, 70, 44, 11, 71, 45],
+[17, 47, 21, 4, 48, 22],
+[9, 39, 13, 16, 40, 14],
+[3, 135, 107, 5, 136, 108],
+[3, 67, 41, 13, 68, 42],
+[15, 54, 24, 5, 55, 25],
+[15, 43, 15, 10, 44, 16],
+[4, 144, 116, 4, 145, 117],
+[17, 68, 42],
+[17, 50, 22, 6, 51, 23],
+[19, 46, 16, 6, 47, 17],
+[2, 139, 111, 7, 140, 112],
+[17, 74, 46],
+[7, 54, 24, 16, 55, 25],
+[34, 37, 13],
+[4, 151, 121, 5, 152, 122],
+[4, 75, 47, 14, 76, 48],
+[11, 54, 24, 14, 55, 25],
+[16, 45, 15, 14, 46, 16],
+[6, 147, 117, 4, 148, 118],
+[6, 73, 45, 14, 74, 46],
+[11, 54, 24, 16, 55, 25],
+[30, 46, 16, 2, 47, 17],
+[8, 132, 106, 4, 133, 107],
+[8, 75, 47, 13, 76, 48],
+[7, 54, 24, 22, 55, 25],
+[22, 45, 15, 13, 46, 16],
+[10, 142, 114, 2, 143, 115],
+[19, 74, 46, 4, 75, 47],
+[28, 50, 22, 6, 51, 23],
+[33, 46, 16, 4, 47, 17],
+[8, 152, 122, 4, 153, 123],
+[22, 73, 45, 3, 74, 46],
+[8, 53, 23, 26, 54, 24],
+[12, 45, 15, 28, 46, 16],
+[3, 147, 117, 10, 148, 118],
+[3, 73, 45, 23, 74, 46],
+[4, 54, 24, 31, 55, 25],
+[11, 45, 15, 31, 46, 16],
+[7, 146, 116, 7, 147, 117],
+[21, 73, 45, 7, 74, 46],
+[1, 53, 23, 37, 54, 24],
+[19, 45, 15, 26, 46, 16],
+[5, 145, 115, 10, 146, 116],
+[19, 75, 47, 10, 76, 48],
+[15, 54, 24, 25, 55, 25],
+[23, 45, 15, 25, 46, 16],
+[13, 145, 115, 3, 146, 116],
+[2, 74, 46, 29, 75, 47],
+[42, 54, 24, 1, 55, 25],
+[23, 45, 15, 28, 46, 16],
+[17, 145, 115],
+[10, 74, 46, 23, 75, 47],
+[10, 54, 24, 35, 55, 25],
+[19, 45, 15, 35, 46, 16],
+[17, 145, 115, 1, 146, 116],
+[14, 74, 46, 21, 75, 47],
+[29, 54, 24, 19, 55, 25],
+[11, 45, 15, 46, 46, 16],
+[13, 145, 115, 6, 146, 116],
+[14, 74, 46, 23, 75, 47],
+[44, 54, 24, 7, 55, 25],
+[59, 46, 16, 1, 47, 17],
+[12, 151, 121, 7, 152, 122],
+[12, 75, 47, 26, 76, 48],
+[39, 54, 24, 14, 55, 25],
+[22, 45, 15, 41, 46, 16],
+[6, 151, 121, 14, 152, 122],
+[6, 75, 47, 34, 76, 48],
+[46, 54, 24, 10, 55, 25],
+[2, 45, 15, 64, 46, 16],
+[17, 152, 122, 4, 153, 123],
+[29, 74, 46, 14, 75, 47],
+[49, 54, 24, 10, 55, 25],
+[24, 45, 15, 46, 46, 16],
+[4, 152, 122, 18, 153, 123],
+[13, 74, 46, 32, 75, 47],
+[48, 54, 24, 14, 55, 25],
+[42, 45, 15, 32, 46, 16],
+[20, 147, 117, 4, 148, 118],
+[40, 75, 47, 7, 76, 48],
+[43, 54, 24, 22, 55, 25],
+[10, 45, 15, 67, 46, 16],
+[19, 148, 118, 6, 149, 119],
+[18, 75, 47, 31, 76, 48],
+[34, 54, 24, 34, 55, 25],
+[20, 45, 15, 61, 46, 16]
+];
+var qrRSBlock = function(totalCount, dataCount) {
+var _this = {};
+_this.totalCount = totalCount;
+_this.dataCount = dataCount;
+return _this;
+};
+var _this = {};
+var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+switch(errorCorrectionLevel) {
+case QRErrorCorrectionLevel.L :
+return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+case QRErrorCorrectionLevel.M :
+return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+case QRErrorCorrectionLevel.Q :
+return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+case QRErrorCorrectionLevel.H :
+return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+default :
+return undefined;
+}
+};
+_this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+if (typeof rsBlock == 'undefined') {
+throw 'bad rs block @ typeNumber:' + typeNumber +
+'/errorCorrectionLevel:' + errorCorrectionLevel;
+}
+var length = rsBlock.length / 3;
+var list = [];
+for (var i = 0; i < length; i += 1) {
+var count = rsBlock[i * 3 + 0];
+var totalCount = rsBlock[i * 3 + 1];
+var dataCount = rsBlock[i * 3 + 2];
+for (var j = 0; j < count; j += 1) {
+list.push(qrRSBlock(totalCount, dataCount) );
+}
+}
+return list;
+};
+return _this;
+}();
+var qrBitBuffer = function() {
+var _buffer = [];
+var _length = 0;
+var _this = {};
+_this.getBuffer = function() {
+return _buffer;
+};
+_this.getAt = function(index) {
+var bufIndex = Math.floor(index / 8);
+return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+};
+_this.put = function(num, length) {
+for (var i = 0; i < length; i += 1) {
+_this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+}
+};
+_this.getLengthInBits = function() {
+return _length;
+};
+_this.putBit = function(bit) {
+var bufIndex = Math.floor(_length / 8);
+if (_buffer.length <= bufIndex) {
+_buffer.push(0);
+}
+if (bit) {
+_buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+}
+_length += 1;
+};
+return _this;
+};
+var qrNumber = function(data) {
+var _mode = QRMode.MODE_NUMBER;
+var _data = data;
+var _this = {};
+_this.getMode = function() {
+return _mode;
+};
+_this.getLength = function(buffer) {
+return _data.length;
+};
+_this.write = function(buffer) {
+var data = _data;
+var i = 0;
+while (i + 2 < data.length) {
+buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+i += 3;
+}
+if (i < data.length) {
+if (data.length - i == 1) {
+buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+} else if (data.length - i == 2) {
+buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+}
+}
+};
+var strToNum = function(s) {
+var num = 0;
+for (var i = 0; i < s.length; i += 1) {
+num = num * 10 + chatToNum(s.charAt(i) );
+}
+return num;
+};
+var chatToNum = function(c) {
+if ('0' <= c && c <= '9') {
+return c.charCodeAt(0) - '0'.charCodeAt(0);
+}
+throw 'illegal char :' + c;
+};
+return _this;
+};
+var qrAlphaNum = function(data) {
+var _mode = QRMode.MODE_ALPHA_NUM;
+var _data = data;
+var _this = {};
+_this.getMode = function() {
+return _mode;
+};
+_this.getLength = function(buffer) {
+return _data.length;
+};
+_this.write = function(buffer) {
+var s = _data;
+var i = 0;
+while (i + 1 < s.length) {
+buffer.put(
+getCode(s.charAt(i) ) * 45 +
+getCode(s.charAt(i + 1) ), 11);
+i += 2;
+}
+if (i < s.length) {
+buffer.put(getCode(s.charAt(i) ), 6);
+}
+};
+var getCode = function(c) {
+if ('0' <= c && c <= '9') {
+return c.charCodeAt(0) - '0'.charCodeAt(0);
+} else if ('A' <= c && c <= 'Z') {
+return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+} else {
+switch (c) {
+case ' ' : return 36;
+case '$' : return 37;
+case '%' : return 38;
+case '*' : return 39;
+case '+' : return 40;
+case '-' : return 41;
+case '.' : return 42;
+case '/' : return 43;
+case ':' : return 44;
+default :
+throw 'illegal char :' + c;
+}
+}
+};
+return _this;
+};
+var qr8BitByte = function(data) {
+var _mode = QRMode.MODE_8BIT_BYTE;
+var _data = data;
+var _bytes = qrcode.stringToBytes(data);
+var _this = {};
+_this.getMode = function() {
+return _mode;
+};
+_this.getLength = function(buffer) {
+return _bytes.length;
+};
+_this.write = function(buffer) {
+for (var i = 0; i < _bytes.length; i += 1) {
+buffer.put(_bytes[i], 8);
+}
+};
+return _this;
+};
+var qrKanji = function(data) {
+var _mode = QRMode.MODE_KANJI;
+var _data = data;
+var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+if (!stringToBytes) {
+throw 'sjis not supported.';
+}
+!function(c, code) {
+var test = stringToBytes(c);
+if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+throw 'sjis not supported.';
+}
+}('\u53cb', 0x9746);
+var _bytes = stringToBytes(data);
+var _this = {};
+_this.getMode = function() {
+return _mode;
+};
+_this.getLength = function(buffer) {
+return ~~(_bytes.length / 2);
+};
+_this.write = function(buffer) {
+var data = _bytes;
+var i = 0;
+while (i + 1 < data.length) {
+var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+if (0x8140 <= c && c <= 0x9FFC) {
+c -= 0x8140;
+} else if (0xE040 <= c && c <= 0xEBBF) {
+c -= 0xC140;
+} else {
+throw 'illegal char at ' + (i + 1) + '/' + c;
+}
+c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+buffer.put(c, 13);
+i += 2;
+}
+if (i < data.length) {
+throw 'illegal char at ' + (i + 1);
+}
+};
+return _this;
+};
+var byteArrayOutputStream = function() {
+var _bytes = [];
+var _this = {};
+_this.writeByte = function(b) {
+_bytes.push(b & 0xff);
+};
+_this.writeShort = function(i) {
+_this.writeByte(i);
+_this.writeByte(i >>> 8);
+};
+_this.writeBytes = function(b, off, len) {
+off = off || 0;
+len = len || b.length;
+for (var i = 0; i < len; i += 1) {
+_this.writeByte(b[i + off]);
+}
+};
+_this.writeString = function(s) {
+for (var i = 0; i < s.length; i += 1) {
+_this.writeByte(s.charCodeAt(i) );
+}
+};
+_this.toByteArray = function() {
+return _bytes;
+};
+_this.toString = function() {
+var s = '';
+s += '[';
+for (var i = 0; i < _bytes.length; i += 1) {
+if (i > 0) {
+s += ',';
+}
+s += _bytes[i];
+}
+s += ']';
+return s;
+};
+return _this;
+};
+var base64EncodeOutputStream = function() {
+var _buffer = 0;
+var _buflen = 0;
+var _length = 0;
+var _base64 = '';
+var _this = {};
+var writeEncoded = function(b) {
+_base64 += String.fromCharCode(encode(b & 0x3f) );
+};
+var encode = function(n) {
+if (n < 0) {
+} else if (n < 26) {
+return 0x41 + n;
+} else if (n < 52) {
+return 0x61 + (n - 26);
+} else if (n < 62) {
+return 0x30 + (n - 52);
+} else if (n == 62) {
+return 0x2b;
+} else if (n == 63) {
+return 0x2f;
+}
+throw 'n:' + n;
+};
+_this.writeByte = function(n) {
+_buffer = (_buffer << 8) | (n & 0xff);
+_buflen += 8;
+_length += 1;
+while (_buflen >= 6) {
+writeEncoded(_buffer >>> (_buflen - 6) );
+_buflen -= 6;
+}
+};
+_this.flush = function() {
+if (_buflen > 0) {
+writeEncoded(_buffer << (6 - _buflen) );
+_buffer = 0;
+_buflen = 0;
+}
+if (_length % 3 != 0) {
+var padlen = 3 - _length % 3;
+for (var i = 0; i < padlen; i += 1) {
+_base64 += '=';
+}
+}
+};
+_this.toString = function() {
+return _base64;
+};
+return _this;
+};
+var base64DecodeInputStream = function(str) {
+var _str = str;
+var _pos = 0;
+var _buffer = 0;
+var _buflen = 0;
+var _this = {};
+_this.read = function() {
+while (_buflen < 8) {
+if (_pos >= _str.length) {
+if (_buflen == 0) {
+return -1;
+}
+throw 'unexpected end of file./' + _buflen;
+}
+var c = _str.charAt(_pos);
+_pos += 1;
+if (c == '=') {
+_buflen = 0;
+return -1;
+} else if (c.match(/^\s$/) ) {
+continue;
+}
+_buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+_buflen += 6;
+}
+var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+_buflen -= 8;
+return n;
+};
+var decode = function(c) {
+if (0x41 <= c && c <= 0x5a) {
+return c - 0x41;
+} else if (0x61 <= c && c <= 0x7a) {
+return c - 0x61 + 26;
+} else if (0x30 <= c && c <= 0x39) {
+return c - 0x30 + 52;
+} else if (c == 0x2b) {
+return 62;
+} else if (c == 0x2f) {
+return 63;
+} else {
+throw 'c:' + c;
+}
+};
+return _this;
+};
+var gifImage = function(width, height) {
+var _width = width;
+var _height = height;
+var _data = new Array(width * height);
+var _this = {};
+_this.setPixel = function(x, y, pixel) {
+_data[y * _width + x] = pixel;
+};
+_this.write = function(out) {
+out.writeString('GIF87a');
+out.writeShort(_width);
+out.writeShort(_height);
+out.writeByte(0x80); // 2bit
+out.writeByte(0);
+out.writeByte(0);
+out.writeByte(0x00);
+out.writeByte(0x00);
+out.writeByte(0x00);
+out.writeByte(0xff);
+out.writeByte(0xff);
+out.writeByte(0xff);
+out.writeString(',');
+out.writeShort(0);
+out.writeShort(0);
+out.writeShort(_width);
+out.writeShort(_height);
+out.writeByte(0);
+var lzwMinCodeSize = 2;
+var raster = getLZWRaster(lzwMinCodeSize);
+out.writeByte(lzwMinCodeSize);
+var offset = 0;
+while (raster.length - offset > 255) {
+out.writeByte(255);
+out.writeBytes(raster, offset, 255);
+offset += 255;
+}
+out.writeByte(raster.length - offset);
+out.writeBytes(raster, offset, raster.length - offset);
+out.writeByte(0x00);
+out.writeString(';');
+};
+var bitOutputStream = function(out) {
+var _out = out;
+var _bitLength = 0;
+var _bitBuffer = 0;
+var _this = {};
+_this.write = function(data, length) {
+if ( (data >>> length) != 0) {
+throw 'length over';
+}
+while (_bitLength + length >= 8) {
+_out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+length -= (8 - _bitLength);
+data >>>= (8 - _bitLength);
+_bitBuffer = 0;
+_bitLength = 0;
+}
+_bitBuffer = (data << _bitLength) | _bitBuffer;
+_bitLength = _bitLength + length;
+};
+_this.flush = function() {
+if (_bitLength > 0) {
+_out.writeByte(_bitBuffer);
+}
+};
+return _this;
+};
+var getLZWRaster = function(lzwMinCodeSize) {
+var clearCode = 1 << lzwMinCodeSize;
+var endCode = (1 << lzwMinCodeSize) + 1;
+var bitLength = lzwMinCodeSize + 1;
+var table = lzwTable();
+for (var i = 0; i < clearCode; i += 1) {
+table.add(String.fromCharCode(i) );
+}
+table.add(String.fromCharCode(clearCode) );
+table.add(String.fromCharCode(endCode) );
+var byteOut = byteArrayOutputStream();
+var bitOut = bitOutputStream(byteOut);
+bitOut.write(clearCode, bitLength);
+var dataIndex = 0;
+var s = String.fromCharCode(_data[dataIndex]);
+dataIndex += 1;
+while (dataIndex < _data.length) {
+var c = String.fromCharCode(_data[dataIndex]);
+dataIndex += 1;
+if (table.contains(s + c) ) {
+s = s + c;
+} else {
+bitOut.write(table.indexOf(s), bitLength);
+if (table.size() < 0xfff) {
+if (table.size() == (1 << bitLength) ) {
+bitLength += 1;
+}
+table.add(s + c);
+}
+s = c;
+}
+}
+bitOut.write(table.indexOf(s), bitLength);
+bitOut.write(endCode, bitLength);
+bitOut.flush();
+return byteOut.toByteArray();
+};
+var lzwTable = function() {
+var _map = {};
+var _size = 0;
+var _this = {};
+_this.add = function(key) {
+if (_this.contains(key) ) {
+throw 'dup key:' + key;
+}
+_map[key] = _size;
+_size += 1;
+};
+_this.size = function() {
+return _size;
+};
+_this.indexOf = function(key) {
+return _map[key];
+};
+_this.contains = function(key) {
+return typeof _map[key] != 'undefined';
+};
+return _this;
+};
+return _this;
+};
+var createDataURL = function(width, height, getPixel) {
+var gif = gifImage(width, height);
+for (var y = 0; y < height; y += 1) {
+for (var x = 0; x < width; x += 1) {
+gif.setPixel(x, y, getPixel(x, y) );
+}
+}
+var b = byteArrayOutputStream();
+gif.write(b);
+var base64 = base64EncodeOutputStream();
+var bytes = b.toByteArray();
+for (var i = 0; i < bytes.length; i += 1) {
+base64.writeByte(bytes[i]);
+}
+base64.flush();
+return 'data:image/gif;base64,' + base64;
+};
+return qrcode;
+}();
+!function() {
+qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+function toUTF8Array(str) {
+var utf8 = [];
+for (var i=0; i < str.length; i++) {
+var charcode = str.charCodeAt(i);
+if (charcode < 0x80) utf8.push(charcode);
+else if (charcode < 0x800) {
+utf8.push(0xc0 | (charcode >> 6),
+0x80 | (charcode & 0x3f));
+}
+else if (charcode < 0xd800 || charcode >= 0xe000) {
+utf8.push(0xe0 | (charcode >> 12),
+0x80 | ((charcode>>6) & 0x3f),
+0x80 | (charcode & 0x3f));
+}
+else {
+i++;
+charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+| (str.charCodeAt(i) & 0x3ff));
+utf8.push(0xf0 | (charcode >>18),
+0x80 | ((charcode>>12) & 0x3f),
+0x80 | ((charcode>>6) & 0x3f),
+0x80 | (charcode & 0x3f));
+}
+}
+return utf8;
+}
+return toUTF8Array(s);
+};
+}();
+(function (factory) {
+if (typeof define === 'function' && define.amd) {
+define([], factory);
+} else if (typeof exports === 'object') {
+module.exports = factory();
+}
+}(function () {
+return qrcode;
+}));
+</script>
 <script>
 "use strict";
 /* ======================= UTIL ======================= */
@@ -1213,7 +3123,7 @@ async function sb(path,opts){
   return data;
 }
 const sbLogin  =(email,password)=>sb("/auth/v1/token?grant_type=password",{method:"POST",noAuth:true,body:JSON.stringify({email,password})});
-const sbSignup =(email,password,nome)=>sb("/auth/v1/signup",{method:"POST",noAuth:true,body:JSON.stringify({email,password,data:{nome}})});
+const sbSignup =(email,password,nome)=>{ const data={nome,app:"planner"}; try{ const o=JSON.parse(localStorage.getItem("cruzon_ref")||"null"); if(o&&o.ref) data.ref=o.ref; }catch(e){} return sb("/auth/v1/signup",{method:"POST",noAuth:true,body:JSON.stringify({email,password,data})}); };
 const sbRecover=(email)=>sb("/auth/v1/recover?redirect_to="+encodeURIComponent(location.origin+location.pathname),
                             {method:"POST",noAuth:true,body:JSON.stringify({email})});
 const sbNewPass=(password)=>sb("/auth/v1/user",{method:"PUT",body:JSON.stringify({password})});
@@ -1517,7 +3427,7 @@ $("#btnTheme").addEventListener("click",()=>{
 if(window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(V&&V.prefs.theme==="auto")applyTheme();});
 
 /* ======================= LOGIN (Supabase Auth) ======================= */
-let LGMODE="login";   // login | signup | forgot | reset
+let LGMODE=/[?&]cadastro=1/.test(location.search)?"signup":"login";   // login | signup | forgot | reset (link "Criar conta" da página Conheça abre direto no cadastro)
 function lgMsg(el,txt){ const e=$(el); if(!txt){e.classList.add("hidden");return;} e.textContent=txt; e.classList.remove("hidden"); }
 function setupLogin(){
   const m=LGMODE;
@@ -1535,7 +3445,7 @@ function setupLogin(){
   $("#lgForm").classList.remove("hidden");
   $("#lgSub").textContent={
     login:"Acesso restrito — informe seu e-mail e senha.",
-    signup:"Crie o seu acesso. O administrador libera o uso em seguida.",
+    signup:"Crie a sua conta e comece a usar na hora, com período de teste.",
     forgot:"Informe o e-mail cadastrado e enviaremos um link para você criar uma nova senha.",
     reset:"Defina a sua nova senha de acesso."}[m];
   $("#lgBtn").textContent={login:"Entrar",signup:"Criar acesso",forgot:"Enviar link de recuperação",reset:"Salvar nova senha"}[m];
@@ -1563,9 +3473,9 @@ $("#lgForm").addEventListener("submit",async ev=>{
       if(pass.length<6) throw new Error("A senha precisa de pelo menos 6 caracteres.");
       if(pass!==$("#lgPass2").value) throw new Error("As senhas não conferem.");
       const r=await sbSignup(email,pass,nome);
+      if(r&&r.access_token){ setSession(r); LGMODE="login"; setupLogin(); await entrar(); return; }
       LGMODE="login"; setupLogin();
-      lgMsg("#lgOk", r&&r.access_token ? "Acesso criado. Aguarde a liberação do administrador."
-        : "Acesso criado. Confirme o e-mail que enviamos e aguarde a liberação do administrador.");
+      lgMsg("#lgOk", "Conta criada! Confirme o e-mail que enviamos e depois entre aqui.");
     }else if(LGMODE==="forgot"){
       if(!email) throw new Error("Informe o e-mail.");
       await sbRecover(email);
@@ -1706,16 +3616,41 @@ function pintaPaywall(vencido){
   const z = $("#pwZap"); if(z) z.classList.toggle("hidden", !zapLink());
   $("#pwRecado").textContent = CFGAPP.recado ||
     "Já pagou? O acesso é liberado assim que o pagamento é confirmado. Se demorar, fale com o administrador.";
+  if(temPix()){
+    $("#pwMensal").textContent = CFGAPP.url_mensal ? "Assinar mensal" : "Pagar mensal com Pix";
+    $("#pwAnual").textContent  = CFGAPP.url_anual  ? "Assinar anual"  : "Pagar anual com Pix";
+    if(!temAno) PWPLANO="mensal"; else if(!temMes) PWPLANO="anual";
+  }
+  pintaPix();
+  const ec = $("#pwEcos"); if(ec) ec.innerHTML = ecosHtml("planner");
+}
+function estPlanner(vencido){
+  const a = PERFIL ? {plano:PERFIL.plano, acesso_ate:PERFIL.acesso_ate, isento:PERFIL.isento} : null;
+  const fim = a && a.acesso_ate ? new Date(a.acesso_ate) : null;
+  return {app:"planner", a, sit: vencido ? "vencido" : situacao(), fim, dias: diasRestantes(),
+    planos:{preco_mensal:CFGAPP.preco_mensal, preco_anual:CFGAPP.preco_anual, url_mensal:CFGAPP.url_mensal, url_anual:CFGAPP.url_anual,
+      whatsapp:CFGAPP.whatsapp, recado:CFGAPP.recado, pix_chave:CFGAPP.pix_chave, pix_nome:CFGAPP.pix_nome, pix_cidade:CFGAPP.pix_cidade}};
 }
 function mostraPaywall(vencido){
+  const est = estPlanner(vencido), s = est.sit;
+  CruzonAssinatura.paywall({est, nomeApp:APP_OFICIAL, icone:"icone-192.png", sb,
+    me: ME ? {id:ME.id, email:ME.email, nome:ME.name} : null, preview: !vencido,
+    titulo: vencido ? null : "Assine o " + APP_OFICIAL,
+    sub: vencido ? null : (s==="teste" && est.dias!=null ? "Seu teste termina " + (est.dias<=0?"hoje":est.dias===1?"amanhã":"em "+est.dias+" dias") + ". Assine agora e continue sem interrupção." : "Escolha o plano e pague com Pix."),
+    onVer: vencido ? null : ()=>{},
+    onExport: vencido ? ()=>$("#pwExport").click() : null,
+    onSair: vencido ? ()=>$("#pwSair").click() : null});
+}
+function mostraPaywallAntigo(vencido){
   pintaPaywall(vencido);
   $("#paywall").classList.remove("hidden");
 }
-function escondePaywall(){ $("#paywall").classList.add("hidden"); }
+function escondePaywall(){ $("#paywall").classList.add("hidden"); if(window.CruzonAssinatura) CruzonAssinatura.limpa(); }
 
 function escolhePlano(qual){
   const url = qual === "anual" ? CFGAPP.url_anual : CFGAPP.url_mensal;
   if(url){ window.open(url, "_blank", "noopener"); return; }
+  if(temPix() && (qual === "anual" ? CFGAPP.preco_anual : CFGAPP.preco_mensal)){ selecionaPlano(qual); return; }
   const m = $("#pwMsg");
   if(m){ m.value = "Quero contratar o plano " + (qual === "anual" ? "anual" : "mensal") + ". Como faço para pagar?";
          m.focus(); m.scrollIntoView({behavior:"smooth", block:"center"}); }
@@ -1738,6 +3673,7 @@ $("#pwExport").addEventListener("click", ()=>{
 /* faixa de aviso dentro do app */
 function pintaTrialBar(){
   const bar = $("#trialBar"); if(!bar) return;
+  bar.classList.add("hidden"); CruzonAssinatura.faixa(estPlanner(false), APP_OFICIAL, ()=>mostraPaywall(false)); return;
   const s = situacao(), d = diasRestantes();
   if((s === "teste" || s === "ativo") && d !== null && d <= 5){
     $("#trialTxt").innerHTML = (s === "teste" ? "Seu período de teste termina " : "Sua assinatura vence ") +
@@ -1758,6 +3694,15 @@ function pintaCfgPlanos(){
   $("#cfgUrlAno").value       = CFGAPP.url_anual || "";
   $("#cfgRecado").value       = CFGAPP.recado || "";
   $("#cfgZap").value          = CFGAPP.whatsapp || "";
+  $("#cfgPix").value          = CFGAPP.pix_chave || "";
+  $("#cfgPixTipo").value      = CFGAPP.pix_chave ? pixTipoDe(CFGAPP.pix_chave) : "cel";
+  $("#cfgPixNome").value      = CFGAPP.pix_nome || "";
+  $("#cfgPixCidade").value    = CFGAPP.pix_cidade || "";
+  $("#cfgAvisoCc").value      = CFGAPP.aviso_cc || "";
+  $("#cfgPrecoMesFin").value  = CFGAPP.preco_mensal_finance ?? "";
+  $("#cfgPrecoAnoFin").value  = CFGAPP.preco_anual_finance ?? "";
+  $("#cfgPrecoMesInv").value  = CFGAPP.preco_mensal_invest ?? "";
+  $("#cfgPrecoAnoInv").value  = CFGAPP.preco_anual_invest ?? "";
 }
 $("#btnSalvarPlanos").addEventListener("click", async ()=>{
   const corpo = {
@@ -1768,8 +3713,20 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
     url_mensal  : $("#cfgUrlMes").value.trim() || null,
     url_anual   : $("#cfgUrlAno").value.trim() || null,
     recado      : $("#cfgRecado").value.trim() || null,
-    whatsapp    : $("#cfgZap").value.replace(/\D/g,"") || null
+    whatsapp    : $("#cfgZap").value.replace(/\D/g,"") || null,
+    pix_chave   : pixNormaliza($("#cfgPixTipo").value, $("#cfgPix").value) || null,
+    pix_nome    : $("#cfgPixNome").value.trim() || null,
+    pix_cidade  : $("#cfgPixCidade").value.trim() || null,
+    aviso_cc    : $("#cfgAvisoCc").value.split(/[,;\s]+/).map(x=>x.trim().toLowerCase()).filter(Boolean).join(", ") || null,
+    preco_mensal_finance: $("#cfgPrecoMesFin").value === "" ? null : +$("#cfgPrecoMesFin").value,
+    preco_anual_finance : $("#cfgPrecoAnoFin").value === "" ? null : +$("#cfgPrecoAnoFin").value,
+    preco_mensal_invest : $("#cfgPrecoMesInv").value === "" ? null : +$("#cfgPrecoMesInv").value,
+    preco_anual_invest  : $("#cfgPrecoAnoInv").value === "" ? null : +$("#cfgPrecoAnoInv").value
   };
+  if(corpo.aviso_cc && corpo.aviso_cc.split(", ").some(x=>!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(x))){ toast("Confira o e-mail em cópia: parece haver um endereço inválido."); return; }
+  if(corpo.pix_chave && (!corpo.pix_nome || !corpo.pix_cidade)){ toast("Para o Pix funcionar, preencha também o nome e a cidade de quem recebe."); return; }
+  if(corpo.pix_chave && $("#cfgPixTipo").value==="cel" && corpo.pix_chave.length!==14){ toast("Celular da chave Pix: informe DDD + número, ex.: 14981584071."); return; }
+  if(corpo.pix_chave && $("#cfgPixTipo").value==="doc" && corpo.pix_chave.length!==11 && corpo.pix_chave.length!==14){ toast("CPF tem 11 números e CNPJ tem 14. Confira a chave Pix."); return; }
   const zap = corpo.whatsapp;
   if(zap && (zap.length < 12 || zap.length > 15)){
     toast("WhatsApp deve ter país + DDD + número, só dígitos. Ex.: 5514981584071");
@@ -1780,6 +3737,33 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
     Object.assign(CFGAPP, corpo); pintaCfgPlanos(); toast("Planos salvos.");
   }catch(e){
     const m = (e && e.message) ? String(e.message) : "";
+    if(/aviso_cc/i.test(m)){
+      const semCc = {...corpo}; delete semCc.aviso_cc;
+      try{
+        await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(semCc)});
+        Object.assign(CFGAPP, semCc); pintaCfgPlanos();
+        toast("Salvei tudo, menos o e-mail em cópia: falta rodar o arquivo 17-aviso-copia.sql no Supabase.");
+        return;
+      }catch(e2){}
+    }
+    if(/_finance|_invest/i.test(m)){
+      const semApps = {...corpo}; ["preco_mensal_finance","preco_anual_finance","preco_mensal_invest","preco_anual_invest"].forEach(k=>delete semApps[k]);
+      try{
+        await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(semApps)});
+        Object.assign(CFGAPP, semApps); pintaCfgPlanos();
+        toast("Salvei tudo, menos os preços do Finance e do CruzInvest: falta rodar o arquivo 15-acesso-por-app.sql no Supabase.");
+        return;
+      }catch(e2){}
+    }
+    if(/pix_/i.test(m)){
+      const semPix = {...corpo}; delete semPix.pix_chave; delete semPix.pix_nome; delete semPix.pix_cidade;
+      try{
+        await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(semPix)});
+        Object.assign(CFGAPP, semPix); pintaCfgPlanos();
+        toast("Salvei tudo, menos o Pix: falta rodar o arquivo 14-pix.sql no Supabase.");
+        return;
+      }catch(e2){}
+    }
     if(/whatsapp/i.test(m)){
       const semZap = {...corpo}; delete semZap.whatsapp;
       try{
@@ -1793,6 +3777,93 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
   }
 });
 $("#btnVerPaywall").addEventListener("click", ()=> mostraPaywall(false));
+
+/* ================= PIX (QR code e copia e cola, padrão BR Code do Banco Central) ================= */
+function pixCampo(id,v){ v=String(v); return id+String(v.length).padStart(2,"0")+v; }
+function pixTxt(s,max){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9 ]/g,"").toUpperCase().trim().slice(0,max).trim(); }
+function crc16(s){ let c=0xFFFF; for(let i=0;i<s.length;i++){ c^=s.charCodeAt(i)<<8; for(let j=0;j<8;j++) c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF; } return c.toString(16).toUpperCase().padStart(4,"0"); }
+function pixPayload(chave,nome,cidade,valor,txid){
+  let p=pixCampo("00","01")+pixCampo("26",pixCampo("00","br.gov.bcb.pix")+pixCampo("01",chave))+pixCampo("52","0000")+pixCampo("53","986")+
+    (valor>0?pixCampo("54",Number(valor).toFixed(2)):"")+pixCampo("58","BR")+pixCampo("59",pixTxt(nome,25)||"CRUZON")+pixCampo("60",pixTxt(cidade,15)||"BRASIL")+
+    pixCampo("62",pixCampo("05",String(txid||"***").replace(/[^A-Za-z0-9]/g,"").slice(0,25)||"***"))+"6304";
+  return p+crc16(p);
+}
+/* deixa a chave no formato que os bancos esperam */
+function pixNormaliza(tipo,v){
+  v=String(v||"").trim(); if(!v) return "";
+  if(tipo==="cel"){ let d=v.replace(/\D/g,""); if(!d.startsWith("55")) d="55"+d; return "+"+d; }
+  if(tipo==="doc") return v.replace(/\D/g,"");
+  if(tipo==="email") return v.toLowerCase();
+  return v.toLowerCase();
+}
+function pixTipoDe(v){ v=String(v||""); if(v.startsWith("+")) return "cel"; if(v.includes("@")) return "email"; if(/^[0-9a-f-]{32,36}$/i.test(v)) return "evp"; return "doc"; }
+function qrSvg(texto){ try{ const q=qrcode(0,"M"); q.addData(texto); q.make(); return q.createSvgTag({cellSize:4,margin:0,scalable:true}); }catch(e){ return ""; } }
+let PWPLANO="anual";
+const temPix=()=>!!(CFGAPP.pix_chave&&String(CFGAPP.pix_chave).trim());
+function pintaPix(){
+  const box=$("#pwPix"); if(!box) return;
+  const url=PWPLANO==="anual"?CFGAPP.url_anual:CFGAPP.url_mensal;
+  const valor=+(PWPLANO==="anual"?CFGAPP.preco_anual:CFGAPP.preco_mensal)||0;
+  $("#pwMensalBox").classList.toggle("sel",PWPLANO==="mensal"); $("#pwAnualBox").classList.toggle("sel",PWPLANO==="anual");
+  if(!temPix()||url||!valor){ box.classList.add("hidden"); $("#pwUrg").classList.add("hidden"); return; }
+  const cod=pixPayload(CFGAPP.pix_chave,CFGAPP.pix_nome,CFGAPP.pix_cidade,valor,"PLANNER"+(PWPLANO==="anual"?"ANUAL":"MENSAL"));
+  $("#pwQr").innerHTML=qrSvg(cod);
+  $("#pwPixCod").value=cod;
+  $("#pwPixPlano").textContent=PWPLANO==="anual"?"plano anual":"plano mensal";
+  $("#pwPixVal").textContent=moeda(valor);
+  $("#pwPixNome").textContent=CFGAPP.pix_nome?("("+CFGAPP.pix_nome+")"):"";
+  $("#pwComprovante").textContent=zapLink()?"Já paguei: enviar comprovante no WhatsApp":"Já paguei: avisar o administrador";
+  $("#pwPixOk").textContent="";
+  box.classList.remove("hidden"); $("#pwUrg").classList.remove("hidden");
+}
+function selecionaPlano(qual){ PWPLANO=qual; pintaPix(); const b=$("#pwPix"); if(b&&!b.classList.contains("hidden")) b.scrollIntoView({behavior:"smooth",block:"nearest"}); }
+$("#pwMensalBox").addEventListener("click",e=>{ if(e.target.closest("button")) return; selecionaPlano("mensal"); });
+$("#pwAnualBox").addEventListener("click",e=>{ if(e.target.closest("button")) return; selecionaPlano("anual"); });
+$("#pwPixCopiar").addEventListener("click",()=>{
+  const i=$("#pwPixCod"); i.select();
+  const ok=()=>toast("Código Pix copiado. Cole no app do seu banco, em Pix › Copia e cola.");
+  try{ navigator.clipboard.writeText(i.value).then(ok,()=>{document.execCommand("copy");ok();}); }catch(e){ document.execCommand("copy"); ok(); }
+});
+$("#pwComprovante").addEventListener("click",async ()=>{
+  const plano=PWPLANO==="anual"?"anual":"mensal", valor=moeda(PWPLANO==="anual"?CFGAPP.preco_anual:CFGAPP.preco_mensal);
+  const quem=ME?((ME.name||"")+" ("+(ME.email||"")+")"):"";
+  const n=(CFGAPP.whatsapp||"").replace(/\D/g,"");
+  if(n) window.open("https://wa.me/"+n+"?text="+encodeURIComponent("Olá! Paguei o plano "+plano+" do "+APP_OFICIAL+" ("+valor+") por Pix. Sou "+quem+". Segue o comprovante:"),"_blank","noopener");
+  try{ if(ME) await enviaRecado("💰 Pagamento por Pix informado: plano "+plano+" ("+valor+"). "+(n?"O comprovante foi enviado pelo WhatsApp.":"Confira o recebimento no banco.")); }catch(e){}
+  $("#pwPixOk").textContent=n?"Anexe a imagem do comprovante na conversa do WhatsApp que abriu. Assim que o pagamento for confirmado, o seu acesso é liberado.":"Aviso enviado. Assim que o pagamento for confirmado, o seu acesso é liberado.";
+});
+
+/* ================= FAMÍLIA CRUZON (apps do mesmo ecossistema, mesma conta) ================= */
+const SITE_CRUZON="https://lucascruz2012.github.io/cruzon-planner/";
+const APPS_CRUZON=[
+  {id:"planner",nome:"CruzOn Planner",lema:"Sua rotina sempre ligada",txt:"Tarefas da semana, prazos, recorrentes e relatório por e-mail.",url:SITE_CRUZON,ic:"icone-192.png"},
+  {id:"finance",nome:"CruzOn Finance",lema:"Seu dinheiro sempre ligado",txt:"Receitas, despesas, cartões, orçamentos, metas e relatórios.",url:SITE_CRUZON+"finance/",ic:"finance/icone-192.png"},
+  {id:"invest",nome:"CruzInvest",lema:"Seu patrimônio sob controle",txt:"Carteira de investimentos, rentabilidade, CDI e proventos.",url:SITE_CRUZON+"cruzinvest/",ic:"cruzinvest/ci-icone-192.png"}];
+function ecosHtml(atual,titulo){
+  return '<h4>'+(titulo||"Conheça a família CruzOn")+'</h4><p class="ecosub">A mesma conta abre todos os apps: use o seu e-mail e senha de sempre.</p><div class="ecogrid">'+
+    APPS_CRUZON.map(a=>'<div class="eco'+(a.id===atual?' aqui':'')+'"><img src="'+a.ic+'" alt="" loading="lazy"><div><b>'+a.nome+'</b><small>'+a.txt+'</small><div class="ecolk">'+
+      (a.id===atual?'<span class="aqui-tag">Você está aqui</span>':'<a href="'+a.url+'" target="_blank" rel="noopener">Abrir</a><a href="'+SITE_CRUZON+'conheca/?app='+a.id+'" target="_blank" rel="noopener">Ver como funciona</a>')+
+      '</div></div></div>').join("")+'</div>';
+}
+
+/* ================= INDICAÇÃO ================= */
+/* quem chega por um link de indicação (?ref=) leva o código até criar a conta, em qualquer app CruzOn */
+const REFK="cruzon_ref";
+(function(){ try{ const q=new URLSearchParams(location.search); const r=(q.get("ref")||"").replace(/[^A-Za-z0-9]/g,"").slice(0,16); if(r) localStorage.setItem(REFK,JSON.stringify({ref:r,em:Date.now()})); }catch(e){} })();
+function refGuardado(){ try{ const o=JSON.parse(localStorage.getItem(REFK)||"null"); if(o&&o.ref&&Date.now()-o.em<90*864e5) return o.ref; }catch(e){} return ""; }
+const meuCodigo=()=>ME&&ME.id?String(ME.id).replace(/-/g,"").slice(0,10):"";
+const meuLinkIndica=()=>SITE_CRUZON+"conheca/?app=planner&ref="+meuCodigo();
+function pintaIndica(){
+  const i=$("#indLink"); if(!i||!ME) return;
+  i.value=meuLinkIndica();
+  $("#indShare").classList.toggle("hidden",!navigator.share);
+  $("#cfgEcos").innerHTML=ecosHtml("planner","Outros apps CruzOn com a sua conta");
+}
+const textoIndica=()=>"Estou usando o "+APP_OFICIAL+" para organizar minha rotina e recomendo! Veja como funciona e crie sua conta: "+meuLinkIndica();
+$("#indCopiar").addEventListener("click",()=>{ const i=$("#indLink"); i.select(); try{ navigator.clipboard.writeText(i.value).then(()=>toast("Link copiado."),()=>{document.execCommand("copy");toast("Link copiado.");}); }catch(e){ document.execCommand("copy"); toast("Link copiado."); } });
+$("#indZap").addEventListener("click",()=> window.open("https://wa.me/?text="+encodeURIComponent(textoIndica()),"_blank","noopener"));
+$("#indShare").addEventListener("click",()=>{ try{ navigator.share({title:APP_OFICIAL,text:textoIndica(),url:meuLinkIndica()}).catch(()=>{}); }catch(e){} });
+
 
 /* ================= RECADOS ================= */
 function zapLink(){
@@ -1905,7 +3976,7 @@ $("#btnSino").addEventListener("click", ()=>{
 /* ================= MANUAL DE USO ================= */
 const MAN_VER = "2.1";
 const MAN_DATA = "02/11/2026";
-const MAN_HTML = "<p class=\"manintro\">Este manual acompanha o aplicativo e é atualizado a cada nova funcionalidade. Percorra na ordem se for a sua primeira vez, ou use o índice acima para ir direto ao ponto.</p>\n\n<h3 id=\"m-visao\">1. O que é o CruzOn Planner</h3>\n<p>É um planejador de rotina semanal. Você registra o que precisa fazer, distribui pelos dias da semana, marca o nível de criticidade e o percentual concluído, e o aplicativo transforma isso em indicadores, histórico e um relatório de pendências que chega no seu e-mail.</p>\n<p>Ele não pressupõe nenhuma área específica: serve para quem cuida de pessoas, de contratos, de obras, de clientes ou de qualquer conjunto de tarefas com prazo e responsável. A divisão por <b>empresa</b> pode ser usada como setor, cliente, projeto ou unidade — quem define é você.</p>\n<p>Tudo o que você registra fica na sua conta, na nuvem. Você entra de qualquer computador e encontra o mesmo conteúdo.</p>\n\n<h3 id=\"m-entrar\">2. Primeiro acesso</h3>\n<p><b>Criar a conta.</b> Na tela de entrada, clique em <b>Criar conta</b>, informe nome, e-mail e senha. A conta nasce bloqueada: o administrador precisa liberar o acesso. Enquanto isso, você vê um aviso de espera.</p>\n<p><b>Esqueci a senha.</b> Clique em <b>Esqueci minha senha</b>, informe o e-mail e siga o link que chega na sua caixa de entrada.</p>\n<p><b>Aviso de Privacidade.</b> No primeiro acesso aparece o Aviso de Privacidade e os Termos de Uso. É preciso marcar a caixa de concordância para entrar. A data do seu aceite fica registrada e pode ser consultada depois em Ajustes.</p>\n<figure><img loading=\"lazy\" src=\"manual-login.jpg\" alt=\"Tela de entrada do aplicativo\"><figcaption>Tela de entrada: e-mail, senha, recuperação e criação de conta.</figcaption></figure>\n\n<h3 id=\"m-semana\">3. Aba Semana — o coração do aplicativo</h3>\n<p>É aqui que você trabalha no dia a dia. Cada coluna é um dia, e cada cartão é uma tarefa.</p>\n<p><b>Criar uma tarefa.</b> Clique em <b>+ tarefa</b> no rodapé da coluna do dia desejado. Escreva a descrição e preencha os campos do cartão.</p>\n<p><b>Campos de cada cartão:</b></p>\n<ul>\n  <li><b>Descrição</b> — texto livre, sem limite prático de tamanho. Clique sobre ele para editar.</li>\n  <li><b>Criticidade</b> — Crítica, Alta, Média ou Baixa. É o que ordena as listas e colore a etiqueta.</li>\n  <li><b>Empresa</b> — a lista vem do seu cadastro em Ajustes. A cor da borda do cartão segue a cor da empresa.</li>\n  <li><b>Prazo</b> — a data de vencimento. Tarefa com prazo passado e não concluída entra como atrasada.</li>\n  <li><b>Percentual</b> — de 0% a 100%. Ao chegar em 100% o cartão fica verde e a descrição é riscada.</li>\n</ul>\n<p><b>Mover uma tarefa de dia.</b> Arraste o cartão para outra coluna. Serve tanto para reorganizar a semana quanto para empurrar o que não deu tempo.</p>\n<p><b>Reagendar para qualquer data.</b> Passe o mouse sobre o cartão e clique no ícone de calendário, no canto superior direito. Escolha a data e a tarefa vai para lá, inclusive para outra semana — o prazo é atualizado junto. No celular o ícone fica sempre visível.</p>\n<p><b>As cores do cartão.</b> A cor de fundo vem sempre da empresa, do jeito que você cadastrou em Ajustes, e não muda por causa do prazo. Tarefa atrasada ganha contorno vermelho, o prazo em vermelho e a etiqueta <i>atrasada</i>; tarefa em 100% fica verde e com a descrição riscada.</p>\n<p><b>Coluna No radar.</b> É a coluna fixa da direita, para o que ainda não tem dia marcado — ideias, pendências futuras, coisas que dependem de terceiros. Ela aparece igual em todas as semanas até você arrastar o item para um dia.</p>\n<p><b>Ordenar por criticidade.</b> No topo de cada coluna há um botão de ordenação. O primeiro clique põe as mais críticas em cima, o segundo inverte, o terceiro volta à ordem manual. O botão <b>Ordenar tudo</b> aplica de uma vez a todas as colunas. É só uma forma de visualizar: a posição real das tarefas não muda.</p>\n<p><b>Sábado e domingo.</b> Os botões no topo escondem ou mostram o fim de semana. Com eles escondidos, os cinco dias úteis ocupam a tela inteira. É só uma forma de visualizar no computador: no celular os sete dias continuam na tira, e se alguma tarefa for parar no fim de semana esses dias voltam a aparecer aqui também.</p>\n<p><b>Levar pendências.</b> O botão leva para a semana seguinte tudo o que ficou aberto, sem precisar redigitar.</p>\n<figure><img loading=\"lazy\" src=\"manual-semana.jpg\" alt=\"Aba Semana com os dias e a coluna No radar\"><figcaption>A grade da semana, com criticidade colorida, percentual por tarefa e a coluna No radar à direita.</figcaption></figure>\n\n<h3 id=\"m-dash\">4. Aba Dashboard</h3>\n<p>Mostra como está a semana escolhida. Use as setas ao lado da data para navegar entre semanas e o botão <b>Hoje</b> para voltar à atual.</p>\n<p><b>Os indicadores do topo</b> respondem, em ordem: quanto da semana foi concluído, como isso se compara com a semana anterior, quantas tarefas existem, quantas estão concluídas, em andamento e não iniciadas, quantas estão atrasadas, quantas vencem hoje, quantas vieram de semanas anteriores, quantos prazos existem nos próximos 14 dias e quantos itens estão no radar.</p>\n<p><b>Os quadros abaixo</b> abrem o mesmo número por empresa e por criticidade, comparam planejado contra concluído em cada dia, mostram a distribuição por situação e listam as prioridades em aberto e os próximos prazos.</p>\n<p>Se um número parecer estranho, clique na semana correspondente: o Dashboard sempre reflete exatamente o que está na aba Semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-dash.jpg\" alt=\"Dashboard com indicadores e gráficos da semana\"><figcaption>Indicadores da semana, desempenho por empresa e por criticidade, e os próximos prazos.</figcaption></figure>\n\n<h3 id=\"m-rec\">5. Aba Recorrentes</h3>\n<p>Serve para o que se repete: obrigações mensais, conferências semanais, rotinas anuais. Cadastre uma vez e o aplicativo lança a tarefa sozinho na semana certa.</p>\n<p>Clique em <b>+ Nova recorrência</b> e preencha empresa, descrição, criticidade e frequência. Depois informe o dia:</p>\n<ul>\n  <li><b>Mensal e Anual</b> — o dia do mês (por exemplo, 7 para todo dia 7). No anual, informe também o mês.</li>\n  <li><b>Semanal</b> — o dia da semana, em número: 1 é segunda-feira e 7 é domingo.</li>\n</ul>\n<p>A caixa <b>Ativo</b> liga e desliga a recorrência sem apagá-la. Uma tarefa lançada por recorrência aparece na semana com a marca <b>rec</b> e pode ser editada normalmente — a alteração vale só para aquela semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-rec.jpg\" alt=\"Aba Recorrentes com a lista de rotinas cadastradas\"><figcaption>Cada linha é uma rotina que se repete sozinha na semana correspondente.</figcaption></figure>\n\n<h3 id=\"m-hist\">6. Aba Histórico</h3>\n<p>Alimentada automaticamente por todas as semanas já registradas. Traz a evolução mensal de planejadas contra concluídas, um resumo mês a mês e a lista de todas as semanas, com o botão <b>abrir</b> para ir direto a qualquer uma delas.</p>\n<p>É a aba certa para responder \"como foi o trimestre\" sem precisar abrir semana por semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-hist.jpg\" alt=\"Aba Histórico com gráfico de evolução mensal\"><figcaption>Evolução mensal e a lista de semanas registradas.</figcaption></figure>\n\n<h3 id=\"m-ajustes\">7. Aba Ajustes</h3>\n<p><b>Sua conta.</b> Altere seu nome e sua senha. A troca de senha vale para todos os computadores.</p>\n<p><b>Trocar o e-mail de login.</b> O botão <i>Trocar e-mail de login</i> abre dois campos para você escrever o endereço novo duas vezes. Ao enviar, chega um link de confirmação no e-mail novo — e, conforme a configuração do sistema, também no atual. <b>O endereço só muda depois que você clica no link</b>, e até lá você continua entrando normalmente com o de sempre. Nenhuma tarefa, semana, recorrência ou empresa é afetada: o seu conteúdo fica preso à conta, não ao endereço. Depois de confirmar, entre com o e-mail novo e a mesma senha. O relatório por e-mail passa a ir para o endereço novo automaticamente.</p>\n<p><b>Aparência.</b> Escolha o tema (Identidade, Claro, Escuro ou Automático), o tamanho da fonte da aba Semana e a intensidade da cor das empresas nos cartões.</p>\n<p><b>Nome exibido ao lado do logotipo.</b> Este campo é só seu: escreva o nome da sua empresa, do seu setor ou o que preferir. Ele aparece ao lado do logotipo, na aba do navegador, no cabeçalho das impressões e também na tela de entrada deste aparelho. Deixe vazio para não exibir nada em lugar nenhum.</p>\n<p><b>Empresas.</b> Cadastre quantas quiser, com nome e cor. Para renomear, clique no campo do nome, escreva e saia do campo (ou aperte Enter): nesse momento todas as tarefas, itens do radar e recorrências que usavam o nome antigo são atualizados de uma vez, e o aplicativo avisa quantos registros mudaram. A cor é aplicada na hora, enquanto você escolhe no seletor.</p>\n<p><b>Empresas que saíram do cadastro.</b> Se uma empresa for excluída e sobrarem registros apontando para ela, eles ficam cinza na aba Semana e o campo da empresa aparece marcado como <i>não cadastrada</i> — nunca trocado em silêncio por outra. Um quadro amarelo aparece no topo de <i>Minhas empresas</i> listando essas empresas e quantos registros cada uma tem, com três saídas: <i>Cadastrar de volta</i>, <i>Passar para esta empresa</i> (move tudo para outra empresa, sem perder nada) ou excluir os registros, depois de conferir a lista completa. O quadro some sozinho quando não sobra nenhum caso.</p>\n<p><b>Excluir uma empresa.</b> Ao clicar no × a tela mostra, antes de qualquer coisa, <b>a lista completa do que está vinculado àquela empresa</b> — tarefas da agenda com dia, criticidade e percentual, itens no radar e recorrências cadastradas. Com a lista na frente você escolhe: <i>Excluir só a empresa</i>, que apaga apenas o cadastro e deixa os registros na agenda sem cor, ou <i>Excluir empresa e registros</i>, que descarta tudo o que está na lista. A segunda opção não tem volta — se tiver dúvida, exporte um backup antes.</p>\n<p><b>Backup.</b> <i>Exportar backup completo</i> gera um arquivo com tudo o que é seu; <i>Restaurar / importar</i> traz esse arquivo de volta; <i>Exportar semana</i> gera uma planilha da semana atual. Vale exportar de tempos em tempos, mesmo com os dados na nuvem.</p>\n<p><b>Privacidade.</b> Abre o Aviso de Privacidade a qualquer momento e mostra a data do seu aceite.</p>\n<p><b>Zona de risco.</b> Apaga todo o seu conteúdo na nuvem. Não tem volta — exporte um backup antes.</p>\n<figure><img loading=\"lazy\" src=\"manual-ajustes.jpg\" alt=\"Aba Ajustes com as opções de conta, aparência e empresas\"><figcaption>Ajustes reúne conta, aparência, empresas, backup, privacidade e o manual.</figcaption></figure>\n\n<h3 id=\"m-email\">8. Relatório por e-mail</h3>\n<p>Você recebe no seu e-mail um resumo só com as suas tarefas. Em <i>Ajustes &rsaquo; Relatório por e-mail</i> você escolhe <b>quais dias da semana</b> quer receber e <b>em que horário</b>, ou desliga o envio de vez. Cada pessoa configura o seu; ninguém vê as pendências de ninguém.</p>\n<p><b>O primeiro dia que você marcar na semana</b> traz o fechamento da semana anterior: percentual concluído, quantas ficaram pendentes, atrasadas e no radar, a lista do que sobrou com a criticidade e a empresa de cada item, e os prazos dos próximos sete dias.</p>\n<p><b>Nos demais dias</b> o e-mail mostra a semana em andamento: o que ainda está em aberto agora, o que já venceu e o que vence até o fim da semana. Assim cada envio traz informação nova em vez de repetir o anterior.</p>\n<p>Todo e-mail termina com uma frase de Provérbios, de Salmos ou de um autor cristão clássico. São mais de 160 frases no acervo, e a rotação é por envio: você não repete nenhuma dentro de um ano.</p>\n<p>O relatório é montado para ser lido igual em qualquer caixa: Outlook do trabalho, webmail corporativo, Gmail e celular. A largura é fixa e as informações ficam lado a lado, sem esticar na tela do computador.</p>\n<p>Se o e-mail não chegar, verifique a pasta de spam ou promoções e marque como \"não é spam\" — isso resolve para todos os envios seguintes.</p>\n\n<h3 id=\"m-print\">9. Impressão</h3>\n<p>O botão <b>Imprimir</b>, no topo, gera a versão em papel ou PDF do que estiver na tela. O cabeçalho sai com o logotipo, o nome exibido, o seu nome e a data da impressão.</p>\n<p>Para gerar um PDF, escolha \"Salvar como PDF\" no destino da impressão do navegador.</p>\n\n<h3 id=\"m-planos\">10. Período de teste, planos e recados</h3>\n<p>Se o administrador tiver ativado o período de teste, a contagem começa no dia em que o seu acesso é liberado. Nos últimos cinco dias aparece um aviso no topo do aplicativo.</p>\n<p>Terminado o prazo, o conteúdo continua guardado e disponível para consulta e exportação, mas a edição fica suspensa até a contratação de um plano. Na tela que aparece você pode escolher o plano, enviar um recado ao administrador ou falar por WhatsApp.</p>\n\n<h3 id=\"m-equipe\">11. Aba Equipe e funções do administrador</h3>\n<p>Visível apenas para quem é administrador. Reúne o panorama consolidado da equipe e a gestão de acessos.</p>\n<p>Em Ajustes, o administrador ainda controla: <b>Perfis de acesso</b> — liberar, desativar, promover a administrador, marcar como gratuito e ajustar a validade. Os botões <i>+1 mês</i> e <i>+1 ano</i> somam o período ao que ainda estiver valendo; <i>+ dias…</i> pergunta a quantidade exata, útil para estender um teste por alguns dias, <b>Recados dos usuários</b> (caixa de entrada, com sino de aviso no topo), <b>Planos e cobrança</b> (período de teste, preços, links de pagamento e WhatsApp) e a <b>Identidade do aplicativo</b> (logotipo).</p>\n\n<h3 id=\"m-celular\">12. No celular</h3>\n<p>A tela se reorganiza sozinha quando você abre pelo telefone. Nada precisa ser instalado: é o mesmo endereço do navegador.</p>\n<p><b>Navegação.</b> As abas passam para uma barra fixa no rodapé — Painel, Semana, Recorrentes, Histórico, Equipe e Ajustes. O topo fica só com o logotipo e os botões de tema e sair.</p>\n<p><b>Um dia por vez.</b> Na aba Semana aparece uma tira com os dias logo abaixo do cabeçalho, já aberta no dia de hoje. Toque em um dia para ver a lista dele ocupando a tela inteira — sem rolagem lateral e sem precisar aproximar a tela. A bolinha vermelha em cada dia mostra quantas tarefas ainda estão em aberto, e a tira termina com o <b>Radar</b>.</p>\n<p><b>Mudar uma tarefa de dia.</b> No computador você arrasta. No celular, <b>segure o dedo por meio segundo em qualquer ponto do cartão</b> — descrição, criticidade, empresa, prazo ou percentual, tanto faz: abre uma janela na parte de baixo com os dias da semana e o radar. Se você rolar a tela durante o toque, nada acontece; e o × de excluir continua funcionando com um toque simples. Toque no destino e pronto — a tela já muda para o dia escolhido, para você conferir.</p>\n<p><b>Sábado e domingo sempre disponíveis.</b> A tira do celular traz os sete dias, mesmo que você tenha escondido o fim de semana no computador — lá é uma questão de espaço na grade, aqui aparece um dia por vez e não atrapalha. Se você criar ou mover uma tarefa para sábado ou domingo, esse dia volta a aparecer também no computador, para a tarefa não ficar escondida.</p>\n<p><b>O resto.</b> Os campos de cada tarefa ficam em duas colunas, com área de toque maior. Os indicadores do Painel aparecem dois por linha, e as tabelas mais largas deslizam para o lado dentro do próprio quadro.</p>\n<p>Nada disso muda a versão de computador: é a mesma conta, os mesmos dados e a mesma sincronização.</p>\n<figure><img loading=\"lazy\" src=\"manual-celular.jpg\" alt=\"Aba Semana no celular e a janela de mover tarefa\"><figcaption>À esquerda, a tira de dias e as tarefas ocupando a tela inteira. À direita, a janela que abre ao segurar o dedo sobre uma tarefa.</figcaption></figure>\n\n<h3 id=\"m-instalar\">13. Instalar no celular</h3>\n<p>O CruzOn Planner pode ser instalado na tela inicial do aparelho. Não é aplicativo de loja: é o próprio site, que passa a abrir com ícone próprio, em tela cheia, sem a barra do navegador — e continua abrindo mesmo sem internet, mostrando o que já estava carregado.</p>\n<p><b>Como instalar.</b> Abra <i>Ajustes &rsaquo; Instalar no celular</i> e toque em <b>Instalar aplicativo</b>. Se o botão não aparecer, use o menu do navegador: no Android, os três pontinhos e depois <b>Instalar aplicativo</b>; no iPhone, o botão de compartilhar do Safari e depois <b>Adicionar à Tela de Início</b>.</p>\n<p><b>Atualizações são automáticas.</b> Toda vez que você abrir com internet, o aplicativo busca a versão mais recente sozinho. Não existe atualização para baixar.</p>\n\n<h3 id=\"m-sync\">14. Tudo em tempo real, em todos os aparelhos</h3>\n<p>Seu conteúdo fica na nuvem, não no aparelho. Computador, celular e tablet mostram a mesma semana, e o que você faz em um aparece no outro em poucos segundos, sem recarregar a página e sem apertar nada.</p>\n<p><b>Como funciona.</b> O aplicativo grava cada alteração poucos instantes depois de você fazê-la e, em paralelo, fica conferindo se mudou alguma coisa do outro lado. Quando encontra novidade, atualiza a tela sozinho e mostra <i>Atualizado</i> no topo, ao lado do seu nome.</p>\n<p><b>Enquanto você digita, nada muda na sua frente.</b> A atualização automática espera você terminar de preencher o campo, para não trocar o conteúdo embaixo do seu dedo.</p>\n<p><b>Mexendo nos dois ao mesmo tempo.</b> Se você concluir uma tarefa no celular enquanto reagenda outra no computador, as duas alterações são mantidas: o aplicativo junta as versões item a item, em vez de deixar a última gravação apagar a anterior. Quando a <i>mesma</i> tarefa é alterada nos dois, vale a alteração mais recente.</p>\n<p><b>Sem internet.</b> Você continua trabalhando: as alterações ficam guardadas no aparelho e sobem assim que a conexão voltar, já juntadas com o que os outros aparelhos fizeram nesse meio tempo.</p>\n<p><b>No aplicativo instalado no celular.</b> Ao trazer o aplicativo de volta para a tela, ele busca as novidades na hora — por isso você não encontra mais a semana desatualizada ao desbloquear o telefone.</p>\n\n<h3 id=\"m-duvidas\">15. Se algo não funcionar</h3>\n<p><b>O aplicativo não atualizou depois de uma novidade.</b> Pressione Ctrl+F5 para recarregar ignorando o que ficou guardado no navegador.</p>\n<p><b>Aparece \"Sem conexão\" no topo.</b> Você continua trabalhando normalmente: as alterações ficam guardadas no navegador e sobem sozinhas quando a internet voltar.</p>\n<p><b>Não encontro sábado ou domingo no computador.</b> Os botões <i>Sábado</i> e <i>Domingo</i> no topo da aba Semana estão desligados. Clique neles para trazer as colunas de volta; o número ao lado de cada botão mostra quantas tarefas estão escondidas ali.</p>\n<p><b>O celular parece atrasado em relação ao computador.</b> Traga o aplicativo de volta para a tela: ele busca as novidades na hora. Se continuar diferente, confira se os dois estão na mesma semana e se o topo não está marcando <i>Sem conexão</i>.</p>\n<p><b>Entrei e não vejo minhas tarefas.</b> Confira se entrou com o mesmo e-mail de sempre. Cada conta tem o seu próprio conteúdo.</p>\n<p><b>A sessão expirou.</b> É normal depois de muito tempo sem uso. Basta entrar de novo.</p>\n<p><b>Outra dúvida.</b> Fale com o administrador pelo canal informado na tela de planos ou pelo e-mail de contato do Aviso de Privacidade.</p>";
+const MAN_HTML = "<p class=\"manintro\">Este manual acompanha o aplicativo e é atualizado a cada nova funcionalidade. Percorra na ordem se for a sua primeira vez, ou use o índice acima para ir direto ao ponto.</p>\n\n<h3 id=\"m-visao\">1. O que é o CruzOn Planner</h3>\n<p>É um planejador de rotina semanal. Você registra o que precisa fazer, distribui pelos dias da semana, marca o nível de criticidade e o percentual concluído, e o aplicativo transforma isso em indicadores, histórico e um relatório de pendências que chega no seu e-mail.</p>\n<p>Ele não pressupõe nenhuma área específica: serve para quem cuida de pessoas, de contratos, de obras, de clientes ou de qualquer conjunto de tarefas com prazo e responsável. A divisão por <b>empresa</b> pode ser usada como setor, cliente, projeto ou unidade — quem define é você.</p>\n<p>Tudo o que você registra fica na sua conta, na nuvem. Você entra de qualquer computador e encontra o mesmo conteúdo.</p>\n\n<h3 id=\"m-entrar\">2. Primeiro acesso</h3>\n<p><b>Criar a conta.</b> Na tela de entrada, clique em <b>Criar conta</b>, informe nome, e-mail e senha. A conta nasce bloqueada: o administrador precisa liberar o acesso. Enquanto isso, você vê um aviso de espera.</p>\n<p><b>Esqueci a senha.</b> Clique em <b>Esqueci minha senha</b>, informe o e-mail e siga o link que chega na sua caixa de entrada.</p>\n<p><b>Aviso de Privacidade.</b> No primeiro acesso aparece o Aviso de Privacidade e os Termos de Uso. É preciso marcar a caixa de concordância para entrar. A data do seu aceite fica registrada e pode ser consultada depois em Ajustes.</p>\n<figure><img loading=\"lazy\" src=\"manual-login.jpg\" alt=\"Tela de entrada do aplicativo\"><figcaption>Tela de entrada: e-mail, senha, recuperação e criação de conta.</figcaption></figure>\n\n<h3 id=\"m-semana\">3. Aba Semana — o coração do aplicativo</h3>\n<p>É aqui que você trabalha no dia a dia. Cada coluna é um dia, e cada cartão é uma tarefa.</p>\n<p><b>Criar uma tarefa.</b> Clique em <b>+ tarefa</b> no rodapé da coluna do dia desejado. Escreva a descrição e preencha os campos do cartão.</p>\n<p><b>Campos de cada cartão:</b></p>\n<ul>\n  <li><b>Descrição</b> — texto livre, sem limite prático de tamanho. Clique sobre ele para editar.</li>\n  <li><b>Criticidade</b> — Crítica, Alta, Média ou Baixa. É o que ordena as listas e colore a etiqueta.</li>\n  <li><b>Empresa</b> — a lista vem do seu cadastro em Ajustes. A cor da borda do cartão segue a cor da empresa.</li>\n  <li><b>Prazo</b> — a data de vencimento. Tarefa com prazo passado e não concluída entra como atrasada.</li>\n  <li><b>Percentual</b> — de 0% a 100%. Ao chegar em 100% o cartão fica verde e a descrição é riscada.</li>\n</ul>\n<p><b>Mover uma tarefa de dia.</b> Arraste o cartão para outra coluna. Serve tanto para reorganizar a semana quanto para empurrar o que não deu tempo.</p>\n<p><b>Reagendar para qualquer data.</b> Passe o mouse sobre o cartão e clique no ícone de calendário, no canto superior direito. Escolha a data e a tarefa vai para lá, inclusive para outra semana — o prazo é atualizado junto. No celular o ícone fica sempre visível.</p>\n<p><b>As cores do cartão.</b> A cor de fundo vem sempre da empresa, do jeito que você cadastrou em Ajustes, e não muda por causa do prazo. Tarefa atrasada ganha contorno vermelho, o prazo em vermelho e a etiqueta <i>atrasada</i>; tarefa em 100% fica verde e com a descrição riscada.</p>\n<p><b>Coluna No radar.</b> É a coluna fixa da direita, para o que ainda não tem dia marcado — ideias, pendências futuras, coisas que dependem de terceiros. Ela aparece igual em todas as semanas até você arrastar o item para um dia.</p>\n<p><b>Ordenar por criticidade.</b> No topo de cada coluna há um botão de ordenação. O primeiro clique põe as mais críticas em cima, o segundo inverte, o terceiro volta à ordem manual. O botão <b>Ordenar tudo</b> aplica de uma vez a todas as colunas. É só uma forma de visualizar: a posição real das tarefas não muda.</p>\n<p><b>Sábado e domingo.</b> Os botões no topo escondem ou mostram o fim de semana. Com eles escondidos, os cinco dias úteis ocupam a tela inteira. É só uma forma de visualizar no computador: no celular os sete dias continuam na tira, e se alguma tarefa for parar no fim de semana esses dias voltam a aparecer aqui também.</p>\n<p><b>Levar pendências.</b> O botão leva para a semana seguinte tudo o que ficou aberto, sem precisar redigitar.</p>\n<figure><img loading=\"lazy\" src=\"manual-semana.jpg\" alt=\"Aba Semana com os dias e a coluna No radar\"><figcaption>A grade da semana, com criticidade colorida, percentual por tarefa e a coluna No radar à direita.</figcaption></figure>\n\n<h3 id=\"m-dash\">4. Aba Dashboard</h3>\n<p>Mostra como está a semana escolhida. Use as setas ao lado da data para navegar entre semanas e o botão <b>Hoje</b> para voltar à atual.</p>\n<p><b>Os indicadores do topo</b> respondem, em ordem: quanto da semana foi concluído, como isso se compara com a semana anterior, quantas tarefas existem, quantas estão concluídas, em andamento e não iniciadas, quantas estão atrasadas, quantas vencem hoje, quantas vieram de semanas anteriores, quantos prazos existem nos próximos 14 dias e quantos itens estão no radar.</p>\n<p><b>Os quadros abaixo</b> abrem o mesmo número por empresa e por criticidade, comparam planejado contra concluído em cada dia, mostram a distribuição por situação e listam as prioridades em aberto e os próximos prazos.</p>\n<p>Se um número parecer estranho, clique na semana correspondente: o Dashboard sempre reflete exatamente o que está na aba Semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-dash.jpg\" alt=\"Dashboard com indicadores e gráficos da semana\"><figcaption>Indicadores da semana, desempenho por empresa e por criticidade, e os próximos prazos.</figcaption></figure>\n\n<h3 id=\"m-rec\">5. Aba Recorrentes</h3>\n<p>Serve para o que se repete: obrigações mensais, conferências semanais, rotinas anuais. Cadastre uma vez e o aplicativo lança a tarefa sozinho na semana certa.</p>\n<p>Clique em <b>+ Nova recorrência</b> e preencha empresa, descrição, criticidade e frequência. Depois informe o dia:</p>\n<ul>\n  <li><b>Mensal e Anual</b> — o dia do mês (por exemplo, 7 para todo dia 7). No anual, informe também o mês.</li>\n  <li><b>Semanal</b> — o dia da semana, em número: 1 é segunda-feira e 7 é domingo.</li>\n</ul>\n<p>A caixa <b>Ativo</b> liga e desliga a recorrência sem apagá-la. Uma tarefa lançada por recorrência aparece na semana com a marca <b>rec</b> e pode ser editada normalmente — a alteração vale só para aquela semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-rec.jpg\" alt=\"Aba Recorrentes com a lista de rotinas cadastradas\"><figcaption>Cada linha é uma rotina que se repete sozinha na semana correspondente.</figcaption></figure>\n\n<h3 id=\"m-hist\">6. Aba Histórico</h3>\n<p>Alimentada automaticamente por todas as semanas já registradas. Traz a evolução mensal de planejadas contra concluídas, um resumo mês a mês e a lista de todas as semanas, com o botão <b>abrir</b> para ir direto a qualquer uma delas.</p>\n<p>É a aba certa para responder \"como foi o trimestre\" sem precisar abrir semana por semana.</p>\n<figure><img loading=\"lazy\" src=\"manual-hist.jpg\" alt=\"Aba Histórico com gráfico de evolução mensal\"><figcaption>Evolução mensal e a lista de semanas registradas.</figcaption></figure>\n\n<h3 id=\"m-ajustes\">7. Aba Ajustes</h3>\n<p><b>Sua conta.</b> Altere seu nome e sua senha. A troca de senha vale para todos os computadores.</p>\n<p><b>Trocar o e-mail de login.</b> O botão <i>Trocar e-mail de login</i> abre dois campos para você escrever o endereço novo duas vezes. Ao enviar, chega um link de confirmação no e-mail novo — e, conforme a configuração do sistema, também no atual. <b>O endereço só muda depois que você clica no link</b>, e até lá você continua entrando normalmente com o de sempre. Nenhuma tarefa, semana, recorrência ou empresa é afetada: o seu conteúdo fica preso à conta, não ao endereço. Depois de confirmar, entre com o e-mail novo e a mesma senha. O relatório por e-mail passa a ir para o endereço novo automaticamente.</p>\n<p><b>Aparência.</b> Escolha o tema (Identidade, Claro, Escuro ou Automático), o tamanho da fonte da aba Semana e a intensidade da cor das empresas nos cartões.</p>\n<p><b>Nome exibido ao lado do logotipo.</b> Este campo é só seu: escreva o nome da sua empresa, do seu setor ou o que preferir. Ele aparece ao lado do logotipo, na aba do navegador, no cabeçalho das impressões e também na tela de entrada deste aparelho. Deixe vazio para não exibir nada em lugar nenhum.</p>\n<p><b>Empresas.</b> Cadastre quantas quiser, com nome e cor. Para renomear, clique no campo do nome, escreva e saia do campo (ou aperte Enter): nesse momento todas as tarefas, itens do radar e recorrências que usavam o nome antigo são atualizados de uma vez, e o aplicativo avisa quantos registros mudaram. A cor é aplicada na hora, enquanto você escolhe no seletor.</p>\n<p><b>Empresas que saíram do cadastro.</b> Se uma empresa for excluída e sobrarem registros apontando para ela, eles ficam cinza na aba Semana e o campo da empresa aparece marcado como <i>não cadastrada</i> — nunca trocado em silêncio por outra. Um quadro amarelo aparece no topo de <i>Minhas empresas</i> listando essas empresas e quantos registros cada uma tem, com três saídas: <i>Cadastrar de volta</i>, <i>Passar para esta empresa</i> (move tudo para outra empresa, sem perder nada) ou excluir os registros, depois de conferir a lista completa. O quadro some sozinho quando não sobra nenhum caso.</p>\n<p><b>Excluir uma empresa.</b> Ao clicar no × a tela mostra, antes de qualquer coisa, <b>a lista completa do que está vinculado àquela empresa</b> — tarefas da agenda com dia, criticidade e percentual, itens no radar e recorrências cadastradas. Com a lista na frente você escolhe: <i>Excluir só a empresa</i>, que apaga apenas o cadastro e deixa os registros na agenda sem cor, ou <i>Excluir empresa e registros</i>, que descarta tudo o que está na lista. A segunda opção não tem volta — se tiver dúvida, exporte um backup antes.</p>\n<p><b>Backup.</b> <i>Exportar backup completo</i> gera um arquivo com tudo o que é seu; <i>Restaurar / importar</i> traz esse arquivo de volta; <i>Exportar semana</i> gera uma planilha da semana atual. Vale exportar de tempos em tempos, mesmo com os dados na nuvem.</p>\n<p><b>Privacidade.</b> Abre o Aviso de Privacidade a qualquer momento e mostra a data do seu aceite.</p>\n<p><b>Zona de risco.</b> Apaga todo o seu conteúdo na nuvem. Não tem volta — exporte um backup antes.</p>\n<figure><img loading=\"lazy\" src=\"manual-ajustes.jpg\" alt=\"Aba Ajustes com as opções de conta, aparência e empresas\"><figcaption>Ajustes reúne conta, aparência, empresas, backup, privacidade e o manual.</figcaption></figure>\n\n<h3 id=\"m-email\">8. Relatório por e-mail</h3>\n<p>Você recebe no seu e-mail um resumo só com as suas tarefas. Em <i>Ajustes &rsaquo; Relatório por e-mail</i> você escolhe <b>quais dias da semana</b> quer receber e <b>em que horário</b>, ou desliga o envio de vez. Cada pessoa configura o seu; ninguém vê as pendências de ninguém.</p>\n<p><b>O primeiro dia que você marcar na semana</b> traz o fechamento da semana anterior: percentual concluído, quantas ficaram pendentes, atrasadas e no radar, a lista do que sobrou com a criticidade e a empresa de cada item, e os prazos dos próximos sete dias.</p>\n<p><b>Nos demais dias</b> o e-mail mostra a semana em andamento: o que ainda está em aberto agora, o que já venceu e o que vence até o fim da semana. Assim cada envio traz informação nova em vez de repetir o anterior.</p>\n<p>Todo e-mail termina com uma frase de Provérbios, de Salmos ou de um autor cristão clássico. São mais de 160 frases no acervo, e a rotação é por envio: você não repete nenhuma dentro de um ano.</p>\n<p>O relatório é montado para ser lido igual em qualquer caixa: Outlook do trabalho, webmail corporativo, Gmail e celular. A largura é fixa e as informações ficam lado a lado, sem esticar na tela do computador.</p>\n<p>Se o e-mail não chegar, verifique a pasta de spam ou promoções e marque como \"não é spam\" — isso resolve para todos os envios seguintes.</p>\n\n<h3 id=\"m-print\">9. Impressão</h3>\n<p>O botão <b>Imprimir</b>, no topo, gera a versão em papel ou PDF do que estiver na tela. O cabeçalho sai com o logotipo, o nome exibido, o seu nome e a data da impressão.</p>\n<p>Para gerar um PDF, escolha \"Salvar como PDF\" no destino da impressão do navegador.</p>\n\n<h3 id=\"m-planos\">10. Período de teste, planos e recados</h3>\n<p>Quem cria a conta já entra e, se o administrador tiver ativado o período de teste, a contagem começa no primeiro uso do Planner. Nos últimos cinco dias aparece um aviso na parte de baixo da tela, com o botão <b>Ver planos</b>. A tela de assinatura é igual nos três apps CruzOn.</p>\n<p>Terminado o prazo, o conteúdo continua guardado e disponível para consulta e exportação, mas a edição fica suspensa até a contratação de um plano. Na tela que aparece você pode escolher o plano, enviar um recado ao administrador ou falar por WhatsApp.</p>\n<p><b>Pagar com Pix.</b> Escolha o plano mensal ou anual: aparece o <b>QR code do Pix</b> já com o valor, e o código <b>Pix copia e cola</b>. Pague pelo app do seu banco e toque em <b>Já paguei: enviar comprovante no WhatsApp</b>. Anexe a imagem do comprovante na conversa; o acesso é liberado assim que o pagamento é confirmado.</p>\n<p><b>Para o administrador:</b> em <b>Ajustes › Planos e cobrança</b>, informe o tipo e a chave Pix, o nome e a cidade de quem recebe. Ao receber o comprovante, libere o acesso na lista de perfis com <b>+1 mês</b> ou <b>+1 ano</b>.</p>\n<p><b>Finance e CruzInvest também são assinados.</b> Cada app tem o seu período de teste (no Finance e no CruzInvest ele começa sozinho no primeiro uso) e o seu preço, definido em <b>Ajustes › Planos e cobrança</b>. Na lista de perfis, a coluna <b>Planos</b> mostra a situação de cada app, e o botão <b>Finance e CruzInvest…</b> libera cada um separadamente: <b>+1 mês</b>, <b>+1 ano</b>, <b>+ dias</b>, <b>Gratuito</b> ou <b>Pausar</b>. Quem pagou só o Finance, você libera só o Finance.</p>\n<p><b>Indique para um amigo.</b> Em <b>Ajustes › Indique para um amigo</b> fica o seu link pessoal. Quem abrir conhece o app com telas reais e cria a conta com a sua indicação. Ali também estão os outros apps da família CruzOn, o <b>CruzOn Finance</b> e o <b>CruzInvest</b>, que abrem com o mesmo e-mail e senha.</p>\n\n<h3 id=\"m-equipe\">11. Aba Equipe e funções do administrador</h3>\n<p>Visível apenas para quem é administrador. Reúne o panorama consolidado da equipe e a gestão de acessos.</p>\n<p>Em Ajustes, o administrador ainda controla: <b>Perfis de acesso</b> — liberar, desativar, promover a administrador, marcar como gratuito e ajustar a validade. Os botões <i>+1 mês</i> e <i>+1 ano</i> somam o período ao que ainda estiver valendo; <i>+ dias…</i> pergunta a quantidade exata, útil para estender um teste por alguns dias, <b>Recados dos usuários</b> (caixa de entrada, com sino de aviso no topo), <b>Planos e cobrança</b> (período de teste, preços, links de pagamento e WhatsApp) e a <b>Identidade do aplicativo</b> (logotipo).</p>\n\n<h3 id=\"m-celular\">12. No celular</h3>\n<p>A tela se reorganiza sozinha quando você abre pelo telefone. Nada precisa ser instalado: é o mesmo endereço do navegador.</p>\n<p><b>Navegação.</b> As abas passam para uma barra fixa no rodapé — Painel, Semana, Recorrentes, Histórico, Equipe e Ajustes. O topo fica só com o logotipo e os botões de tema e sair.</p>\n<p><b>Um dia por vez.</b> Na aba Semana aparece uma tira com os dias logo abaixo do cabeçalho, já aberta no dia de hoje. Toque em um dia para ver a lista dele ocupando a tela inteira — sem rolagem lateral e sem precisar aproximar a tela. A bolinha vermelha em cada dia mostra quantas tarefas ainda estão em aberto, e a tira termina com o <b>Radar</b>.</p>\n<p><b>Mudar uma tarefa de dia.</b> No computador você arrasta. No celular, <b>segure o dedo por meio segundo em qualquer ponto do cartão</b> — descrição, criticidade, empresa, prazo ou percentual, tanto faz: abre uma janela na parte de baixo com os dias da semana e o radar. Se você rolar a tela durante o toque, nada acontece; e o × de excluir continua funcionando com um toque simples. Toque no destino e pronto — a tela já muda para o dia escolhido, para você conferir.</p>\n<p><b>Sábado e domingo sempre disponíveis.</b> A tira do celular traz os sete dias, mesmo que você tenha escondido o fim de semana no computador — lá é uma questão de espaço na grade, aqui aparece um dia por vez e não atrapalha. Se você criar ou mover uma tarefa para sábado ou domingo, esse dia volta a aparecer também no computador, para a tarefa não ficar escondida.</p>\n<p><b>O resto.</b> Os campos de cada tarefa ficam em duas colunas, com área de toque maior. Os indicadores do Painel aparecem dois por linha, e as tabelas mais largas deslizam para o lado dentro do próprio quadro.</p>\n<p>Nada disso muda a versão de computador: é a mesma conta, os mesmos dados e a mesma sincronização.</p>\n<figure><img loading=\"lazy\" src=\"manual-celular.jpg\" alt=\"Aba Semana no celular e a janela de mover tarefa\"><figcaption>À esquerda, a tira de dias e as tarefas ocupando a tela inteira. À direita, a janela que abre ao segurar o dedo sobre uma tarefa.</figcaption></figure>\n\n<h3 id=\"m-instalar\">13. Instalar no celular</h3>\n<p>O CruzOn Planner pode ser instalado na tela inicial do aparelho. Não é aplicativo de loja: é o próprio site, que passa a abrir com ícone próprio, em tela cheia, sem a barra do navegador — e continua abrindo mesmo sem internet, mostrando o que já estava carregado.</p>\n<p><b>Como instalar.</b> Abra <i>Ajustes &rsaquo; Instalar no celular</i> e toque em <b>Instalar aplicativo</b>. Se o botão não aparecer, use o menu do navegador: no Android, os três pontinhos e depois <b>Instalar aplicativo</b>; no iPhone, o botão de compartilhar do Safari e depois <b>Adicionar à Tela de Início</b>.</p>\n<p><b>Atualizações são automáticas.</b> Toda vez que você abrir com internet, o aplicativo busca a versão mais recente sozinho. Não existe atualização para baixar.</p>\n\n<h3 id=\"m-sync\">14. Tudo em tempo real, em todos os aparelhos</h3>\n<p>Seu conteúdo fica na nuvem, não no aparelho. Computador, celular e tablet mostram a mesma semana, e o que você faz em um aparece no outro em poucos segundos, sem recarregar a página e sem apertar nada.</p>\n<p><b>Como funciona.</b> O aplicativo grava cada alteração poucos instantes depois de você fazê-la e, em paralelo, fica conferindo se mudou alguma coisa do outro lado. Quando encontra novidade, atualiza a tela sozinho e mostra <i>Atualizado</i> no topo, ao lado do seu nome.</p>\n<p><b>Enquanto você digita, nada muda na sua frente.</b> A atualização automática espera você terminar de preencher o campo, para não trocar o conteúdo embaixo do seu dedo.</p>\n<p><b>Mexendo nos dois ao mesmo tempo.</b> Se você concluir uma tarefa no celular enquanto reagenda outra no computador, as duas alterações são mantidas: o aplicativo junta as versões item a item, em vez de deixar a última gravação apagar a anterior. Quando a <i>mesma</i> tarefa é alterada nos dois, vale a alteração mais recente.</p>\n<p><b>Sem internet.</b> Você continua trabalhando: as alterações ficam guardadas no aparelho e sobem assim que a conexão voltar, já juntadas com o que os outros aparelhos fizeram nesse meio tempo.</p>\n<p><b>No aplicativo instalado no celular.</b> Ao trazer o aplicativo de volta para a tela, ele busca as novidades na hora — por isso você não encontra mais a semana desatualizada ao desbloquear o telefone.</p>\n\n<h3 id=\"m-duvidas\">15. Se algo não funcionar</h3>\n<p><b>O aplicativo não atualizou depois de uma novidade.</b> Pressione Ctrl+F5 para recarregar ignorando o que ficou guardado no navegador.</p>\n<p><b>Aparece \"Sem conexão\" no topo.</b> Você continua trabalhando normalmente: as alterações ficam guardadas no navegador e sobem sozinhas quando a internet voltar.</p>\n<p><b>Não encontro sábado ou domingo no computador.</b> Os botões <i>Sábado</i> e <i>Domingo</i> no topo da aba Semana estão desligados. Clique neles para trazer as colunas de volta; o número ao lado de cada botão mostra quantas tarefas estão escondidas ali.</p>\n<p><b>O celular parece atrasado em relação ao computador.</b> Traga o aplicativo de volta para a tela: ele busca as novidades na hora. Se continuar diferente, confira se os dois estão na mesma semana e se o topo não está marcando <i>Sem conexão</i>.</p>\n<p><b>Entrei e não vejo minhas tarefas.</b> Confira se entrou com o mesmo e-mail de sempre. Cada conta tem o seu próprio conteúdo.</p>\n<p><b>A sessão expirou.</b> É normal depois de muito tempo sem uso. Basta entrar de novo.</p>\n<p><b>Outra dúvida.</b> Fale com o administrador pelo canal informado na tela de planos ou pelo e-mail de contato do Aviso de Privacidade.</p>";
 function manMonta(){
   if($("#manTxt").innerHTML) return;
   $("#manTxt").innerHTML = MAN_HTML;
@@ -2030,6 +4101,8 @@ async function entrar(){
   ME={id:u.id,email:u.email,name:(u.user_metadata&&u.user_metadata.nome)||(u.email||"").split("@")[0],role:"user",ativo:false};
   try{ await carregaPerfil(); }catch(e){ if(e.offline) return semRede(); throw e; }
   if(!PERFIL){ mostraPendente("Seu perfil está sendo criado. Recarregue a página em alguns segundos."); return; }
+  if(PERFIL.planner_teste_pendente){ /* primeiro uso do Planner: o banco começa o teste (16-planner-teste-automatico.sql) */
+    try{ await sb("/rest/v1/rpc/planner_acesso",{method:"POST",body:"{}"}); await carregaPerfil(); }catch(e){} }
   if(!ME.ativo){ mostraPendente("Seu acesso foi criado e está aguardando liberação do administrador."); return; }
   if(!await lgpdGarante()){ clearSession(); ME=null; PERFIL=null; V=null; clearUI(); LGMODE="login"; setupLogin(); return; }
   try{ await carregaCofre(); }
@@ -2747,10 +4820,11 @@ function renderCfg(){
   }
   $("#cfgOpac").value=(V.prefs.opacity!=null?V.prefs.opacity:14);
   $("#cfgOpacLbl").textContent=$("#cfgOpac").value+"%";
-  renderComps(); renderOrfas();
+  renderComps(); renderOrfas(); pintaIndica();
 }
 function seloPlano(u){
   if(u.isento) return '<span class="chip p-baixa">Gratuito</span>';
+  if(u.planner_teste_pendente) return '<span class="note" style="border:0;padding:0">ainda não usou</span>';
   if(!u.acesso_ate) return '<span class="note" style="border:0;padding:0">sem prazo</span>';
   const fim=new Date(u.acesso_ate), d=Math.ceil((fim-new Date())/86400000);
   const dt=fim.toLocaleDateString("pt-BR");
@@ -2761,27 +4835,79 @@ function seloPlano(u){
 }
 function somaMeses(base,m){ const d=new Date(base); d.setMonth(d.getMonth()+m); return d; }
 
+/* ---- acesso por app (CruzOn Finance e CruzInvest): tabela app_acessos, arquivo 15-acesso-por-app.sql ---- */
+let ACESSOS=null, USERS_CACHE=[];
+const NOME_APP={finance:"CruzOn Finance",invest:"CruzInvest"};
+async function carregaAcessos(){
+  try{ const l=await sb("/rest/v1/app_acessos?select=*"); ACESSOS={}; (l||[]).forEach(a=>{ACESSOS[a.user_id+"|"+a.app]=a;}); }
+  catch(e){ ACESSOS=null; }
+}
+function seloApp(a){
+  if(!a) return '<span class="note" style="border:0;padding:0">ainda não usou</span>';
+  if(a.bloqueado) return '<span class="chip p-crit">Pausado</span>';
+  return seloPlano(a);
+}
+async function gravaAcesso(uid,app,campos){
+  await sb("/rest/v1/app_acessos?on_conflict=user_id,app",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+    body:JSON.stringify({user_id:uid,app,...campos})});
+}
+function abreAcessos(uid){
+  const u=(USERS_CACHE||[]).find(x=>x.id===uid)||{id:uid};
+  const el=document.createElement("div"); el.className="acwrap"; el.setAttribute("role","dialog"); el.setAttribute("aria-modal","true");
+  const pinta=()=>{
+    el.innerHTML=`<div class="acbox"><header><b>Acesso aos apps</b><span>${esc(u.nome||u.email||"")}</span></header>
+      <p class="note" style="margin:0 0 10px">Cada app tem o seu teste e a sua assinatura. Quem pagou o Finance, por exemplo, você libera só no Finance. O Planner continua sendo liberado na lista de perfis.</p>
+      ${["finance","invest"].map(app=>{const a=ACESSOS[uid+"|"+app];return `<div class="acrow"><div class="acnome"><b>${NOME_APP[app]}</b><div>${seloApp(a)}</div></div>
+        <div class="acbtns">${a&&a.isento?"":`<button class="btn sm" data-x="mes" data-app="${app}">+1 mês</button><button class="btn sm" data-x="ano" data-app="${app}">+1 ano</button><button class="btn sm" data-x="dias" data-app="${app}">+ dias…</button>`}
+        <button class="btn sm" data-x="free" data-app="${app}">${a&&a.isento?"Cobrar":"Gratuito"}</button>
+        ${a?`<button class="btn sm" data-x="pausa" data-app="${app}">${a.bloqueado?"Reativar":"Pausar"}</button>`:""}</div></div>`;}).join("")}
+      <footer><button class="btn" data-x="fechar">Fechar</button></footer></div>`;
+  };
+  pinta(); document.body.appendChild(el);
+  el.addEventListener("click",async ev=>{
+    const x=ev.target.dataset.x, app=ev.target.dataset.app;
+    if(ev.target===el||x==="fechar"){ el.remove(); renderUsers(); return; }
+    if(!x||!app) return;
+    const a=ACESSOS[uid+"|"+app]||{}, atual=a.acesso_ate?new Date(a.acesso_ate):null, base=(atual&&atual>new Date())?atual:new Date();
+    try{
+      if(x==="mes"||x==="ano"){ const m=x==="ano"?12:1; await gravaAcesso(uid,app,{acesso_ate:somaMeses(base,m).toISOString(),plano:m>=12?"anual":"mensal",isento:false,bloqueado:false}); toast(NOME_APP[app]+": "+(m>=12?"mais um ano liberado.":"mais um mês liberado.")); }
+      if(x==="dias"){ const r=prompt("Liberar quantos dias de "+NOME_APP[app]+" para esta pessoa?\n\nO prazo soma ao que ainda estiver valendo.","7"); if(r===null) return;
+        const n=parseInt(String(r).replace(/\D/g,""),10); if(!n||n<1||n>3650){ toast("Informe um número de dias entre 1 e 3650."); return; }
+        await gravaAcesso(uid,app,{acesso_ate:new Date(base.getTime()+n*864e5).toISOString(),plano:a.plano||"teste",isento:false,bloqueado:false}); toast(NOME_APP[app]+": "+n+" dia(s) liberado(s)."); }
+      if(x==="free"){ const vira=!a.isento; if(!confirm(vira?"Deixar esta pessoa usando o "+NOME_APP[app]+" de graça, sem prazo?":"Voltar a cobrar o "+NOME_APP[app]+" desta pessoa? O acesso fica sem prazo até você definir uma validade.")) return;
+        await gravaAcesso(uid,app,vira?{isento:true,bloqueado:false}:{isento:false,plano:null,acesso_ate:null}); toast(vira?"Marcado como gratuito.":"Cortesia removida."); }
+      if(x==="pausa"){ const vira=!a.bloqueado; if(vira&&!confirm("Pausar o "+NOME_APP[app]+" para esta pessoa? Os dados ficam guardados e ela só consegue ver.")) return;
+        await gravaAcesso(uid,app,{bloqueado:vira}); toast(vira?"Acesso pausado.":"Acesso reativado."); }
+      await carregaAcessos(); pinta();
+    }catch(err){ toast(/app_acessos|PGRST205|42P01/i.test(err.message)?"Falta rodar o arquivo 15-acesso-por-app.sql no Supabase.":"Não foi possível: "+err.message); }
+  });
+}
+
 async function renderUsers(){
   if(ME.role!=="admin") return;
   $("#tblUsers").innerHTML='<tbody><tr><td class="empty">Carregando…</td></tr></tbody>';
   let lista=[];
+  await carregaAcessos();
   try{ lista=await sb("/rest/v1/perfis?select=*&order=ativo.asc,criado_em.asc"); }
   catch(e){ $("#tblUsers").innerHTML='<tbody><tr><td class="empty">Não consegui carregar os perfis.</td></tr></tbody>'; return; }
-  $("#tblUsers").innerHTML=`<thead><tr><th>Nome</th><th>E-mail</th><th style="width:120px">Perfil</th><th style="width:110px">Acesso</th><th style="width:150px">Plano</th><th style="width:120px">Último acesso</th><th style="width:300px">Ações</th></tr></thead><tbody>`+
+  USERS_CACHE=lista;
+  $("#tblUsers").innerHTML=`<thead><tr><th>Nome</th><th>E-mail</th><th style="width:120px">Perfil</th><th style="width:110px">Acesso</th><th style="width:190px">Planos</th><th style="width:120px">Último acesso</th><th style="width:300px">Ações</th></tr></thead><tbody>`+
     lista.map(u=>`<tr${u.ativo?"":' style="background:var(--warn-bg)"'}>
       <td><b>${esc(u.nome||"—")}</b>${u.id===ME.id?' <span class="badge">você</span>':""}</td>
       <td style="color:var(--ink-2)">${esc(u.email||"")}</td>
       <td>${u.papel==="admin"?'<span class="chip p-crit">Administrador</span>':'<span class="chip p-baixa">Usuário</span>'}</td>
       <td>${u.ativo?'<span class="st st-ok">Ativo</span>':'<span class="st st-soon">Aguardando</span>'}</td>
-      <td>${seloPlano(u)}</td>
+      <td><div class="planos3"><div><small>Planner</small>${seloPlano(u)}</div>${ACESSOS?["finance","invest"].map(a=>`<div><small>${a==="finance"?"Finance":"CruzInvest"}</small>${seloApp(ACESSOS[u.id+"|"+a])}</div>`).join(""):""}</div></td>
       <td style="color:var(--muted);font-size:11.5px">${u.ultimo_acesso?new Date(u.ultimo_acesso).toLocaleDateString("pt-BR"):"nunca"}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">${u.id===ME.id?'<span class="note">é você</span>':
         (u.ativo?`<button class="btn sm" data-off="${u.id}">Desativar</button>`:`<button class="btn sm pri" data-on="${u.id}">Liberar acesso</button>`)+
+        (ACESSOS?`<button class="btn sm pri" data-apps="${u.id}">Finance e CruzInvest…</button>`:"")+
         `<button class="btn sm" data-papel="${u.id}" data-novo="${u.papel==="admin"?"user":"admin"}">${u.papel==="admin"?"Tornar usuário":"Tornar admin"}</button>`+
         `<button class="btn sm" data-free="${u.id}" data-novo2="${u.isento?"0":"1"}">${u.isento?"Cobrar":"Gratuito"}</button>`+
         (u.isento?"":`<button class="btn sm" data-ren="${u.id}" data-meses="1">+1 mês</button><button class="btn sm" data-ren="${u.id}" data-meses="12">+1 ano</button><button class="btn sm" data-dias="${u.id}" title="Liberar uma quantidade exata de dias">+ dias…</button>`)}</td></tr>`).join("")+"</tbody>";
 }
 $("#tblUsers").addEventListener("click",async e=>{
+  if(e.target.dataset.apps){ abreAcessos(e.target.dataset.apps); return; }
   const on=e.target.dataset.on, off=e.target.dataset.off, papel=e.target.dataset.papel,
         free=e.target.dataset.free, ren=e.target.dataset.ren, dias=e.target.dataset.dias;
   try{
@@ -3190,7 +5316,7 @@ $("#btnWipe").addEventListener("click",async()=>{
     try{ if(await refreshSession()){ await entrar(); return; } }catch(e){}
     $("#lgBtn").disabled=false; $("#lgBtn").textContent="Entrar";
   }
-  LGMODE="login"; setupLogin();
+  LGMODE=/[?&]cadastro=1/.test(location.search)?"signup":"login"; setupLogin();
 })();
 
 </script>

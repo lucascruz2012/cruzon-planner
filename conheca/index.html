@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Conheça os apps CruzOn</title>
+<meta name="description" content="CruzOn Planner, CruzOn Finance e CruzInvest: sua rotina, seu dinheiro e seu patrimônio sempre ligados. Uma conta para os três apps.">
+<meta name="theme-color" content="#0C1F2B">
+<meta property="og:title" content="Conheça os apps CruzOn">
+<meta property="og:description" content="Sua rotina, seu dinheiro e seu patrimônio sempre ligados. Veja as telas e crie sua conta.">
+<meta property="og:image" content="https://lucascruz2012.github.io/cruzon-planner/capa.jpg">
+<link rel="icon" href="../icone-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0C1F2B;--azul2:#13303f;--verde:#00C853;--verde-esc:#1E7A4E;--verde-cl:#39E875;--cinza:#E9ECEF;--grafite:#263746;
+  --bg:#F4F7F9;--surface:#fff;--ink:#0C1F2B;--ink2:#4A5B68;--line:#E1E7EC;--shadow:0 20px 50px rgba(12,31,43,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A1821;--surface:#102530;--ink:#F2F7F9;--ink2:#A9BCC7;--line:#1F3A48;--shadow:0 20px 50px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#0A1821;--surface:#102530;--ink:#F2F7F9;--ink2:#A9BCC7;--line:#1F3A48;--shadow:0 20px 50px rgba(0,0,0,.4)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Montserrat,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{width:min(1180px,100% - 32px);margin:0 auto}
+
+/* topo */
+.hero{position:relative;overflow:hidden;background:radial-gradient(1200px 500px at 85% -10%,rgba(0,200,83,.22),transparent 60%),radial-gradient(800px 400px at -10% 110%,rgba(57,232,117,.12),transparent 60%),var(--azul);color:#fff;padding:22px 0 64px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav img{height:30px;width:auto}
+.nav a.entrar{font-weight:700;font-size:14px;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:9px 16px}
+.nav a.entrar:hover{background:rgba(255,255,255,.08)}
+.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.08;letter-spacing:-1.2px;margin:46px 0 14px;max-width:820px;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--verde-cl)}
+.hero p.lead{font-size:clamp(15px,1.8vw,18px);line-height:1.6;color:#C9D7DF;max-width:680px;margin:0 0 26px}
+.indicado{display:inline-flex;align-items:center;gap:8px;background:rgba(0,200,83,.14);border:1px solid rgba(57,232,117,.4);color:#BFF5D2;font-weight:700;font-size:13px;padding:7px 13px;border-radius:999px;margin-top:34px}
+.indicado[hidden]{display:none}
+
+/* escolha do app */
+.tabs{display:flex;gap:10px;flex-wrap:wrap}
+.tab{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:#fff;border-radius:16px;padding:10px 16px 10px 10px;cursor:pointer;font:inherit;text-align:left;transition:.2s}
+.tab img{width:40px;height:40px;border-radius:11px}
+.tab b{display:block;font-size:15px}
+.tab small{display:block;font-size:12px;color:#A9BCC7;font-weight:500}
+.tab:hover{background:rgba(255,255,255,.1)}
+.tab[aria-selected="true"]{background:#fff;color:var(--azul);border-color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.tab[aria-selected="true"] small{color:var(--ink2)}
+
+/* vitrine */
+.show{margin-top:-34px;position:relative}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:28px;align-items:end}
+.laptop{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:10px;border:1px solid var(--line)}
+.laptop .bar{display:flex;gap:6px;padding:4px 6px 10px}
+.laptop .bar i{width:10px;height:10px;border-radius:50%;background:#E3E8EC}
+.laptop .bar i:nth-child(1){background:#FF6B5F}.laptop .bar i:nth-child(2){background:#FFC23D}.laptop .bar i:nth-child(3){background:#2BCB52}
+.screen{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/10;background:#E9ECEF}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;transform:scale(1.015);transition:opacity .6s,transform 6s}
+.screen img.on{opacity:1;transform:scale(1)}
+.phone{background:#0C1F2B;border-radius:36px;padding:10px;box-shadow:var(--shadow);position:relative}
+.phone::before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:70px;height:6px;border-radius:6px;background:#1d3442;z-index:2}
+.phone .screen{aspect-ratio:9/19.5;border-radius:27px}
+.caption{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 2px 0;flex-wrap:wrap}
+.caption b{font-size:15px}
+.caption span{color:var(--ink2);font-size:13.5px}
+.dots{display:flex;gap:6px}
+.dots button{width:30px;height:6px;border-radius:6px;border:0;background:var(--line);cursor:pointer;padding:0}
+.dots button.on{background:var(--verde)}
+
+/* conteúdo do app */
+.sec{padding:56px 0 20px}
+.app-head{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.app-head img{width:64px;height:64px;border-radius:16px;box-shadow:0 8px 22px rgba(12,31,43,.2)}
+.app-head h2{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.6px}
+.app-head .lema{color:var(--verde-esc);font-weight:700;font-size:14px;letter-spacing:.3px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .app-head .lema{color:var(--verde-cl)}}
+.app-desc{font-size:16px;line-height:1.65;color:var(--ink2);max-width:760px;margin:10px 0 26px}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.feat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.feat .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(0,200,83,.12);font-size:20px;margin-bottom:10px}
+.feat b{display:block;font-size:15px;margin-bottom:5px}
+.feat p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ink2)}
+
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px;counter-reset:p}
+.step{position:relative;background:linear-gradient(160deg,var(--azul),var(--azul2));color:#fff;border-radius:18px;padding:22px 18px 18px}
+.step::before{counter-increment:p;content:counter(p);position:absolute;top:-14px;left:18px;width:30px;height:30px;border-radius:50%;background:var(--verde);color:var(--azul);font-weight:800;display:grid;place-items:center;font-size:14px}
+.step b{display:block;font-size:15px;margin:6px 0 6px}
+.step p{margin:0;font-size:13.5px;line-height:1.55;color:#C9D7DF}
+
+.cta{margin:46px 0 10px;background:linear-gradient(120deg,var(--verde-esc),#0E5A39);color:#fff;border-radius:22px;padding:30px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cta h3{margin:0 0 6px;font-size:clamp(20px,2.6vw,26px)}
+.cta p{margin:0;color:#D5F3E1;font-size:14.5px;line-height:1.5;max-width:560px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:800;font-size:15px;text-decoration:none;border-radius:12px;padding:14px 20px;border:0;cursor:pointer}
+.btn.pri{background:var(--verde);color:var(--azul);box-shadow:0 10px 24px rgba(0,200,83,.35)}
+.btn.pri:hover{filter:brightness(1.06)}
+.btn.sec{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35)}
+
+/* família */
+.familia{padding:40px 0 30px}
+.familia h3{text-align:center;font-size:clamp(20px,2.6vw,26px);margin:0 0 6px}
+.familia>p{text-align:center;color:var(--ink2);margin:0 0 20px}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.fcard{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.fcard img{width:50px;height:50px;border-radius:13px}
+.fcard b{display:block}
+.fcard small{color:var(--ink2);font-size:12.5px}
+.fcard.on{border-color:var(--verde);box-shadow:0 0 0 3px rgba(0,200,83,.18)}
+footer{padding:26px 0 40px;text-align:center;color:var(--ink2);font-size:12.5px}
+footer a{color:var(--verde-esc);font-weight:700;text-decoration:none}
+
+@media (max-width:860px){
+  .stage{grid-template-columns:1fr}
+  .phone{width:min(260px,70%);margin:0 auto}
+  .how,.fgrid{grid-template-columns:1fr}
+  .hero{padding-bottom:58px}
+  .tab{flex:1 1 100%}
+}
+@media (prefers-reduced-motion:reduce){.screen img{transition:none}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <nav class="nav"><img src="img/cruzon-claro.png" alt="CruzOn"><a class="entrar" id="lnkEntrar" href="../">Já tenho conta: entrar</a></nav>
+    <div class="indicado" id="indicado" hidden>🎁 Você chegou pela indicação de um amigo</div>
+    <h1>Sua rotina, seu dinheiro e seu patrimônio <em>sempre ligados</em>.</h1>
+    <p class="lead">Três apps simples, feitos para o dia a dia, que funcionam no computador e no celular. Uma única conta abre todos eles. Escolha um e veja as telas de verdade:</p>
+    <div class="tabs" role="tablist" id="tabs"></div>
+  </div>
+</header>
+
+<main>
+  <section class="wrap show" aria-live="polite">
+    <div class="stage">
+      <div>
+        <div class="laptop"><div class="bar"><i></i><i></i><i></i></div><div class="screen" id="tela"></div></div>
+        <div class="caption"><div><b id="capT"></b> <span id="capS"></span></div><div class="dots" id="dots"></div></div>
+      </div>
+      <div class="phone"><div class="screen" id="cel"></div></div>
+    </div>
+  </section>
+
+  <section class="wrap sec">
+    <div class="app-head"><img id="appIc" alt=""><div><div class="lema" id="appLema"></div><h2 id="appNome"></h2></div></div>
+    <p class="app-desc" id="appDesc"></p>
+    <div class="feats" id="feats"></div>
+    <div class="how" id="how"></div>
+    <div class="cta">
+      <div><h3 id="ctaT"></h3><p id="ctaP"></p></div>
+      <div class="btns"><a class="btn pri" id="ctaCriar" href="#">Criar minha conta</a><a class="btn sec" id="ctaEntrar" href="#">Já tenho conta</a></div>
+    </div>
+  </section>
+
+  <section class="wrap familia">
+    <h3>Uma conta, três apps</h3>
+    <p>Crie a conta em qualquer um e use o mesmo e-mail e senha nos outros.</p>
+    <div class="fgrid" id="fgrid"></div>
+  </section>
+</main>
+<footer class="wrap">CruzOn · <span id="ano"></span> · <a href="../">CruzOn Planner</a> · <a href="../finance/">CruzOn Finance</a> · <a href="../cruzinvest/">CruzInvest</a></footer>
+
+<script>
+"use strict";
+const APPS={
+  planner:{nome:"CruzOn Planner",lema:"Sua rotina sempre ligada",ic:"../icone-192.png",url:"../",
+    curto:"Tarefas da semana e prazos",
+    desc:"Organize a semana em um quadro simples: cada dia com suas tarefas, prioridade, empresa ou área, prazo e percentual concluído. O que é fixo vira recorrente, o que ficou para trás aparece em destaque, e o painel mostra como está o andamento.",
+    telas:[["../manual-semana.jpg","Semana","todas as tarefas da semana em um quadro"],["../manual-dash.jpg","Painel","andamento, atrasos e prioridades"],["../manual-rec.jpg","Recorrentes","o que se repete é lançado sozinho"],["../manual-hist.jpg","Histórico","o que foi feito em cada semana"]],
+    cel:"../manual-celular.jpg",
+    feats:[["🗓️","Semana organizada","Arraste tarefas entre os dias e use o Radar para o que ainda não tem data."],["🔁","Recorrentes","Tarefas fixas aparecem sozinhas toda semana, no dia certo."],["📊","Painel e histórico","Veja o que está atrasado, o percentual concluído e a evolução."],["✉️","Relatório por e-mail","Receba suas pendências no e-mail, nos dias e horário que escolher."]],
+    how:[["Crie sua conta","Nome, e-mail e senha. Leva menos de um minuto."],["Monte a sua semana","Lance as tarefas e as recorrentes. O app cuida do resto."],["Acompanhe de qualquer lugar","Computador ou celular: tudo sincronizado na nuvem."]]},
+  finance:{nome:"CruzOn Finance",lema:"Seu dinheiro sempre ligado",ic:"../finance/icone-192.png",url:"../finance/",
+    curto:"Receitas, despesas e metas",
+    desc:"Controle receitas, despesas, contas fixas, compras parceladas e faturas do cartão em um só lugar. O assistente avisa o que vence, os orçamentos mostram quanto ainda dá para gastar e os relatórios saem em PDF e Excel.",
+    telas:[["img/finance-painel.jpg","Painel","saldo, receitas, despesas e para onde foi o dinheiro"],["img/finance-lancamentos.jpg","Lançamentos","dê OK no que foi pago e veja o saldo mudar"],["img/finance-cartoes.jpg","Cartões","faturas, limite e parcelas mês a mês"],["img/finance-relatorios.jpg","Relatórios","9 relatórios em PDF e Excel"],["img/finance-metas.jpg","Metas","quanto guardar por mês para chegar lá"]],
+    cel:"img/finance-cel.jpg",
+    feats:[["💳","Cartões e faturas","Cada compra cai na fatura certa e as parcelas vão para os meses seguintes."],["🔔","Alertas de vencimento","Veja o que está atrasado ou vence hoje e dê baixa na hora."],["🎯","Orçamentos e metas","Limite por categoria e quanto guardar por mês para cada sonho."],["🔒","Dados criptografados","Seus lançamentos são protegidos com a sua senha. Ninguém mais lê."]],
+    how:[["Crie sua conta","Nome, e-mail e senha. Pode começar com dados de exemplo."],["Cadastre carteiras e cartões","Informe o saldo de hoje e lance as contas fixas do mês."],["Acompanhe e planeje","Painel, alertas, orçamentos, metas e relatórios sempre em dia."]]},
+  invest:{nome:"CruzInvest",lema:"Seu patrimônio sob controle",ic:"../cruzinvest/ci-icone-192.png",url:"../cruzinvest/",
+    curto:"Carteira de investimentos",
+    desc:"Acompanhe ações, FIIs e renda fixa: patrimônio, rentabilidade, comparação com o CDI e proventos. O semáforo de saúde mostra, ativo por ativo, o que está saudável, o que pede atenção e o que está em risco.",
+    telas:[["img/invest-painel.jpg","Painel","patrimônio, rentabilidade e alertas"],["img/invest-saude.jpg","Saúde da carteira","semáforo por ativo com indicadores"],["img/invest-proventos.jpg","Proventos","dividendos e rendimentos recebidos"],["img/invest-carteira.jpg","Carteira","posição, preço médio e resultado"]],
+    cel:"img/invest-cel.jpg",
+    feats:[["🚦","Semáforo de saúde","P/L, P/VP, ROE, dívida e DY de cada ativo, com limites que você ajusta."],["💰","Proventos","Dividendos e rendimentos do mês e dos últimos 12 meses."],["📈","Comparação com o CDI","Saiba se a carteira está rendendo mais que a renda fixa."],["📥","Importa da B3","Traga suas negociações direto dos extratos da Área do Investidor."]],
+    how:[["Crie sua conta","Ou entre com a mesma conta dos outros apps CruzOn."],["Importe a carteira","Arquivos da B3 ou uma planilha simples. Ou lance à mão."],["Acompanhe a saúde","Cotações, proventos e alertas atualizados sozinhos."]]}
+};
+const $=s=>document.querySelector(s);
+const q=new URLSearchParams(location.search);
+let ref=(q.get("ref")||"").replace(/[^A-Za-z0-9]/g,"").slice(0,16);
+try{ if(ref) localStorage.setItem("cruzon_ref",JSON.stringify({ref,em:Date.now()})); else { const o=JSON.parse(localStorage.getItem("cruzon_ref")||"null"); if(o&&o.ref&&Date.now()-o.em<90*864e5) ref=o.ref; } }catch(e){}
+$("#indicado").hidden=!ref;
+let atual=APPS[q.get("app")]?q.get("app"):"planner", idx=0, timer=null;
+$("#ano").textContent=new Date().getFullYear();
+
+function link(a,cadastro){ const u=new URL(APPS[a].url,location.href); if(cadastro) u.searchParams.set("cadastro","1"); if(ref) u.searchParams.set("ref",ref); return u.href; }
+function pintaTabs(){
+  $("#tabs").innerHTML=Object.entries(APPS).map(([k,a])=>`<button class="tab" role="tab" aria-selected="${k===atual}" data-app="${k}"><img src="${a.ic}" alt=""><span><b>${a.nome}</b><small>${a.curto}</small></span></button>`).join("");
+  $("#fgrid").innerHTML=Object.entries(APPS).map(([k,a])=>`<button class="fcard ${k===atual?"on":""}" data-app="${k}"><img src="${a.ic}" alt=""><span><b>${a.nome}</b><small>${a.lema}</small></span></button>`).join("");
+}
+function mostraTela(i){
+  const a=APPS[atual]; idx=(i+a.telas.length)%a.telas.length;
+  document.querySelectorAll("#tela img").forEach((im,n)=>im.classList.toggle("on",n===idx));
+  document.querySelectorAll("#dots button").forEach((b,n)=>b.classList.toggle("on",n===idx));
+  $("#capT").textContent=a.telas[idx][1]; $("#capS").textContent="· "+a.telas[idx][2];
+}
+function roda(){ clearInterval(timer); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) timer=setInterval(()=>mostraTela(idx+1),4200); }
+function pinta(){
+  const a=APPS[atual];
+  pintaTabs();
+  $("#tela").innerHTML=a.telas.map((t,n)=>`<img src="${t[0]}" alt="Tela ${t[1]} do ${a.nome}" ${n?'loading="lazy"':''}>`).join("");
+  $("#dots").innerHTML=a.telas.map((t,n)=>`<button aria-label="Ver ${t[1]}" data-i="${n}"></button>`).join("");
+  $("#cel").innerHTML=`<img class="on" src="${a.cel}" alt="${a.nome} no celular">`;
+  $("#appIc").src=a.ic; $("#appLema").textContent=a.lema; $("#appNome").textContent=a.nome; $("#appDesc").textContent=a.desc;
+  $("#feats").innerHTML=a.feats.map(f=>`<div class="feat"><div class="ic">${f[0]}</div><b>${f[1]}</b><p>${f[2]}</p></div>`).join("");
+  $("#how").innerHTML=a.how.map(h=>`<div class="step"><b>${h[0]}</b><p>${h[1]}</p></div>`).join("");
+  $("#ctaT").textContent="Comece a usar o "+a.nome;
+  $("#ctaP").textContent="Crie sua conta em menos de um minuto. A mesma conta vale para o CruzOn Planner, o CruzOn Finance e o CruzInvest.";
+  $("#ctaCriar").href=link(atual,true); $("#ctaEntrar").href=link(atual,false); $("#lnkEntrar").href=link(atual,false);
+  document.title=a.nome+" · Conheça os apps CruzOn";
+  idx=0; mostraTela(0); roda();
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-app]"); if(t){ atual=t.dataset.app; const u=new URL(location.href); u.searchParams.set("app",atual); history.replaceState(null,"",u); pinta(); if(t.classList.contains("fcard")) scrollTo({top:0,behavior:"smooth"}); return; }
+  const d=e.target.closest("#dots button"); if(d){ mostraTela(+d.dataset.i); roda(); }
+});
+let tx=null; $("#tela").addEventListener("touchstart",e=>tx=e.touches[0].clientX,{passive:true});
+$("#tela").addEventListener("touchend",e=>{ if(tx==null) return; const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>40){ mostraTela(idx+(dx<0?1:-1)); roda(); } tx=null; });
+pinta();
+</script>
+</body>
+</html>
