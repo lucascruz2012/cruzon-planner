@@ -396,7 +396,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-17c";
+const APP_VER="2026-11-17d";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -767,16 +767,26 @@ const limiteErr=e=>/simult|concurren|too many|rate.?limit|limite de requisi|429/
 async function brapiEspera(tk,n){
   for(let t=0;;t++){
     try{ const x=await brapi(tk,n); await sleep(600); return x; }
-    catch(e){ if(!limiteErr(e)||t>=5) throw e; await sleep(2000*(t+1)); }
+    catch(e){ if(!limiteErr(e)||t>=2) throw e; await sleep(2000*(t+1)); }
   }
 }
+/* nível por ativo: quando a brapi insiste em recusar a consulta completa de um ativo
+   (no plano gratuito ela responde "limite de requisições" de forma enganosa), pede menos dados só para ele */
 async function brapiNivel(tk){
-  let n=V.prefs.nivel||0;
+  V.prefs.nivelTk=V.prefs.nivelTk||{};
+  let n=Math.max(V.prefs.nivel||0, V.prefs.nivelTk[tk]||0);
   for(;n<NIVEIS.length;n++){
-    try{ const x=await brapiEspera(tk,n); if(n!==(V.prefs.nivel||0)) V.prefs.nivel=n; return x; }
-    catch(e){ if(!planErr(e)||n===NIVEIS.length-1) throw e; }
+    try{ const x=await brapiEspera(tk,n);
+      if(n>(V.prefs.nivel||0)&&!V.prefs.nivelTk[tk]&&!limiteTk[tk]) V.prefs.nivel=n;
+      if(limiteTk[tk]) V.prefs.nivelTk[tk]=n;
+      return x; }
+    catch(e){
+      if(limiteErr(e)&&n<NIVEIS.length-1){ limiteTk[tk]=1; continue; }
+      if(!planErr(e)||n===NIVEIS.length-1) throw e;
+    }
   }
 }
+const limiteTk={};
 async function brapi(tk,nivel){
   const t=V.prefs.token?("&token="+encodeURIComponent(V.prefs.token)):"";
   const r=await fetch("https://brapi.dev/api/quote/"+encodeURIComponent(tk)+NIVEIS[nivel]+t);
@@ -1500,7 +1510,7 @@ function vAjustes(){
   </div>`;
 }
 vAjustes.after=m=>{
-  $("#aSalvaTok").addEventListener("click",()=>{V.prefs.token=$("#aTok").value.trim(); V.prefs.nivel=0; V.prefs.autoHoras=+$("#aAuto").value; V._aviso=null; save(); toast("Fonte de dados salva."); atualizar(false);});
+  $("#aSalvaTok").addEventListener("click",()=>{V.prefs.token=$("#aTok").value.trim(); V.prefs.nivel=0; V.prefs.nivelTk={}; V.prefs.autoHoras=+$("#aAuto").value; V._aviso=null; save(); toast("Fonte de dados salva."); atualizar(false);});
   $("#aTestar").addEventListener("click",async()=>{const old=V.prefs.token; V.prefs.token=$("#aTok").value.trim(); const tk=tickers().find(t=>isListed(ativo(t).cls))||"BBAS3";
     const oldN=V.prefs.nivel; V.prefs.nivel=0;
     try{const x=await brapiNivel(tk); const n=V.prefs.nivel||0;
