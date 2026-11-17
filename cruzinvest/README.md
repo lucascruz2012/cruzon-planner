@@ -27,6 +27,10 @@ Configuração (uma vez): rode o arquivo [`supabase.sql`](supabase.sql) no **SQL
 
 Se a senha for trocada pelo Planner ("Esqueci a senha"), o CruzInvest pede a senha anterior uma vez para reabrir a carteira, porque ela é criptografada com a senha.
 
+## Assinatura
+
+O CruzInvest tem período de teste e assinatura próprios, como o Planner e o Finance. O teste começa sozinho no primeiro uso; quando vence, o app abre a tela de planos com o **QR code do Pix** e o botão para mandar o comprovante pelo WhatsApp, e a pessoa pode continuar vendo os dados (só leitura). O administrador libera no Planner, em **Ajustes › Perfis de acesso › Finance e CruzInvest…**. Configuração: [`supabase/15-acesso-por-app.sql`](../supabase/15-acesso-por-app.sql). O código da tela de assinatura é cópia de `cruzon-finance-projeto/src/assinatura.js`.
+
 ## Segurança
 
 - Os dados são **criptografados no aparelho antes de ir para a nuvem** (AES-256-GCM; chave derivada da senha por PBKDF2-SHA-256 com 310 mil iterações). A senha e a chave nunca são gravadas.
