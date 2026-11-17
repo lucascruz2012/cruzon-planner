@@ -5,7 +5,7 @@ name: Avisos para o administrador
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "7,22,37,52 * * * *"   # minutos "quebrados": o GitHub atrasa menos que nos horários redondos
   workflow_dispatch:
     inputs:
       teste:
