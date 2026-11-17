@@ -396,7 +396,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-17d";
+const APP_VER="2026-11-17e";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -652,7 +652,7 @@ function enterApp(){
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
   marca(!ME?"Só neste aparelho":!NUVEM?"Nuvem indisponível":OFFLINE?"Sem conexão":"Sincronizado ✓",!ME||!NUVEM||OFFLINE);
-  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); iniciaTicker(); mostraInstalar();
+  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); iniciaTicker(); mostraInstalar(); carregaFiis();
   const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
   if(tickers().length&&old) atualizar(true);
 }
@@ -689,14 +689,31 @@ function sortedLanc(){return V.lanc.slice().sort((a,b)=>a.data<b.data?-1:a.data>
 function qtyAt(tk,iso){let q=0;for(const l of V.lanc){if(l.tk===tk&&l.data<=iso)q+=l.tipo==="C"?l.qtd:-l.qtd;}return Math.max(0,q);}
 /* proventos: brapi (se o plano permitir) + registrados/importados por você */
 function divKey(d){return (d.com||d.ex)+"|"+(+d.rate).toFixed(6);}
+/* dados públicos de todos os FIIs (CVM), gerados pela rotina do GitHub em dados/fiis.json */
+let FIIS=null; const FIISK="cruzinvest_fiis_v1";
+try{ const c=JSON.parse(localStorage.getItem(FIISK)||"null"); if(c&&c.fundos) FIIS=c; }catch(e){}
+async function carregaFiis(){
+  try{ const r=await fetch("dados/fiis.json",{cache:"no-cache"}); if(!r.ok) return; const j=await r.json(); if(!j||!j.fundos) return;
+    const novo=!FIIS||FIIS.gerado!==j.gerado; FIIS=j; try{localStorage.setItem(FIISK,JSON.stringify(j));}catch(e){} if(novo&&V) render(); }catch(e){}
+}
 function mk(tk){
   const m=V.mkt[tk]||{}, man=(V.provMan||[]).filter(d=>d.tk===tk);
-  if(!man.length&&m.dy12!==undefined) return m;
   const seen=new Set(), divs=[];
   const pays=new Set(man.map(d=>d.pay+"|"+(+d.rate).toFixed(4)));
   [...man,...(m.divs||[]).filter(d=>!pays.has(d.pay+"|"+(+d.rate).toFixed(4)))].forEach(d=>{const k=divKey(d); if(!seen.has(k)){seen.add(k); divs.push(d);}});
-  const d12=isoOf(Date.now()-365*864e5), s12=divs.filter(d=>(d.com||d.ex)>=d12).reduce((a,d)=>a+d.rate,0);
-  return {...m,divs,div12:s12,dy12:m.price&&s12?s12/m.price:(m.price?0:null)};
+  const d12=isoOf(Date.now()-365*864e5), ult12=divs.filter(d=>(d.com||d.ex)>=d12);
+  let s12=ult12.reduce((a,d)=>a+d.rate,0), dySrc="proventos";
+  const out={...m,divs};
+  const cv=FIIS&&FIIS.fundos&&FIIS.fundos[tk]; const cls=V.ativos[tk]&&V.ativos[tk].cls;
+  if(cv&&cls==="FII"){
+    out.cvm=cv; if(!out.vpa&&cv.vp) out.vpa=cv.vp;
+    const mesesUser=new Set(ult12.filter(d=>!/AMORTIZ/.test(d.label||"")).map(d=>(d.com||d.ex).slice(0,7))).size;
+    const r12=(cv.rend||[]).slice(-12), cvm12=r12.reduce((a,x)=>a+x[1],0);
+    /* histórico próprio completo (10+ meses) vale mais; senão, completa com a CVM (fundo inteiro, por cota) */
+    if(mesesUser<10&&cvm12>0){ s12=r12.length<12&&r12.length>=6?cvm12*12/r12.length:cvm12; dySrc="cvm"; }
+  }
+  out.div12=s12; out.dySrc=dySrc; out.dy12=m.price&&s12?s12/m.price:(m.price?0:null);
+  return out;
 }
 function proventosDe(tk){
   const m=mk(tk); if(!m.divs||!m.divs.length) return [];
@@ -814,7 +831,7 @@ function parseQuote(x,prev){
 async function atualizar(silent){
   if(BUSY) return; const tks=tickers().filter(t=>isListed(ativo(t).cls));
   const C=carteira(); const ativos=new Set(C.lista.map(p=>p.tk));
-  BUSY=true; $("#bAtualizar").classList.add("spin");
+  BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis();
   const erros=[]; let ok=0, semToken=false, semModulos=false;
   const fila=tks.slice(); const N=Math.min(1,fila.length); /* plano gratuito da brapi: uma consulta por vez */
   await Promise.all(Array.from({length:N},async()=>{
@@ -880,12 +897,13 @@ function saude(p,C){
   }
   if(a.cls==="FII"){
     if(m.dy12!=null&&m.price){ if(m.dy12*100>L.fiiDyMax) add("y","DY 12m de "+pct(m.dy12,1)+": verifique se há rendimento não recorrente."); else if(m.dy12*100<L.fiiDyMin&&m.dy12>0) add("y","DY 12m de "+pct(m.dy12,1)+": abaixo do mínimo definido."); }
-    const r=(m.divs||[]).filter(d=>d.label!=="AMORTIZAÇÃO"&&d.label!=="AMORTIZACAO").sort((x,y)=>(y.com||y.ex)<(x.com||x.ex)?-1:1);
+    let r=(m.divs||[]).filter(d=>d.label!=="AMORTIZAÇÃO"&&d.label!=="AMORTIZACAO").sort((x,y)=>(y.com||y.ex)<(x.com||x.ex)?-1:1);
+    if(r.length<6&&m.cvm&&(m.cvm.rend||[]).length>=6) r=m.cvm.rend.slice().reverse().map(x=>({rate:x[1],com:x[0]}));
     if(r.length>=6){ const u3=r.slice(0,3).reduce((s,d)=>s+d.rate,0)/3, ant=r.slice(3,12), ma=ant.reduce((s,d)=>s+d.rate,0)/ant.length;
       if(ma>0){const q=1-u3/ma; if(q*100>=L.fiiRendQuedaR) add("r","Rendimento médio dos últimos 3 meses "+pct(q,0)+" menor que o histórico."); else if(q*100>=L.fiiRendQuedaY) add("y","Rendimento recente "+pct(q,0)+" abaixo da média anterior.");} }
     const vp=a.vp||m.vpa; const pvp=vp&&m.price?m.price/vp:m.pvp;
     if(pvp){ if(pvp>L.fiiPvpMax) add("y","P/VP de "+n2(pvp)+": pagando ágio sobre o patrimônio."); else if(pvp<L.fiiPvpMin) add("y","P/VP de "+n2(pvp)+": desconto forte, investigue o motivo (vacância, inadimplência, dívida)."); }
-    else add("n","Informe o VP por cota do fundo (no detalhe do ativo) para calcular o P/VP.");
+    else add("n","Sem valor patrimonial por cota: informe o VP no detalhe do ativo para calcular o P/VP.");
   }
   const lv=f.some(x=>x.lv==="r")?"r":f.some(x=>x.lv==="y")?"y":f.length&&f.every(x=>x.lv==="n")&&m.price==null&&isListed(a.cls)?"n":"g";
   return {lv,f};
@@ -1462,6 +1480,7 @@ function detalhe(tk){
       <div class="card kpi" style="padding:10px"><div class="lb">Valorização</div><div class="vl num ${sgn(p.ganho)}" style="font-size:17px">${spct(p.ganhoPct)}</div><div class="sm">${money(p.ganho)}</div></div>
       <div class="card kpi" style="padding:10px"><div class="lb">Retorno c/ proventos</div><div class="vl num ${sgn(p.retTotal)}" style="font-size:17px">${spct(p.retTotalPct)}</div><div class="sm">Proventos ${money(p.provRec)}</div></div></div>
     ${ind.length?`<div class="ind" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">${ind.join("")}</div>`:""}
+    ${fii&&m.cvm?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">${m.dySrc==="cvm"?"DY 12m estimado com os rendimentos informados pelo fundo à CVM":"DY 12m calculado com os seus proventos"} · VP por cota: ${a.vp?"informado por você":"CVM, informe de "+esc((m.cvm.vpMes||"").split("-").reverse().join("/"))}.</p>`:""}
     <h3 style="font-size:14px;margin:12px 0 6px">Análise</h3>
     <ul style="margin:0;padding:0;list-style:none;font-size:13px;display:flex;flex-direction:column;gap:5px">${s.f.length?s.f.map(f=>`<li>${LVL[f.lv][2]} ${esc(f.t)}</li>`).join(""):"<li>🟢 Nenhum indicador fora dos limites.</li>"}</ul>
     <div class="links" style="margin-top:12px"><a href="${i10}" target="_blank" rel="noopener">Investidor10 ↗</a><a href="${si}" target="_blank" rel="noopener">Status Invest ↗</a>${fii?`<a href="https://fnet.bmfbovespa.com.br/fnet/publico/abrirGerenciadorDocumentosCVM" target="_blank" rel="noopener">Relatórios (Fundos.NET) ↗</a>`:`<a href="https://www.rad.cvm.gov.br/ENET/frmConsultaExternaCVM.aspx" target="_blank" rel="noopener">Fatos relevantes (CVM) ↗</a>`}</div>

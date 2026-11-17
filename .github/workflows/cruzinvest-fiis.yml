@@ -1,0 +1,42 @@
+# CruzInvest: atualiza cruzinvest/dados/fiis.json com os dados públicos de FIIs da CVM
+# (valor patrimonial por cota e rendimento por cota dos últimos 13 meses).
+# Roda todo dia; só faz commit quando o arquivo muda. Não usa nenhum dado pessoal.
+name: CruzInvest - dados de FIIs (CVM)
+
+on:
+  schedule:
+    - cron: "17 9 * * *"   # 06:17 em Brasília
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cruzinvest-fiis
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Gerar fiis.json a partir da CVM
+        run: python3 cruzinvest/scripts/fiis_cvm.py cruzinvest/dados/fiis.json
+
+      - name: Publicar se mudou
+        run: |
+          if git diff --quiet -- cruzinvest/dados/fiis.json; then
+            echo "Sem mudanças nos dados da CVM."
+            exit 0
+          fi
+          git config user.name "cruzinvest-dados[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cruzinvest/dados/fiis.json
+          git commit -m "CruzInvest: atualiza dados de FIIs da CVM"
+          git push
