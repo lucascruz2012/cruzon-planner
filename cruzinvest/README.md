@@ -19,11 +19,19 @@ Acompanhamento da carteira de investimentos: patrimônio, rentabilidade, compara
 4. Toque em ↻ para buscar cotações, indicadores e proventos. O app também atualiza sozinho ao abrir, se os dados estiverem velhos.
 5. Em **Ajustes → Backup**, baixe um backup criptografado de tempos em tempos.
 
+## Conta e sincronização
+
+O CruzInvest usa a **mesma conta do CruzOn Planner** (mesmo e-mail e senha, mesmo Supabase). A carteira fica igual em todos os aparelhos: o que muda em um aparece nos outros em poucos segundos.
+
+Configuração (uma vez): rode o arquivo [`supabase.sql`](supabase.sql) no **SQL Editor** do Supabase do Planner. Ele cria a tabela `invest_cofres`, separada das tabelas do Planner, com acesso só do próprio dono. Enquanto a tabela não existir, o app funciona só no aparelho.
+
+Se a senha for trocada pelo Planner ("Esqueci a senha"), o CruzInvest pede a senha anterior uma vez para reabrir a carteira, porque ela é criptografada com a senha.
+
 ## Segurança
 
-- Os dados ficam **criptografados no aparelho** (AES-256-GCM; chave derivada da senha por PBKDF2-SHA-256 com 310 mil iterações). A senha e a chave nunca são gravadas.
+- Os dados são **criptografados no aparelho antes de ir para a nuvem** (AES-256-GCM; chave derivada da senha por PBKDF2-SHA-256 com 310 mil iterações). A senha e a chave nunca são gravadas.
 - O app se bloqueia sozinho após o tempo de inatividade escolhido. Depois de 5 senhas erradas, impõe uma espera crescente.
-- Nenhum dado da carteira é enviado a servidores. O app só consulta cotações por ticker na brapi e índices no Banco Central.
+- O Supabase guarda só a carteira cifrada; sem a senha, ninguém a lê. Cotações são consultadas por ticker na brapi e índices no Banco Central.
 
 ## O que é analisado
 
