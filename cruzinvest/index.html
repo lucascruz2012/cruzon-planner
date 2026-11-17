@@ -2226,7 +2226,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-17g";
+const APP_VER="2026-11-17h";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -2714,12 +2714,30 @@ function parseQuote(x,prev){
     setor:sp.sector||(prev&&prev.setor)||"", industria:sp.industry||(prev&&prev.industria)||"",
     divs:x.dividendsData?uniq:(prev&&prev.divs)||[], full:!!(x.defaultKeyStatistics||x.financialData)};
 }
+/* lista pública da brapi: cotação de todos os ativos da B3 em poucas consultas, sem token */
+async function cotacoesLista(quero){
+  const out={};
+  for(let page=1;page<=4;page++){
+    let j=null;
+    for(let t=0;t<3&&!j;t++){ try{ const r=await fetch("https://brapi.dev/api/quote/list?limit=2000&page="+page); if(r.ok) j=await r.json(); else await sleep(1500*(t+1)); }catch(e){ await sleep(1500*(t+1)); } }
+    if(!j) break;
+    (j.stocks||[]).forEach(x=>{ if(quero.has(x.stock)) out[x.stock]=x; });
+    if(!j.totalPages||page>=j.totalPages) break;
+    await sleep(700);
+  }
+  return out;
+}
 async function atualizar(silent){
   if(BUSY) return; const tks=tickers().filter(t=>isListed(ativo(t).cls));
   const C=carteira(); const ativos=new Set(C.lista.map(p=>p.tk));
   BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis(); carregaAcoes();
   const erros=[]; let ok=0, semToken=false, semModulos=false;
-  const fila=tks.slice(); const N=Math.min(1,fila.length); /* plano gratuito da brapi: uma consulta por vez */
+  /* 1) cotações de todos os ativos pela lista pública (funciona sem token) */
+  const lista=await cotacoesLista(new Set(tks)).catch(()=>({}));
+  Object.entries(lista).forEach(([tk,x])=>{ const prev=V.mkt[tk]||{};
+    V.mkt[tk]={...prev,ts:Date.now(),price:x.close,chg:x.change,name:prev.name||x.name||"",logo:prev.logo||(x.logo&&!/BRAPI\.svg$/i.test(x.logo)?x.logo:""),fonteCot:"lista"}; delete V.mkt[tk].err; ok++; });
+  /* 2) com token, detalha cada ativo (máxima/mínima de 52 semanas etc.); sem token, a lista já basta */
+  const fila=V.prefs.token?tks.slice():tks.filter(t=>!lista[t]); const N=Math.min(1,fila.length); /* plano gratuito da brapi: uma consulta por vez */
   await Promise.all(Array.from({length:N},async()=>{
     while(fila.length){
       let tk=fila.shift(); const seg=tk.endsWith("#2"); if(seg){ await sleep(5000); }
@@ -2727,9 +2745,11 @@ async function atualizar(silent){
       if(!seg&&!ativos.has(tk)&&V.mkt[tk]&&V.mkt[tk].divs&&Date.now()-V.mkt[tk].ts<7*864e5) continue; /* posição zerada: atualiza 1x/semana */
       try{
         const x=await brapiNivel(tkr);
-        if(x){ V.mkt[tkr]=parseQuote(x,V.mkt[tkr]); delete V.mkt[tkr].err; ok++; }
-      }catch(e){ if(limiteErr(e)&&!tk.endsWith("#2")){ fila.push(tk+"#2"); continue; } /* tenta de novo no fim da fila */
-        const t0=tk.replace("#2",""); if(/TOKEN/i.test(e.code+e.message)) semToken=true; erros.push(t0+": "+e.message); V.mkt[t0]={...(V.mkt[t0]||{}),err:e.message,errTs:Date.now()}; }
+        if(x){ V.mkt[tkr]=parseQuote(x,V.mkt[tkr]); delete V.mkt[tkr].err; if(!lista[tkr]) ok++; }
+      }catch(e){ if(limiteErr(e)&&!tk.endsWith("#2")&&!lista[tk]){ fila.push(tk+"#2"); continue; } /* tenta de novo no fim da fila */
+        const t0=tk.replace("#2","");
+        if(lista[t0]) continue; /* a cotação já veio da lista pública: o detalhe que faltou não é pendência */
+        if(/TOKEN/i.test(e.code+e.message)) semToken=true; erros.push(t0+": "+e.message); V.mkt[t0]={...(V.mkt[t0]||{}),err:e.message,errTs:Date.now()}; }
     }
   }));
   try{ await atualizarMacro(); }catch(e){ erros.push("Banco Central: "+e.message); }
@@ -2876,7 +2896,7 @@ function render(){
 }
 function avisos(){
   let h="";
-  if(V._aviso==="token") h+=`<div class="banner warn">⚠️ <div>A brapi exige um <b>token gratuito</b> para a maioria dos ativos. Crie em <a href="https://brapi.dev/dashboard" target="_blank" rel="noopener">brapi.dev</a> e cole em <b>Ajustes → Fonte de dados</b>.</div></div>`;
+  if(V._aviso==="token") h+=`<div class="banner warn">⚠️ <div>Não foi possível obter a cotação de alguns ativos agora. Tente atualizar de novo em instantes; se persistir, confira os tickers em <b>Lançamentos</b>.</div></div>`;
   else if((V.prefs.nivel||0)>0&&!(V.provMan||[]).length) h+=`<div class="banner warn">ℹ️ <div>O plano gratuito da brapi ${(V.prefs.nivel===2)?"libera só cotações (sem indicadores nem proventos)":"não inclui proventos"}. Registre ou importe seus dividendos e rendimentos na aba <b>Proventos</b> para calcular DY e renda passiva. <button class="lnk" onclick="go('proventos')">Ir para Proventos</button></div></div>`;
   return h;
 }
@@ -3407,8 +3427,8 @@ function vAjustes(){
   return `<div class="pghead"><div><h2>Ajustes</h2><p>Personalize a análise, a segurança e a fonte de dados.</p></div></div>
   <div class="set">
     <div class="card"><h3>Fonte de dados</h3><p class="cap">Cotações, indicadores e proventos vêm da <b>brapi.dev</b>; Selic, IPCA e CDI, do <b>Banco Central</b>.</p>
-      <div class="fld"><label>Token da brapi</label><input id="aTok" type="password" value="${esc(V.prefs.token)}" placeholder="cole aqui seu token gratuito" autocomplete="off"></div>
-      <p class="mut" style="font-size:12px">Crie grátis em <a href="https://brapi.dev/dashboard" target="_blank" rel="noopener">brapi.dev/dashboard</a>. Sem token só alguns ativos (ex.: PETR4, VALE3, ITUB4) funcionam. O token fica criptografado no seu cofre.</p>
+      <div class="fld"><label>Token da brapi (opcional)</label><input id="aTok" type="password" value="${esc(V.prefs.token)}" placeholder="cole aqui seu token gratuito" autocomplete="off"></div>
+      <p class="mut" style="font-size:12px"><b>Opcional.</b> Sem token, o app já traz a cotação de todos os ativos da B3, e os indicadores vêm dos balanços oficiais da CVM. Com um token gratuito (<a href="https://brapi.dev/dashboard" target="_blank" rel="noopener">brapi.dev/dashboard</a>) você ganha extras, como a máxima e a mínima de 52 semanas. O token fica criptografado na sua conta.</p>
       <div class="fld"><label>Atualizar automaticamente ao abrir, se os dados tiverem mais de</label><select id="aAuto">${[1,3,6,12,24].map(h=>`<option value="${h}" ${V.prefs.autoHoras==h?"selected":""}>${h} hora${h>1?"s":""}</option>`).join("")}</select></div>
       <div class="acts"><button class="btn" id="aTestar">Testar conexão</button><button class="btn primary" id="aSalvaTok">Salvar</button></div>
       ${V._erros&&V._erros.length?`<details><summary>Pendências da atualização de ${new Date(V._errosTs||Date.now()).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})} neste aparelho (${V._erros.length})</summary><ul style="font-size:12px;margin:6px 0 0;padding-left:18px">${V._erros.slice(0,20).map(e=>`<li>${esc(e)}</li>`).join("")}</ul></details>`:""}</div>
