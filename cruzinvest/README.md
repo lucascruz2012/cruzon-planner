@@ -7,8 +7,7 @@ Acompanhamento da carteira de investimentos: patrimônio, rentabilidade, compara
 ## Primeiros passos
 
 1. Abra o endereço e crie seu **cofre** (nome, e-mail e senha forte; depois o login é por e-mail e senha). Não existe recuperação de senha: guarde-a bem.
-2. Em **Ajustes → Fonte de dados**, cole o token gratuito da [brapi.dev](https://brapi.dev/dashboard). Sem ele, só alguns ativos (PETR4, VALE3, ITUB4…) têm cotação.
-   O plano gratuito não inclui proventos: o app detecta isso sozinho e usa só o que o plano libera. Registre ou importe dividendos e rendimentos na aba **Proventos** (planilha com Ativo, Data com/Pagamento e Valor por cota ou Valor total).
+2. (Opcional) Em **Ajustes → Fonte de dados**, cole um token gratuito da [brapi.dev](https://brapi.dev/dashboard) para ganhar extras como a máxima e a mínima de 52 semanas. Sem token, o app já traz a cotação de todos os ativos da B3 (lista pública da brapi), e os indicadores vêm dos balanços da CVM.
 3. Em **Lançamentos → Importar da B3**, selecione de uma vez os arquivos Excel da Área do Investidor (investidor.b3.com.br):
    - **Extratos → Negociação** (maior período disponível): compras e vendas;
    - **Relatórios → Consolidado mensal** (pode mandar todos os meses; o mais recente confere a posição);

@@ -214,14 +214,22 @@ def main():
         e["ebit12m"] = fluxo12m(dem, cnpj, ult, ant, dfp, conta("3.05"))
         e["da12m"] = fluxo12m(dem, cnpj, ult, ant, dfp, da)
         e["prov12m"] = fluxo12m(dem, cnpj, ult, ant, dfp, proventos_pagos)
-        pl_tot, minor = b.get("2.03"), b.get("2.03.09")
+        # patrimônio líquido: conta de 2º nível cujo nome é "patrimônio líquido" (2.03 nas empresas, 2.08 nos bancos)
+        dsc = dem.desc.get((cnpj, ult), {})
+        cod_pl = next((c for c in sorted(b) if c.count(".") == 1 and c.startswith("2.") and "patrim" in dsc.get(c, "") and "quido" in dsc.get(c, "")), None)
+        pl_tot = b.get(cod_pl) if cod_pl else None
+        minor = next((b[c] for c in b if cod_pl and c.startswith(cod_pl + ".") and c.count(".") == 2 and "controlador" in dsc.get(c, "") and "não" in dsc.get(c, "")), None)
         e["pl"] = (pl_tot - minor) if pl_tot is not None and minor is not None and abs(minor) < abs(pl_tot) else pl_tot
-        e["ac"], e["pc"] = b.get("1.01"), b.get("2.01")
+        financeira = cod_pl is not None and cod_pl != "2.03"  # bancos/seguradoras no modelo IFRS de instituição financeira
+        e["ac"], e["pc"] = (None, None) if financeira else (b.get("1.01"), b.get("2.01"))
         caixa = (b.get("1.01.01") or 0) + (b.get("1.01.02") or 0)
         div = None
         if b.get("2.01.04") is not None or b.get("2.02.01") is not None:
             div = (b.get("2.01.04") or 0) + (b.get("2.02.01") or 0)
-        e["divLiq"] = (div - caixa) if div is not None else None
+        e["divLiq"] = (div - caixa) if div is not None and not financeira else None
+        if financeira:  # receita, EBIT e dívida não têm o mesmo significado para bancos
+            e["receita12m"] = e["ebit12m"] = e["da12m"] = None
+        e["financeira"] = financeira
         e["acoes"] = acoes.get((cnpj, ult)) or next((acoes[(cnpj, d)] for d in sorted(ds, reverse=True) if (cnpj, d) in acoes), None)
         # algumas companhias informam a quantidade de ações em milhares: patrimônio por ação acima de
         # R$ 1.000 indica isso (nenhuma ação relevante da B3 tem VPA nesse nível)
