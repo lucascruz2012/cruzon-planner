@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CruzInvest</title>
 <meta name="description" content="CruzInvest: acompanhe sua carteira de investimentos, rentabilidade, proventos e a saúde dos fundamentos de cada ativo.">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest?v=2"><meta name="application-name" content="CruzInvest">
 <meta name="theme-color" content="#0C1F2B">
-<link rel="apple-touch-icon" href="icone-apple.png">
-<link rel="icon" href="logo.svg" type="image/svg+xml"><link rel="alternate icon" href="icone-192.png">
+<link rel="apple-touch-icon" href="ci-icone-apple.png">
+<link rel="icon" href="logo.svg?v=2" type="image/svg+xml"><link rel="alternate icon" href="ci-icone-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="CruzInvest">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -396,7 +396,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-17f";
+const APP_VER="2026-11-17g";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
