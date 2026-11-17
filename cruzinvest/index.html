@@ -759,10 +759,18 @@ function cdiCompare(C){
 /* níveis de consulta: 0 = indicadores + proventos, 1 = só indicadores, 2 = só cotação */
 const NIVEIS=["?modules=defaultKeyStatistics,financialData,summaryProfile&dividends=true","?modules=defaultKeyStatistics,financialData,summaryProfile","?"];
 const planErr=e=>/PLAN|MODULE|UPGRADE|FORBIDDEN|plano|módulo|requer/i.test((e.code||"")+" "+e.message);
+/* a brapi recusa consultas simultâneas ou muito seguidas: espera e tenta de novo */
+const limiteErr=e=>/simult|concurren|too many|rate.?limit|limite de requisi|429/i.test((e.code||"")+" "+e.message);
+async function brapiEspera(tk,n){
+  for(let t=0;;t++){
+    try{ const x=await brapi(tk,n); await sleep(250); return x; }
+    catch(e){ if(!limiteErr(e)||t>=4) throw e; await sleep(1200*(t+1)); }
+  }
+}
 async function brapiNivel(tk){
   let n=V.prefs.nivel||0;
   for(;n<NIVEIS.length;n++){
-    try{ const x=await brapi(tk,n); if(n!==(V.prefs.nivel||0)) V.prefs.nivel=n; return x; }
+    try{ const x=await brapiEspera(tk,n); if(n!==(V.prefs.nivel||0)) V.prefs.nivel=n; return x; }
     catch(e){ if(!planErr(e)||n===NIVEIS.length-1) throw e; }
   }
 }
@@ -795,7 +803,7 @@ async function atualizar(silent){
   const C=carteira(); const ativos=new Set(C.lista.map(p=>p.tk));
   BUSY=true; $("#bAtualizar").classList.add("spin");
   const erros=[]; let ok=0, semToken=false, semModulos=false;
-  const fila=tks.slice(); const N=Math.min(3,fila.length);
+  const fila=tks.slice(); const N=Math.min(1,fila.length); /* plano gratuito da brapi: uma consulta por vez */
   await Promise.all(Array.from({length:N},async()=>{
     while(fila.length){
       const tk=fila.shift();
