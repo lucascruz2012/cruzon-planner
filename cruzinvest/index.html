@@ -247,6 +247,15 @@ tbody tr.click{cursor:pointer} tbody tr.click:hover{background:var(--surface-2)}
 .links{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;margin-top:4px}
 details{border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;margin-top:10px}
 details summary{cursor:pointer;font-weight:600;font-size:13px}
+.ecogrid{display:grid;gap:8px}
+.eco{display:flex;gap:11px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface-2,var(--surface))}
+.eco img{width:42px;height:42px;border-radius:10px;flex:0 0 42px}
+.eco b{display:block;font-size:13.5px}
+.eco small{display:block;font-size:11.5px;color:var(--muted)}
+.eco .ecolk{display:flex;gap:10px;margin-top:4px;font-size:11.5px;font-weight:700}
+.eco .ecolk a{color:var(--accent);text-decoration:none}
+.eco.aqui{border-color:var(--accent)}
+.eco .aqui-tag{font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.6px}
 .set{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:14px}
 .lims{display:grid;grid-template-columns:1fr 90px;gap:6px 10px;align-items:center;font-size:12.5px}
 .lims input{padding:6px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--surface-2);text-align:right;width:100%}
@@ -284,6 +293,7 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
         <label class="chk"><input type="checkbox" id="eLembrar" checked> Lembrar meu e-mail neste aparelho</label>
         <div id="eErr" class="msg err hidden"></div><div id="eOk" class="msg ok hidden"></div>
         <button class="btn primary block" type="submit" id="eBtn">Entrar</button>
+        <div class="note"><a class="lnk" href="../conheca/?app=invest" style="text-decoration:none">Ainda não conhece? Veja como o CruzInvest funciona →</a></div>
         <div class="note">Ainda não tem conta? <button type="button" class="lnk" id="eCriar">Criar conta</button> · <button type="button" class="lnk" id="eEsqueci">Esqueci a senha</button><br>
           <button type="button" class="lnk" id="eRestaurar">Restaurar um backup</button> · <button type="button" class="lnk inst-lnk hidden" data-instalar>Instalar o app</button></div>
       </form>
@@ -615,7 +625,7 @@ $("#fCriar").addEventListener("submit",async e=>{
   if(p1!==p2) return erroLogin(err,"As senhas não conferem.");
   btn.disabled=true; btn.textContent="Criando…";
   try{
-    const r=await sb("/auth/v1/signup",{method:"POST",noAuth:true,body:JSON.stringify({email:normEmail(email),password:p1,data:{nome}})});
+    const r=await sb("/auth/v1/signup",{method:"POST",noAuth:true,body:JSON.stringify({email:normEmail(email),password:p1,data:{nome,app:"invest",...(refGuardado()?{ref:refGuardado()}:{})}})});
     if(r&&r.access_token){ await abrirConta(email,p1); V.perfil.nome=nome; save(); lembrar(email); enterApp(); toast("Conta criada. Bem-vindo(a) ao CruzInvest!"); }
     else { mostra("#fEntrar"); $("#eEmail").value=normEmail(email); const ok=$("#eOk"); ok.innerHTML="Conta criada! Enviamos um link de confirmação para <b>"+esc(normEmail(email))+"</b>. Confirme e depois entre aqui."; ok.classList.remove("hidden"); }
   }catch(x){ erroLogin(err,traduz(x)); }
@@ -1532,6 +1542,16 @@ function detalhe(tk){
 const LIMS=[["Ações","plMax","P/L máximo",""],["Ações","pvpMax","P/VP máximo",""],["Ações","roeMin","ROE mínimo","%"],["Ações","divEbitdaY","Dív.líq/EBITDA: atenção a partir de","x"],["Ações","divEbitdaR","Dív.líq/EBITDA: risco a partir de","x"],["Ações","liqMin","Liquidez corrente mínima",""],["Ações","payoutMax","Payout máximo","%"],
   ["FIIs","fiiDyMin","DY 12m mínimo","%"],["FIIs","fiiDyMax","DY 12m máximo (possível não recorrente)","%"],["FIIs","fiiRendQuedaY","Queda do rendimento: atenção","%"],["FIIs","fiiRendQuedaR","Queda do rendimento: risco","%"],["FIIs","fiiPvpMax","P/VP máximo",""],["FIIs","fiiPvpMin","P/VP mínimo",""],
   ["Carteira","concY","Concentração por ativo: atenção","%"],["Carteira","concR","Concentração por ativo: risco","%"],["Carteira","quedaMax","Queda desde a máxima de 52 semanas","%"],["Carteira","quedaDia","Queda em um pregão","%"]];
+/* ======================= INDICAÇÃO E FAMÍLIA CRUZON ======================= */
+const SITE_CRUZON="https://lucascruz2012.github.io/cruzon-planner/";
+(function(){ try{ const r=(new URLSearchParams(location.search).get("ref")||"").replace(/[^A-Za-z0-9]/g,"").slice(0,16); if(r) localStorage.setItem("cruzon_ref",JSON.stringify({ref:r,em:Date.now()})); }catch(e){} })();
+function refGuardado(){ try{ const o=JSON.parse(localStorage.getItem("cruzon_ref")||"null"); if(o&&o.ref&&Date.now()-o.em<90*864e5) return o.ref; }catch(e){} return ""; }
+const meuLinkIndica=()=>SITE_CRUZON+"conheca/?app=invest"+(ME&&ME.id?"&ref="+String(ME.id).replace(/-/g,"").slice(0,10):"");
+const textoIndica=()=>"Estou usando o CruzInvest para acompanhar meus investimentos e recomendo! Veja como funciona e crie sua conta: "+meuLinkIndica();
+function ecosHtml(){
+  return [["CruzOn Planner","Tarefas da semana, prazos e recorrentes.","../icone-192.png","../",""],["CruzOn Finance","Receitas, despesas, cartões, orçamentos e metas.","../finance/icone-192.png","../finance/","finance"],["CruzInvest","Carteira, rentabilidade, CDI e proventos.","ci-icone-192.png","",null]]
+    .map(([n,t,ic,u,id])=>`<div class="eco${id===null?" aqui":""}"><img src="${ic}" alt="" loading="lazy"><div><b>${n}</b><small>${t}</small><div class="ecolk">${id===null?'<span class="aqui-tag">Você está aqui</span>':`<a href="${u}" target="_blank" rel="noopener">Abrir</a><a href="../conheca/?app=${id||"planner"}" target="_blank" rel="noopener">Ver como funciona</a>`}</div></div></div>`).join("");
+}
 function vAjustes(){
   const grp=g=>LIMS.filter(l=>l[0]===g).map(([,k,t,u])=>`<span>${t}${u?` (${u})`:""}</span><input data-lim="${k}" inputmode="decimal" value="${n2(V.prefs.lim[k]).replace(/,00$/,"")}">`).join("");
   return `<div class="pghead"><div><h2>Ajustes</h2><p>Personalize a análise, a segurança e a fonte de dados.</p></div></div>
@@ -1551,6 +1571,11 @@ function vAjustes(){
     <div class="card"><h3>Limites da análise de saúde</h3><p class="cap">Quando um indicador passa destes valores, o ativo recebe um alerta 🟡 ou 🔴.</p>
       ${["Ações","FIIs","Carteira"].map(g=>`<h4 style="margin:12px 0 6px;font-size:12.5px;color:var(--ink-2)">${g}</h4><div class="lims">${grp(g)}</div>`).join("")}
       <div class="acts"><button class="btn" id="aLimRes">Restaurar padrões</button><button class="btn primary" id="aLimOk">Salvar limites</button></div></div>
+    <div class="card"><h3>Indique para um amigo</h3><p class="cap">Mande o seu link: quem abrir conhece o app com as telas de verdade e cria a conta já com a sua indicação.</p>
+      <div class="fld"><input id="aIndLink" readonly value="${esc(meuLinkIndica())}" aria-label="Seu link de indicação"></div>
+      <div class="acts" style="justify-content:flex-start"><button class="btn" id="aIndCopiar">Copiar link</button><button class="btn primary" id="aIndZap" style="background:#25D366;border-color:#25D366;color:#0b3d21">Enviar no WhatsApp</button>${navigator.share?'<button class="btn" id="aIndShare">Compartilhar…</button>':""}</div>
+      <h3 style="margin-top:18px">Família CruzOn</h3><p class="cap">A mesma conta abre todos os apps: use o seu e-mail e senha de sempre.</p>
+      <div class="ecogrid">${ecosHtml()}</div></div>
     <div class="card"><h3>Backup</h3><p class="cap">Gera um arquivo criptografado com toda a carteira, para guardar como segurança. A sincronização entre aparelhos já é automática.</p>
       <p style="font-size:12.5px">Último backup: <b>${V.meta.backup?new Date(V.meta.backup).toLocaleString("pt-BR"):"nunca"}</b></p>
       <div class="acts" style="justify-content:flex-start"><button class="btn primary" id="aBackup">Baixar backup</button><button class="btn" id="aExport">Exportar lançamentos (CSV)</button></div>
@@ -1559,6 +1584,9 @@ function vAjustes(){
   </div>`;
 }
 vAjustes.after=m=>{
+  $("#aIndCopiar").addEventListener("click",()=>{const i=$("#aIndLink"); i.select(); try{navigator.clipboard.writeText(i.value).then(()=>toast("Link copiado."),()=>{document.execCommand("copy");toast("Link copiado.");});}catch(e){document.execCommand("copy");toast("Link copiado.");}});
+  $("#aIndZap").addEventListener("click",()=>window.open("https://wa.me/?text="+encodeURIComponent(textoIndica()),"_blank","noopener"));
+  const sh=$("#aIndShare"); if(sh) sh.addEventListener("click",()=>{try{navigator.share({title:"CruzInvest",text:textoIndica(),url:meuLinkIndica()}).catch(()=>{});}catch(e){}});
   $("#aSalvaTok").addEventListener("click",()=>{V.prefs.token=$("#aTok").value.trim(); V.prefs.nivel=0; V.prefs.nivelTk={}; V.prefs.autoHoras=+$("#aAuto").value; V._aviso=null; save(); toast("Fonte de dados salva."); atualizar(false);});
   $("#aTestar").addEventListener("click",async()=>{const old=V.prefs.token; V.prefs.token=$("#aTok").value.trim(); const tk=tickers().find(t=>isListed(ativo(t).cls))||"BBAS3";
     const oldN=V.prefs.nivel; V.prefs.nivel=0;
@@ -1632,7 +1660,7 @@ document.addEventListener("click",e=>{ if(e.target.closest("[data-instalar]")) i
 
 /* ======================= INÍCIO ======================= */
 if(!window.crypto||!crypto.subtle){document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">Este navegador não suporta criptografia segura. Abra o CruzInvest pelo endereço https:// em um navegador atualizado.</p>';}
-else { wireEyes($("#login")); showLogin(); mostraInstalar(); }
+else { wireEyes($("#login")); showLogin(); mostraInstalar(); if(/[?&]cadastro=1/.test(location.search)){ mostra("#fCriar"); setTimeout(()=>$("#cNome").focus(),60); } }
 if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>

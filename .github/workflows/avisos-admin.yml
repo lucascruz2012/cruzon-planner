@@ -1,0 +1,39 @@
+# Avisos para o administrador: cadastro novo, fim do período de teste, plano vencido e recados
+# (inclusive "paguei com Pix"), por e-mail e/ou WhatsApp. Roda a cada 15 minutos.
+# Configuração (uma vez): veja avisos/LEIA-ME.md. Sem os segredos, a rotina só termina sem fazer nada.
+name: Avisos para o administrador
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: avisos-admin
+  cancel-in-progress: false
+
+jobs:
+  avisar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Conferir novidades e avisar
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AVISO_EMAIL: ${{ secrets.AVISO_EMAIL }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          CALLMEBOT_PHONE: ${{ secrets.CALLMEBOT_PHONE }}
+          CALLMEBOT_APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
+        run: python3 avisos/avisos_admin.py
