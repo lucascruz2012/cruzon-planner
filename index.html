@@ -1026,6 +1026,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
           <div class="field"><label>WhatsApp para contato</label><input id="cfgZap" type="text" inputmode="numeric" placeholder="5531999998888"><span class="note" style="border:0;padding:4px 0 0;margin:0">Só números, com país e DDD. Deixe vazio para esconder o botão.</span></div>
           <div class="field"><label>Link de pagamento mensal</label><input id="cfgUrlMes" type="url" placeholder="https://..."></div>
           <div class="field"><label>Link de pagamento anual</label><input id="cfgUrlAno" type="url" placeholder="https://..."></div>
+          <div class="field"><label>E-mail em cópia nos avisos</label><input id="cfgAvisoCc" type="text" inputmode="email" placeholder="opcional; separe vários com vírgula"><span class="note" style="border:0;padding:4px 0 0;margin:0">Recebe também os e-mails do vigia: cadastros, testes que terminam, planos vencidos e pagamentos por Pix.</span></div>
         </div>
         <div class="formgrid" style="margin-top:4px;border-top:1px solid var(--line);padding-top:12px">
           <div class="field"><label>Tipo da chave Pix</label><select id="cfgPixTipo"><option value="cel">Celular</option><option value="doc">CPF ou CNPJ</option><option value="email">E-mail</option><option value="evp">Chave aleatória</option></select></div>
@@ -3697,6 +3698,7 @@ function pintaCfgPlanos(){
   $("#cfgPixTipo").value      = CFGAPP.pix_chave ? pixTipoDe(CFGAPP.pix_chave) : "cel";
   $("#cfgPixNome").value      = CFGAPP.pix_nome || "";
   $("#cfgPixCidade").value    = CFGAPP.pix_cidade || "";
+  $("#cfgAvisoCc").value      = CFGAPP.aviso_cc || "";
   $("#cfgPrecoMesFin").value  = CFGAPP.preco_mensal_finance ?? "";
   $("#cfgPrecoAnoFin").value  = CFGAPP.preco_anual_finance ?? "";
   $("#cfgPrecoMesInv").value  = CFGAPP.preco_mensal_invest ?? "";
@@ -3715,11 +3717,13 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
     pix_chave   : pixNormaliza($("#cfgPixTipo").value, $("#cfgPix").value) || null,
     pix_nome    : $("#cfgPixNome").value.trim() || null,
     pix_cidade  : $("#cfgPixCidade").value.trim() || null,
+    aviso_cc    : $("#cfgAvisoCc").value.split(/[,;\s]+/).map(x=>x.trim().toLowerCase()).filter(Boolean).join(", ") || null,
     preco_mensal_finance: $("#cfgPrecoMesFin").value === "" ? null : +$("#cfgPrecoMesFin").value,
     preco_anual_finance : $("#cfgPrecoAnoFin").value === "" ? null : +$("#cfgPrecoAnoFin").value,
     preco_mensal_invest : $("#cfgPrecoMesInv").value === "" ? null : +$("#cfgPrecoMesInv").value,
     preco_anual_invest  : $("#cfgPrecoAnoInv").value === "" ? null : +$("#cfgPrecoAnoInv").value
   };
+  if(corpo.aviso_cc && corpo.aviso_cc.split(", ").some(x=>!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(x))){ toast("Confira o e-mail em cópia: parece haver um endereço inválido."); return; }
   if(corpo.pix_chave && (!corpo.pix_nome || !corpo.pix_cidade)){ toast("Para o Pix funcionar, preencha também o nome e a cidade de quem recebe."); return; }
   if(corpo.pix_chave && $("#cfgPixTipo").value==="cel" && corpo.pix_chave.length!==14){ toast("Celular da chave Pix: informe DDD + número, ex.: 14981584071."); return; }
   if(corpo.pix_chave && $("#cfgPixTipo").value==="doc" && corpo.pix_chave.length!==11 && corpo.pix_chave.length!==14){ toast("CPF tem 11 números e CNPJ tem 14. Confira a chave Pix."); return; }
@@ -3733,6 +3737,15 @@ $("#btnSalvarPlanos").addEventListener("click", async ()=>{
     Object.assign(CFGAPP, corpo); pintaCfgPlanos(); toast("Planos salvos.");
   }catch(e){
     const m = (e && e.message) ? String(e.message) : "";
+    if(/aviso_cc/i.test(m)){
+      const semCc = {...corpo}; delete semCc.aviso_cc;
+      try{
+        await sb("/rest/v1/config_app?id=eq.1",{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(semCc)});
+        Object.assign(CFGAPP, semCc); pintaCfgPlanos();
+        toast("Salvei tudo, menos o e-mail em cópia: falta rodar o arquivo 17-aviso-copia.sql no Supabase.");
+        return;
+      }catch(e2){}
+    }
     if(/_finance|_invest/i.test(m)){
       const semApps = {...corpo}; ["preco_mensal_finance","preco_anual_finance","preco_mensal_invest","preco_anual_invest"].forEach(k=>delete semApps[k]);
       try{

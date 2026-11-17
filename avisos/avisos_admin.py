@@ -182,19 +182,32 @@ def monta(ev):
     return total, assunto, "\n\n".join(partes_txt) + "\n" + rodape_txt, html
 
 
+def copias():
+    """E-mails em cópia definidos no Planner (Ajustes › Planos e cobrança), coluna config_app.aviso_cc."""
+    try:
+        r = sb("/rest/v1/config_app?select=aviso_cc&id=eq.1") or []
+        txt = (r[0].get("aviso_cc") if r else "") or ""
+        return [x.strip() for x in re.split(r"[,;\s]+", txt) if re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]{2,}$", x.strip())]
+    except Exception:
+        return []  # coluna ainda não criada (17-aviso-copia.sql)
+
+
 def manda_email(assunto, texto, html):
     usuario, senha, para = env("GMAIL_USER"), env("GMAIL_APP_PASSWORD").replace(" ", ""), env("AVISO_EMAIL") or env("GMAIL_USER")
     if not (usuario and senha and para):
         print("E-mail não configurado (faltam GMAIL_USER, GMAIL_APP_PASSWORD ou AVISO_EMAIL).")
         return False
+    cc = [x for x in copias() if x.lower() != para.lower()]
     m = MIMEMultipart("alternative")
     m["Subject"], m["From"], m["To"] = assunto, f"Avisos CruzOn <{usuario}>", para
+    if cc:
+        m["Cc"] = ", ".join(cc)
     m.attach(MIMEText(texto, "plain", "utf-8"))
     m.attach(MIMEText(html, "html", "utf-8"))
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=40) as s:
         s.login(usuario, senha)
-        s.sendmail(usuario, [para], m.as_string())
-    print("E-mail enviado.")
+        s.sendmail(usuario, [para] + cc, m.as_string())
+    print("E-mail enviado." + (f" Com {len(cc)} cópia(s)." if cc else ""))
     return True
 
 
