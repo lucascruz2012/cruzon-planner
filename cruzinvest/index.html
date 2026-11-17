@@ -7,8 +7,8 @@
 <meta name="description" content="CruzInvest: acompanhe sua carteira de investimentos, rentabilidade, proventos e a saúde dos fundamentos de cada ativo.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0C1F2B">
-<link rel="apple-touch-icon" href="../icone-apple.png">
-<link rel="icon" href="../icone-192.png">
+<link rel="apple-touch-icon" href="icone-apple.png">
+<link rel="icon" href="logo.svg" type="image/svg+xml"><link rel="alternate icon" href="icone-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="CruzInvest">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -37,7 +37,7 @@ html[data-theme="brand"]{
   --plane:#EDF1F4; --surface:#FFFFFF; --surface-2:#F5F8FA; --surface-3:#E9ECEF;
   --ink:#0C1F2B; --ink-2:#263746; --muted:#566674;
   --line:#E3E8EC; --line-2:#C7D1D9; --ring:rgba(12,31,43,.10);
-  --brand:#1E7A4E; --brand-2:#0C1F2B; --accent:#00C853;
+  --brand:#17864B; --brand-2:#0C1F2B; --accent:#00C853;
   --good:#1E7A4E; --good-bg:#E4F6EC;
   --shadow:0 1px 2px rgba(12,31,43,.05),0 10px 26px -14px rgba(12,31,43,.25);
 }
@@ -63,22 +63,13 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 
 /* ======================= LOGIN ======================= */
 #login{position:fixed;inset:0;z-index:100;display:flex;overflow:auto;background:#07131c}
-#login{background:radial-gradient(120% 90% at 15% 10%,#12384a 0%,#0a2230 45%,#06141c 100%)}
-.lgart{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-.lgart svg{position:absolute;left:0;bottom:0;width:100%;height:78%}
-.lgwrap{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:space-between;gap:5vw;padding:4vh 6vw}
-.lghero{color:#EAF2F0;max-width:520px}
-.lghero h2{font-size:clamp(30px,4vw,52px);line-height:1.05;margin:0 0 16px;letter-spacing:-.02em;font-weight:700}
-.lghero h2 span{color:#39E875}
-.lghero p{font-size:15px;color:rgba(234,242,240,.72);margin:0 0 22px;line-height:1.5}
-.lghero ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:13.5px;color:rgba(234,242,240,.86)}
-.lghero li{display:flex;gap:10px;align-items:center}
-.lghero li i{width:8px;height:8px;border-radius:50%;background:#39E875;box-shadow:0 0 0 4px rgba(57,232,117,.15);flex:0 0 auto}
+#login{background:#081a22 url(login-bg.jpg) left center/cover no-repeat}
+.lgwrap{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:flex-end;padding:4vh 5vw}
 .lgpane{width:min(410px,100%);background:var(--surface);border-radius:18px;padding:26px 28px 20px;box-shadow:0 34px 80px -18px rgba(0,0,0,.66)}
 .brandmark{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.brandmark svg{width:38px;height:38px}
+.brandmark img{width:40px;height:40px;border-radius:10px}
 .brandmark b{font-size:22px;letter-spacing:-.02em}
-.brandmark b span{color:#00A04E}
+.brandmark b span{color:#1a9a55;font-weight:500}
 #login h1{font-size:18px;margin:0 0 2px}
 #login .sub{color:var(--ink-2);font-size:12.5px;margin:0 0 12px}
 .fld label{display:block;font-size:11px;font-weight:600;color:var(--ink-2);margin:11px 0 4px;text-transform:uppercase;letter-spacing:.05em}
@@ -86,8 +77,8 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 .fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid #00A04E;outline-offset:1px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:var(--surface);font-weight:600;font-size:13px;white-space:nowrap}
 .btn:hover{background:var(--surface-2)}
-.btn.primary{background:#1E7A4E;border-color:#1E7A4E;color:#fff}
-.btn.primary:hover{background:#00A04E}
+.btn.primary{background:#17864B;border-color:#17864B;color:#fff}
+.btn.primary:hover{background:#1a9a55}
 .btn.danger{color:var(--crit);border-color:var(--crit)}
 .btn:disabled{opacity:.55;cursor:default}
 .btn.block{width:100%;margin-top:16px;padding:12px}
@@ -103,13 +94,21 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 .chk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);margin-top:12px;cursor:pointer}
 .meter{height:4px;border-radius:3px;background:var(--surface-3);margin-top:6px;overflow:hidden}
 .meter i{display:block;height:100%;width:0;background:var(--crit);transition:width .2s}
-@media(max-width:860px){ .lgwrap{justify-content:center;padding:16px} .lghero{display:none} }
+@media(max-width:1100px) and (min-width:861px){ #login{background-position:22% center} }
+@media(max-width:860px){
+  #login{background:#081a22 url(login-bg-m.jpg) left top/100% auto no-repeat}
+  .lgwrap{align-items:flex-end;justify-content:center;padding:calc(84vw*.62) 14px calc(18px + env(safe-area-inset-bottom))}
+  .lgwrap::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(8,26,34,0) 30vw,rgba(8,26,34,.85) 80vw,#081a22 100vw);z-index:-1}
+  .lgpane{border-radius:20px;padding:22px 20px 18px}
+  .brandmark{display:none}
+}
 
 /* ======================= TOPO ======================= */
 header.top{position:sticky;top:0;z-index:20;background:var(--hdr);color:var(--hdr-ink);border-bottom:1px solid var(--hdr-line)}
 .topin{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px}
 .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;letter-spacing:-.01em;color:#fff}
-.logo svg{width:28px;height:28px} .logo span{color:#39E875}
+.logo img{width:30px;height:30px;border-radius:8px}
+.logo .wm{color:#E6ECEF} .logo .wm span{color:#39E875;font-weight:500}
 nav.tabs{display:flex;gap:2px;background:rgba(255,255,255,.07);padding:3px;border-radius:10px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
 nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs button{border:0;background:transparent;color:rgba(255,255,255,.72);padding:7px 12px;border-radius:8px;font-weight:600;font-size:13px;white-space:nowrap}
@@ -122,6 +121,47 @@ nav.tabs button[aria-selected="true"]{background:rgba(0,200,83,.20);color:#fff;b
 .upd{font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap}
 #sync{color:#39E875} #sync.bad{color:#FFC94D}
 @media(max-width:820px){ .topin{flex-wrap:wrap} nav.tabs{order:3;flex-basis:100%} .upd{display:none} }
+/* carrossel de cotações */
+.ticker{overflow:hidden;border-top:1px solid var(--hdr-line);background:rgba(0,0,0,.18);-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.tk-track{display:flex;width:max-content;gap:0;animation:tk 45s linear infinite;padding:6px 0}
+.ticker:hover .tk-track,.ticker.pause .tk-track{animation-play-state:paused}
+.tk-it{display:inline-flex;align-items:center;gap:6px;padding:0 18px;font-size:12px;color:rgba(255,255,255,.82);white-space:nowrap;border-right:1px solid rgba(255,255,255,.10);font-variant-numeric:tabular-nums}
+.tk-it b{color:#fff;font-weight:600} .tk-it .up{color:#39E875} .tk-it .dn{color:#FF8A80} .tk-it small{color:rgba(255,255,255,.55);font-size:11px}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){ .tk-track{animation:none} .ticker{overflow-x:auto} }
+/* navegação inferior (celular) */
+.bnav{display:none}
+@media(max-width:760px){
+  html{scroll-behavior:smooth} body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain}
+  nav.tabs{display:none} .topin{flex-wrap:nowrap;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top))} .logo{font-size:16px;flex:1}
+  .topact{gap:6px} .iconbtn{width:38px;height:38px}
+  .bnav{display:grid;grid-template-columns:repeat(6,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .bnav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;min-height:50px;color:var(--muted);font-size:10.5px;font-weight:600;border-radius:12px;transition:color .15s,background .15s}
+  .bnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+  .bnav button[aria-selected="true"]{color:var(--brand)} .bnav button[aria-selected="true"] svg{transform:translateY(-1px) scale(1.08)}
+  .bnav button:active{background:var(--surface-2)}
+  main{padding:14px 12px calc(88px + env(safe-area-inset-bottom))} footer{padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+  .btn{min-height:42px} .toolbar{width:100%} .toolbar .btn{flex:1 1 auto}
+  .pghead{align-items:stretch}
+  .seg{display:flex;overflow-x:auto;scrollbar-width:none;max-width:100%} .seg::-webkit-scrollbar{display:none} .seg button{flex:0 0 auto;padding:9px 12px}
+  .ov{align-items:flex-end;padding:0} .modal{border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom));animation:sheet .22s ease-out}
+  .modal::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--line-2);margin:-6px auto 12px}
+  .desk{display:none !important}
+  .tk-it{font-size:11.5px;padding:0 14px}
+}
+@media(min-width:761px){ .mob{display:none !important} }
+@keyframes sheet{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+/* cartões da carteira no celular */
+.mlist{display:flex;flex-direction:column;gap:10px}
+.mcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;cursor:pointer}
+.mcard:active{transform:scale(.99)}
+.mcard .r{text-align:right}
+.mcard .big{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.mcard .sub{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.mcard .foot{grid-column:1/-1;display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--ink-2);border-top:1px dashed var(--line);padding-top:7px;margin-top:2px}
+.sortbar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 10px} .sortbar::-webkit-scrollbar{display:none}
+.sortbar button{flex:0 0 auto;border:1px solid var(--line-2);background:var(--surface);border-radius:99px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.sortbar button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
 
 /* ======================= CONTEÚDO ======================= */
 main{max-width:1280px;margin:0 auto;padding:18px 16px 60px}
@@ -229,20 +269,10 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
 
 <!-- ======================= LOGIN ======================= -->
 <div id="login">
-  <div class="lgart" aria-hidden="true"><svg viewBox="0 0 1200 600" preserveAspectRatio="none">
-    <defs><linearGradient id="lgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#39E875" stop-opacity=".28"/><stop offset="1" stop-color="#39E875" stop-opacity="0"/></linearGradient></defs>
-    <g stroke="rgba(255,255,255,.05)" stroke-width="1"><line x1="0" x2="1200" y1="100" y2="100"/><line x1="0" x2="1200" y1="200" y2="200"/><line x1="0" x2="1200" y1="300" y2="300"/><line x1="0" x2="1200" y1="400" y2="400"/><line x1="0" x2="1200" y1="500" y2="500"/></g>
-    <g fill="rgba(57,232,117,.10)"><rect x="60" y="520" width="34" height="40" rx="4"/><rect x="140" y="474" width="34" height="86" rx="4"/><rect x="220" y="428" width="34" height="132" rx="4"/><rect x="300" y="472" width="34" height="88" rx="4"/><rect x="380" y="426" width="34" height="134" rx="4"/><rect x="460" y="470" width="34" height="90" rx="4"/><rect x="540" y="424" width="34" height="136" rx="4"/><rect x="620" y="378" width="34" height="182" rx="4"/><rect x="700" y="422" width="34" height="138" rx="4"/><rect x="780" y="376" width="34" height="184" rx="4"/><rect x="860" y="420" width="34" height="140" rx="4"/><rect x="940" y="374" width="34" height="186" rx="4"/><rect x="1020" y="328" width="34" height="232" rx="4"/><rect x="1100" y="372" width="34" height="188" rx="4"/></g>
-    <path d="M0,470 C120,450 180,480 260,420 S400,380 470,400 S600,300 690,320 S820,230 900,240 S1060,120 1200,90 L1200,600 L0,600Z" fill="url(#lgA)"/>
-    <path d="M0,470 C120,450 180,480 260,420 S400,380 470,400 S600,300 690,320 S820,230 900,240 S1060,120 1200,90" fill="none" stroke="#39E875" stroke-width="3"/>
-  </svg></div>
   <div class="lgwrap">
-    <div class="lghero"><h2>Seu patrimônio,<br><span>sob controle.</span></h2>
-      <p>Rentabilidade, proventos e a saúde de cada ativo da sua carteira, num só lugar.</p>
-      <ul><li><i></i>Semáforo de fundamentos por ativo</li><li><i></i>Proventos recebidos e a receber</li><li><i></i>Comparação com o CDI</li><li><i></i>Dados criptografados no seu aparelho</li></ul></div>
     <div class="lgpane">
       <div class="brandmark">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0C1F2B"/><path d="M9 27l7-8 5 5 10-12" fill="none" stroke="#39E875" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="12" r="2.6" fill="#39E875"/></svg>
+        <img src="logo.svg" alt="" width="40" height="40">
         <b>Cruz<span>Invest</span></b>
       </div>
 
@@ -255,7 +285,7 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
         <div id="eErr" class="msg err hidden"></div><div id="eOk" class="msg ok hidden"></div>
         <button class="btn primary block" type="submit" id="eBtn">Entrar</button>
         <div class="note">Ainda não tem conta? <button type="button" class="lnk" id="eCriar">Criar conta</button> · <button type="button" class="lnk" id="eEsqueci">Esqueci a senha</button><br>
-          <button type="button" class="lnk" id="eRestaurar">Restaurar um backup</button></div>
+          <button type="button" class="lnk" id="eRestaurar">Restaurar um backup</button> · <button type="button" class="lnk inst-lnk hidden" data-instalar>Instalar o app</button></div>
       </form>
 
       <form id="fCriar" class="hidden" autocomplete="on">
@@ -289,8 +319,8 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
   <header class="top">
     <div class="topin">
       <div class="logo">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#14303f"/><path d="M9 27l7-8 5 5 10-12" fill="none" stroke="#39E875" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="12" r="2.6" fill="#39E875"/></svg>
-        Cruz<span>Invest</span>
+        <img src="logo.svg" alt="" width="40" height="40">
+        <span class="wm">Cruz<span>Invest</span></span>
       </div>
       <nav class="tabs" role="tablist" id="tabs">
         <button data-v="painel">Painel</button>
@@ -302,13 +332,16 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
       </nav>
       <div class="topact">
         <span class="upd" id="sync" title="Estado da sincronização entre aparelhos"></span><span class="upd" id="upd"></span>
+        <button class="iconbtn hidden" data-instalar title="Instalar o CruzInvest neste aparelho" aria-label="Instalar app"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
         <button class="iconbtn" id="bAtualizar" title="Atualizar cotações e indicadores" aria-label="Atualizar dados"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
         <button class="iconbtn" id="bTema" title="Trocar tema" aria-label="Trocar tema"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
         <button class="iconbtn" id="bSair" title="Bloquear" aria-label="Bloquear"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
       </div>
     </div>
+    <div class="ticker" id="ticker" aria-label="Cotações do mercado"><div class="tk-track" id="tkTrack"><span class="tk-it mut">Carregando cotações…</span></div></div>
   </header>
   <main id="main"></main>
+  <nav class="bnav" id="bnav" aria-label="Navegação"><button data-v="painel"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Painel</span></button><button data-v="carteira"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h12v4"/><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="16.5" cy="13.5" r="1.5"/></svg><span>Carteira</span></button><button data-v="saude"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg><span>Saúde</span></button><button data-v="proventos"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Proventos</span></button><button data-v="lanc"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span>Lançam.</span></button><button data-v="ajustes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Ajustes</span></button></nav>
   <footer>CruzInvest é uma ferramenta de acompanhamento. Os alertas são filtros de atenção baseados em indicadores públicos e <b>não constituem recomendação de compra ou venda</b>. Dados: brapi.dev e Banco Central (SGS). Proventos exibidos em valor bruto.</footer>
 </div>
 
@@ -616,7 +649,7 @@ function enterApp(){
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
   marca(!ME?"Só neste aparelho":!NUVEM?"Nuvem indisponível":OFFLINE?"Sem conexão":"Sincronizado ✓",!ME||!NUVEM||OFFLINE);
-  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000);
+  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); iniciaTicker(); mostraInstalar();
   const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
   if(tickers().length&&old) atualizar(true);
 }
@@ -769,8 +802,8 @@ async function atualizar(silent){
       if(!ativos.has(tk)&&V.mkt[tk]&&V.mkt[tk].divs&&Date.now()-V.mkt[tk].ts<7*864e5) continue; /* posição zerada: atualiza 1x/semana */
       try{
         const x=await brapiNivel(tk);
-        if(x){ V.mkt[tk]=parseQuote(x,V.mkt[tk]); ok++; }
-      }catch(e){ if(/TOKEN/i.test(e.code+e.message)) semToken=true; erros.push(tk+": "+e.message); }
+        if(x){ V.mkt[tk]=parseQuote(x,V.mkt[tk]); delete V.mkt[tk].err; ok++; }
+      }catch(e){ if(/TOKEN/i.test(e.code+e.message)) semToken=true; erros.push(tk+": "+e.message); V.mkt[tk]={...(V.mkt[tk]||{}),err:e.message,errTs:Date.now()}; }
     }
   }));
   try{ await atualizarMacro(); }catch(e){ erros.push("Banco Central: "+e.message); }
@@ -807,7 +840,7 @@ function saude(p,C){
   const L=V.prefs.lim, m=mk(p.tk), a=ativo(p.tk), f=[];
   const add=(lv,t)=>f.push({lv,t});
   const fin=/financial|banco|bank|seguro|insurance/i.test((m.setor||"")+" "+(m.industria||""));
-  if(isListed(a.cls)&&m.price==null) add("n","Sem cotação: clique em atualizar ou confira o ticker.");
+  if(isListed(a.cls)&&(m.price==null||m.err)) add("n",m.err?"A fonte de dados (brapi) recusou "+p.tk+": "+m.err+(m.price!=null?" Mostrando a última cotação obtida.":""):"Sem cotação: clique em atualizar ou confira o ticker.");
   if(p.peso*100>=L.concR) add("r","Concentração alta: "+pct(p.peso,1)+" da carteira.");
   else if(p.peso*100>=L.concY) add("y","Concentração: "+pct(p.peso,1)+" da carteira.");
   if(m.price&&m.high52&&isListed(a.cls)){const q=1-m.price/m.high52; if(q*100>=L.quedaMax) add("y","Cotação "+pct(q,0)+" abaixo da máxima de 52 semanas.");}
@@ -901,7 +934,8 @@ function hbars(rows){ /* rows: [{nm,v,color,tip,right}] */
 
 /* ======================= NAVEGAÇÃO ======================= */
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-v]"); if(b) go(b.dataset.v);});
-function go(v){VIEW=v; $$("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false")); render(); scrollTo(0,0);}
+function go(v){VIEW=v; $$("#tabs button,#bnav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false")); render(); scrollTo({top:0,behavior:"instant"});}
+$("#bnav").addEventListener("click",e=>{const b=e.target.closest("button[data-v]"); if(b){ if(navigator.vibrate) try{navigator.vibrate(8);}catch(x){} go(b.dataset.v);} });
 function render(){
   if(!V) return; tipOff();
   $("#upd").textContent=V.meta.upd?"Atualizado "+new Date(V.meta.upd).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
@@ -991,7 +1025,13 @@ function vCarteira(){
   const th=(k,t,r)=>`<th class="sortable ${r?"r":""}" data-k="${k}">${t}${SORT.k===k?(SORT.d<0?" ↓":" ↑"):""}</th>`;
   return `<div class="pghead"><div><h2>Carteira</h2><p>Clique em um ativo para ver indicadores, proventos e lançamentos.</p></div>
     <div class="toolbar"><div class="seg" id="fcls">${clsUsadas.map(c=>`<button aria-pressed="${c===FCLS}" data-c="${c}">${c}</button>`).join("")}</div></div></div>${avisos()}
-    <div class="card"><div class="tbl-wrap"><table><thead><tr>${th("tk","Ativo")}${th("sv","Saúde")}${th("qtd","Qtd",1)}${th("pm","Preço médio",1)}${th("preco","Cotação",1)}${th("chg","Dia",1)}${th("valor","Valor",1)}${th("ganhoPct","Valorização",1)}${th("dy12","DY 12m",1)}${th("prov12","Proventos 12m",1)}${th("peso","% carteira",1)}</tr></thead>
+    <div class="mob">
+      <div class="sortbar" id="msort">${[["valor","Valor"],["ganhoPct","Valorização"],["chg","Dia"],["dy12","DY"],["sv","Saúde"],["tk","A-Z"]].map(([k,t])=>`<button aria-pressed="${SORT.k===k}" data-k="${k}">${t}${SORT.k===k?(SORT.d<0?" ↓":" ↑"):""}</button>`).join("")}</div>
+      <div class="mlist">${L.map(p=>`<div class="mcard" data-tk="${p.tk}"><div>${tkCell(p)}</div><div class="r"><div class="big">${money(p.valor)}</div><div class="sub ${sgn(p.ganho)}">${spct(p.ganhoPct)} · ${money(p.ganho)}</div></div>
+        <div class="foot"><span>${N0.format(p.qtd)} × ${p.semPreco?"—":money(p.preco)}${p.chg!=null?` <b class="${sgn(p.chg)}">${spct(p.chg)}</b>`:""}</span><span>DY ${p.dy12!=null?pct(p.dy12,1):"—"} · ${pct(p.peso,1)}</span>${pill(p.sv)}</div></div>`).join("")}</div>
+      <div class="card" style="margin-top:10px;display:flex;justify-content:space-between;gap:8px;font-size:13px"><b>Total ${FCLS==="Todas"?"":FCLS}</b><span class="num"><b>${money(sub.v)}</b> · <span class="${sgn(sub.g)}">${spct(sub.c?sub.g/sub.c:0)}</span></span></div>
+    </div>
+    <div class="card desk"><div class="tbl-wrap"><table><thead><tr>${th("tk","Ativo")}${th("sv","Saúde")}${th("qtd","Qtd",1)}${th("pm","Preço médio",1)}${th("preco","Cotação",1)}${th("chg","Dia",1)}${th("valor","Valor",1)}${th("ganhoPct","Valorização",1)}${th("dy12","DY 12m",1)}${th("prov12","Proventos 12m",1)}${th("peso","% carteira",1)}</tr></thead>
     <tbody>${L.map(p=>`<tr class="click" data-tk="${p.tk}"><td>${tkCell(p)}</td><td>${pill(p.sv)}</td><td class="r num">${N0.format(p.qtd)}</td><td class="r num">${money(p.pm)}</td>
       <td class="r num">${p.semPreco?'<span class="mut">—</span>':money(p.preco)}</td><td class="r num ${sgn(p.chg)}">${p.chg==null?"—":spct(p.chg)}</td><td class="r num"><b>${money(p.valor)}</b></td>
       <td class="r num ${sgn(p.ganho)}">${spct(p.ganhoPct)}<br><small>${money(p.ganho)}</small></td><td class="r num">${p.dy12!=null?pct(p.dy12):"—"}</td><td class="r num">${money(p.prov12)}</td><td class="r num">${pct(p.peso,1)}</td></tr>`).join("")}</tbody>
@@ -1001,7 +1041,8 @@ function vCarteira(){
 vCarteira.after=m=>{
   m.querySelectorAll("th[data-k]").forEach(t=>t.addEventListener("click",()=>{const k=t.dataset.k; SORT=SORT.k===k?{k,d:-SORT.d}:{k,d:k==="tk"?1:-1}; render();}));
   m.querySelectorAll("#fcls button").forEach(b=>b.addEventListener("click",()=>{FCLS=b.dataset.c;render();}));
-  m.querySelectorAll("tr[data-tk]").forEach(r=>r.addEventListener("click",()=>detalhe(r.dataset.tk)));
+  m.querySelectorAll("tr[data-tk],.mcard[data-tk]").forEach(r=>r.addEventListener("click",()=>detalhe(r.dataset.tk)));
+  m.querySelectorAll("#msort button").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.k; SORT=SORT.k===k?{k,d:-SORT.d}:{k,d:k==="tk"?1:-1}; render();}));
 };
 
 /* ---------- SAÚDE ---------- */
@@ -1279,7 +1320,9 @@ function vLanc(){
   const L=sortedLanc().reverse();
   return `<div class="pghead"><div><h2>Lançamentos</h2><p>Compras e vendas que formam sua carteira. Preço médio e rentabilidade são calculados a partir daqui.</p></div>
     <div class="toolbar"><button class="btn primary" id="bB3">Importar da B3</button><button class="btn" id="bNovo">+ Novo lançamento</button><button class="btn" id="bImport">Importar planilha</button>${L.length?`<button class="btn" id="bExportCsv">Exportar CSV</button>`:""}</div></div>
-    <div class="card">${L.length?`<div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Ativo</th><th>Classe</th><th>Operação</th><th class="r">Qtd</th><th class="r">Preço</th><th class="r">Taxas</th><th class="r">Total</th><th></th></tr></thead><tbody>
+    ${L.length?`<div class="mlist mob">${L.slice(0,300).map(l=>`<div class="mcard" data-ed="${l.id}"><div><b>${esc(l.tk)}</b> <span class="cls">${esc(ativo(l.tk).cls)}</span><div class="sub">${brDate(l.data)} · ${l.tipo==="C"?'<span class="pos">Compra</span>':'<span class="neg">Venda</span>'}</div></div>
+      <div class="r"><div class="big">${money(l.qtd*l.preco+(l.tipo==="C"?1:-1)*(l.taxa||0))}</div><div class="sub">${N0.format(l.qtd)} × ${money(l.preco)}</div></div></div>`).join("")}</div>`:""}
+    <div class="card ${L.length?"desk":""}">${L.length?`<div class="tbl-wrap"><table><thead><tr><th>Data</th><th>Ativo</th><th>Classe</th><th>Operação</th><th class="r">Qtd</th><th class="r">Preço</th><th class="r">Taxas</th><th class="r">Total</th><th></th></tr></thead><tbody>
       ${L.map(l=>`<tr><td>${brDate(l.data)}</td><td><b>${esc(l.tk)}</b></td><td><span class="cls">${esc(ativo(l.tk).cls)}</span></td><td>${l.tipo==="C"?'<span class="pos">Compra</span>':'<span class="neg">Venda</span>'}</td><td class="r num">${N0.format(l.qtd)}</td><td class="r num">${money(l.preco)}</td><td class="r num">${l.taxa?money(l.taxa):"—"}</td><td class="r num">${money(l.qtd*l.preco+(l.tipo==="C"?1:-1)*(l.taxa||0))}</td>
       <td class="r"><button class="btn" data-ed="${l.id}" style="padding:5px 9px">Editar</button></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty"><b>Nenhum lançamento ainda</b>Use <b>+ Novo lançamento</b> ou <b>Importar planilha</b> para montar sua carteira.</div>`}</div>`;
 }
@@ -1431,6 +1474,8 @@ function vAjustes(){
       <div class="fld"><label>Bloquear após inatividade</label><select id="aLock">${[5,10,15,30,60].map(m=>`<option value="${m}" ${V.prefs.lock==m?"selected":""}>${m} minutos</option>`).join("")}</select></div>
       <div class="fld"><label>Seu nome</label><input id="aNome" value="${esc(V.perfil.nome)}" maxlength="60"></div>
       <div class="acts"><button class="btn" id="aSair">Sair da conta neste aparelho</button><button class="btn" id="aSenha">Trocar senha</button><button class="btn primary" id="aSalvaSeg">Salvar</button></div></div>
+    <div class="card"><h3>Instalar o app</h3><p class="cap">Tenha o CruzInvest com ícone próprio no computador e no celular, abrindo em tela cheia, sem precisar do navegador.</p>
+      ${instalado()?`<p style="font-size:13px">✅ Você já está usando o app instalado.</p>`:`<button class="btn primary" data-instalar>Instalar neste aparelho</button>`}</div>
     <div class="card"><h3>Limites da análise de saúde</h3><p class="cap">Quando um indicador passa destes valores, o ativo recebe um alerta 🟡 ou 🔴.</p>
       ${["Ações","FIIs","Carteira"].map(g=>`<h4 style="margin:12px 0 6px;font-size:12.5px;color:var(--ink-2)">${g}</h4><div class="lims">${grp(g)}</div>`).join("")}
       <div class="acts"><button class="btn" id="aLimRes">Restaurar padrões</button><button class="btn primary" id="aLimOk">Salvar limites</button></div></div>
@@ -1467,9 +1512,55 @@ vAjustes.after=m=>{
     marcaDel([...V.lanc,...V.provMan].map(x=>x.id)); const del=V.del, em=V.perfil.email, nm=V.perfil.nome; V=newV(nm); V.perfil.email=em; V.del=del; normV(); save(true).then(()=>{render(); toast("Carteira apagada.");});});
 };
 
+/* ======================= CARROSSEL DE COTAÇÕES ======================= */
+let TKT=null;
+async function carregaTicker(){
+  const itens=[];
+  const fmt=(v,d=2)=>v.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
+  try{ /* CoinGecko: cripto em reais; dólar e euro derivados da cotação do bitcoin nas três moedas */
+    const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=brl,usd,eur&include_24hr_change=true"); const j=await r.json();
+    const b=j.bitcoin; if(b&&b.usd&&b.eur){ itens.push({n:"Dólar",v:"R$ "+fmt(b.brl/b.usd,3)},{n:"Euro",v:"R$ "+fmt(b.brl/b.eur,3)}); }
+    [["bitcoin","Bitcoin",0],["ethereum","Ethereum",0],["solana","Solana",2]].forEach(([k,n,d])=>{const x=j[k]; if(x&&x.brl) itens.push({n,v:"R$ "+fmt(x.brl,d),c:x.brl_24h_change});});
+  }catch(e){}
+  if(!itens.length) try{ /* reserva */
+    const r=await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL,ETH-BRL,SOL-BRL"); const j=await r.json();
+    [["USDBRL","Dólar",3],["EURBRL","Euro",3],["BTCBRL","Bitcoin",0],["ETHBRL","Ethereum",0],["SOLBRL","Solana",2]].forEach(([k,n,d])=>{const x=j[k]; if(x&&x.bid) itens.push({n,v:"R$ "+fmt(+x.bid,d),c:+x.pctChange});});
+  }catch(e){}
+  try{
+    const g=async sr=>{const r=await fetch("https://api.bcb.gov.br/dados/serie/bcdata.sgs."+sr+"/dados/ultimos/1?formato=json"); return (await r.json())[0];};
+    const [selic,cdi,ipca]=await Promise.all([g(432),g(4389),g(13522)]);
+    itens.push({n:"Selic",v:fmt(+selic.valor)+"% a.a."},{n:"CDI",v:fmt(+cdi.valor)+"% a.a."},{n:"IPCA 12m",v:fmt(+ipca.valor)+"%"});
+  }catch(e){}
+  if(!itens.length) return;
+  const html=itens.map(i=>`<span class="tk-it">${i.n} <b>${i.v}</b>${i.c!=null&&isFinite(i.c)?` <span class="${i.c>=0?"up":"dn"}">${i.c>=0?"▲":"▼"} ${fmt(Math.abs(i.c))}%</span>`:""}</span>`).join("");
+  const tr=$("#tkTrack"); tr.innerHTML=html+html; tr.style.animationDuration=Math.max(30,itens.length*6)+"s";
+}
+function iniciaTicker(){ carregaTicker(); clearInterval(TKT); TKT=setInterval(()=>{ if(document.visibilityState==="visible") carregaTicker(); },90000); }
+$("#ticker").addEventListener("touchstart",()=>$("#ticker").classList.toggle("pause"),{passive:true});
+
+/* ======================= INSTALAR O APP ======================= */
+let PROMPT_INST=null;
+const instalado=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+const ehIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+function mostraInstalar(){ const ok=!instalado(); $$("[data-instalar]").forEach(b=>b.classList.toggle("hidden",!ok)); }
+addEventListener("beforeinstallprompt",e=>{e.preventDefault(); PROMPT_INST=e; mostraInstalar();});
+addEventListener("appinstalled",()=>{PROMPT_INST=null; mostraInstalar(); toast("CruzInvest instalado! Procure o ícone na tela inicial.");});
+async function instalar(){
+  if(PROMPT_INST){ PROMPT_INST.prompt(); await PROMPT_INST.userChoice.catch(()=>({})); PROMPT_INST=null; mostraInstalar(); return; }
+  const ios=ehIOS(), android=/android/i.test(navigator.userAgent);
+  modal(`<div class="mh"><h3>Instalar o CruzInvest</h3><button class="x" data-close aria-label="Fechar">×</button></div>
+    <p style="margin-top:0">O CruzInvest funciona como um aplicativo: ícone na tela inicial, abre em tela cheia e já entra no seu login.</p>
+    ${ios?`<ol style="line-height:1.8;padding-left:20px"><li>Abra este endereço no <b>Safari</b>.</li><li>Toque em <b>Compartilhar</b> (o quadrado com a seta para cima).</li><li>Escolha <b>Adicionar à Tela de Início</b> e confirme em <b>Adicionar</b>.</li></ol>`
+    :android?`<ol style="line-height:1.8;padding-left:20px"><li>Abra este endereço no <b>Chrome</b>.</li><li>Toque no menu <b>⋮</b> (canto superior direito).</li><li>Escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>`
+    :`<ol style="line-height:1.8;padding-left:20px"><li>Abra este endereço no <b>Chrome</b> ou no <b>Edge</b>.</li><li>Clique no ícone de instalar no fim da barra de endereço (ou no menu <b>⋮ → Instalar CruzInvest</b>).</li><li>Confirme em <b>Instalar</b>. O app aparece no menu Iniciar e pode ser fixado na barra de tarefas.</li></ol>`}
+    <p class="mut" style="font-size:12px">Endereço: <b>${esc(location.origin+location.pathname)}</b></p>
+    <div class="acts"><button class="btn primary" data-close>Entendi</button></div>`);
+}
+document.addEventListener("click",e=>{ if(e.target.closest("[data-instalar]")) instalar(); });
+
 /* ======================= INÍCIO ======================= */
 if(!window.crypto||!crypto.subtle){document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">Este navegador não suporta criptografia segura. Abra o CruzInvest pelo endereço https:// em um navegador atualizado.</p>';}
-else { wireEyes($("#login")); showLogin(); }
+else { wireEyes($("#login")); showLogin(); mostraInstalar(); }
 if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
