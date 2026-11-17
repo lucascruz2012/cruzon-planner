@@ -396,7 +396,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-17e";
+const APP_VER="2026-11-17f";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -652,7 +652,7 @@ function enterApp(){
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
   marca(!ME?"Só neste aparelho":!NUVEM?"Nuvem indisponível":OFFLINE?"Sem conexão":"Sincronizado ✓",!ME||!NUVEM||OFFLINE);
-  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); iniciaTicker(); mostraInstalar(); carregaFiis();
+  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); iniciaTicker(); mostraInstalar(); carregaFiis(); carregaAcoes();
   const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
   if(tickers().length&&old) atualizar(true);
 }
@@ -689,6 +689,23 @@ function sortedLanc(){return V.lanc.slice().sort((a,b)=>a.data<b.data?-1:a.data>
 function qtyAt(tk,iso){let q=0;for(const l of V.lanc){if(l.tk===tk&&l.data<=iso)q+=l.tipo==="C"?l.qtd:-l.qtd;}return Math.max(0,q);}
 /* proventos: brapi (se o plano permitir) + registrados/importados por você */
 function divKey(d){return (d.com||d.ex)+"|"+(+d.rate).toFixed(6);}
+/* dados contábeis oficiais das companhias (CVM: DFP/ITR), gerados pela rotina do GitHub em dados/acoes.json */
+let ACOES=null; const ACOESK="cruzinvest_acoes_v1";
+try{ const c=JSON.parse(localStorage.getItem(ACOESK)||"null"); if(c&&c.acoes) ACOES=c; }catch(e){}
+async function carregaAcoes(){
+  try{ const r=await fetch("dados/acoes.json",{cache:"no-cache"}); if(!r.ok) return; const j=await r.json(); if(!j||!j.acoes) return;
+    const novo=!ACOES||ACOES.gerado!==j.gerado; ACOES=j; try{localStorage.setItem(ACOESK,JSON.stringify(j));}catch(e){} if(novo&&V) render(); }catch(e){}
+}
+/* indicadores calculados com os números oficiais da CVM e a cotação atual; dado ausente fica ausente (nunca estima) */
+function indCVM(tk,price){
+  const e=ACOES&&ACOES.acoes&&ACOES.acoes[tk]; if(!e||!price) return null;
+  const div=(a,b)=>(a!=null&&b)?a/b:null, mc=e.acoes?price*e.acoes:null;
+  const ebitda=e.ebit12m!=null?e.ebit12m+(e.da12m||0):null;
+  return {ref:e.ref, setor:e.setor||"", pl:div(mc,e.lucro12m), pvp:div(mc,e.pl), roe:div(e.lucro12m,e.pl), margem:div(e.lucro12m,e.receita12m),
+    divEbitda:ebitda>0?div(e.divLiq,ebitda):null, liq:div(e.ac,e.pc), payout:(e.lucro12m>0)?div(e.prov12m,e.lucro12m):null,
+    dyPago:div(e.prov12m,mc), vpa:div(e.pl,e.acoes), eps:div(e.lucro12m,e.acoes)};
+}
+
 /* dados públicos de todos os FIIs (CVM), gerados pela rotina do GitHub em dados/fiis.json */
 let FIIS=null; const FIISK="cruzinvest_fiis_v1";
 try{ const c=JSON.parse(localStorage.getItem(FIISK)||"null"); if(c&&c.fundos) FIIS=c; }catch(e){}
@@ -713,6 +730,15 @@ function mk(tk){
     if(mesesUser<10&&cvm12>0){ s12=r12.length<12&&r12.length>=6?cvm12*12/r12.length:cvm12; dySrc="cvm"; }
   }
   out.div12=s12; out.dySrc=dySrc; out.dy12=m.price&&s12?s12/m.price:(m.price?0:null);
+  if(cls==="Ação"){
+    const c=indCVM(tk,m.price);
+    if(c){ ["pl","pvp","roe","margem","divEbitda","liq","vpa","eps"].forEach(k=>{ if(c[k]!=null) out[k]=c[k]; else if(k!=="vpa"&&k!=="eps") out[k]=out[k]??null; });
+      out.payout=c.payout; out.cvmRef=c.ref; out.full=true; if(c.setor) out.setorCvm=c.setor;
+      /* sem proventos próprios cobrindo o ano, o DY vem do que a empresa pagou (fluxo de caixa na CVM) */
+      const mesesUser=new Set(ult12.map(d=>(d.com||d.ex).slice(0,7))).size;
+      if(mesesUser<3&&c.dyPago!=null){ out.dy12=c.dyPago; out.dySrc="cvm"; }
+    }
+  }
   return out;
 }
 function proventosDe(tk){
@@ -831,7 +857,7 @@ function parseQuote(x,prev){
 async function atualizar(silent){
   if(BUSY) return; const tks=tickers().filter(t=>isListed(ativo(t).cls));
   const C=carteira(); const ativos=new Set(C.lista.map(p=>p.tk));
-  BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis();
+  BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis(); carregaAcoes();
   const erros=[]; let ok=0, semToken=false, semModulos=false;
   const fila=tks.slice(); const N=Math.min(1,fila.length); /* plano gratuito da brapi: uma consulta por vez */
   await Promise.all(Array.from({length:N},async()=>{
@@ -879,21 +905,23 @@ async function atualizarMacro(){
 function saude(p,C){
   const L=V.prefs.lim, m=mk(p.tk), a=ativo(p.tk), f=[];
   const add=(lv,t)=>f.push({lv,t});
-  const fin=/financial|banco|bank|seguro|insurance/i.test((m.setor||"")+" "+(m.industria||""));
+  const fin=/financial|banco|bank|seguro|insurance|intermedia..o financeira|seguradora|previd/i.test((m.setor||"")+" "+(m.industria||"")+" "+(m.setorCvm||""));
   if(isListed(a.cls)&&(m.price==null||m.err)) add("n",m.err?"A fonte de dados (brapi) recusou "+p.tk+": "+m.err+(m.price!=null?" Mostrando a última cotação obtida.":""):"Sem cotação: clique em atualizar ou confira o ticker.");
   if(p.peso*100>=L.concR) add("r","Concentração alta: "+pct(p.peso,1)+" da carteira.");
   else if(p.peso*100>=L.concY) add("y","Concentração: "+pct(p.peso,1)+" da carteira.");
   if(m.price&&m.high52&&isListed(a.cls)){const q=1-m.price/m.high52; if(q*100>=L.quedaMax) add("y","Cotação "+pct(q,0)+" abaixo da máxima de 52 semanas.");}
   if(m.chg!=null&&m.chg<=-L.quedaDia&&isListed(a.cls)) add("y","Queda forte no último pregão ("+spct(m.chg/100)+"). Procure notícias.");
   if(a.cls==="Ação"||a.cls==="BDR"){
-    if(!m.full&&m.price!=null) add("n","Indicadores fundamentalistas indisponíveis no seu plano da brapi.");
+    var semInd=m.price!=null&&m.pl==null&&m.roe==null&&m.divEbitda==null&&m.margem==null;
+    if(semInd) add("n","Indicadores fundamentalistas indisponíveis no momento: o semáforo não avaliou os fundamentos deste ativo.");
     if(m.pl!=null){ if(m.pl<0) add("r","Empresa com prejuízo nos últimos 12 meses (P/L negativo)."); else if(m.pl>L.plMax) add("y","P/L de "+n2(m.pl)+": preço exigente frente ao lucro."); }
     if(m.roe!=null){ if(m.roe<0) add("r","ROE negativo ("+pct(m.roe,1)+")."); else if(m.roe*100<L.roeMin) add("y","ROE baixo ("+pct(m.roe,1)+")."); }
     if(m.margem!=null&&m.margem<0) add("r","Margem líquida negativa ("+pct(m.margem,1)+").");
-    if(m.pvp!=null&&m.pvp>L.pvpMax) add("y","P/VP de "+n2(m.pvp)+": acima do limite de "+n2(L.pvpMax)+".");
+    if(!fin&&m.pvp!=null&&m.pvp>L.pvpMax) add("y","P/VP de "+n2(m.pvp)+": acima do limite de "+n2(L.pvpMax)+".");
     if(!fin&&m.divEbitda!=null){ if(m.divEbitda>=L.divEbitdaR) add("r","Dívida líquida/EBITDA de "+n2(m.divEbitda)+"x: endividamento alto."); else if(m.divEbitda>=L.divEbitdaY) add("y","Dívida líquida/EBITDA de "+n2(m.divEbitda)+"x."); }
     if(!fin&&m.liq!=null&&m.liq<L.liqMin) add("y","Liquidez corrente de "+n2(m.liq)+": menos ativo que passivo de curto prazo.");
-    if(m.eps>0&&m.div12>0){const po=m.div12/m.eps; if(po*100>L.payoutMax) add("y","Payout de "+pct(po,0)+": distribui mais do que lucra.");}
+    const po=m.payout!=null?m.payout:(m.eps>0&&m.div12>0?m.div12/m.eps:null);
+    if(po!=null&&po*100>L.payoutMax) add("y","Payout de "+pct(po,0)+": distribuiu mais do que lucrou nos últimos 12 meses.");
   }
   if(a.cls==="FII"){
     if(m.dy12!=null&&m.price){ if(m.dy12*100>L.fiiDyMax) add("y","DY 12m de "+pct(m.dy12,1)+": verifique se há rendimento não recorrente."); else if(m.dy12*100<L.fiiDyMin&&m.dy12>0) add("y","DY 12m de "+pct(m.dy12,1)+": abaixo do mínimo definido."); }
@@ -905,7 +933,8 @@ function saude(p,C){
     if(pvp){ if(pvp>L.fiiPvpMax) add("y","P/VP de "+n2(pvp)+": pagando ágio sobre o patrimônio."); else if(pvp<L.fiiPvpMin) add("y","P/VP de "+n2(pvp)+": desconto forte, investigue o motivo (vacância, inadimplência, dívida)."); }
     else add("n","Sem valor patrimonial por cota: informe o VP no detalhe do ativo para calcular o P/VP.");
   }
-  const lv=f.some(x=>x.lv==="r")?"r":f.some(x=>x.lv==="y")?"y":f.length&&f.every(x=>x.lv==="n")&&m.price==null&&isListed(a.cls)?"n":"g";
+  const semAval=(a.cls==="Ação"||a.cls==="BDR")&&m.price!=null&&m.pl==null&&m.roe==null&&m.divEbitda==null&&m.margem==null;
+  const lv=f.some(x=>x.lv==="r")?"r":f.some(x=>x.lv==="y")?"y":(semAval||(f.length&&f.every(x=>x.lv==="n")&&m.price==null&&isListed(a.cls)))?"n":"g";
   return {lv,f};
 }
 const LVL={g:["g","Saudável","🟢"],y:["y","Atenção","🟡"],r:["r","Risco","🔴"],n:["n","Sem dados","⚪"]};
@@ -1470,7 +1499,7 @@ function detalhe(tk){
   const si=fii?`https://statusinvest.com.br/fundos-imobiliarios/${slug}`:`https://statusinvest.com.br/acoes/${slug}`;
   const cell=(l,v)=>`<div>${l}<b>${v}</b></div>`;
   const ind=fii?[cell("Cotação",money(m.price)),cell("DY 12m",pct(m.dy12)),cell("P/VP",(a.vp||m.vpa)&&m.price?n2(m.price/(a.vp||m.vpa)):n2(m.pvp)),cell("Rend. 12m/cota",money(m.div12)),cell("Mín. 52s",money(m.low52)),cell("Máx. 52s",money(m.high52)),cell("Var. dia",spct(m.chg!=null?m.chg/100:null)),cell("Peso",pct(p.peso,1))]
-    :isListed(a.cls)?[cell("Cotação",money(m.price)),cell("P/L",n2(m.pl)),cell("P/VP",n2(m.pvp)),cell("ROE",pct(m.roe,1)),cell("Margem líq.",pct(m.margem,1)),cell("Dív.líq/EBITDA",m.divEbitda!=null?n2(m.divEbitda)+"x":"—"),cell("DY 12m",pct(m.dy12)),cell("Liq. corrente",n2(m.liq)),cell("LPA",money(m.eps)),cell("Mín. 52s",money(m.low52)),cell("Máx. 52s",money(m.high52)),cell("Peso",pct(p.peso,1))]:[];
+    :isListed(a.cls)?[cell("Cotação",money(m.price)),cell("P/L",n2(m.pl)),cell("P/VP",n2(m.pvp)),cell("ROE",pct(m.roe,1)),cell("Margem líq.",pct(m.margem,1)),cell("Dív.líq/EBITDA",m.divEbitda!=null?n2(m.divEbitda)+"x":"—"),cell("DY 12m",pct(m.dy12)),cell("Liq. corrente",n2(m.liq)),cell("LPA",money(m.eps)),cell("Payout",m.payout!=null?pct(m.payout,0):"—"),cell("Mín. 52s",money(m.low52)),cell("Máx. 52s",money(m.high52)),cell("Peso",pct(p.peso,1))]:[];
   const provs=proventosDe(tk).sort((x,y)=>(y.pay||y.com)<(x.pay||x.com)?-1:1).slice(0,12);
   const lan=V.lanc.filter(l=>l.tk===tk).sort((x,y)=>y.data<x.data?-1:1);
   modal(`<div class="mh"><div>${tkCell(p)}${m.setor?`<div class="mut" style="font-size:12px;margin-top:4px">${esc(m.setor)}${m.industria?" · "+esc(m.industria):""}</div>`:""}</div><div style="display:flex;gap:8px;align-items:center">${pill(s.lv)}<button class="x" data-close aria-label="Fechar">×</button></div></div>
@@ -1480,6 +1509,7 @@ function detalhe(tk){
       <div class="card kpi" style="padding:10px"><div class="lb">Valorização</div><div class="vl num ${sgn(p.ganho)}" style="font-size:17px">${spct(p.ganhoPct)}</div><div class="sm">${money(p.ganho)}</div></div>
       <div class="card kpi" style="padding:10px"><div class="lb">Retorno c/ proventos</div><div class="vl num ${sgn(p.retTotal)}" style="font-size:17px">${spct(p.retTotalPct)}</div><div class="sm">Proventos ${money(p.provRec)}</div></div></div>
     ${ind.length?`<div class="ind" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">${ind.join("")}</div>`:""}
+    ${a.cls==="Ação"&&m.cvmRef?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">Indicadores calculados com o balanço oficial entregue à CVM (referência ${esc(m.cvmRef.split("-").reverse().join("/"))}, últimos 12 meses) e a cotação atual. Payout e DY: dividendos e JCP efetivamente pagos no período.</p>`:""}
     ${fii&&m.cvm?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">${m.dySrc==="cvm"?"DY 12m estimado com os rendimentos informados pelo fundo à CVM":"DY 12m calculado com os seus proventos"} · VP por cota: ${a.vp?"informado por você":"CVM, informe de "+esc((m.cvm.vpMes||"").split("-").reverse().join("/"))}.</p>`:""}
     <h3 style="font-size:14px;margin:12px 0 6px">Análise</h3>
     <ul style="margin:0;padding:0;list-style:none;font-size:13px;display:flex;flex-direction:column;gap:5px">${s.f.length?s.f.map(f=>`<li>${LVL[f.lv][2]} ${esc(f.t)}</li>`).join(""):"<li>🟢 Nenhum indicador fora dos limites.</li>"}</ul>
