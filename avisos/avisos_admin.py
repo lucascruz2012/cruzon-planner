@@ -122,8 +122,19 @@ def eventos(desde, ate):
     for p in sb("/rest/v1/perfis?select=nome,email,plano,acesso_ate,isento&" + janela) or []:
         if p.get("isento"):
             continue
-        item = {"nome": p.get("nome") or "", "email": p.get("email") or "", "plano": p.get("plano") or "", "quando": quando(p.get("acesso_ate"))}
+        item = {"nome": p.get("nome") or "", "email": p.get("email") or "", "plano": p.get("plano") or "", "quando": quando(p.get("acesso_ate")), "app": "CruzOn Planner"}
         (ev["testes"] if p.get("plano") == "teste" else ev["vencidos"]).append(item)
+    try:  # Finance e CruzInvest (tabela app_acessos, arquivo supabase/15-acesso-por-app.sql)
+        por_id = {u["id"]: u for u in us}
+        for a in sb("/rest/v1/app_acessos?select=user_id,app,plano,acesso_ate,isento,bloqueado&" + janela) or []:
+            if a.get("isento") or a.get("bloqueado"):
+                continue
+            u = por_id.get(a.get("user_id")) or {}
+            item = {"nome": (u.get("user_metadata") or {}).get("nome") or "", "email": u.get("email") or "", "plano": a.get("plano") or "",
+                    "quando": quando(a.get("acesso_ate")), "app": APPS.get(a.get("app"), a.get("app") or "")}
+            (ev["testes"] if a.get("plano") == "teste" else ev["vencidos"]).append(item)
+    except Exception as e:
+        print("Aviso: não consegui ler os acessos por app:", type(e).__name__)
     try:
         filtro = f"and=(criado_em.gt.{iso(desde)},criado_em.lte.{iso(ate)})"
         for r in sb("/rest/v1/recados?select=nome,email,texto,criado_em&order=criado_em.asc&" + filtro) or []:
@@ -146,9 +157,9 @@ def monta(ev):
             f"{c['nome'] or 'Sem nome'} <{c['email']}> no {c['app']} em {br(c['quando'])}" + (f" · indicado por {c['indicou']}" if c["indicou"] else "")
             for c in ev["cadastros"]])
     if ev["testes"]:
-        bloco(f"Períodos de teste que terminaram ({len(ev['testes'])})", [f"{t['nome'] or 'Sem nome'} <{t['email']}> · terminou em {br(t['quando'])}" for t in ev["testes"]])
+        bloco(f"Períodos de teste que terminaram ({len(ev['testes'])})", [f"{t['nome'] or 'Sem nome'} <{t['email']}> · {t.get('app', 'CruzOn Planner')} · terminou em {br(t['quando'])}" for t in ev["testes"]])
     if ev["vencidos"]:
-        bloco(f"Planos que venceram ({len(ev['vencidos'])})", [f"{t['nome'] or 'Sem nome'} <{t['email']}> · plano {t['plano'] or '-'} venceu em {br(t['quando'])}" for t in ev["vencidos"]])
+        bloco(f"Planos que venceram ({len(ev['vencidos'])})", [f"{t['nome'] or 'Sem nome'} <{t['email']}> · {t.get('app', 'CruzOn Planner')} · plano {t['plano'] or '-'} venceu em {br(t['quando'])}" for t in ev["vencidos"]])
     if ev["recados"]:
         bloco(f"Recados novos ({len(ev['recados'])})", [f"{r['nome'] or 'Sem nome'} <{r['email']}>: {r['texto'][:300]}" for r in ev["recados"]])
     total = sum(len(v) for v in ev.values())
@@ -159,7 +170,7 @@ def monta(ev):
             "<div style='background:#0C1F2B;color:#fff;padding:14px 18px;border-radius:10px 10px 0 0;font-weight:bold'>CruzOn · avisos do administrador</div>"
             "<div style='border:1px solid #E3E8EC;border-top:0;padding:6px 18px 18px;border-radius:0 0 10px 10px'>" + "".join(partes_html) +
             f"<p style='margin-top:18px'><a href='{SITE}' style='background:#00C853;color:#0C1F2B;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:bold'>Abrir o CruzOn Planner</a></p>"
-            "<p style='font-size:12px;color:#566674'>Para liberar ou renovar o acesso: Ajustes › Perfis de acesso (+1 mês, +1 ano).</p></div></div>")
+            "<p style='font-size:12px;color:#566674'>Para liberar ou renovar: Ajustes › Perfis de acesso (Planner: +1 mês, +1 ano; Finance e CruzInvest: botão Finance e CruzInvest…).</p></div></div>")
     return total, assunto, "\n\n".join(partes_txt) + "\n" + rodape_txt, html
 
 
