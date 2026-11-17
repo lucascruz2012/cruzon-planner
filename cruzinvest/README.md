@@ -29,7 +29,7 @@ Se a senha for trocada pelo Planner ("Esqueci a senha"), o CruzInvest pede a sen
 
 ## Assinatura
 
-O CruzInvest tem período de teste e assinatura próprios, como o Planner e o Finance. O teste começa sozinho no primeiro uso; quando vence, o app abre a tela de planos com o **QR code do Pix** e o botão para mandar o comprovante pelo WhatsApp, e a pessoa pode continuar vendo os dados (só leitura). O administrador libera no Planner, em **Ajustes › Perfis de acesso › Finance e CruzInvest…**. Configuração: [`supabase/15-acesso-por-app.sql`](../supabase/15-acesso-por-app.sql). O código da tela de assinatura é cópia de `cruzon-finance-projeto/src/assinatura.js`.
+O CruzInvest tem período de teste e assinatura próprios, como o Planner e o Finance. O teste começa sozinho no primeiro uso; quando vence, o app abre a tela de planos com o **QR code do Pix** e o botão para mandar o comprovante pelo WhatsApp, e a pessoa pode baixar o backup ou sair, igual ao Planner e ao Finance. O administrador libera no Planner, em **Ajustes › Perfis de acesso › Finance e CruzInvest…**. Configuração: [`supabase/15-acesso-por-app.sql`](../supabase/15-acesso-por-app.sql). O código da tela de assinatura é cópia de `cruzon-finance-projeto/src/assinatura.js`.
 
 ## Segurança
 

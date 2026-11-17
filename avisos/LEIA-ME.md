@@ -41,6 +41,8 @@ Em **Actions › Avisos para o administrador › Run workflow**, deixe marcado *
 
 Os avisos também aparecem no **sino** do Planner (recados que começam com 🔔).
 
+Para mandar **cópia** para outro e-mail (por exemplo, de um sócio): no Planner, **Ajustes › Planos e cobrança › E-mail em cópia nos avisos** (depois de rodar `supabase/17-aviso-copia.sql`).
+
 ## Bom saber
 - O GitHub pausa rotinas agendadas de repositórios sem nenhuma alteração por 60 dias. Se os avisos pararem, abra **Actions** e clique em **Enable workflow**.
 - Se o envio falhar, a execução fica vermelha e a próxima tenta de novo a mesma janela de tempo, então nada se perde.

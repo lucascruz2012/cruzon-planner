@@ -2489,7 +2489,7 @@ function abrePlanosInv(){
   CruzonAssinatura.paywall({est,nomeApp:"CruzInvest",icone:"ci-icone-192.png",me:meInv(),sb,preview:!bloq,
     titulo:bloq?null:"Assine o CruzInvest",
     sub:bloq?null:(est.sit==="teste"&&est.dias!=null?"Seu teste termina "+(est.dias<=0?"hoje":est.dias===1?"amanhã":"em "+est.dias+" dias")+". Assine agora e continue sem interrupção.":"Escolha o plano e pague com Pix."),
-    onVer:()=>{ if(bloq){ RO=true; CruzonAssinatura.somenteLeitura(true,abrePlanosInv); } },
+    onVer: bloq ? null : ()=>{},
     onExport:()=>{ CruzonAssinatura.fecha(); backupInv(); }, onSair:()=>lock()});
 }
 async function verificaAcessoInv(){
@@ -2497,7 +2497,7 @@ async function verificaAcessoInv(){
   try{ ACESSO=await CruzonAssinatura.consulta({app:"invest",sb,uid:ME.id}); }catch(e){ return; }
   if(!V) return;
   RO=CruzonAssinatura.bloqueia(ACESSO);
-  if(RO){ CruzonAssinatura.somenteLeitura(true,abrePlanosInv); abrePlanosInv(); }
+  if(RO){ abrePlanosInv(); }
   else { CruzonAssinatura.somenteLeitura(false); CruzonAssinatura.fecha(); CruzonAssinatura.faixa(ACESSO,"CruzInvest",abrePlanosInv); }
   if(VIEW==="ajustes") render();
 }
