@@ -6,7 +6,12 @@ name: Avisos para o administrador
 on:
   schedule:
     - cron: "*/15 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      teste:
+        description: "Mandar um e-mail de teste mesmo sem novidades"
+        type: boolean
+        default: true
 
 permissions:
   actions: read
@@ -30,6 +35,7 @@ jobs:
       - name: Conferir novidades e avisar
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          AVISO_TESTE: ${{ inputs.teste }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           AVISO_EMAIL: ${{ secrets.AVISO_EMAIL }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}

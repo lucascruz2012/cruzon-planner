@@ -2054,6 +2054,7 @@ window.CruzonAssinatura = (function () {
 .cza-plan b{display:block;font-size:24px;margin:5px 0 2px;letter-spacing:-.5px}
 .cza-plan b i{font-style:normal;font-size:12px;color:#6B7B87;font-weight:600}
 .cza-plan span{display:block;font-size:11.5px;color:#4A5B68;min-height:30px}
+.cza-pix[hidden],.cza-row[hidden]{display:none}
 .cza-pix{display:flex;gap:16px;align-items:center;text-align:left;border:1px solid #00C853;border-radius:14px;padding:14px;background:#F6F9FB;margin-bottom:6px}
 .cza-qr{flex:0 0 176px;width:176px;height:176px;background:#fff;border:1px solid #E1E7EC;border-radius:12px;padding:8px}
 .cza-qr svg{width:100%;height:100%;display:block}
@@ -2090,7 +2091,7 @@ window.CruzonAssinatura = (function () {
   function paywall(o) {
     estilos(); fecha();
     const est = o.est || {}, pl = est.planos || {}, nome = o.nomeApp || NOMES[est.app] || 'CruzOn';
-    const temM = +pl.preco_mensal > 0, temA = +pl.preco_anual > 0, temPix = !!(pl.pix_chave && String(pl.pix_chave).trim());
+    const temM = +pl.preco_mensal > 0 || !!pl.url_mensal, temA = +pl.preco_anual > 0 || !!pl.url_anual, temPix = !!(pl.pix_chave && String(pl.pix_chave).trim());
     if (!temA) plano = 'mensal'; else if (!temM) plano = 'anual';
     const bloq = est.sit === 'bloqueado';
     const tit = o.titulo ? o.titulo : o.preview ? 'Planos do ' + nome : bloq ? 'Seu acesso ao ' + nome + ' está pausado' : (est.a && est.a.plano === 'teste' ? 'Seu período de teste do ' + nome + ' terminou' : 'Sua assinatura do ' + nome + ' venceu');
@@ -2112,6 +2113,7 @@ window.CruzonAssinatura = (function () {
         <div class="cza-cp"><input id="cza-cod" readonly aria-label="Código Pix copia e cola"><button type="button" class="cza-btn sm" id="cza-copiar">Copiar código</button></div>
         <button type="button" class="cza-btn zap" id="cza-comp">${pl.whatsapp ? 'Já paguei: enviar comprovante no WhatsApp' : 'Já paguei: avisar o administrador'}</button>
         <p class="ok" id="cza-ok"></p></div></div>` : ''}
+      <div class="cza-row" id="cza-linkbox" hidden><a class="cza-btn pri" id="cza-link" target="_blank" rel="noopener">Ir para o pagamento</a></div>
       <div class="cza-ct"><h4>Precisa falar comigo?</h4><textarea id="cza-msg" maxlength="2000" placeholder="Escreva aqui sua dúvida sobre planos, pagamento ou prazo."></textarea>
         <div class="cza-row"><button type="button" class="cza-btn pri" id="cza-env">Enviar recado</button>${pl.whatsapp ? '<button type="button" class="cza-btn" id="cza-zap" style="background:#25D366;border-color:#25D366;color:#0b3d21">Falar no WhatsApp</button>' : ''}</div>
         <p class="ok" id="cza-ok2"></p></div>
@@ -2125,7 +2127,9 @@ window.CruzonAssinatura = (function () {
     document.body.appendChild(el);
     const pintaPix = () => {
       el.querySelectorAll('.cza-plan').forEach(b => b.classList.toggle('sel', b.dataset.pl === plano));
-      if (!$('#cza-qr', el)) return;
+      const url = pl['url_' + plano], lb = $('#cza-linkbox', el), px = $('.cza-pix', el);
+      lb.hidden = !url; if (url) $('#cza-link', el).href = url; if (px) px.hidden = !!url;
+      if (!$('#cza-qr', el) || url) return;
       const v = +(plano === 'anual' ? pl.preco_anual : pl.preco_mensal) || 0;
       const cod = pix(pl.pix_chave, pl.pix_nome, pl.pix_cidade, v, (est.app || 'CRUZON').toUpperCase() + (plano === 'anual' ? 'ANUAL' : 'MENSAL'));
       $('#cza-qr', el).innerHTML = qr(cod); $('#cza-cod', el).value = cod;

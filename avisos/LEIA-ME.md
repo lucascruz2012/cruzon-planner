@@ -37,7 +37,9 @@ Usa o serviço gratuito **CallMeBot**:
 4. Crie mais dois segredos: `CALLMEBOT_PHONE` (seu número com 55 e DDD, só dígitos) e `CALLMEBOT_APIKEY`.
 
 ### 5. Testar
-Em **Actions › Avisos para o administrador › Run workflow**. Se houver novidade nos últimos 20 minutos, o aviso chega. O log mostra só quantidades (o repositório é público), nunca nomes ou e-mails.
+Em **Actions › Avisos para o administrador › Run workflow**, deixe marcado **"Mandar um e-mail de teste mesmo sem novidades"** e clique no botão verde **Run workflow**. Em cerca de 1 minuto chega o e-mail **"CruzOn: teste do vigia (tudo funcionando)"**. O log mostra só quantidades (o repositório é público), nunca nomes ou e-mails.
+
+Os avisos também aparecem no **sino** do Planner (recados que começam com 🔔).
 
 ## Bom saber
 - O GitHub pausa rotinas agendadas de repositórios sem nenhuma alteração por 60 dias. Se os avisos pararem, abra **Actions** e clique em **Enable workflow**.
