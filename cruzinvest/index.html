@@ -396,7 +396,10 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-async function seal(obj,key){const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(obj)));return{iv:b64(iv),ct:b64(ct)};}
+const APP_VER="2026-11-17c";
+async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
+  const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
+  const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
 async function unseal(box,key){const pt=await SUB.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct));return JSON.parse(DEC.decode(pt));}
 
 /* ======================= E-MAIL E OLHO DA SENHA ======================= */
@@ -763,8 +766,8 @@ const planErr=e=>/PLAN|MODULE|UPGRADE|FORBIDDEN|plano|módulo|requer/i.test((e.c
 const limiteErr=e=>/simult|concurren|too many|rate.?limit|limite de requisi|429/i.test((e.code||"")+" "+e.message);
 async function brapiEspera(tk,n){
   for(let t=0;;t++){
-    try{ const x=await brapi(tk,n); await sleep(250); return x; }
-    catch(e){ if(!limiteErr(e)||t>=4) throw e; await sleep(1200*(t+1)); }
+    try{ const x=await brapi(tk,n); await sleep(600); return x; }
+    catch(e){ if(!limiteErr(e)||t>=5) throw e; await sleep(2000*(t+1)); }
   }
 }
 async function brapiNivel(tk){
@@ -806,12 +809,14 @@ async function atualizar(silent){
   const fila=tks.slice(); const N=Math.min(1,fila.length); /* plano gratuito da brapi: uma consulta por vez */
   await Promise.all(Array.from({length:N},async()=>{
     while(fila.length){
-      const tk=fila.shift();
-      if(!ativos.has(tk)&&V.mkt[tk]&&V.mkt[tk].divs&&Date.now()-V.mkt[tk].ts<7*864e5) continue; /* posição zerada: atualiza 1x/semana */
+      let tk=fila.shift(); const seg=tk.endsWith("#2"); if(seg){ await sleep(5000); }
+      const tkr=tk.replace("#2","");
+      if(!seg&&!ativos.has(tk)&&V.mkt[tk]&&V.mkt[tk].divs&&Date.now()-V.mkt[tk].ts<7*864e5) continue; /* posição zerada: atualiza 1x/semana */
       try{
-        const x=await brapiNivel(tk);
-        if(x){ V.mkt[tk]=parseQuote(x,V.mkt[tk]); delete V.mkt[tk].err; ok++; }
-      }catch(e){ if(/TOKEN/i.test(e.code+e.message)) semToken=true; erros.push(tk+": "+e.message); V.mkt[tk]={...(V.mkt[tk]||{}),err:e.message,errTs:Date.now()}; }
+        const x=await brapiNivel(tkr);
+        if(x){ V.mkt[tkr]=parseQuote(x,V.mkt[tkr]); delete V.mkt[tkr].err; ok++; }
+      }catch(e){ if(limiteErr(e)&&!tk.endsWith("#2")){ fila.push(tk+"#2"); continue; } /* tenta de novo no fim da fila */
+        const t0=tk.replace("#2",""); if(/TOKEN/i.test(e.code+e.message)) semToken=true; erros.push(t0+": "+e.message); V.mkt[t0]={...(V.mkt[t0]||{}),err:e.message,errTs:Date.now()}; }
     }
   }));
   try{ await atualizarMacro(); }catch(e){ erros.push("Banco Central: "+e.message); }
@@ -820,7 +825,7 @@ async function atualizar(silent){
   if(C2.lista.length){ V.hist=V.hist.filter(h=>h.d!==hoje); V.hist.push({d:hoje,v:+C2.total.toFixed(2),c:+C2.custo.toFixed(2)}); V.hist.sort((a,b)=>a.d<b.d?-1:1); if(V.hist.length>1500) V.hist=V.hist.slice(-1500); }
   BUSY=false; $("#bAtualizar").classList.remove("spin"); save(); render();
   semModulos=(V.prefs.nivel||0)>0;
-  V._aviso=semToken?"token":semModulos?"modulos":(erros.length?"erros":null); V._erros=erros;
+  V._aviso=semToken?"token":semModulos?"modulos":(erros.length?"erros":null); V._erros=erros; V._errosTs=Date.now();
   if(!silent||erros.length) toast(erros.length?("Atualizado com "+erros.length+" pendência(s)."+(semToken?" Cadastre o token da brapi em Ajustes.":"")):"Dados atualizados ("+ok+" ativos).");
   render();
 }
@@ -1477,8 +1482,8 @@ function vAjustes(){
       <p class="mut" style="font-size:12px">Crie grátis em <a href="https://brapi.dev/dashboard" target="_blank" rel="noopener">brapi.dev/dashboard</a>. Sem token só alguns ativos (ex.: PETR4, VALE3, ITUB4) funcionam. O token fica criptografado no seu cofre.</p>
       <div class="fld"><label>Atualizar automaticamente ao abrir, se os dados tiverem mais de</label><select id="aAuto">${[1,3,6,12,24].map(h=>`<option value="${h}" ${V.prefs.autoHoras==h?"selected":""}>${h} hora${h>1?"s":""}</option>`).join("")}</select></div>
       <div class="acts"><button class="btn" id="aTestar">Testar conexão</button><button class="btn primary" id="aSalvaTok">Salvar</button></div>
-      ${V._erros&&V._erros.length?`<details><summary>Pendências da última atualização (${V._erros.length})</summary><ul style="font-size:12px;margin:6px 0 0;padding-left:18px">${V._erros.slice(0,20).map(e=>`<li>${esc(e)}</li>`).join("")}</ul></details>`:""}</div>
-    <div class="card"><h3>Conta e segurança</h3><p class="cap">Conta: <b>${esc((ME&&ME.email)||V.perfil.email||"")}</b> (a mesma do CruzOn Planner) · ${!ME?"⚠️ só neste aparelho":NUVEM?"☁️ sincronizada entre aparelhos":"⚠️ nuvem indisponível"}.<br>A carteira é criptografada com AES-256 antes de ir para a nuvem. A chave vem da sua senha (PBKDF2, ${N0.format(ITERS)} iterações) e nunca é gravada.</p>
+      ${V._erros&&V._erros.length?`<details><summary>Pendências da atualização de ${new Date(V._errosTs||Date.now()).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})} neste aparelho (${V._erros.length})</summary><ul style="font-size:12px;margin:6px 0 0;padding-left:18px">${V._erros.slice(0,20).map(e=>`<li>${esc(e)}</li>`).join("")}</ul></details>`:""}</div>
+    <div class="card"><h3>Conta e segurança</h3><p class="cap">Conta: <b>${esc((ME&&ME.email)||V.perfil.email||"")}</b> (a mesma do CruzOn Planner) · ${!ME?"⚠️ só neste aparelho":NUVEM?"☁️ sincronizada entre aparelhos":"⚠️ nuvem indisponível"}.<br>A carteira é criptografada com AES-256 antes de ir para a nuvem. A chave vem da sua senha (PBKDF2, ${N0.format(ITERS)} iterações) e nunca é gravada.<br><span class="mut">Versão do app: ${APP_VER}</span></p>
       <div class="fld"><label>Bloquear após inatividade</label><select id="aLock">${[5,10,15,30,60].map(m=>`<option value="${m}" ${V.prefs.lock==m?"selected":""}>${m} minutos</option>`).join("")}</select></div>
       <div class="fld"><label>Seu nome</label><input id="aNome" value="${esc(V.perfil.nome)}" maxlength="60"></div>
       <div class="acts"><button class="btn" id="aSair">Sair da conta neste aparelho</button><button class="btn" id="aSenha">Trocar senha</button><button class="btn primary" id="aSalvaSeg">Salvar</button></div></div>
