@@ -2,7 +2,7 @@
    A pagina tenta sempre a internet primeiro (nunca fica numa versao velha); icones e PDFs vem do cache.
    O Supabase (conta e dados) nunca passa por aqui. Os caches usam o prefixo "cfinance-" para nao
    misturar com os do CruzOn Planner e do CruzInvest, que ficam no mesmo endereco. */
-const VERSAO='cfinance-1.7b';
+const VERSAO='cfinance-1.8';
 const ESTATICOS=['./','./index.html','./manifest.webmanifest','./icone-192.png','./icone-512.png','./icone-apple.png'];
 self.addEventListener('install',ev=>{ev.waitUntil(caches.open(VERSAO).then(c=>Promise.allSettled(ESTATICOS.map(u=>c.add(u)))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',ev=>{ev.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('cfinance-')&&k!==VERSAO).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
