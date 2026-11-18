@@ -240,7 +240,7 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
     <h2 class="tit" id="planTit">Experimente grátis, assine quando quiser</h2>
     <p class="lead2">Cada app tem o seu período de teste. Gostou? Escolha o plano mensal ou anual e pague com Pix, sem burocracia.</p>
     <div class="planos">
-      <div class="plano"><small>Teste</small><div class="preco">Grátis <i>por 7 dias</i></div><p>Para conhecer o app com calma.</p>
+      <div class="plano"><small>Teste</small><div class="preco">Grátis <i id="testeDias">por 7 dias</i></div><p>Para conhecer o app com calma.</p>
         <ul><li>Todas as funções liberadas</li><li>Sem cartão de crédito</li><li>Seus dados continuam guardados</li></ul>
         <a class="btn out" data-criar href="#">Começar grátis</a></div>
       <div class="plano dest"><small>Anual</small><div class="preco" id="precoAno">—</div><p id="precoAnoObs">Um pagamento por ano, com desconto em relação ao mensal.</p>
@@ -355,11 +355,19 @@ function pinta(){
   $("#segTit").textContent=a.seg[0]; $("#segTxt").textContent=a.seg[1];
   $("#segItens").innerHTML=a.seg[2].map(x=>`<li><span>${x[0]}</span><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div></li>`).join("");
   $("#planTit").textContent="Experimente o "+a.nome+" grátis";
-  const brl=v=>"R$ "+v.toFixed(2).replace(".",","), eco=Math.round((1-a.anual/12/a.mensal)*100);
+  pintaPrecos();
+  _restoPinta(a);
+}
+let TESTE_DIAS=7;
+function pintaPrecos(){
+  const a=APPS[atual], brl=v=>"R$ "+v.toFixed(2).replace(".",","), eco=Math.round((1-a.anual/12/a.mensal)*100);
+  $("#testeDias").textContent="por "+TESTE_DIAS+(TESTE_DIAS===1?" dia":" dias");
   $("#precoMes").innerHTML=brl(a.mensal)+" <i>/mês</i>";
   $("#precoAno").innerHTML=brl(a.anual)+" <i>/ano</i>";
   $("#precoAnoObs").textContent="Equivale a "+brl(a.anual/12)+" por mês"+(eco>0?": "+eco+"% de economia em relação ao mensal.":".");
   $("#planNota").textContent="Preços do "+a.nome+". Pagamento por Pix, direto na tela de assinatura do app, ao fim do teste.";
+}
+function _restoPinta(a){
   $("#faq").innerHTML=[...a.faq,...FAQ_COMUM].map(f=>`<details><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
   $("#passos").innerHTML=a.passos.map(p=>`<div class="passo"><b>${esc(p[0])}</b><p>${esc(p[1])}</p></div>`).join("");
   $("#finalTit").textContent="Comece a usar o "+a.nome+", é grátis";
@@ -375,6 +383,18 @@ document.addEventListener("click",e=>{
 let tx=null; $("#tela").addEventListener("touchstart",e=>tx=e.touches[0].clientX,{passive:true});
 $("#tela").addEventListener("touchend",e=>{ if(tx==null) return; const dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>40){ mostraTela(idx+(dx<0?1:-1)); roda(); } tx=null; });
 pinta();
+/* preços ao vivo: vêm de Ajustes › Planos e cobrança (função cruzon_precos_publicos, arquivo supabase/20-precos-publicos.sql).
+   Se não conseguir ler, ficam os valores escritos acima. */
+(async()=>{
+  const SB="https://qflpwxyyzimlmnizgltl.supabase.co", KEY="sb_publishable_mRfAlyPRU2duHz0Y1ibRVg_zOmYA_xi";
+  try{
+    const r=await fetch(SB+"/rest/v1/rpc/cruzon_precos_publicos",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:"{}"});
+    if(!r.ok) return; const j=await r.json(); if(!j) return;
+    for(const k of ["planner","finance","invest"]){ const x=j[k]||{}; if(+x.mensal>0) APPS[k].mensal=+x.mensal; if(+x.anual>0) APPS[k].anual=+x.anual; }
+    if(j.teste_dias) TESTE_DIAS=+j.teste_dias;
+    pintaPrecos();
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
