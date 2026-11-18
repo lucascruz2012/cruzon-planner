@@ -2243,7 +2243,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-18c";
+const APP_VER="2026-11-18d";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -2621,8 +2621,14 @@ function mk(tk){
          sem contar duas vezes o mesmo pagamento (mesmo valor com até 6 dias de diferença) */
       const ev=rh.filter(x=>x[0]>=d12).map(x=>({d:x[0],v:x[1]}));
       const dias=(a,b)=>Math.abs(new Date(a)-new Date(b))/864e5;
-      ult12.filter(d=>!/AMORTIZ/.test(d.label||"")).forEach(d=>{const c=d.com||d.ex;
-        if(!ev.some(e=>dias(e.d,c)<=6&&Math.abs(e.v-d.rate)<=Math.max(0.005,d.rate*0.02))) ev.push({d:c,v:d.rate});});
+      /* o histórico do fundo (data-ex) é a base. Os proventos importados da B3 vêm pela data de PAGAMENTO,
+         que fica até ~45 dias depois da data-ex: cada um é casado com um rendimento do histórico e só entra
+         se for posterior ao último registrado (anúncio que a fonte ainda não pegou). */
+      const ultHist=ev.length?ev[ev.length-1].d:"", usados=new Set();
+      ult12.filter(d=>!/AMORTIZ/.test(d.label||"")).sort((x,y)=>((x.com||x.ex)<(y.com||y.ex)?-1:1)).forEach(d=>{const c=d.com||d.ex;
+        const i=ev.findIndex((e,k)=>{ if(usados.has(k)) return false; const delta=(new Date(c)-new Date(e.d))/864e5;
+          return delta>=-6&&delta<=45&&Math.abs(e.v-d.rate)<=Math.max(0.005,d.rate*0.02); });
+        if(i>=0) usados.add(i); else if(c>ultHist&&dias(c,ultHist)>6) ev.push({d:c,v:d.rate});});
       ev.sort((a,b)=>a.d<b.d?-1:1);
       s12=ev.reduce((a,e)=>a+e.v,0); dySrc="hist";
       const ultimo=ev.length?ev[ev.length-1].d:null;
