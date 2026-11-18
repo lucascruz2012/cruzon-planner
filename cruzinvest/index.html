@@ -63,7 +63,7 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 
 /* ======================= LOGIN ======================= */
 #login{position:fixed;inset:0;z-index:100;display:flex;overflow:auto;background:#07131c}
-#login{background:#081a22 url(login-bg.jpg) left center/cover no-repeat}
+#login{background:#081a22 url(login-bg.jpg) left top/cover no-repeat} /* ancorada no topo: o nome nunca é cortado */
 .lgwrap{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:flex-end;padding:4vh 5vw}
 .lgpane{width:min(410px,100%);background:var(--surface);border-radius:18px;padding:26px 28px 20px;box-shadow:0 34px 80px -18px rgba(0,0,0,.66)}
 .brandmark{display:flex;align-items:center;gap:10px;margin-bottom:16px}
@@ -94,10 +94,13 @@ button,input,select,textarea{font:inherit;color:inherit} button{cursor:pointer} 
 .chk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);margin-top:12px;cursor:pointer}
 .meter{height:4px;border-radius:3px;background:var(--surface-3);margin-top:6px;overflow:hidden}
 .meter i{display:block;height:100%;width:0;background:var(--crit);transition:width .2s}
-@media(max-width:1100px) and (min-width:861px){ #login{background-position:22% center} }
+@media(max-width:1100px) and (min-width:861px){ #login{background-position:22% top} }
 @media(max-width:860px){
-  #login{background:#081a22 url(login-bg-m.jpg) left top/100% auto no-repeat}
-  .lgwrap{align-items:flex-end;justify-content:center;padding:calc(84vw*.62) 14px calc(18px + env(safe-area-inset-bottom))}
+  /* celular: a arte desce para dar respiro ao nome e não ficar sob a barra de status */
+  #login{--lgtop:calc(env(safe-area-inset-top) + 20px);
+    background:linear-gradient(180deg,#0a2a2e 0,#0a2a2e var(--lgtop),rgba(10,42,46,0) calc(var(--lgtop) + 26px)) left top/100% calc(var(--lgtop) + 26px) no-repeat,
+      url(login-bg-m.jpg) left var(--lgtop)/100% auto no-repeat,#0a2a2e}
+  #login{flex-direction:column} .lgwrap{flex:1 0 auto;align-items:flex-end;justify-content:center;padding:calc(84vw*.62 + var(--lgtop)) 14px calc(18px + env(safe-area-inset-bottom))}
   .lgwrap::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(8,26,34,0) 30vw,rgba(8,26,34,.85) 80vw,#081a22 100vw);z-index:-1}
   .lgpane{border-radius:20px;padding:22px 20px 18px}
   .brandmark{display:none}
@@ -2226,7 +2229,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-17h";
+const APP_VER="2026-11-18a";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
