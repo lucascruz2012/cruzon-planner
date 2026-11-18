@@ -1,7 +1,7 @@
 /* CruzInvest: guarda o app no aparelho.
    A pagina tenta sempre a internet primeiro; imagens vem do cache.
    Cotacoes (brapi) e Banco Central nunca passam por aqui. */
-const VERSAO = "cruzinvest-2026-11-18c";
+const VERSAO = "cruzinvest-2026-11-18d";
 const ESTATICOS = ["./", "./index.html", "./manifest.webmanifest", "./logo.svg", "./login-bg.jpg", "./login-bg-m.jpg", "./ci-icone-192.png", "./ci-icone-512.png", "./ci-icone-apple.png"];
 self.addEventListener("install", ev => {
   ev.waitUntil(caches.open(VERSAO).then(c => Promise.allSettled(ESTATICOS.map(u => c.add(u)))).then(() => self.skipWaiting()));
