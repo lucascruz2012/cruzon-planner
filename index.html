@@ -4899,7 +4899,7 @@ async function renderUsers(){
       <td>${u.ativo?'<span class="st st-ok">Ativo</span>':'<span class="st st-soon">Aguardando</span>'}</td>
       <td><div class="planos3"><div><small>Planner</small>${seloPlano(u)}</div>${ACESSOS?["finance","invest"].map(a=>`<div><small>${a==="finance"?"Finance":"CruzInvest"}</small>${seloApp(ACESSOS[u.id+"|"+a])}</div>`).join(""):""}</div></td>
       <td style="color:var(--muted);font-size:11.5px">${u.ultimo_acesso?new Date(u.ultimo_acesso).toLocaleDateString("pt-BR"):"nunca"}</td>
-      <td style="display:flex;gap:6px;flex-wrap:wrap">${u.id===ME.id?'<span class="note">é você</span>':
+      <td style="display:flex;gap:6px;flex-wrap:wrap">${u.id===ME.id?(ACESSOS?`<button class="btn sm pri" data-apps="${u.id}">Finance e CruzInvest…</button>`:'<span class="note">é você</span>'):
         (u.ativo?`<button class="btn sm" data-off="${u.id}">Desativar</button>`:`<button class="btn sm pri" data-on="${u.id}">Liberar acesso</button>`)+
         (ACESSOS?`<button class="btn sm pri" data-apps="${u.id}">Finance e CruzInvest…</button>`:"")+
         `<button class="btn sm" data-papel="${u.id}" data-novo="${u.papel==="admin"?"user":"admin"}">${u.papel==="admin"?"Tornar usuário":"Tornar admin"}</button>`+
