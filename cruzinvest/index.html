@@ -2243,7 +2243,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-18b";
+const APP_VER="2026-11-18c";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -2529,7 +2529,7 @@ function enterApp(){
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
   marca(!ME?"Só neste aparelho":!NUVEM?"Nuvem indisponível":OFFLINE?"Sem conexão":"Sincronizado ✓",!ME||!NUVEM||OFFLINE);
-  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); verificaAcessoInv(); iniciaTicker(); mostraInstalar(); carregaFiis(); carregaAcoes(); carregaMax52();
+  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); verificaAcessoInv(); iniciaTicker(); mostraInstalar(); carregaFiis(); carregaAcoes(); carregaMax52(); carregaRend();
   const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
   if(tickers().length&&old) atualizar(true);
 }
@@ -2591,6 +2591,13 @@ async function carregaMax52(){
   try{ const r=await fetch("dados/max52.json",{cache:"no-cache"}); if(!r.ok) return; const j=await r.json(); if(!j||!j.ativos) return;
     const novo=!MAX52||MAX52.gerado!==j.gerado; MAX52=j; try{localStorage.setItem(MAX52K,JSON.stringify(j));}catch(e){} if(novo&&V) render(); }catch(e){}
 }
+/* rendimentos por cota dos últimos 13 meses de todos os FIIs/Fiagros (rotina diária: dados/rend_fiis.json) */
+let REND=null; const RENDK="cruzinvest_rend_v1";
+try{ const c=JSON.parse(localStorage.getItem(RENDK)||"null"); if(c&&c.fundos) REND=c; }catch(e){}
+async function carregaRend(){
+  try{ const r=await fetch("dados/rend_fiis.json",{cache:"no-cache"}); if(!r.ok) return; const j=await r.json(); if(!j||!j.fundos) return;
+    const novo=!REND||REND.gerado!==j.gerado; REND=j; try{localStorage.setItem(RENDK,JSON.stringify(j));}catch(e){} if(novo&&V) render(); }catch(e){}
+}
 let FIIS=null; const FIISK="cruzinvest_fiis_v1";
 try{ const c=JSON.parse(localStorage.getItem(FIISK)||"null"); if(c&&c.fundos) FIIS=c; }catch(e){}
 async function carregaFiis(){
@@ -2606,12 +2613,29 @@ function mk(tk){
   let s12=ult12.reduce((a,d)=>a+d.rate,0), dySrc="proventos";
   const out={...m,divs};
   const cv=FIIS&&FIIS.fundos&&FIIS.fundos[tk]; const cls=V.ativos[tk]&&V.ativos[tk].cls;
-  if(cv&&cls==="FII"){
-    out.cvm=cv; if(!out.vpa&&cv.vp) out.vpa=cv.vp;
-    const mesesUser=new Set(ult12.filter(d=>!/AMORTIZ/.test(d.label||"")).map(d=>(d.com||d.ex).slice(0,7))).size;
-    const r12=(cv.rend||[]).slice(-12), cvm12=r12.reduce((a,x)=>a+x[1],0);
-    /* histórico próprio completo (10+ meses) vale mais; senão, completa com a CVM (fundo inteiro, por cota) */
-    if(mesesUser<10&&cvm12>0){ s12=r12.length<12&&r12.length>=6?cvm12*12/r12.length:cvm12; dySrc="cvm"; }
+  const rh=REND&&REND.fundos&&REND.fundos[tk];
+  if(cls==="FII"){
+    if(cv){ out.cvm=cv; if(!out.vpa&&cv.vp) out.vpa=cv.vp; }
+    if(rh&&rh.length){
+      /* histórico do fundo inteiro (Yahoo, por data-ex) + proventos oficiais da B3 importados pelo usuário,
+         sem contar duas vezes o mesmo pagamento (mesmo valor com até 6 dias de diferença) */
+      const ev=rh.filter(x=>x[0]>=d12).map(x=>({d:x[0],v:x[1]}));
+      const dias=(a,b)=>Math.abs(new Date(a)-new Date(b))/864e5;
+      ult12.filter(d=>!/AMORTIZ/.test(d.label||"")).forEach(d=>{const c=d.com||d.ex;
+        if(!ev.some(e=>dias(e.d,c)<=6&&Math.abs(e.v-d.rate)<=Math.max(0.005,d.rate*0.02))) ev.push({d:c,v:d.rate});});
+      ev.sort((a,b)=>a.d<b.d?-1:1);
+      s12=ev.reduce((a,e)=>a+e.v,0); dySrc="hist";
+      const ultimo=ev.length?ev[ev.length-1].d:null;
+      /* ritmo normal de pagamento do fundo (mediana dos intervalos); se já passou desse intervalo desde o último
+         rendimento registrado, o anúncio mais recente ainda não chegou à fonte */
+      const gaps=ev.slice(1).map((e,i)=>dias(e.d,ev[i].d)).sort((x,y)=>x-y), ritmo=gaps.length>=5?gaps[Math.floor(gaps.length/2)]:null;
+      out.dyParcial=!!(ritmo&&ritmo<=40&&ultimo&&(Date.now()-new Date(ultimo))/864e5>=ritmo+2);
+      out.dyUlt=ultimo; out.dyN=ev.length;
+    } else if(cv){
+      const mesesUser=new Set(ult12.filter(d=>!/AMORTIZ/.test(d.label||"")).map(d=>(d.com||d.ex).slice(0,7))).size;
+      const r12=(cv.rend||[]).slice(-12), cvm12=r12.reduce((a,x)=>a+x[1],0);
+      if(mesesUser<10&&cvm12>0){ s12=r12.length<12&&r12.length>=6?cvm12*12/r12.length:cvm12; dySrc="cvm"; }
+    }
   }
   out.div12=s12; out.dySrc=dySrc; out.dy12=m.price&&s12?s12/m.price:(m.price?0:null);
   const mx=MAX52&&MAX52.ativos&&MAX52.ativos[tk];
@@ -2663,7 +2687,7 @@ function carteira(){
     p.retTotal=p.ganho+p.provRec+p.realizado; p.retTotalPct=p.custo?p.retTotal/p.custo:0;
     p.chg=m.chg!=null&&isListed(a.cls)?m.chg/100:null;
     if(p.chg!=null) diaVar+=p.valor-p.valor/(1+p.chg);
-    p.dy12=m.dy12; p.yoc=p.custo?p.prov12/p.custo:0;
+    p.dy12=m.dy12; p.dyParcial=!!m.dyParcial; p.yoc=p.custo?p.prov12/p.custo:0;
     p.nome=m.name||""; p.logo=m.logo||"";
     total+=p.valor; custo+=p.custo; lista.push(p);
   }
@@ -2756,7 +2780,7 @@ async function cotacoesLista(quero){
 async function atualizar(silent){
   if(BUSY) return; const tks=tickers().filter(t=>isListed(ativo(t).cls));
   const C=carteira(); const ativos=new Set(C.lista.map(p=>p.tk));
-  BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis(); carregaAcoes(); carregaMax52();
+  BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis(); carregaAcoes(); carregaMax52(); carregaRend();
   const erros=[]; let ok=0, semToken=false, semModulos=false;
   /* 1) cotações de todos os ativos pela lista pública (funciona sem token) */
   const lista=await cotacoesLista(new Set(tks)).catch(()=>({}));
@@ -2832,7 +2856,7 @@ function saude(p,C){
     if(po!=null&&po*100>L.payoutMax) add("y","Payout de "+pct(po,0)+": distribuiu mais do que lucrou nos últimos 12 meses.");
   }
   if(a.cls==="FII"){
-    if(m.dy12!=null&&m.price){ if(m.dy12*100>L.fiiDyMax) add("y","DY 12m de "+pct(m.dy12,1)+": verifique se há rendimento não recorrente."); else if(m.dy12*100<L.fiiDyMin&&m.dy12>0) add("y","DY 12m de "+pct(m.dy12,1)+": abaixo do mínimo definido."); }
+    if(m.dy12!=null&&m.price){ if(m.dy12*100>L.fiiDyMax) add("y","DY 12m de "+pct(m.dy12,1)+": verifique se há rendimento não recorrente."); else if(m.dy12*100<L.fiiDyMin&&m.dy12>0&&!m.dyParcial) add("y","DY 12m de "+pct(m.dy12,1)+": abaixo do mínimo definido."); }
     let r=(m.divs||[]).filter(d=>d.label!=="AMORTIZAÇÃO"&&d.label!=="AMORTIZACAO").sort((x,y)=>(y.com||y.ex)<(x.com||x.ex)?-1:1);
     if(r.length<6&&m.cvm&&(m.cvm.rend||[]).length>=6) r=m.cvm.rend.slice().reverse().map(x=>({rate:x[1],com:x[0]}));
     if(r.length>=6){ const u3=r.slice(0,3).reduce((s,d)=>s+d.rate,0)/3, ant=r.slice(3,12), ma=ant.reduce((s,d)=>s+d.rate,0)/ant.length;
@@ -3008,14 +3032,15 @@ function vCarteira(){
     <div class="mob">
       <div class="sortbar" id="msort">${[["valor","Valor"],["ganhoPct","Valorização"],["chg","Dia"],["dy12","DY"],["sv","Saúde"],["tk","A-Z"]].map(([k,t])=>`<button aria-pressed="${SORT.k===k}" data-k="${k}">${t}${SORT.k===k?(SORT.d<0?" ↓":" ↑"):""}</button>`).join("")}</div>
       <div class="mlist">${L.map(p=>`<div class="mcard" data-tk="${p.tk}"><div>${tkCell(p)}</div><div class="r"><div class="big">${money(p.valor)}</div><div class="sub ${sgn(p.ganho)}">${spct(p.ganhoPct)} · ${money(p.ganho)}</div></div>
-        <div class="foot"><span>${N0.format(p.qtd)} × ${p.semPreco?"—":money(p.preco)}${p.chg!=null?` <b class="${sgn(p.chg)}">${spct(p.chg)}</b>`:""}</span><span>DY ${p.dy12!=null?pct(p.dy12,1):"—"} · ${pct(p.peso,1)}</span>${pill(p.sv)}</div></div>`).join("")}</div>
+        <div class="foot"><span>${N0.format(p.qtd)} × ${p.semPreco?"—":money(p.preco)}${p.chg!=null?` <b class="${sgn(p.chg)}">${spct(p.chg)}</b>`:""}</span><span>DY ${p.dy12!=null?pct(p.dy12,1):"—"}${p.dyParcial?`<span title="Falta o rendimento mais recente na fonte; o DY pode estar um pouco abaixo do real">*</span>`:""} · ${pct(p.peso,1)}</span>${pill(p.sv)}</div></div>`).join("")}</div>
       <div class="card" style="margin-top:10px;display:flex;justify-content:space-between;gap:8px;font-size:13px"><b>Total ${FCLS==="Todas"?"":FCLS}</b><span class="num"><b>${money(sub.v)}</b> · <span class="${sgn(sub.g)}">${spct(sub.c?sub.g/sub.c:0)}</span></span></div>
     </div>
     <div class="card desk"><div class="tbl-wrap"><table><thead><tr>${th("tk","Ativo")}${th("sv","Saúde")}${th("qtd","Qtd",1)}${th("pm","Preço médio",1)}${th("preco","Cotação",1)}${th("chg","Dia",1)}${th("valor","Valor",1)}${th("ganhoPct","Valorização",1)}${th("dy12","DY 12m",1)}${th("prov12","Proventos 12m",1)}${th("peso","% carteira",1)}</tr></thead>
     <tbody>${L.map(p=>`<tr class="click" data-tk="${p.tk}"><td>${tkCell(p)}</td><td>${pill(p.sv)}</td><td class="r num">${N0.format(p.qtd)}</td><td class="r num">${money(p.pm)}</td>
       <td class="r num">${p.semPreco?'<span class="mut">—</span>':money(p.preco)}</td><td class="r num ${sgn(p.chg)}">${p.chg==null?"—":spct(p.chg)}</td><td class="r num"><b>${money(p.valor)}</b></td>
-      <td class="r num ${sgn(p.ganho)}">${spct(p.ganhoPct)}<br><small>${money(p.ganho)}</small></td><td class="r num">${p.dy12!=null?pct(p.dy12):"—"}</td><td class="r num">${money(p.prov12)}</td><td class="r num">${pct(p.peso,1)}</td></tr>`).join("")}</tbody>
+      <td class="r num ${sgn(p.ganho)}">${spct(p.ganhoPct)}<br><small>${money(p.ganho)}</small></td><td class="r num">${p.dy12!=null?pct(p.dy12):"—"}${p.dyParcial?`<span title="Falta o rendimento mais recente na fonte; o DY pode estar um pouco abaixo do real">*</span>`:""}</td><td class="r num">${money(p.prov12)}</td><td class="r num">${pct(p.peso,1)}</td></tr>`).join("")}</tbody>
     <tfoot><tr><td colspan="6"><b>Total ${FCLS==="Todas"?"":FCLS}</b></td><td class="r num"><b>${money(sub.v)}</b></td><td class="r num ${sgn(sub.g)}"><b>${spct(sub.c?sub.g/sub.c:0)}</b><br><small>${money(sub.g)}</small></td><td></td><td class="r num"><b>${money(sub.pr)}</b></td><td class="r num">${pct(C.total?sub.v/C.total:0,1)}</td></tr></tfoot></table></div></div>
+    ${L.some(p=>p.dyParcial)?`<p class="mut" style="font-size:12px;margin-top:10px">* DY de FII calculado com o histórico de rendimentos do fundo, mas o rendimento mais recente ainda não apareceu na fonte (costuma levar alguns dias): o valor pode estar um pouco abaixo do real.</p>`:""}
     ${C.realizado?`<p class="mut" style="font-size:12px;margin-top:10px">Lucro/prejuízo realizado em vendas: <b class="${sgn(C.realizado)}">${money(C.realizado)}</b></p>`:""}`;
 }
 vCarteira.after=m=>{
@@ -3420,7 +3445,7 @@ function detalhe(tk){
       <div class="card kpi" style="padding:10px"><div class="lb">Retorno c/ proventos</div><div class="vl num ${sgn(p.retTotal)}" style="font-size:17px">${spct(p.retTotalPct)}</div><div class="sm">Proventos ${money(p.provRec)}</div></div></div>
     ${ind.length?`<div class="ind" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">${ind.join("")}</div>`:""}
     ${a.cls==="Ação"&&m.cvmRef?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">Indicadores calculados com o balanço oficial entregue à CVM (referência ${esc(m.cvmRef.split("-").reverse().join("/"))}, últimos 12 meses) e a cotação atual. Payout e DY: dividendos e JCP efetivamente pagos no período.</p>`:""}
-    ${fii&&m.cvm?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">${m.dySrc==="cvm"?"DY 12m estimado com os rendimentos informados pelo fundo à CVM":"DY 12m calculado com os seus proventos"} · VP por cota: ${a.vp?"informado por você":"CVM, informe de "+esc((m.cvm.vpMes||"").split("-").reverse().join("/"))}.</p>`:""}
+    ${fii?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">${m.dySrc==="hist"?"DY 12m calculado com o histórico de rendimentos por cota do fundo (últimos 12 meses), completado com os seus proventos da B3"+(m.dyParcial?`. <b>O rendimento mais recente ainda não apareceu na fonte</b> (último registrado com data-ex em ${esc((m.dyUlt||"").split("-").reverse().join("/"))}); o DY pode estar um pouco abaixo do real`:""):m.dySrc==="cvm"?"DY 12m estimado com os rendimentos informados pelo fundo à CVM":"DY 12m calculado com os seus proventos"}${m.cvm?` · VP por cota: ${a.vp?"informado por você":"CVM, informe de "+esc((m.cvm.vpMes||"").split("-").reverse().join("/"))}`:""}.</p>`:""}
     <h3 style="font-size:14px;margin:12px 0 6px">Análise</h3>
     <ul style="margin:0;padding:0;list-style:none;font-size:13px;display:flex;flex-direction:column;gap:5px">${s.f.length?s.f.map(f=>`<li>${LVL[f.lv][2]} ${esc(f.t)}</li>`).join(""):"<li>🟢 Nenhum indicador fora dos limites.</li>"}</ul>
     <div class="links" style="margin-top:12px"><a href="${i10}" target="_blank" rel="noopener">Investidor10 ↗</a><a href="${si}" target="_blank" rel="noopener">Status Invest ↗</a>${fii?`<a href="https://fnet.bmfbovespa.com.br/fnet/publico/abrirGerenciadorDocumentosCVM" target="_blank" rel="noopener">Relatórios (Fundos.NET) ↗</a>`:`<a href="https://www.rad.cvm.gov.br/ENET/frmConsultaExternaCVM.aspx" target="_blank" rel="noopener">Fatos relevantes (CVM) ↗</a>`}</div>
