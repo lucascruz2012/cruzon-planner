@@ -240,13 +240,13 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
     <h2 class="tit" id="planTit">Experimente grátis, assine quando quiser</h2>
     <p class="lead2">Cada app tem o seu período de teste. Gostou? Escolha o plano mensal ou anual e pague com Pix, sem burocracia.</p>
     <div class="planos">
-      <div class="plano"><small>Teste</small><div class="preco">Grátis</div><p>Para conhecer o app com calma.</p>
+      <div class="plano"><small>Teste</small><div class="preco">Grátis <i>por 7 dias</i></div><p>Para conhecer o app com calma.</p>
         <ul><li>Todas as funções liberadas</li><li>Sem cartão de crédito</li><li>Seus dados continuam guardados</li></ul>
         <a class="btn out" data-criar href="#">Começar grátis</a></div>
-      <div class="plano dest"><small>Anual</small><div class="preco">Economize <i>no ano</i></div><p>Um pagamento por ano, com desconto em relação ao mensal.</p>
+      <div class="plano dest"><small>Anual</small><div class="preco" id="precoAno">—</div><p id="precoAnoObs">Um pagamento por ano, com desconto em relação ao mensal.</p>
         <ul><li>Tudo do plano mensal</li><li>Melhor custo por mês</li><li>Pagamento por Pix</li></ul>
         <a class="btn pri" data-criar href="#">Criar conta e testar</a></div>
-      <div class="plano"><small>Mensal</small><div class="preco">Mês a mês</div><p>Flexível: cancele quando quiser.</p>
+      <div class="plano"><small>Mensal</small><div class="preco" id="precoMes">—</div><p>Flexível: cancele quando quiser.</p>
         <ul><li>Todas as funções</li><li>Sincronização entre aparelhos</li><li>Pagamento por Pix</li></ul>
         <a class="btn out" data-criar href="#">Criar conta e testar</a></div>
     </div>
@@ -282,7 +282,7 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
 <script>
 "use strict";
 const APPS={
-  planner:{nome:"CruzOn Planner",curto:"Tarefas e prazos",ic:"../icone-192.png",url:"../",
+  planner:{nome:"CruzOn Planner",mensal:12.99,anual:139.99,curto:"Tarefas e prazos",ic:"../icone-192.png",url:"../",
     tit:'Sua semana organizada, <em>sem esquecer nada</em>.',
     sub:"Tarefas do dia, prazos, recorrentes e relatório por e-mail num quadro simples, no computador e no celular.",
     telas:[["../manual-semana.jpg","Semana","todas as tarefas da semana em um quadro"],["../manual-dash.jpg","Painel","andamento, atrasos e prioridades"],["../manual-rec.jpg","Recorrentes","o que se repete é lançado sozinho"],["../manual-hist.jpg","Histórico","o que foi feito em cada semana"]],
@@ -295,7 +295,7 @@ const APPS={
     seg:["Sua rotina guardada com segurança","Cada pessoa tem o seu acesso e a sua lista de tarefas. O que você planeja fica ligado à sua conta e aparece igual em qualquer computador ou celular.",[["🔐","Acesso só seu","Entrada com e-mail e senha; cada perfil vê apenas as próprias tarefas."],["☁️","Sempre sincronizado","Planeje no computador e confira no celular, sem perder nada."],["⚖️","Transparência (LGPD)","Aviso de Privacidade claro e exportação dos seus dados quando quiser."]]],
     faq:[["Serve para qualquer área?","Sim. Funciona para administrativo, financeiro, comercial, RH ou qualquer rotina de escritório: você cria as suas próprias áreas ou empresas e organiza as tarefas por elas."],["Dá para usar com a equipe?","Sim. Cada pessoa tem o seu acesso, e o administrador acompanha o andamento da equipe num painel próprio."]],
     passos:[["Crie sua conta","Nome, e-mail e senha. O teste começa no primeiro uso."],["Monte a sua semana","Lance as tarefas e as recorrentes; o app cuida do resto."],["Acompanhe de qualquer lugar","Computador ou celular, tudo sincronizado."]]},
-  finance:{nome:"CruzOn Finance",curto:"Receitas, despesas e metas",ic:"../finance/icone-192.png",url:"../finance/",
+  finance:{nome:"CruzOn Finance",mensal:9.99,anual:109.99,curto:"Receitas, despesas e metas",ic:"../finance/icone-192.png",url:"../finance/",
     tit:'Seu dinheiro organizado, <em>sem planilhas</em>.',
     sub:"Contas do mês, cartões, orçamentos e metas da família num só lugar, com alertas de vencimento e relatórios em PDF e Excel.",
     telas:[["img/finance-painel.jpg","Painel","saldo, receitas, despesas e para onde foi o dinheiro"],["img/finance-lancamentos.jpg","Lançamentos","dê OK no que foi pago e veja o saldo mudar"],["img/finance-cartoes.jpg","Cartões","faturas, limite e parcelas mês a mês"],["img/finance-relatorios.jpg","Relatórios","9 relatórios em PDF e Excel"],["img/finance-metas.jpg","Metas","quanto guardar por mês para chegar lá"]],
@@ -308,7 +308,7 @@ const APPS={
     seg:["Seu dinheiro é assunto só seu","Os seus lançamentos são criptografados no seu aparelho antes de ir para a nuvem. Sem a sua senha, ninguém lê, nem o administrador.",[["🔐","Criptografia no aparelho","Proteção forte (AES-256) ligada à sua senha."],["☁️","Sincronizado e com cópia","O que muda no celular aparece no computador, e o backup fica a um clique."],["📴","Funciona sem internet","Abre com a cópia do aparelho e sincroniza quando a conexão volta."]]],
     faq:[["Preciso ligar minha conta do banco?","Não. Você lança receitas e despesas no app, com sugestões automáticas pela descrição. Nada é ligado ao seu banco."],["Serve para a família toda?","Sim. Cadastre as carteiras e os cartões da casa e acompanhe o orçamento familiar num lugar só."]],
     passos:[["Crie sua conta","Nome, e-mail e senha. Dá para começar com dados de exemplo."],["Cadastre carteiras e cartões","Informe o saldo e lance as contas fixas do mês."],["Acompanhe e planeje","Alertas, orçamentos, metas e relatórios sempre em dia."]]},
-  invest:{nome:"CruzInvest",curto:"Carteira de investimentos",ic:"../cruzinvest/ci-icone-192.png",url:"../cruzinvest/",
+  invest:{nome:"CruzInvest",mensal:19.99,anual:199.99,curto:"Carteira de investimentos",ic:"../cruzinvest/ci-icone-192.png",url:"../cruzinvest/",
     tit:'Seu patrimônio <em>sob controle</em>.',
     sub:"Ações, FIIs e renda fixa num painel só: rentabilidade, comparação com o CDI, proventos e a saúde de cada ativo.",
     telas:[["img/invest-painel.jpg","Painel","patrimônio, rentabilidade e alertas"],["img/invest-saude.jpg","Saúde da carteira","semáforo por ativo com indicadores"],["img/invest-proventos.jpg","Proventos","dividendos e rendimentos recebidos"],["img/invest-carteira.jpg","Carteira","posição, preço médio e resultado"]],
@@ -355,7 +355,11 @@ function pinta(){
   $("#segTit").textContent=a.seg[0]; $("#segTxt").textContent=a.seg[1];
   $("#segItens").innerHTML=a.seg[2].map(x=>`<li><span>${x[0]}</span><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div></li>`).join("");
   $("#planTit").textContent="Experimente o "+a.nome+" grátis";
-  $("#planNota").textContent="Os valores do "+a.nome+" aparecem dentro do app, na tela de assinatura, ao fim do teste. Pagamento por Pix.";
+  const brl=v=>"R$ "+v.toFixed(2).replace(".",","), eco=Math.round((1-a.anual/12/a.mensal)*100);
+  $("#precoMes").innerHTML=brl(a.mensal)+" <i>/mês</i>";
+  $("#precoAno").innerHTML=brl(a.anual)+" <i>/ano</i>";
+  $("#precoAnoObs").textContent="Equivale a "+brl(a.anual/12)+" por mês"+(eco>0?": "+eco+"% de economia em relação ao mensal.":".");
+  $("#planNota").textContent="Preços do "+a.nome+". Pagamento por Pix, direto na tela de assinatura do app, ao fim do teste.";
   $("#faq").innerHTML=[...a.faq,...FAQ_COMUM].map(f=>`<details><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
   $("#passos").innerHTML=a.passos.map(p=>`<div class="passo"><b>${esc(p[0])}</b><p>${esc(p[1])}</p></div>`).join("");
   $("#finalTit").textContent="Comece a usar o "+a.nome+", é grátis";
