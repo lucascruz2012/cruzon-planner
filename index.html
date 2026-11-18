@@ -359,6 +359,20 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
 .trialbar b{font-weight:700}
 .trialbar .btn{margin-left:auto}
 
+
+/* ---------- Cartão "Conheça o app" e botão "Criar conta" na entrada (igual nos 3 apps CruzOn) ---------- */
+.cz-criar{display:flex;align-items:center;justify-content:center;width:100%;margin-top:10px;padding:11px 12px;border:1.5px solid #1E7A4E;border-radius:10px;background:#fff;color:#1E7A4E;font:inherit;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;transition:background .15s}
+.cz-criar:hover{background:#EEF8F2}
+.cz-conheca{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px 14px;border:1px solid #CFE9DA;border-radius:14px;background:linear-gradient(135deg,#EFFAF4 0%,#FFFFFF 70%);color:#0C1F2B;text-decoration:none;box-shadow:0 2px 10px rgba(12,31,43,.06);transition:transform .15s,box-shadow .15s,border-color .15s}
+.cz-conheca:hover{transform:translateY(-1px);border-color:#00C853;box-shadow:0 8px 22px rgba(0,200,83,.18)}
+.czc-ic{flex:0 0 42px;height:42px;border-radius:12px;background:#0C1F2B;display:grid;place-items:center;box-shadow:0 4px 12px rgba(12,31,43,.25)}
+.czc-ic svg{width:18px;height:18px;fill:#00C853;margin-left:3px}
+.czc-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3;text-align:left}
+.czc-t small{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1E7A4E}
+.czc-t b{font-size:14px;margin:1px 0;color:#0C1F2B}
+.czc-t em{font-style:normal;font-size:12px;color:#526472}
+.czc-seta{flex:0 0 auto;font-size:26px;line-height:1;color:#1E7A4E;font-weight:700}
+
 /* ---------- Pix na tela de assinatura ---------- */
 .pwplan{cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .pwplan.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(27,175,122,.22);background:var(--surface)}
@@ -654,9 +668,9 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <div id="lgErr" class="err hidden"></div>
         <div id="lgOk" class="ok hidden"></div>
         <button class="primary" type="submit" id="lgBtn">Entrar</button>
-        <div class="row">
+        <button type="button" class="cz-criar" id="lgToggle">Criar conta grátis</button>
+        <div class="row" style="justify-content:center">
           <button type="button" class="lnk" id="lgForgot">Esqueci minha senha</button>
-          <button type="button" class="lnk" id="lgToggle">Criar conta</button>
         </div>
       </form>
       <div id="lgPendente" class="hidden">
@@ -664,8 +678,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         <p class="note" style="border:0;padding-top:8px;margin-top:8px">Assim que o administrador liberar, entre normalmente com o mesmo e-mail e senha.</p>
         <button class="primary" type="button" id="btnSairPendente">Voltar ao login</button>
       </div>
-      <p class="note" style="border:0;padding:0;margin:10px 0 0;text-align:center"><a class="lgpdlnk" id="lgConheca" href="conheca/?app=planner" style="text-decoration:none">Ainda não conhece? Veja como o app funciona →</a></p>
-      <p class="note" id="lgNote">Seus dados ficam na nuvem, ligados à sua conta: você entra de qualquer computador e encontra tudo como deixou.</p>
+      <a class="cz-conheca" href="conheca/?app=planner"><span class="czc-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg></span><span class="czc-t"><small>Novo por aqui?</small><b>Conheça o CruzOn Planner em 1 minuto</b><em>Veja as telas reais e como funciona</em></span><span class="czc-seta" aria-hidden="true">›</span></a>
       <p class="note" style="border:0;padding-top:6px;margin-top:6px;text-align:center"><button type="button" class="lgpdlnk" id="lgpdAbrirLogin">Aviso de Privacidade e Termos de Uso</button></p>
   </div>
   </div>
@@ -947,7 +960,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
       <div class="card">
         <h3>Aparência</h3>
         <div class="formgrid">
-          <div class="field"><label>Nome exibido ao lado do logotipo</label><input id="cfgNomeExib" type="text" maxlength="40" placeholder="Ex.: Recursos Humanos, Financeiro, Nome da empresa"><span class="note" style="border:0;padding:4px 0 0;margin:0">É só seu: aparece ao lado do logotipo, na aba do navegador e nos relatórios impressos. Deixe vazio para não exibir nada.</span></div>
+          <div class="field"><label>Nome exibido ao lado do logotipo</label><input id="cfgNomeExib" type="text" maxlength="40" placeholder="Ex.: Administrativo, Financeiro, Nome da empresa"><span class="note" style="border:0;padding:4px 0 0;margin:0">É só seu: aparece ao lado do logotipo, na aba do navegador e nos relatórios impressos. Deixe vazio para não exibir nada.</span></div>
           <div class="field"><label>Tema</label><select id="cfgTheme"><option value="brand">Identidade CruzOn</option><option value="light">Claro</option><option value="dark">Escuro</option><option value="auto">Automático (segue o sistema)</option></select></div>
           <div class="field"><label>Fonte da semana</label><select id="cfgFont"><option value="10">Muito compacto (10px)</option><option value="11.5">Compacto (11,5px)</option><option value="13">Normal (13px)</option></select></div>
         </div>
@@ -963,7 +976,7 @@ html[data-theme="dark"] .st-soon{color:#f6cf6a} html[data-theme="dark"] .st-run{
         </div>
         <div style="overflow:auto"><table class="tbl" id="tblComps"></table></div>
         <div class="formgrid" style="border-top:1px solid var(--line);padding-bottom:0">
-          <div class="field"><label>Nome da empresa</label><input id="ncNome" type="text" placeholder="Ex.: CNA" maxlength="28"></div>
+          <div class="field"><label>Nome da empresa</label><input id="ncNome" type="text" placeholder="Ex.: Administrativo" maxlength="28"></div>
           <div class="field"><label>Cor</label><input id="ncCor" type="color" value="#2a78d6"></div>
           <div class="field"><label>Opacidade do preenchimento — <span id="cfgOpacLbl">14%</span></label><input id="cfgOpac" type="range" min="4" max="60" step="2"></div>
         </div>
@@ -2968,8 +2981,8 @@ const DAYS=["SEGUNDA","TERÇA","QUARTA","QUINTA","SEXTA","SÁBADO","DOMINGO"];
 const DAYSFULL=["Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado","Domingo"];
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const PRIOS=["Crítica","Alta","Média","Baixa"];
-const EMPS=["CNA","MINAS/SUZANA"];                     /* padrão inicial; a lista real fica no perfil */
-const DEFCOMPS=[{nome:"CNA",cor:"#2a78d6"},{nome:"MINAS/SUZANA",cor:"#eb6834"}];
+const EMPS=["Administrativo","Financeiro"];                     /* padrão inicial; a lista real fica no perfil */
+const DEFCOMPS=[{nome:"Administrativo",cor:"#2a78d6"},{nome:"Financeiro",cor:"#eb6834"}]; /* exemplos genéricos para quem cria conta */
 function comps(){ return (V&&V.companies&&V.companies.length)?V.companies:DEFCOMPS.map((c,i)=>({id:"d"+i,...c})); }
 function compNames(){ return comps().map(c=>c.nome); }
 /* a empresa da tarefa pode ter sido excluída do cadastro: ela continua na lista,
@@ -3035,22 +3048,18 @@ const NOMEK = "cruzon:nomeexib";   /* ultimo nome exibido neste aparelho */   /*
 let SESSION=null, ME=null, PERFIL=null, V=null, APP={app:{}};
 let CURWEEK=iso(mondayOf(new Date())), VIEW="dash", OFFLINE=false;
 
-const SEED_TASKS=[{"d":0,"p":"Alta","e":"CNA","t":"Separar documentos das admissões da semana","due":"","pct":0},{"d":0,"p":"Média","e":"CNA","t":"Conferir marcações de ponto","due":"","pct":0},{"d":1,"p":"Crítica","e":"CNA","t":"Envio e-Social — competência anterior","due":"","pct":0},{"d":2,"p":"Média","e":"CNA","t":"Reunião de alinhamento com a equipe","due":"","pct":100},{"d":3,"p":"Média","e":"MINAS/SUZANA","t":"Conferir ASOs pendentes","due":"","pct":25},{"d":3,"p":"Baixa","e":"MINAS/SUZANA","t":"Cotar treinamento de segurança","due":"","pct":0},{"d":4,"p":"Crítica","e":"CNA","t":"Enviar guias ao financeiro","due":"","pct":0},{"d":4,"p":"Alta","e":"MINAS/SUZANA","t":"Fechar indicadores da semana","due":"","pct":0}];
+const SEED_TASKS=[{"d": 0, "p": "Alta", "e": "Administrativo", "t": "Conferir agenda e e-mails da semana", "due": "", "pct": 100}, {"d": 0, "p": "Média", "e": "Financeiro", "t": "Lançar notas fiscais de fornecedores", "due": "", "pct": 100}, {"d": 1, "p": "Crítica", "e": "Financeiro", "t": "Pagar contas com vencimento hoje", "due": "", "pct": 100}, {"d": 1, "p": "Média", "e": "Administrativo", "t": "Atualizar planilha de contratos", "due": "", "pct": 50}, {"d": 2, "p": "Média", "e": "Administrativo", "t": "Reunião de alinhamento com a equipe", "due": "", "pct": 0}, {"d": 2, "p": "Alta", "e": "Financeiro", "t": "Conciliação bancária da semana", "due": "", "pct": 25}, {"d": 3, "p": "Baixa", "e": "Administrativo", "t": "Cotar material de escritório", "due": "", "pct": 0}, {"d": 3, "p": "Alta", "e": "Financeiro", "t": "Emitir boletos de clientes", "due": "", "pct": 0}, {"d": 4, "p": "Alta", "e": "Administrativo", "t": "Relatório semanal para a diretoria", "due": "", "pct": 0}, {"d": 4, "p": "Baixa", "e": "Administrativo", "t": "Digitalizar e arquivar documentos", "due": "", "pct": 0}];
 const SEED_RULES=[
- {on:true,e:"CNA",t:"Envio e-Social (fechamento mensal)",p:"Crítica",freq:"Mensal",dia:7,mes:"",obs:"Competência do mês anterior"},
- {on:true,e:"CNA",t:"Envio FGTS Digital",p:"Crítica",freq:"Mensal",dia:7,mes:"",obs:"Guia + conferência antes do vencimento"},
- {on:true,e:"CNA",t:"Envio DCTFWeb",p:"Crítica",freq:"Mensal",dia:15,mes:"",obs:""},
- {on:true,e:"CNA",t:"Envio de impostos ao Financeiro",p:"Alta",freq:"Mensal",dia:18,mes:"",obs:"Encaminhar guias conferidas"},
- {on:true,e:"MINAS/SUZANA",t:"Envio SST Minas",p:"Alta",freq:"Mensal",dia:10,mes:"",obs:""},
- {on:true,e:"MINAS/SUZANA",t:"Envio agentes nocivos Minas",p:"Alta",freq:"Mensal",dia:10,mes:"",obs:""},
- {on:true,e:"MINAS/SUZANA",t:"Indicadores financeiros Suzana",p:"Média",freq:"Mensal",dia:5,mes:"",obs:""},
- {on:true,e:"CNA",t:"Conferência mensal extrator DIRF",p:"Média",freq:"Mensal",dia:20,mes:"",obs:""},
- {on:true,e:"CNA",t:"Kit absenteísmo",p:"Média",freq:"Mensal",dia:10,mes:"",obs:""},
- {on:true,e:"MINAS/SUZANA",t:"Revisar marcações de ponto",p:"Alta",freq:"Mensal",dia:26,mes:"",obs:"Fechamento do ponto"},
- {on:true,e:"CNA",t:"Conferência de ponto (equipe)",p:"Média",freq:"Semanal",dia:3,mes:"",obs:"Quarta-feira"},
- {on:true,e:"MINAS/SUZANA",t:"Backup dos servidores/particulares",p:"Alta",freq:"Semanal",dia:5,mes:"",obs:"Sexta-feira"},
- {on:true,e:"CNA",t:"DIRF (declaração anual)",p:"Crítica",freq:"Anual",dia:25,mes:2,obs:"Prazo legal — conferir calendário"},
- {on:true,e:"CNA",t:"Programação de férias da equipe",p:"Média",freq:"Anual",dia:30,mes:11,obs:""}
+ {on:true,e:"Administrativo",t:"Conferir agenda e e-mails da semana",p:"Alta",freq:"Semanal",dia:1,mes:"",obs:"Segunda-feira"},
+ {on:true,e:"Financeiro",t:"Pagar contas a vencer",p:"Crítica",freq:"Semanal",dia:2,mes:"",obs:"Terça-feira"},
+ {on:true,e:"Financeiro",t:"Conciliação bancária",p:"Alta",freq:"Semanal",dia:4,mes:"",obs:"Quinta-feira"},
+ {on:true,e:"Administrativo",t:"Backup dos arquivos do escritório",p:"Alta",freq:"Semanal",dia:5,mes:"",obs:"Sexta-feira"},
+ {on:true,e:"Financeiro",t:"Pagamento do aluguel",p:"Crítica",freq:"Mensal",dia:5,mes:"",obs:""},
+ {on:true,e:"Financeiro",t:"Enviar documentos ao contador",p:"Alta",freq:"Mensal",dia:10,mes:"",obs:"Notas, extratos e recibos do mês"},
+ {on:true,e:"Administrativo",t:"Reunião mensal de resultados",p:"Média",freq:"Mensal",dia:15,mes:"",obs:""},
+ {on:true,e:"Financeiro",t:"Emitir notas fiscais do mês",p:"Alta",freq:"Mensal",dia:25,mes:"",obs:""},
+ {on:true,e:"Administrativo",t:"Renovar alvará de funcionamento",p:"Crítica",freq:"Anual",dia:31,mes:3,obs:"Conferir documentos com antecedência"},
+ {on:true,e:"Administrativo",t:"Inventário de materiais e equipamentos",p:"Média",freq:"Anual",dia:15,mes:12,obs:""}
 ];
 const DEFCOLORS={a:"#2a78d6",b:"#eb6834"};
 function newPayload(opts){
@@ -3449,7 +3458,7 @@ function setupLogin(){
     forgot:"Informe o e-mail cadastrado e enviaremos um link para você criar uma nova senha.",
     reset:"Defina a sua nova senha de acesso."}[m];
   $("#lgBtn").textContent={login:"Entrar",signup:"Criar acesso",forgot:"Enviar link de recuperação",reset:"Salvar nova senha"}[m];
-  $("#lgToggle").textContent=m==="login"?"Criar conta":"Já tenho acesso — entrar";
+  $("#lgToggle").textContent=m==="login"?"Criar conta grátis":"Já tenho acesso: entrar";
   $("#lgPass").setAttribute("autocomplete",m==="login"?"current-password":"new-password");
   $("#lgPassLbl").textContent=m==="reset"?"Nova senha":"Senha";
   lgMsg("#lgErr",""); lgMsg("#lgOk","");
