@@ -2229,7 +2229,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-18a";
+const APP_VER="2026-11-18b";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -2257,7 +2257,7 @@ const EMAILK="cruzinvest_email";
 const VKEY="cruzinvest_cofre_v1", TKEY="cruzinvest_tema", FAILK="cruzinvest_falhas";
 let KEY=null, V=null, VIEW="painel", LOCKT=null, SAVET=null, BUSY=false;
 const DEF_LIM={
-  plMax:25, pvpMax:3, roeMin:12, divEbitdaY:3, divEbitdaR:4.5, liqMin:1, payoutMax:100, quedaMax:35, quedaDia:6,
+  plMax:25, pvpMax:3, roeMin:12, divEbitdaY:3, divEbitdaR:4.5, liqMin:1, payoutMax:100, quedaMaxY:20, quedaMax:35, quedaDia:6, acumY:3,
   fiiDyMin:8, fiiDyMax:16, fiiRendQuedaY:15, fiiRendQuedaR:30, fiiPvpMax:1.2, fiiPvpMin:0.7,
   concY:20, concR:30
 };
@@ -2515,7 +2515,7 @@ function enterApp(){
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
   marca(!ME?"Só neste aparelho":!NUVEM?"Nuvem indisponível":OFFLINE?"Sem conexão":"Sincronizado ✓",!ME||!NUVEM||OFFLINE);
-  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); verificaAcessoInv(); iniciaTicker(); mostraInstalar(); carregaFiis(); carregaAcoes();
+  clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); verificaAcessoInv(); iniciaTicker(); mostraInstalar(); carregaFiis(); carregaAcoes(); carregaMax52();
   const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
   if(tickers().length&&old) atualizar(true);
 }
@@ -2570,6 +2570,13 @@ function indCVM(tk,price){
 }
 
 /* dados públicos de todos os FIIs (CVM), gerados pela rotina do GitHub em dados/fiis.json */
+/* máxima e mínima de 52 semanas de todos os ativos (rotina diária do GitHub: dados/max52.json) */
+let MAX52=null; const MAX52K="cruzinvest_max52_v1";
+try{ const c=JSON.parse(localStorage.getItem(MAX52K)||"null"); if(c&&c.ativos) MAX52=c; }catch(e){}
+async function carregaMax52(){
+  try{ const r=await fetch("dados/max52.json",{cache:"no-cache"}); if(!r.ok) return; const j=await r.json(); if(!j||!j.ativos) return;
+    const novo=!MAX52||MAX52.gerado!==j.gerado; MAX52=j; try{localStorage.setItem(MAX52K,JSON.stringify(j));}catch(e){} if(novo&&V) render(); }catch(e){}
+}
 let FIIS=null; const FIISK="cruzinvest_fiis_v1";
 try{ const c=JSON.parse(localStorage.getItem(FIISK)||"null"); if(c&&c.fundos) FIIS=c; }catch(e){}
 async function carregaFiis(){
@@ -2593,6 +2600,8 @@ function mk(tk){
     if(mesesUser<10&&cvm12>0){ s12=r12.length<12&&r12.length>=6?cvm12*12/r12.length:cvm12; dySrc="cvm"; }
   }
   out.div12=s12; out.dySrc=dySrc; out.dy12=m.price&&s12?s12/m.price:(m.price?0:null);
+  const mx=MAX52&&MAX52.ativos&&MAX52.ativos[tk];
+  if(mx){ out.high52=Math.max(out.high52||0,mx[0])||null; if(!out.low52) out.low52=mx[1]; }
   if(cls==="Ação"){
     const c=indCVM(tk,m.price);
     if(c){ ["pl","pvp","roe","margem","divEbitda","liq","vpa","eps"].forEach(k=>{ if(c[k]!=null) out[k]=c[k]; else if(k!=="vpa"&&k!=="eps") out[k]=out[k]??null; });
@@ -2733,7 +2742,7 @@ async function cotacoesLista(quero){
 async function atualizar(silent){
   if(BUSY) return; const tks=tickers().filter(t=>isListed(ativo(t).cls));
   const C=carteira(); const ativos=new Set(C.lista.map(p=>p.tk));
-  BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis(); carregaAcoes();
+  BUSY=true; $("#bAtualizar").classList.add("spin"); carregaFiis(); carregaAcoes(); carregaMax52();
   const erros=[]; let ok=0, semToken=false, semModulos=false;
   /* 1) cotações de todos os ativos pela lista pública (funciona sem token) */
   const lista=await cotacoesLista(new Set(tks)).catch(()=>({}));
@@ -2792,7 +2801,9 @@ function saude(p,C){
   if(isListed(a.cls)&&(m.price==null||m.err)) add("n",m.err?"A fonte de dados (brapi) recusou "+p.tk+": "+m.err+(m.price!=null?" Mostrando a última cotação obtida.":""):"Sem cotação: clique em atualizar ou confira o ticker.");
   if(p.peso*100>=L.concR) add("r","Concentração alta: "+pct(p.peso,1)+" da carteira.");
   else if(p.peso*100>=L.concY) add("y","Concentração: "+pct(p.peso,1)+" da carteira.");
-  if(m.price&&m.high52&&isListed(a.cls)){const q=1-m.price/m.high52; if(q*100>=L.quedaMax) add("y","Cotação "+pct(q,0)+" abaixo da máxima de 52 semanas.");}
+  if(m.price&&m.high52&&isListed(a.cls)){const q=1-m.price/m.high52;
+    if(q*100>=L.quedaMax) add("r","Queda forte: cotação "+pct(q,0)+" abaixo da máxima de 52 semanas ("+money(m.high52)+"). Investigue o motivo antes de aportar.");
+    else if(q*100>=(L.quedaMaxY??20)) add("y","Cotação "+pct(q,0)+" abaixo da máxima de 52 semanas ("+money(m.high52)+").");}
   if(m.chg!=null&&m.chg<=-L.quedaDia&&isListed(a.cls)) add("y","Queda forte no último pregão ("+spct(m.chg/100)+"). Procure notícias.");
   if(a.cls==="Ação"||a.cls==="BDR"){
     var semInd=m.price!=null&&m.pl==null&&m.roe==null&&m.divEbitda==null&&m.margem==null;
@@ -2817,6 +2828,8 @@ function saude(p,C){
     else add("n","Sem valor patrimonial por cota: informe o VP no detalhe do ativo para calcular o P/VP.");
   }
   const semAval=(a.cls==="Ação"||a.cls==="BDR")&&m.price!=null&&m.pl==null&&m.roe==null&&m.divEbitda==null&&m.margem==null;
+  const nY=f.filter(x=>x.lv==="y").length, acum=+(L.acumY??3);
+  if(acum>0&&nY>=acum&&!f.some(x=>x.lv==="r")) f.unshift({lv:"r",t:"Vários sinais de atenção ao mesmo tempo ("+nY+" alertas): somados, indicam risco."});
   const lv=f.some(x=>x.lv==="r")?"r":f.some(x=>x.lv==="y")?"y":(semAval||(f.length&&f.every(x=>x.lv==="n")&&m.price==null&&isListed(a.cls)))?"n":"g";
   return {lv,f};
 }
@@ -3414,7 +3427,7 @@ function detalhe(tk){
 /* ---------- AJUSTES ---------- */
 const LIMS=[["Ações","plMax","P/L máximo",""],["Ações","pvpMax","P/VP máximo",""],["Ações","roeMin","ROE mínimo","%"],["Ações","divEbitdaY","Dív.líq/EBITDA: atenção a partir de","x"],["Ações","divEbitdaR","Dív.líq/EBITDA: risco a partir de","x"],["Ações","liqMin","Liquidez corrente mínima",""],["Ações","payoutMax","Payout máximo","%"],
   ["FIIs","fiiDyMin","DY 12m mínimo","%"],["FIIs","fiiDyMax","DY 12m máximo (possível não recorrente)","%"],["FIIs","fiiRendQuedaY","Queda do rendimento: atenção","%"],["FIIs","fiiRendQuedaR","Queda do rendimento: risco","%"],["FIIs","fiiPvpMax","P/VP máximo",""],["FIIs","fiiPvpMin","P/VP mínimo",""],
-  ["Carteira","concY","Concentração por ativo: atenção","%"],["Carteira","concR","Concentração por ativo: risco","%"],["Carteira","quedaMax","Queda desde a máxima de 52 semanas","%"],["Carteira","quedaDia","Queda em um pregão","%"]];
+  ["Carteira","concY","Concentração por ativo: atenção","%"],["Carteira","concR","Concentração por ativo: risco","%"],["Carteira","quedaMaxY","Queda desde a máxima de 52 semanas: atenção","%"],["Carteira","quedaMax","Queda desde a máxima de 52 semanas: risco","%"],["Carteira","acumY","Alertas de atenção que, somados, viram risco",""],["Carteira","quedaDia","Queda em um pregão","%"]];
 /* ======================= INDICAÇÃO E FAMÍLIA CRUZON ======================= */
 const SITE_CRUZON="https://lucascruz2012.github.io/cruzon-planner/";
 (function(){ try{ const r=(new URLSearchParams(location.search).get("ref")||"").replace(/[^A-Za-z0-9]/g,"").slice(0,16); if(r) localStorage.setItem("cruzon_ref",JSON.stringify({ref:r,em:Date.now()})); }catch(e){} })();
