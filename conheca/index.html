@@ -206,12 +206,7 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
 </section>
 
 <div class="faixa">
-  <ul class="wrap">
-    <li><span class="n">🔗</span><div><b>3 apps, 1 conta</b><span>O mesmo e-mail e senha em todos</span></div></li>
-    <li><span class="n">🔒</span><div><b>Dados protegidos</b><span>Criptografia e acesso só seu</span></div></li>
-    <li><span class="n">📱</span><div><b>Computador e celular</b><span>Instala como app, sem loja</span></div></li>
-    <li><span class="n">💸</span><div><b>Teste grátis</b><span>Depois, mensal ou anual por Pix</span></div></li>
-  </ul>
+  <ul class="wrap" id="faixa"></ul>
 </div>
 
 <section id="recursos">
@@ -233,13 +228,8 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
 <section id="seguranca">
   <div class="wrap">
     <div class="seg">
-      <div><span class="eyebrow">Segurança e privacidade</span><h2>Seus dados são só seus</h2>
-        <p>Os apps CruzOn foram feitos para guardar informações pessoais com cuidado. Você entra com a sua senha, e o que é seu fica protegido: nem o administrador lê os seus lançamentos.</p></div>
-      <ul>
-        <li><span>🔐</span><div><b>Criptografia no seu aparelho</b><small>No Finance e no CruzInvest, os dados são criptografados antes de ir para a nuvem.</small></div></li>
-        <li><span>☁️</span><div><b>Sincronizado e com cópia</b><small>O que muda no celular aparece no computador, e você pode baixar um backup quando quiser.</small></div></li>
-        <li><span>⚖️</span><div><b>Transparência (LGPD)</b><small>Aviso de Privacidade e Termos de Uso claros, e exportação dos seus dados a qualquer momento.</small></div></li>
-      </ul>
+      <div><span class="eyebrow">Segurança e privacidade</span><h2 id="segTit"></h2><p id="segTxt"></p></div>
+      <ul id="segItens"></ul>
     </div>
   </div>
 </section>
@@ -247,7 +237,7 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
 <section id="planos" style="padding-top:20px">
   <div class="wrap centro">
     <span class="eyebrow">Planos</span>
-    <h2 class="tit">Experimente grátis, assine quando quiser</h2>
+    <h2 class="tit" id="planTit">Experimente grátis, assine quando quiser</h2>
     <p class="lead2">Cada app tem o seu período de teste. Gostou? Escolha o plano mensal ou anual e pague com Pix, sem burocracia.</p>
     <div class="planos">
       <div class="plano"><small>Teste</small><div class="preco">Grátis</div><p>Para conhecer o app com calma.</p>
@@ -260,7 +250,7 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
         <ul><li>Todas as funções</li><li>Sincronização entre aparelhos</li><li>Pagamento por Pix</li></ul>
         <a class="btn out" data-criar href="#">Criar conta e testar</a></div>
     </div>
-    <p class="nota-planos">Os valores de cada app aparecem dentro dele, na tela de assinatura, ao fim do teste.</p>
+    <p class="nota-planos" id="planNota"></p>
   </div>
 </section>
 
@@ -268,14 +258,7 @@ footer a{color:var(--verde-esc);font-weight:700;text-decoration:none;margin-righ
   <div class="wrap centro">
     <span class="eyebrow">Dúvidas frequentes</span>
     <h2 class="tit">Perguntas comuns</h2>
-    <div class="faq">
-      <details><summary>Preciso pagar para começar?</summary><p>Não. Toda conta nova começa com um período de teste grátis em cada app, sem cartão de crédito. Ao fim do teste, você escolhe se quer assinar.</p></details>
-      <details><summary>Uma conta vale para os três apps?</summary><p>Sim. Com o mesmo e-mail e senha você entra no CruzOn Planner, no CruzOn Finance e no CruzInvest. Cada app tem o seu teste e a sua assinatura.</p></details>
-      <details><summary>Funciona no celular?</summary><p>Funciona no computador e no celular, pelo navegador. Dá para instalar na tela inicial como um aplicativo, sem passar pela loja, e os dados aparecem iguais nos dois.</p></details>
-      <details><summary>Como pago a assinatura?</summary><p>Por Pix, direto na tela de assinatura do app: aparece o QR code com o valor do plano e o botão para enviar o comprovante. O acesso é liberado assim que o pagamento é confirmado.</p></details>
-      <details><summary>Meus dados ficam seguros?</summary><p>Sim. O acesso é protegido pela sua senha e, no Finance e no CruzInvest, os dados são criptografados no seu aparelho antes de ir para a nuvem. Você também pode baixar um backup quando quiser.</p></details>
-      <details><summary>E se o teste acabar?</summary><p>Seus dados continuam guardados. Você pode baixar uma cópia ou assinar para continuar usando de onde parou.</p></details>
-    </div>
+    <div class="faq" id="faq"></div>
   </div>
 </section>
 
@@ -308,6 +291,9 @@ const APPS={
     blocos:[["../manual-semana.jpg","Semana","Planeje a semana arrastando tarefas",["Cada dia com suas tarefas, prioridade e prazo","Radar para o que ainda não tem data","Percentual concluído em cada tarefa"]],
       ["../manual-dash.jpg","Painel","Saiba o que está atrasado antes que vire problema",["Indicadores do andamento da semana","Atrasos e prioridades em destaque","Visão por empresa ou área"]],
       ["../manual-rec.jpg","Recorrentes","O que se repete, o app lança sozinho",["Tarefas semanais e mensais automáticas","Relatório de pendências no seu e-mail","Histórico de tudo o que foi feito"]]],
+    faixa:[["🗓️","Semana num quadro","Tarefas por dia, prioridade e prazo"],["🔁","Rotinas automáticas","O que se repete entra sozinho"],["✉️","Relatório por e-mail","Suas pendências nos dias que escolher"],["📱","Computador e celular","Instala como app, sem loja"]],
+    seg:["Sua rotina guardada com segurança","Cada pessoa tem o seu acesso e a sua lista de tarefas. O que você planeja fica ligado à sua conta e aparece igual em qualquer computador ou celular.",[["🔐","Acesso só seu","Entrada com e-mail e senha; cada perfil vê apenas as próprias tarefas."],["☁️","Sempre sincronizado","Planeje no computador e confira no celular, sem perder nada."],["⚖️","Transparência (LGPD)","Aviso de Privacidade claro e exportação dos seus dados quando quiser."]]],
+    faq:[["Serve para qualquer área?","Sim. Funciona para administrativo, financeiro, comercial, RH ou qualquer rotina de escritório: você cria as suas próprias áreas ou empresas e organiza as tarefas por elas."],["Dá para usar com a equipe?","Sim. Cada pessoa tem o seu acesso, e o administrador acompanha o andamento da equipe num painel próprio."]],
     passos:[["Crie sua conta","Nome, e-mail e senha. O teste começa no primeiro uso."],["Monte a sua semana","Lance as tarefas e as recorrentes; o app cuida do resto."],["Acompanhe de qualquer lugar","Computador ou celular, tudo sincronizado."]]},
   finance:{nome:"CruzOn Finance",curto:"Receitas, despesas e metas",ic:"../finance/icone-192.png",url:"../finance/",
     tit:'Seu dinheiro organizado, <em>sem planilhas</em>.',
@@ -318,6 +304,9 @@ const APPS={
     blocos:[["img/finance-painel.jpg","Painel","Entenda o seu mês num olhar",["Saldo das carteiras, receitas e despesas","Para onde foi o dinheiro, por categoria","Assistente que avisa o que merece atenção"]],
       ["img/finance-cartoes.jpg","Cartões e contas","Faturas, parcelas e contas fixas no lugar certo",["Cada compra cai na fatura certa","Parcelas lançadas para os meses seguintes","Alertas do que vence e do que atrasou"]],
       ["img/finance-metas.jpg","Orçamentos e metas","Planeje o futuro da família",["Limite por categoria com aviso ao estourar","Metas com quanto guardar por mês","9 relatórios em PDF e Excel"]]],
+    faixa:[["💳","Cartões e faturas","Cada compra na fatura certa"],["🔔","Alertas de vencimento","O que vence hoje e o que atrasou"],["🎯","Orçamentos e metas","Quanto gastar e quanto guardar"],["📄","Relatórios em PDF e Excel","9 relatórios prontos"]],
+    seg:["Seu dinheiro é assunto só seu","Os seus lançamentos são criptografados no seu aparelho antes de ir para a nuvem. Sem a sua senha, ninguém lê, nem o administrador.",[["🔐","Criptografia no aparelho","Proteção forte (AES-256) ligada à sua senha."],["☁️","Sincronizado e com cópia","O que muda no celular aparece no computador, e o backup fica a um clique."],["📴","Funciona sem internet","Abre com a cópia do aparelho e sincroniza quando a conexão volta."]]],
+    faq:[["Preciso ligar minha conta do banco?","Não. Você lança receitas e despesas no app, com sugestões automáticas pela descrição. Nada é ligado ao seu banco."],["Serve para a família toda?","Sim. Cadastre as carteiras e os cartões da casa e acompanhe o orçamento familiar num lugar só."]],
     passos:[["Crie sua conta","Nome, e-mail e senha. Dá para começar com dados de exemplo."],["Cadastre carteiras e cartões","Informe o saldo e lance as contas fixas do mês."],["Acompanhe e planeje","Alertas, orçamentos, metas e relatórios sempre em dia."]]},
   invest:{nome:"CruzInvest",curto:"Carteira de investimentos",ic:"../cruzinvest/ci-icone-192.png",url:"../cruzinvest/",
     tit:'Seu patrimônio <em>sob controle</em>.',
@@ -328,8 +317,15 @@ const APPS={
     blocos:[["img/invest-painel.jpg","Painel","Patrimônio e rentabilidade num só lugar",["Valor investido, patrimônio e resultado","Comparação com o CDI","Alertas dos ativos fora dos seus limites"]],
       ["img/invest-saude.jpg","Saúde da carteira","Um semáforo para cada ativo",["P/L, P/VP, ROE, dívida e DY","Limites que você mesmo ajusta","Saudável, atenção ou risco, sem complicação"]],
       ["img/invest-proventos.jpg","Proventos","Dividendos e rendimentos em dia",["Recebidos e a receber","Últimos 12 meses e yield on cost","Importação direto dos arquivos da B3"]]],
+    faixa:[["🚦","Saúde de cada ativo","Semáforo com indicadores"],["💰","Proventos","Recebidos e a receber"],["📈","Comparação com o CDI","Rendendo mais que a renda fixa?"],["📥","Importa da B3","Extratos da Área do Investidor"]],
+    seg:["Sua carteira protegida","A carteira é criptografada no seu aparelho antes de ir para a nuvem. As cotações são consultadas por ticker, sem expor o seu patrimônio.",[["🔐","Criptografia no aparelho","Proteção forte (AES-256) ligada à sua senha."],["🔒","Bloqueio automático","O app se fecha sozinho depois do tempo sem uso que você escolher."],["💾","Backup criptografado","Baixe uma cópia segura da carteira quando quiser."]]],
+    faq:[["O CruzInvest recomenda compra ou venda?","Não. O semáforo é um filtro de atenção com base em indicadores públicos e nos limites que você define. A decisão é sempre sua."],["Quais investimentos posso acompanhar?","Ações, FIIs, BDRs e renda fixa. As cotações e os proventos são atualizados sozinhos."]],
     passos:[["Crie sua conta","Ou entre com a mesma conta dos outros apps CruzOn."],["Importe a carteira","Arquivos da B3, uma planilha simples ou lançamentos à mão."],["Acompanhe a saúde","Cotações, proventos e alertas atualizados sozinhos."]]}
 };
+const FAQ_COMUM=[["Preciso pagar para começar?","Não. Toda conta nova começa com um período de teste grátis, sem cartão de crédito. Ao fim do teste, você escolhe se quer assinar."],
+      ["Uma conta vale para os três apps?","Sim. Com o mesmo e-mail e senha você entra no CruzOn Planner, no CruzOn Finance e no CruzInvest. Cada app tem o seu teste e a sua assinatura."],
+      ["Como pago a assinatura?","Por Pix, direto na tela de assinatura do app: aparece o QR code com o valor do plano e o botão para enviar o comprovante. O acesso é liberado assim que o pagamento é confirmado."],
+      ["E se o teste acabar?","Seus dados continuam guardados. Você pode baixar uma cópia ou assinar para continuar de onde parou."]];
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const q=new URLSearchParams(location.search);
 let ref=(q.get("ref")||"").replace(/[^A-Za-z0-9]/g,"").slice(0,16);
@@ -355,6 +351,12 @@ function pinta(){
   $("#cel").innerHTML=`<img class="on" src="${a.cel}" alt="${a.nome} no celular" style="object-position:top left">`;
   $("#recEyebrow").textContent=a.rec[0]; $("#recTit").textContent=a.rec[1]; $("#recSub").textContent=a.rec[2];
   $("#blocos").innerHTML=a.blocos.map((b,n)=>`<div class="bloco ${n%2?'inv':''}"><div class="txt"><span class="eyebrow">${esc(b[1])}</span><h3>${esc(b[2])}</h3><ul>${b[3].map(x=>`<li>${esc(x)}</li>`).join("")}</ul><a class="saibamais" data-criar href="#">Experimentar grátis →</a></div><div class="shot"><img src="${b[0]}" alt="${esc(b[1])} do ${a.nome}" loading="lazy"></div></div>`).join("");
+  $("#faixa").innerHTML=a.faixa.map(f=>`<li><span class="n">${f[0]}</span><div><b>${esc(f[1])}</b><span>${esc(f[2])}</span></div></li>`).join("");
+  $("#segTit").textContent=a.seg[0]; $("#segTxt").textContent=a.seg[1];
+  $("#segItens").innerHTML=a.seg[2].map(x=>`<li><span>${x[0]}</span><div><b>${esc(x[1])}</b><small>${esc(x[2])}</small></div></li>`).join("");
+  $("#planTit").textContent="Experimente o "+a.nome+" grátis";
+  $("#planNota").textContent="Os valores do "+a.nome+" aparecem dentro do app, na tela de assinatura, ao fim do teste. Pagamento por Pix.";
+  $("#faq").innerHTML=[...a.faq,...FAQ_COMUM].map(f=>`<details><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
   $("#passos").innerHTML=a.passos.map(p=>`<div class="passo"><b>${esc(p[0])}</b><p>${esc(p[1])}</p></div>`).join("");
   $("#finalTit").textContent="Comece a usar o "+a.nome+", é grátis";
   $("#heroCriar").href=link(atual,true); $("#topCriar").href=link(atual,true); $("#topEntrar").href=link(atual,false);
