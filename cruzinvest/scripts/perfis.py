@@ -22,7 +22,7 @@ import urllib.request
 import zipfile
 
 SAIDA = sys.argv[1] if len(sys.argv) > 1 else "cruzinvest/dados/perfis.json"
-UA = {"User-Agent": "Mozilla/5.0 (compatible; dados-publicos/1.0)"}
+UA = {"User-Agent": "CruzInvestDados/1.0 (atualizacao diaria de dados publicos; python-urllib)"}
 CVM = "https://dados.cvm.gov.br/dados"
 
 
@@ -120,8 +120,8 @@ def acoes():
         lote = titulos[i:i + 20]
         url = ("https://pt.wikipedia.org/w/api.php?action=query&format=json&redirects=1&prop=extracts|images&exintro=1&explaintext=1"
                "&exlimit=20&imlimit=500&titles=" + urllib.parse.quote("|".join(lote)))
-        b = baixa(url)
-        time.sleep(1)
+        b = baixa(url, tentativas=5)
+        time.sleep(4)  # a Wikipédia limita consultas seguidas
         if not b:
             continue
         j = json.loads(b).get("query", {})
@@ -142,6 +142,30 @@ def acoes():
                         and any(c in n.lower() for c in chaves)):
                     fotos.append(n)
             wiki[t] = {"wiki": p["title"], "resumo": limpa(p.get("extract"), 700), "fotos": fotos[:5]}
+    # endereço da miniatura padrão (960 px), autor e licença de cada foto, para exibir com o crédito certo
+    nomes = sorted({f for w in wiki.values() for f in w["fotos"]})
+    meta = {}
+    for i in range(0, len(nomes), 40):
+        lote = nomes[i:i + 40]
+        url = ("https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|extmetadata"
+               "&iiurlwidth=960&iiextmetadatafilter=Artist|LicenseShortName&titles=" + urllib.parse.quote("|".join("File:" + n for n in lote)))
+        b = baixa(url, tentativas=5)
+        time.sleep(3)
+        if not b:
+            continue
+        j = json.loads(b).get("query", {})
+        red = {r["to"]: r["from"] for r in j.get("normalized", [])}
+        for pg in j.get("pages", {}).values():
+            ii = (pg.get("imageinfo") or [{}])[0]
+            if not ii.get("thumburl"):
+                continue
+            em = ii.get("extmetadata") or {}
+            autor = re.sub(r"<[^>]+>", "", (em.get("Artist") or {}).get("value", "")).strip()
+            nome = red.get(pg["title"], pg["title"]).split(":", 1)[-1]
+            meta[nome] = {"url": ii["thumburl"], "pag": ii.get("descriptionurl", ""), "autor": limpa(autor, 60),
+                          "lic": (em.get("LicenseShortName") or {}).get("value", "")}
+    for w in wiki.values():
+        w["fotos"] = [dict(meta[f], nome=f) for f in w["fotos"] if f in meta][:5]
     for tk, v in res.items():
         if tk in tk_art and tk_art[tk] in wiki:
             v.update(wiki[tk_art[tk]])

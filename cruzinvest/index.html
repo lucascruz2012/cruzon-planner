@@ -3399,7 +3399,6 @@ function carregaPerfis(){ if(PERFIS) return Promise.resolve(PERFIS); if(PERFIS_P
 const temConheca=tk=>["Ação","FII"].includes(ativo(tk).cls);
 const conhecaBtn=tk=>temConheca(tk)?`<button type="button" class="conhecabtn" data-conheca="${esc(tk)}">${ic3d(ativo(tk).cls==="FII"?"condominio":"grafico",18)}${ativo(tk).cls==="FII"?"Conheça o fundo":"Conheça a empresa"}</button>`:"";
 const mapaUrl=end=>"https://maps.google.com/maps?q="+encodeURIComponent(end+", Brasil")+"&t=k&z=17&output=embed";
-const fotoUrl=f=>"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(f)+"?width=900";
 const tipoFii=f=>{const c=f.comp||{}, papel=(c.cri||0)+(c.lci||0);
   if(papel>=.5) return ["papel","Fundo de papel","Investe principalmente em <b>títulos de dívida do setor imobiliário</b> (CRI e LCI). Na prática, empresta dinheiro a incorporadoras, construtoras e empresas e recebe <b>juros</b>, em geral corrigidos pelo IPCA ou pelo CDI. Não é dono dos imóveis: o risco principal é o de <b>atraso ou calote dos devedores</b>, reduzido pelas garantias de cada operação."];
   if((c.fii||0)>=.5) return ["fof","Fundo de fundos","Compra <b>cotas de outros FIIs</b>, montando uma carteira diversificada. A renda vem dos rendimentos e dos ganhos na venda dessas cotas; há duas camadas de taxas (a deste fundo e a dos fundos investidos)."];
@@ -3418,7 +3417,8 @@ function conheca(tk){
       let h="";
       if(!fii){
         const fotos=(f.fotos||[]);
-        if(fotos.length) h+=`<div class="cn-fotos">${fotos.map(x=>`<figure><img src="${fotoUrl(x)}" alt="${esc(x.replace(/\.[a-z]+$/i,"").replace(/_/g," "))}" loading="lazy" onerror="this.closest('figure').remove()"><figcaption><a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(x)}" target="_blank" rel="noopener">Foto: Wikimedia Commons</a></figcaption></figure>`).join("")}</div>`;
+        const fotosOk=fotos.filter(x=>x&&x.url&&/^https:\/\/(upload|thumb)\.wikimedia\.org\//.test(x.url));
+        if(fotosOk.length) h+=`<div class="cn-fotos">${fotosOk.map(x=>`<figure><img src="${esc(x.url)}" alt="${esc(String(x.nome||"").replace(/\.[a-z]+$/i,"").replace(/_/g," "))}" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('figure').remove()"><figcaption><a href="${esc(x.pag||"https://commons.wikimedia.org/")}" target="_blank" rel="noopener">Foto${x.autor?": "+esc(x.autor):""}${x.lic?" · "+esc(x.lic):""} · Wikimedia Commons</a></figcaption></figure>`).join("")}</div>`;
         h+=`<h4 class="cn-h">Sobre a empresa</h4><p class="cn-p">${esc(f.resumo||f.ativ||"Descrição não informada.")}</p>${f.wiki?`<p class="cn-src"><a href="https://pt.wikipedia.org/wiki/${encodeURIComponent(f.wiki.replace(/ /g,"_"))}" target="_blank" rel="noopener">Ler mais na Wikipédia</a></p>`:""}
           ${f.resumo&&f.ativ?`<h4 class="cn-h">Atividade (declarada à CVM)</h4><p class="cn-p">${esc(f.ativ)}</p>`:""}
           <div class="cn-info">${info("Razão social",esc(f.nome))}${info("Setor",esc(f.setor))}${info("Fundada em",esc(f.desde))}${info("Site",site)}${info("Sede",esc(f.sede))}</div>`;
