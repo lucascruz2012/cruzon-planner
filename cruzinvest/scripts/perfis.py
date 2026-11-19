@@ -73,6 +73,10 @@ def zips_ano(fmt):
 
 
 # ---------------------------------------------------------------- ações
+PARADAS = {"companhia", "energética", "energia", "minas", "gerais", "saneamento", "brasil", "brasileira", "brasileiro", "grupo", "banco",
+           "participações", "holding", "industrias", "indústrias", "estado", "paraná", "paulo", "janeiro", "federal", "nacional", "sistema"}
+
+
 def acoes():
     res = {}
     zs = zips_ano(CVM + "/CIA_ABERTA/DOC/FCA/DADOS/fca_cia_aberta_{ano}.zip")
@@ -100,13 +104,16 @@ def acoes():
                    "ativ": limpa(g.get("Descricao_Atividade"), 400), "site": site, "sede": end,
                    "desde": (g.get("Data_Constituicao") or "")[:4]}
     # Wikidata: ticker da B3 -> artigo da Wikipédia em português
-    q = """SELECT ?tk ?art WHERE { ?item p:P414 ?st . ?st pq:P249 ?tk . FILTER(REGEX(?tk,"^[A-Z]{4}[0-9]{1,2}$"))
-           ?art schema:about ?item; schema:isPartOf <https://pt.wikipedia.org/> . }"""
+    q = """SELECT ?tk ?art ?img WHERE { ?item p:P414 ?st . ?st pq:P249 ?tk . FILTER(REGEX(?tk,"^[A-Z]{4}[0-9]{1,2}$"))
+           ?art schema:about ?item; schema:isPartOf <https://pt.wikipedia.org/> . OPTIONAL { ?item wdt:P18 ?img } }"""
     b = baixa("https://query.wikidata.org/sparql?format=json&query=" + urllib.parse.quote(q), cab={"Accept": "application/sparql-results+json"})
-    tk_art = {}
+    tk_art, art_img = {}, {}
     if b:
         for x in json.loads(b)["results"]["bindings"]:
-            tk_art[x["tk"]["value"]] = urllib.parse.unquote(x["art"]["value"].rsplit("/wiki/", 1)[1]).replace("_", " ")
+            t = urllib.parse.unquote(x["art"]["value"].rsplit("/wiki/", 1)[1]).replace("_", " ")
+            tk_art[x["tk"]["value"]] = t
+            if x.get("img"):  # foto escolhida no Wikidata para a empresa
+                art_img[t] = urllib.parse.unquote(x["img"]["value"].rsplit("/", 1)[1])
     titulos = sorted({tk_art[t] for t in res if t in tk_art})
     wiki = {}
     for i in range(0, len(titulos), 20):
@@ -124,10 +131,15 @@ def acoes():
             p = por_titulo.get(red.get(t, t))
             if not p or "missing" in p:
                 continue
-            fotos = []
+            # só fotos que citam a empresa no nome do arquivo (sigla entre parênteses no resumo, palavras do título)
+            chaves = {w.lower() for w in re.findall(r"\(([A-Za-zÀ-ú]{3,12})[;)]", p.get("extract") or "")[:3]}
+            chaves |= {w.lower() for w in re.split(r"[\s.,()-]+", p["title"]) if len(w) >= 4 and w.lower() not in PARADAS}
+            fotos = [art_img[t]] if t in art_img and re.search(r"\.(jpe?g)$", art_img[t], re.I) else []
             for im in p.get("images", []):
                 n = im["title"].split(":", 1)[-1]
-                if re.search(r"\.(jpe?g)$", n, re.I) and not re.search(r"logo|bandeira|flag|mapa|map|brasão|assinatura|signature|icon", n, re.I):
+                if (re.search(r"\.(jpe?g)$", n, re.I) and n not in fotos
+                        and not re.search(r"logo|bandeira|flag|mapa|map|brasão|assinatura|signature|icon|cpmi|cerim|reuni|presidente|ministr|posse|retrato", n, re.I)
+                        and any(c in n.lower() for c in chaves)):
                     fotos.append(n)
             wiki[t] = {"wiki": p["title"], "resumo": limpa(p.get("extract"), 700), "fotos": fotos[:5]}
     for tk, v in res.items():
