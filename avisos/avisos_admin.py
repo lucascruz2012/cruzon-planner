@@ -23,6 +23,8 @@ import re
 import smtplib
 import sys
 import urllib.parse
+import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from email.mime.multipart import MIMEMultipart
@@ -51,7 +53,17 @@ def sb(caminho, corpo=None):
     chave = env("SUPABASE_SERVICE_KEY")
     h = {"apikey": chave, "Authorization": "Bearer " + chave}
     if corpo is None:
-        return pede(SB_URL + caminho, h)
+        # leitura: tenta de novo se o Supabase oscilar (erros 5xx como 522, ou sem conexão)
+        for t in range(3):
+            try:
+                return pede(SB_URL + caminho, h)
+            except urllib.error.HTTPError as e:
+                if e.code < 500 or t == 2:
+                    raise
+            except urllib.error.URLError:
+                if t == 2:
+                    raise
+            time.sleep(15 * (t + 1))
     h.update({"Content-Type": "application/json", "Prefer": "return=minimal"})
     return pede(SB_URL + caminho, h, json.dumps(corpo).encode("utf-8"), "POST")
 
