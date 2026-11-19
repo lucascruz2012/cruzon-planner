@@ -121,7 +121,7 @@ def acoes():
         url = ("https://pt.wikipedia.org/w/api.php?action=query&format=json&redirects=1&prop=extracts|images&exintro=1&explaintext=1"
                "&exlimit=20&imlimit=500&titles=" + urllib.parse.quote("|".join(lote)))
         b = baixa(url, tentativas=5)
-        time.sleep(4)  # a Wikipédia limita consultas seguidas
+        time.sleep(6)  # a Wikipédia limita consultas seguidas
         if not b:
             continue
         j = json.loads(b).get("query", {})
@@ -270,6 +270,16 @@ def main():
     f = fiis()
     if not a and not f:
         sys.exit("nada gerado")
+    # se a Wikipédia limitou alguma consulta nesta rodada, mantém o que já havia sido obtido antes
+    try:
+        with open(SAIDA, encoding="utf-8") as fh:
+            ant = json.load(fh)
+        for tk, v in a.items():
+            o = (ant.get("acoes") or {}).get(tk) or {}
+            if not v.get("wiki") and o.get("wiki"):
+                v.update({k: o[k] for k in ("wiki", "resumo", "fotos") if k in o})
+    except Exception:
+        pass
     out["acoes"], out["fiis"] = a, f
     with open(SAIDA, "w", encoding="utf-8") as fh:
         json.dump(out, fh, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
