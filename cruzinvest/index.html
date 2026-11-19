@@ -292,7 +292,7 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
 .chips span{background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:12.5px;color:var(--ink-2)}
 .chips b{color:var(--ink)}
-.mapa{border-collapse:separate;border-spacing:0;width:100%;min-width:660px}
+.mapa{border-collapse:separate;border-spacing:0;width:100%;min-width:900px}
 .mapa th,.mapa td{padding:7px 2px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
 .mapa thead th{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:capitalize}
 .mapa th:first-child,.mapa td:first-child{position:sticky;left:0;background:var(--surface);text-align:left;padding:7px 10px 7px 4px;z-index:1}
@@ -303,8 +303,8 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
 .mapa .coin:hover{transform:scale(1.18)}
 .mapa .coin.fut{background:transparent;border:2px dashed var(--cc);box-shadow:none}
 .mapa .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--line-2)}
-.mapa .cv{display:block;font-size:10px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
-.mapa tfoot td{font-weight:700;font-size:11.5px;border-bottom:0;padding-top:9px}
+.mapa .cv{display:block;white-space:nowrap;font-size:10px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.mapa tfoot td{font-weight:700;font-size:11px;white-space:nowrap;border-bottom:0;padding-top:9px}
 .mapa .cur{background:color-mix(in srgb,var(--accent) 9%,transparent)}
 .paga-top{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}
 .paga-v{font-size:30px;font-weight:800;letter-spacing:-.5px}
@@ -2569,7 +2569,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-19f";
+const APP_VER="2026-11-19g";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -3611,12 +3611,12 @@ function cardMapa(){
   const cel=(g,i)=>{const c=g.m[i], v=c.v+c.f; if(!v) return `<td class="${isCur(i)?"cur":""}"><span class="dot"></span></td>`;
     const sz=Math.round(34+22*Math.sqrt(v/max));
     const tip=`<b>${g.tk} · ${MES[i]}/${MAPA_ANO}</b>`+c.it.map(x=>`${esc(x.label||"Provento")}: ${money(x.rate)} × ${N0.format(x.qtd)} = <b>${money(x.valor)}</b>${x.recebido?" · pago "+brDate(x.pay):" · a receber"+(x.pay?" em "+brDate(x.pay):"")}`).join("<br>");
-    return `<td class="${isCur(i)?"cur":""}"><span class="notaw" data-tip="${esc(tip)}">${nota(sz,!c.v)}</span><span class="cv">${v>=1000?shortBRL(v).replace("R$ ",""):N0.format(Math.round(v))}</span></td>`;};
+    return `<td class="${isCur(i)?"cur":""}"><span class="notaw" data-tip="${esc(tip)}">${nota(sz,!c.v)}</span><span class="cv">${money(v)}</span></td>`;};
   return `<div class="card" style="margin-top:14px"><div class="paga-top"><div>${head}</div><div class="toolbar">${filtro}${anos.length>1?`<div class="seg" id="fano">${anos.map(a=>`<button aria-pressed="${a===MAPA_ANO}" data-a="${a}">${a}</button>`).join("")}</div>`:""}</div></div>
     <div class="chips">${totAno?`<span>${ic3d("trofeu",20)}Melhor mês: <b>${MES[melhorM]}</b> · ${money(tot[melhorM])}</span>`:""}<span>${ic3d("calendario",20)}<b>${comProv}</b> de 12 meses com proventos</span>${seq>1?`<span>${ic3d("chama",20)}<b>${seq}</b> meses seguidos recebendo</span>`:""}<span>${ic3d("moedas",20)}Recebido em ${MAPA_ANO}: <b>${money(totAno)}</b></span>${totF.some(v=>v)?`<span>${ic3d("ampulheta",20)}A receber: <b>${money(totF.reduce((a,b)=>a+b,0))}</b></span>`:""}</div>
     <div class="tbl-wrap"><table class="mapa"><thead><tr><th>Ativo</th>${MES.map((m,i)=>`<th class="${isCur(i)?"cur":""}">${m}</th>`).join("")}<th>Total</th></tr></thead>
     <tbody>${rows.map(g=>`<tr><td><b>${esc(g.tk)}</b></td>${g.m.map((_,i)=>cel(g,i)).join("")}<td class="num"><b>${money0(g.t)}</b></td></tr>`).join("")}</tbody>
-    <tfoot><tr><td>Total do mês</td>${tot.map((v,i)=>`<td class="num ${isCur(i)?"cur":""}">${v||totF[i]?(i===melhorM&&v?ic3d("trofeu",16)+"<br>":"")+N0.format(Math.round(v+totF[i])):"·"}</td>`).join("")}<td class="num">${money0(totAno+totF.reduce((a,b)=>a+b,0))}</td></tr></tfoot></table></div>
+    <tfoot><tr><td>Total do mês</td>${tot.map((v,i)=>`<td class="num ${isCur(i)?"cur":""}">${v||totF[i]?(i===melhorM&&v?ic3d("trofeu",16)+"<br>":"")+money(v+totF[i]):"·"}</td>`).join("")}<td class="num">${money0(totAno+totF.reduce((a,b)=>a+b,0))}</td></tr></tfoot></table></div>
     <p class="mut" style="font-size:11.5px;margin:8px 0 0">Valores brutos em reais, pela quantidade que você tinha na data com. Toque numa nota para ver o detalhe.</p></div>`;
 }
 function formContas(){
