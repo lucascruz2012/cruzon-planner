@@ -455,6 +455,26 @@ details{border-radius:14px}
 .bnav button:focus{outline:none}.bnav button:focus-visible{outline:2px solid var(--glow);outline-offset:-2px}
 @media(max-width:760px){ .seg{display:flex;max-width:100%;overflow-x:auto;scrollbar-width:none} .seg::-webkit-scrollbar{display:none} .seg button{flex:1 0 auto;justify-content:center;padding:8px 10px}
   .contas{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px} .conta{padding:10px 6px 9px} .conta b{font-size:11.5px} .conta small{font-size:10.5px} .conta.ok::after{top:6px;right:6px;width:16px;height:16px} }
+
+/* navegação por mês, notas de dinheiro e logos maiores na Saúde */
+.mesnav{display:flex;align-items:center;gap:10px;margin:12px 0 2px;padding:8px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line)}
+.mesnav .btn{width:40px;height:40px;min-height:40px;padding:0;border-radius:12px;flex:0 0 auto}
+.mesnav .btn:disabled{opacity:.35;box-shadow:none}
+.mesnav-t{flex:1;text-align:center;line-height:1.25}.mesnav-t b{display:block;font-size:15px}.mesnav-t small{color:var(--muted);font-size:11.5px}
+.notaw{display:inline-block;line-height:0;cursor:default;transition:transform .15s}.notaw:hover{transform:scale(1.12) rotate(-3deg)}
+.nota{display:inline-block;vertical-align:middle;filter:drop-shadow(0 2px 2px rgba(14,90,48,.35))}
+.nota .n1{fill:#1DB45E;stroke:#0B7A3B;stroke-width:1.4}.nota .n2{fill:none;stroke:#9BF0BE;stroke-width:1;opacity:.75}
+.nota .n3{fill:#57D88C;stroke:#0B7A3B;stroke-width:.8}.nota .n4{fill:#0B5E2E;font:800 10px var(--fn)}.nota .n5{fill:#fff;opacity:.18}
+.nota.fut{filter:drop-shadow(0 1px 1.5px rgba(14,90,48,.18))}
+.nota.fut .n1{fill:#CFF3DD;stroke:#86D3A5}.nota.fut .n2{stroke:#fff;opacity:.9}.nota.fut .n3{fill:#E9FAF0;stroke:#9ADDB6}.nota.fut .n4{fill:#5DB683}
+html[data-theme="dark"] .nota.fut .n1{fill:#2B5A43;stroke:#4F9C74}html[data-theme="dark"] .nota.fut .n3{fill:#3C7457;stroke:#5FAF85}html[data-theme="dark"] .nota.fut .n4{fill:#A8E6C3}html[data-theme="dark"] .nota.fut .n2{stroke:#7FC8A0}
+.hc .tk{gap:13px;font-size:16px}
+.hc .tk img,.hc .tk .ph{width:54px;height:54px;border-radius:16px}
+.hc .tk img{background:#fff;padding:5px;border:1px solid var(--line);box-shadow:0 8px 18px -12px rgba(12,31,43,.55)}
+.hc .tk .ph{font-size:12.5px;letter-spacing:.03em}
+.hc .tk small{font-size:11.5px}
+.hc .hd .tk{flex:1;min-width:0}.hc .hd .pill{flex:0 0 auto}.hc .tk small{max-width:100%}
+@media(max-width:760px){ .mesnav{margin-top:10px} }
 </style>
 </head>
 <body>
@@ -2516,7 +2536,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-19d";
+const APP_VER="2026-11-19e";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -3415,7 +3435,7 @@ function vProventos(){
 }
 
 /* ---------- MAPA DE DIVIDENDOS e O QUE SEUS PROVENTOS PAGAM ---------- */
-let MAPA_ANO=null, PAGA_P="media";
+let MAPA_ANO=null, PAGA_P="mes", PAGA_OFF=0, MAPA_CLS="Todas";
 const CONTAS_PADRAO=[{i:"luz",n:"Conta de luz",v:200},{i:"internet",n:"Internet",v:100},{i:"agua",n:"Conta de água",v:50},{i:"celular",n:"Celular",v:50},
   {i:"gas",n:"Gás",v:120},{i:"streaming",n:"Streaming",v:40},{i:"academia",n:"Academia",v:100},{i:"combustivel",n:"Combustível",v:400},{i:"mercado",n:"Mercado do mês",v:800},
   {i:"saude",n:"Plano de saúde",v:600},{i:"condominio",n:"Condomínio",v:600},{i:"aluguel",n:"Aluguel",v:1800}];
@@ -3432,18 +3452,26 @@ function pagaCalc(valor){
   return {it,resto,prox,pagas:it.filter(c=>c.ok),totalContas:it.reduce((s,c)=>s+(c.v||0),0)};
 }
 function cardPaga(C){
-  const rec=provTks().flatMap(proventosDe).filter(x=>x.recebido);
-  const now=new Date(), meses=[];
-  for(let i=0;i<=12;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1), k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
-    meses.push({k,lb:MES[d.getMonth()]+"/"+String(d.getFullYear()).slice(2),v:rec.filter(x=>x.pay.slice(0,7)===k).reduce((s,x)=>s+x.valor,0)});}
-  const passado=meses[1], melhor=meses.slice(0,12).reduce((a,b)=>b.v>a.v?b:a,meses[0]);
-  const op={media:["Média 12 meses","Média mensal dos últimos 12 meses",C.prov12/12],passado:["Mês passado","Mês passado ("+passado.lb+")",passado.v],melhor:["Melhor mês","Melhor mês dos últimos 12 ("+melhor.lb+")",melhor.v]};
-  if(!op[PAGA_P]) PAGA_P="media";
-  const [,rot,valor]=op[PAGA_P], R=pagaCalc(valor);
+  const todos=provTks().flatMap(proventosDe).filter(x=>x.pay), now=new Date();
+  const mesDe=off=>{const d=new Date(now.getFullYear(),now.getMonth()+off,1), k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"), it=todos.filter(x=>x.pay.slice(0,7)===k);
+    const nome=d.toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
+    return {off,k,lb:MES[d.getMonth()]+"/"+String(d.getFullYear()).slice(2),nome:nome.charAt(0).toUpperCase()+nome.slice(1),v:it.filter(x=>x.recebido).reduce((s,x)=>s+x.valor,0),f:it.filter(x=>!x.recebido).reduce((s,x)=>s+x.valor,0)};};
+  /* limites das setas: do primeiro ao último mês com proventos (nunca antes de 36 meses nem depois de 12) */
+  const offDe=p=>{const [y,m]=p.split("-").map(Number); return (y-now.getFullYear())*12+(m-1-now.getMonth());};
+  const offs=todos.map(x=>offDe(x.pay)); const offMin=Math.max(-36,Math.min(0,...offs)), offMax=Math.min(12,Math.max(0,...offs));
+  PAGA_OFF=Math.max(offMin,Math.min(offMax,PAGA_OFF));
+  const ult12=Array.from({length:12},(_,i)=>mesDe(-i)), melhor=ult12.reduce((a,b)=>b.v>a.v?b:a,ult12[0]), M=mesDe(PAGA_OFF);
+  const op={mes:["Mês atual"],media:["Média 12 meses"],melhor:["Melhor mês"]};
+  if(!op[PAGA_P]) PAGA_P="mes";
+  let rot, valor;
+  if(PAGA_P==="mes"){ valor=M.v+M.f; rot=M.f?`${money(M.v)} recebido + ${money(M.f)} a receber`:M.off>0?"Nada anunciado ainda":"Recebido no mês"; }
+  else if(PAGA_P==="melhor"){ valor=melhor.v; rot="Melhor mês dos últimos 12 ("+melhor.lb+")"; }
+  else { valor=C.prov12/12; rot="Média mensal dos últimos 12 meses"; }
+  const R=pagaCalc(valor);
   const nomes=R.pagas.map(c=>"<b>"+esc(c.n.toLowerCase())+"</b>");
   const junta=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a[a.length-1];
   let msg;
-  if(!(valor>0)) msg=`Ainda não há proventos recebidos nesse período. Assim que eles entrarem, você vê aqui quais contas eles pagam.`;
+  if(!(valor>0)) msg=PAGA_P==="mes"&&M.off>=0?`Ainda não há proventos ${M.off>0?"anunciados":"pagos ou anunciados"} para ${M.nome.toLowerCase()}. Assim que entrarem, você vê aqui quais contas eles pagam.`:`Não houve proventos nesse período.`;
   else if(!R.pagas.length) msg=`Ainda não cobre uma conta inteira da lista. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar <b>${esc(R.prox.n.toLowerCase())}</b>.`;
   else if(!R.prox) msg=`${ic3d("trofeu",22)} Seus proventos pagam <b>todas as contas da lista</b> e ainda sobram <b>${money(R.resto)}</b> por mês.`;
   else msg=`Seus proventos já pagam ${junta(nomes)}${R.resto>=1?` e sobram <b>${money(R.resto)}</b>`:""}. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar também <b>${esc(R.prox.n.toLowerCase())}</b>.`;
@@ -3451,7 +3479,10 @@ function cardPaga(C){
   const anoMeses=R.totalContas?C.prov12/R.totalContas:0;
   const tiles=R.it.map(c=>`<div class="conta ${c.ok?"ok":c===R.prox?"prox":""}" data-tip="${esc(`<b>${c.n}</b>${money(c.v)} por mês`+(c.ok?"<br>Coberta pelos proventos":c===R.prox?`<br>${pct(c.parc,0)} coberto · faltam ${money(c.v-R.resto)}`:""))}">${ic3d(contaIc(c),40)}<b>${esc(c.n)}</b><small class="num">${money0(c.v)}/mês</small>${c===R.prox?`<div class="pb"><i style="width:${(c.parc*100).toFixed(1)}%"></i></div>`:""}</div>`).join("");
   return `<div class="card" style="margin-top:14px"><div class="paga-top"><div><h3>O que seus proventos pagam</h3><p class="cap">Sua renda passiva convertida em contas do dia a dia. Toque em <b>Editar contas</b> para usar os seus valores.</p></div>
-      <div class="toolbar"><div class="seg" id="fpaga">${Object.entries(op).map(([k,[t]])=>`<button aria-pressed="${PAGA_P===k}" data-k="${k}">${esc(t)}</button>`).join("")}</div><button class="btn" id="bContas">Editar contas</button></div></div>
+      <div class="toolbar"><div class="seg" id="fpaga">${Object.entries(op).map(([k,[t]])=>`<button aria-pressed="${PAGA_P===k&&(k!=="mes"||PAGA_OFF===0)}" data-k="${k}">${esc(t)}</button>`).join("")}</div><button class="btn" id="bContas">Editar contas</button></div></div>
+    <div class="mesnav"><button class="btn" id="pmAnt" aria-label="Mês anterior" ${PAGA_P==="mes"&&PAGA_OFF<=offMin?"disabled":""}><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="mesnav-t"><b>${PAGA_P==="mes"?esc(M.nome):PAGA_P==="melhor"?"Melhor mês":"Média 12 meses"}</b><small>${PAGA_P==="mes"?(M.off===0?"mês atual":M.off<0?(M.off===-1?"mês passado":-M.off+" meses atrás"):"próximo"+(M.off>1?"s "+M.off+" meses":" mês")):"use as setas para ver mês a mês"}</small></div>
+      <button class="btn" id="pmProx" aria-label="Próximo mês" ${PAGA_P==="mes"&&PAGA_OFF>=offMax?"disabled":""}><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></div>
     <div class="paga-top" style="margin-top:8px"><div><div class="mut" style="font-size:12px">${esc(rot)}</div><div class="paga-v num">${money(valor)}</div></div>
       <div class="mut" style="font-size:12.5px;text-align:right">Cobre <b>${pct(cob,0)}</b> das contas da lista (${money0(R.totalContas)}/mês)</div></div>
     <div class="cobre" role="img" aria-label="Cobre ${pct(cob,0)} das contas"><i style="width:${(cob*100).toFixed(1)}%"></i></div>
@@ -3459,11 +3490,20 @@ function cardPaga(C){
     ${C.prov12>0&&R.totalContas?`<p class="mut" style="font-size:12.5px;margin:2px 0 0;display:flex;gap:8px;align-items:center">${ic3d("calendario",22)}<span>Nos últimos 12 meses você recebeu ${money(C.prov12)}: o bastante para pagar <b>${anoMeses.toLocaleString("pt-BR",{maximumFractionDigits:1})} ${anoMeses>=0.95&&anoMeses<1.05?"mês":"meses"}</b> de todas as contas da lista.</span></p>`:""}
     <div class="contas">${tiles}</div></div>`;
 }
+/* nota de dinheiro: verde vivo = pago, verde claro = a receber */
+function nota(w,fut){const h=Math.round(w*.54);
+  return `<svg class="nota${fut?" fut":""}" width="${w}" height="${h}" viewBox="0 0 60 32" aria-hidden="true"><rect class="n1" x="1" y="1" width="58" height="30" rx="4"/><rect class="n2" x="4.5" y="4.5" width="51" height="23" rx="2.5"/>
+    <circle class="n3" cx="30" cy="16" r="7.5"/><text class="n4" x="30" y="19.6" text-anchor="middle">$</text><circle class="n3" cx="11" cy="16" r="2.2"/><circle class="n3" cx="49" cy="16" r="2.2"/><path class="n5" d="M5 2h50a3 3 0 0 1 3 3v6H2V5a3 3 0 0 1 3-3z"/></svg>`;}
+const CLS_PL={"Ação":"Ações","FII":"FIIs","ETF":"ETFs","BDR":"BDRs","Renda fixa":"Renda fixa","Outro":"Outros"};
 function cardMapa(){
-  const all=provTks().flatMap(proventosDe).filter(dataProv);
+  const todosP=provTks().flatMap(proventosDe).filter(dataProv);
+  const clsMapa=[...new Set(todosP.map(x=>ativo(x.tk).cls))].sort((a,b)=>CLASSES.indexOf(a)-CLASSES.indexOf(b));
+  if(MAPA_CLS!=="Todas"&&!clsMapa.includes(MAPA_CLS)) MAPA_CLS="Todas";
+  const all=todosP.filter(x=>MAPA_CLS==="Todas"||ativo(x.tk).cls===MAPA_CLS);
   const anos=[...new Set(all.map(x=>dataProv(x).slice(0,4)))].sort();
-  const head=`<h3>Mapa de dividendos</h3><p class="cap">O que cada ativo pagou mês a mês, pela data de pagamento. Moeda maior = valor maior · cor = classe · tracejada = a receber.</p>`;
-  if(!anos.length) return `<div class="card" style="margin-top:14px">${head}<div class="empty">Sem proventos ainda.</div></div>`;
+  const head=`<h3>Mapa de dividendos</h3><p class="cap">O que cada ativo pagou mês a mês, pela data de pagamento. Nota maior = valor maior · verde vivo = pago · verde claro = a receber.</p>`;
+  const filtro=clsMapa.length>1?`<div class="seg" id="fmcls">${["Todas",...clsMapa].map(c=>`<button aria-pressed="${c===MAPA_CLS}" data-c="${c}">${c==="Todas"?"Todos":esc(CLS_PL[c]||c)}</button>`).join("")}</div>`:"";
+  if(!anos.length) return `<div class="card" style="margin-top:14px">${head}${filtro}<div class="empty">Sem proventos ${MAPA_CLS==="Todas"?"ainda":"deste tipo"}.</div></div>`;
   const anoAtual=String(new Date().getFullYear()), mesAtual=new Date().getMonth();
   if(!MAPA_ANO||!anos.includes(MAPA_ANO)) MAPA_ANO=anos.includes(anoAtual)?anoAtual:anos[anos.length-1];
   const G={}, tot=Array(12).fill(0), totF=Array(12).fill(0);
@@ -3478,15 +3518,15 @@ function cardMapa(){
   const temMes=new Set(rec.map(x=>x.pay.slice(0,7))); let seq=0; { const d=new Date(); d.setDate(1); if(!temMes.has(chave(d))) d.setMonth(d.getMonth()-1); while(temMes.has(chave(d))){seq++; d.setMonth(d.getMonth()-1);} }
   const isCur=i=>MAPA_ANO===anoAtual&&i===mesAtual;
   const cel=(g,i)=>{const c=g.m[i], v=c.v+c.f; if(!v) return `<td class="${isCur(i)?"cur":""}"><span class="dot"></span></td>`;
-    const sz=Math.round(12+24*Math.sqrt(v/max)), cor=clsColor(ativo(g.tk).cls);
+    const sz=Math.round(22+22*Math.sqrt(v/max));
     const tip=`<b>${g.tk} · ${MES[i]}/${MAPA_ANO}</b>`+c.it.map(x=>`${esc(x.label||"Provento")}: ${money(x.rate)} × ${N0.format(x.qtd)} = <b>${money(x.valor)}</b>${x.recebido?" · pago "+brDate(x.pay):" · a receber"+(x.pay?" em "+brDate(x.pay):"")}`).join("<br>");
-    return `<td class="${isCur(i)?"cur":""}"><span class="coin${c.v?"":" fut"}" style="--s:${sz}px;--cc:${cor}" data-tip="${esc(tip)}"></span><span class="cv">${v>=1000?shortBRL(v).replace("R$ ",""):N0.format(Math.round(v))}</span></td>`;};
-  return `<div class="card" style="margin-top:14px"><div class="paga-top"><div>${head}</div>${anos.length>1?`<div class="seg" id="fano">${anos.map(a=>`<button aria-pressed="${a===MAPA_ANO}" data-a="${a}">${a}</button>`).join("")}</div>`:""}</div>
+    return `<td class="${isCur(i)?"cur":""}"><span class="notaw" data-tip="${esc(tip)}">${nota(sz,!c.v)}</span><span class="cv">${v>=1000?shortBRL(v).replace("R$ ",""):N0.format(Math.round(v))}</span></td>`;};
+  return `<div class="card" style="margin-top:14px"><div class="paga-top"><div>${head}</div><div class="toolbar">${filtro}${anos.length>1?`<div class="seg" id="fano">${anos.map(a=>`<button aria-pressed="${a===MAPA_ANO}" data-a="${a}">${a}</button>`).join("")}</div>`:""}</div></div>
     <div class="chips">${totAno?`<span>${ic3d("trofeu",20)}Melhor mês: <b>${MES[melhorM]}</b> · ${money(tot[melhorM])}</span>`:""}<span>${ic3d("calendario",20)}<b>${comProv}</b> de 12 meses com proventos</span>${seq>1?`<span>${ic3d("chama",20)}<b>${seq}</b> meses seguidos recebendo</span>`:""}<span>${ic3d("moedas",20)}Recebido em ${MAPA_ANO}: <b>${money(totAno)}</b></span>${totF.some(v=>v)?`<span>${ic3d("ampulheta",20)}A receber: <b>${money(totF.reduce((a,b)=>a+b,0))}</b></span>`:""}</div>
     <div class="tbl-wrap"><table class="mapa"><thead><tr><th>Ativo</th>${MES.map((m,i)=>`<th class="${isCur(i)?"cur":""}">${m}</th>`).join("")}<th>Total</th></tr></thead>
-    <tbody>${rows.map(g=>`<tr><td><span class="tkd" style="background:${clsColor(ativo(g.tk).cls)}"></span><b>${esc(g.tk)}</b></td>${g.m.map((_,i)=>cel(g,i)).join("")}<td class="num"><b>${money0(g.t)}</b></td></tr>`).join("")}</tbody>
+    <tbody>${rows.map(g=>`<tr><td><b>${esc(g.tk)}</b></td>${g.m.map((_,i)=>cel(g,i)).join("")}<td class="num"><b>${money0(g.t)}</b></td></tr>`).join("")}</tbody>
     <tfoot><tr><td>Total do mês</td>${tot.map((v,i)=>`<td class="num ${isCur(i)?"cur":""}">${v||totF[i]?(i===melhorM&&v?ic3d("trofeu",16)+"<br>":"")+N0.format(Math.round(v+totF[i])):"·"}</td>`).join("")}<td class="num">${money0(totAno+totF.reduce((a,b)=>a+b,0))}</td></tr></tfoot></table></div>
-    <p class="mut" style="font-size:11.5px;margin:8px 0 0">Valores brutos em reais, pela quantidade que você tinha na data com. Toque numa moeda para ver o detalhe.</p></div>`;
+    <p class="mut" style="font-size:11.5px;margin:8px 0 0">Valores brutos em reais, pela quantidade que você tinha na data com. Toque numa nota para ver o detalhe.</p></div>`;
 }
 function formContas(){
   let L=contasLista().map(c=>({...c}));
@@ -3510,7 +3550,10 @@ function formContas(){
 }
 
 vProventos.after=m=>{
-  const fp=$("#fpaga"); if(fp) fp.addEventListener("click",e=>{const b=e.target.closest("button[data-k]"); if(b){PAGA_P=b.dataset.k; render();}});
+  const fp=$("#fpaga"); if(fp) fp.addEventListener("click",e=>{const b=e.target.closest("button[data-k]"); if(b){PAGA_P=b.dataset.k; if(PAGA_P==="mes") PAGA_OFF=0; render();}});
+  const pa=$("#pmAnt"), pp=$("#pmProx"); if(pa) pa.addEventListener("click",()=>{ if(PAGA_P!=="mes"){PAGA_P="mes";PAGA_OFF=0;} PAGA_OFF--; render(); });
+  if(pp) pp.addEventListener("click",()=>{ if(PAGA_P!=="mes"){PAGA_P="mes";PAGA_OFF=0;} PAGA_OFF++; render(); });
+  const fm=$("#fmcls"); if(fm) fm.addEventListener("click",e=>{const b=e.target.closest("button[data-c]"); if(b){MAPA_CLS=b.dataset.c; render();}});
   const fa=$("#fano"); if(fa) fa.addEventListener("click",e=>{const b=e.target.closest("button[data-a]"); if(b){MAPA_ANO=b.dataset.a; render();}});
   const bc=$("#bContas"); if(bc) bc.addEventListener("click",formContas);
   $("#bProv").addEventListener("click",()=>formProv());
