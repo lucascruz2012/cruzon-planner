@@ -3,6 +3,7 @@
 #   acoes.json  - ações (CVM, DFP/ITR): números contábeis para P/L, ROE, dívida etc.
 #   max52.json  - todos os ativos da B3: máxima e mínima de 52 semanas (Yahoo Finance)
 #   rend_fiis.json - FIIs e Fiagros: rendimentos por cota dos últimos 13 meses (Yahoo Finance)
+#   perfis.json - "Conheça a empresa/o fundo": CVM (cadastro, imóveis, composição), Wikidata e Wikipédia
 # Roda todo dia; só faz commit quando algum arquivo muda. Não usa nenhum dado pessoal.
 name: CruzInvest - dados da CVM (FIIs e ações)
 
@@ -43,6 +44,10 @@ jobs:
         continue-on-error: true
         run: python3 cruzinvest/scripts/rendimentos_fiis.py cruzinvest/dados/rend_fiis.json
 
+      - name: Gerar perfis.json (Conheça a empresa / o fundo)
+        continue-on-error: true
+        run: python3 cruzinvest/scripts/perfis.py cruzinvest/dados/perfis.json
+
       - name: Publicar se mudou
         run: |
           if git diff --quiet -- cruzinvest/dados/; then
@@ -51,6 +56,6 @@ jobs:
           fi
           git config user.name "cruzinvest-dados[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add cruzinvest/dados/fiis.json cruzinvest/dados/acoes.json cruzinvest/dados/max52.json cruzinvest/dados/rend_fiis.json
+          git add cruzinvest/dados/fiis.json cruzinvest/dados/acoes.json cruzinvest/dados/max52.json cruzinvest/dados/rend_fiis.json cruzinvest/dados/perfis.json
           git commit -m "CruzInvest: atualiza dados de mercado (CVM e máximas de 52 semanas)"
           git push
