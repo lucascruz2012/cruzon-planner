@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ======================= TEMAS (mesmos do CruzOn Planner) ======================= */
 :root{
@@ -327,6 +327,134 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
 .crow input{min-width:0}.crow .ce{text-align:center;font-size:18px;padding-left:2px;padding-right:2px}
 .crow button{padding:0}
 @media (prefers-reduced-motion:reduce){ .conta.ok .em{animation:none} .mapa .coin{transition:none} }
+
+/* ======================= VISUAL PREMIUM ======================= */
+:root{--r:18px;--r-sm:12px;--fn:"Inter","Montserrat",system-ui,sans-serif;--em1:#22C978;--em2:#0E8A4F;--glow:#39E875}
+html[data-theme="brand"]{--plane:#F2F5F8;--line:#E6EBEF;--line-2:#D3DCE3;--surface-2:#F6F8FA;--surface-3:#EBEFF3;
+  --shadow:0 1px 2px rgba(12,31,43,.04),0 14px 30px -22px rgba(12,31,43,.38)}
+html[data-theme="light"]{--shadow:0 1px 2px rgba(11,11,11,.04),0 14px 30px -22px rgba(11,11,11,.32)}
+.ic3d{display:inline-block;vertical-align:middle;flex:0 0 auto;overflow:visible}
+.num,.kpi .vl,.paga-v,.mcard .big{font-family:var(--fn);font-feature-settings:"tnum"}
+/* topo */
+header.top{background:radial-gradient(90% 160% at 92% -40%,rgba(57,232,117,.22),transparent 55%),linear-gradient(160deg,#0F2A3A,#0A1B26 70%);border-bottom:0;box-shadow:0 10px 30px -18px rgba(5,14,20,.7)}
+html[data-theme="dark"] header.top{background:radial-gradient(90% 160% at 92% -40%,rgba(57,232,117,.16),transparent 55%),linear-gradient(160deg,#0E2230,#08121A 70%)}
+.logo img{border-radius:10px;box-shadow:0 6px 14px -6px rgba(57,232,117,.55)}
+.logo .wm{font-weight:800}
+nav.tabs{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:4px}
+nav.tabs button{border-radius:10px;padding:8px 14px;font-weight:700;color:rgba(255,255,255,.66);transition:color .15s,background .15s}
+nav.tabs button:hover{color:#fff;background:rgba(255,255,255,.06)}
+nav.tabs button[aria-selected="true"]{background:linear-gradient(145deg,rgba(57,232,117,.26),rgba(23,178,106,.12));color:#fff;box-shadow:inset 0 0 0 1px rgba(57,232,117,.38),0 6px 16px -10px rgba(57,232,117,.7)}
+.iconbtn{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);color:#DDE8EE;transition:background .15s,transform .1s}
+.iconbtn:hover{background:rgba(255,255,255,.14)} .iconbtn:active{transform:scale(.94)}
+.iconbtn svg{width:18px;height:18px;stroke-width:2}
+.ticker{background:rgba(0,0,0,.22);border-top:1px solid rgba(255,255,255,.06)}
+/* botões */
+.btn{border-radius:12px;padding:10px 16px;font-weight:700;font-size:13px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);box-shadow:0 6px 14px -12px rgba(12,31,43,.55);transition:transform .1s,box-shadow .15s,background .15s,border-color .15s}
+.btn:hover{background:var(--surface-2);border-color:var(--line-2)} .btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(160deg,var(--em1),var(--em2));border-color:transparent;color:#fff;box-shadow:0 10px 22px -10px rgba(23,178,106,.75),inset 0 1px 0 rgba(255,255,255,.28)}
+.btn.primary:hover{background:linear-gradient(160deg,#2AD683,#0F9655);box-shadow:0 12px 26px -10px rgba(23,178,106,.85),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn.danger{background:var(--surface);color:var(--crit);border-color:color-mix(in srgb,var(--crit) 45%,transparent)}
+.btn.dark{background:#0C1F2B;color:#fff;border-color:#0C1F2B;box-shadow:0 10px 22px -12px rgba(12,31,43,.8)}
+.btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.btn.block{border-radius:14px;padding:13px}
+.lnk{color:var(--em2);text-decoration:none}
+html[data-theme="dark"] .lnk{color:var(--glow)}
+/* campos */
+.fld input,.fld select,.fld textarea{border-radius:12px;padding:11px 13px;border-color:var(--line-2);transition:border-color .15s,box-shadow .15s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:0;border-color:var(--em1);box-shadow:0 0 0 4px color-mix(in srgb,var(--em1) 18%,transparent)}
+/* filtros (pílula) */
+.seg{display:inline-flex;background:var(--surface-3);border:0;border-radius:14px;padding:4px;gap:2px;overflow:visible}
+.seg button{border:0 !important;background:transparent;border-radius:11px;padding:8px 13px;font-weight:700;font-size:12.5px;color:var(--ink-2);display:inline-flex;align-items:center;gap:6px;transition:background .15s,color .15s,box-shadow .15s}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 2px 8px -2px rgba(12,31,43,.28)}
+html[data-theme="dark"] .seg button[aria-pressed="true"]{background:#2A4555;color:#fff}
+.sortbar button{border-radius:999px;font-weight:700;padding:7px 13px}
+.sortbar button[aria-pressed="true"]{background:#0C1F2B;border-color:#0C1F2B}
+html[data-theme="dark"] .sortbar button[aria-pressed="true"]{background:var(--em2);border-color:var(--em2)}
+/* cartões */
+.card,.hc,.mcard{border-radius:var(--r)}
+.card{padding:18px}
+.card h3{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.pghead h2{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.kpi{position:relative}
+.kpi .lb{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em}
+.kpi .vl{font-size:23px;font-weight:800;letter-spacing:-.03em;margin-top:8px}
+.pill{padding:3px 9px 3px 4px;font-weight:700}
+.pill .ic3d{margin:-2px 0}
+.cls{border-radius:7px}
+.banner{border-radius:14px;padding:12px 14px;align-items:center}
+.banner.warn{background:var(--warn-bg);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent)}
+.banner.info{background:var(--surface);box-shadow:var(--shadow)}
+details{border-radius:14px}
+/* selo do ativo quando não há logo */
+.tk img,.tk .ph{width:30px;height:30px;border-radius:9px}
+.tk .ph{display:grid;place-items:center;color:#fff;font:800 8.5px var(--fn);letter-spacing:.02em;background:linear-gradient(145deg,color-mix(in srgb,var(--cc,#566674) 80%,#fff),var(--cc,#566674));box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 12px -8px rgba(0,0,0,.6)}
+.tk img+.ph{display:none}
+/* saúde */
+.hc{border-left-width:1px !important;position:relative;overflow:hidden}
+.hc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+.hc.r::before{background:linear-gradient(var(--crit),color-mix(in srgb,var(--crit) 40%,transparent))} .hc.y::before{background:linear-gradient(var(--warn),color-mix(in srgb,var(--warn) 40%,transparent))}
+.hc.g::before{background:linear-gradient(var(--good),color-mix(in srgb,var(--good) 40%,transparent))} .hc.n::before{background:var(--line-2)}
+.hc li .d{line-height:1}
+.ind div{border-radius:10px}
+/* modal e avisos */
+.modal{border-radius:24px;padding:22px}
+.x{border-radius:12px;width:36px;height:36px}
+#toast{display:flex;align-items:center;gap:10px;border-radius:16px;padding:10px 16px 10px 12px;box-shadow:0 16px 30px -14px rgba(0,0,0,.6);bottom:calc(26px + env(safe-area-inset-bottom))}
+#tip{border-radius:12px}
+/* herói do painel */
+.hero{position:relative;overflow:hidden;border-radius:24px;padding:20px 20px 12px;color:#fff;margin-bottom:14px;
+  background:radial-gradient(120% 140% at 95% -30%,rgba(57,232,117,.30),transparent 55%),linear-gradient(155deg,#12324A,#0A1B26 70%);box-shadow:0 24px 50px -28px rgba(10,27,38,.9)}
+.hero .hl{display:flex;justify-content:space-between;align-items:center;color:#9FB3BF;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.hero .hv{font:800 34px var(--fn);letter-spacing:-.04em;margin-top:6px}
+.hero .hs{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:8px;color:#B9CAD4;font-size:12.5px}
+.hero .hs b{color:#fff;font-family:var(--fn)}
+.hpill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;font:700 12px var(--fn)}
+.hpill.up{background:rgba(57,232,117,.16);color:#5CF29A} .hpill.dn{background:rgba(255,107,107,.16);color:#FF9C9C} .hpill.nt{background:rgba(255,255,255,.1);color:#DDE8EE}
+.hero svg.sp{display:block;width:100%;height:56px;margin-top:10px}
+.hero .hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,.10)}
+.hero .hgrid small{display:block;color:#8FA5B1;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.hero .hgrid b{font:800 15px var(--fn);color:#fff}
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+.qa button{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:12px 4px 10px;font-weight:700;font-size:12px;color:var(--ink-2);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .1s}
+.qa button:active{transform:scale(.96)} .qa button:hover{border-color:var(--line-2)}
+.semaf{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.semaf span{display:inline-flex;align-items:center;gap:5px;font:800 16px var(--fn)}
+.empty .ic3d{display:block;margin:0 auto 8px}
+/* contas e mapa */
+.conta{border-radius:16px;text-align:center;opacity:.6;filter:grayscale(.3)}
+.conta .ic3d{display:block;margin:0 auto 4px}
+.conta b{margin-top:2px}
+.conta.ok{opacity:1;filter:none;background:linear-gradient(170deg,var(--good-bg),var(--surface))}
+.conta.ok::after{content:"";top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:#17B26A url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/12px no-repeat;box-shadow:0 2px 6px rgba(23,178,106,.5)}
+.conta.prox{opacity:1;filter:none;background:color-mix(in srgb,var(--warn-bg) 60%,var(--surface))}
+.conta .pb i{background:linear-gradient(90deg,#FFD66B,#F2A900)}
+.cobre{height:12px;border-radius:7px} .cobre i{background:linear-gradient(90deg,#39E875,#0E8A4F);box-shadow:0 0 12px rgba(57,232,117,.45)}
+.paga-v{font-weight:800;letter-spacing:-.04em}
+.chips span{display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 5px;font-weight:600}
+.mapa .coin{background:radial-gradient(circle at 35% 30%,#FFE9A8,#F2B21B 55%,#B67B00);box-shadow:inset -1.5px -2px 0 rgba(0,0,0,.16),0 2px 5px -1px rgba(120,80,0,.55)}
+.mapa .coin.fut{background:none;border:2px dashed #E5A800;box-shadow:none}
+.crow{grid-template-columns:150px 1fr 92px 38px 38px} .crow select{min-width:0;border:1px solid var(--line-2);border-radius:12px;background:var(--surface-2);padding:0 8px}
+/* navegação inferior flutuante */
+@media(max-width:760px){
+  .bnav{grid-template-columns:repeat(5,1fr);left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));border-radius:24px;border:0;padding:7px;
+    background:rgba(10,27,38,.93);box-shadow:0 18px 40px -12px rgba(10,27,38,.65),inset 0 1px 0 rgba(255,255,255,.08)}
+  .bnav button{color:#8EA3AF;min-height:52px;border-radius:17px;font-weight:700;font-size:10.5px}
+  .bnav button[aria-selected="true"]{color:#fff;background:linear-gradient(145deg,rgba(57,232,117,.25),rgba(23,178,106,.12));box-shadow:inset 0 0 0 1px rgba(57,232,117,.35)}
+  .bnav button[aria-selected="true"] svg{stroke:var(--glow);transform:none}
+  .bnav button:active{background:rgba(255,255,255,.06)}
+  main{padding-bottom:calc(104px + env(safe-area-inset-bottom))} footer{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+  #toast{bottom:calc(92px + env(safe-area-inset-bottom))}
+  .hero .hv{font-size:30px}
+  .qa{gap:8px} .qa button{font-size:11px;border-radius:16px}
+}
+.maisl{display:flex;flex-direction:column;gap:8px}
+.maisl button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:12px 14px;font-weight:700;font-size:14px;box-shadow:var(--shadow)}
+.maisl button small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+@media(min-width:761px){ .qa{grid-template-columns:repeat(4,minmax(0,170px))} }
+.tk>div{min-width:0}.tk small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(46vw,240px)}
+.bnav button:focus{outline:none}.bnav button:focus-visible{outline:2px solid var(--glow);outline-offset:-2px}
+@media(max-width:760px){ .seg{display:flex;max-width:100%;overflow-x:auto;scrollbar-width:none} .seg::-webkit-scrollbar{display:none} .seg button{flex:1 0 auto;justify-content:center;padding:8px 10px}
+  .contas{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px} .conta{padding:10px 6px 9px} .conta b{font-size:11.5px} .conta small{font-size:10.5px} .conta.ok::after{top:6px;right:6px;width:16px;height:16px} }
 </style>
 </head>
 <body>
@@ -408,13 +536,118 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
     <div class="ticker" id="ticker" aria-label="Cotações do mercado"><div class="tk-track" id="tkTrack"><span class="tk-it mut">Carregando cotações…</span></div></div>
   </header>
   <main id="main"></main>
-  <nav class="bnav" id="bnav" aria-label="Navegação"><button data-v="painel"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Painel</span></button><button data-v="carteira"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h12v4"/><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="16.5" cy="13.5" r="1.5"/></svg><span>Carteira</span></button><button data-v="saude"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg><span>Saúde</span></button><button data-v="proventos"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Proventos</span></button><button data-v="lanc"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span>Lançam.</span></button><button data-v="ajustes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Ajustes</span></button></nav>
+  <nav class="bnav" id="bnav" aria-label="Navegação"><button data-v="painel"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Painel</span></button><button data-v="carteira"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h12v4"/><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="16.5" cy="13.5" r="1.5"/></svg><span>Carteira</span></button><button data-v="saude"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg><span>Saúde</span></button><button data-v="proventos"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Proventos</span></button><button data-v="mais" aria-label="Mais opções"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>Mais</span></button></nav>
   <footer>CruzInvest é uma ferramenta de acompanhamento. Os alertas são filtros de atenção baseados em indicadores públicos e <b>não constituem recomendação de compra ou venda</b>. Dados: brapi.dev e Banco Central (SGS). Proventos exibidos em valor bruto.</footer>
 </div>
 
 <div id="tip"></div>
 <div id="toast"></div>
 
+<script>/* CruzInvest: ícones 3D (SVG com volume, luz e sombra), sem emojis.
+   ic3d(nome, tamanho) devolve um <svg>. Cada ícone tem sombra no chão, face com gradiente,
+   lateral escura (profundidade) e brilho especular. */
+(function(){
+let N=0;
+const lg=(id,a,b,x1=0,y1=0,x2=0,y2=1)=>`<linearGradient id="${id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const rg=(id,a,b,cx=.35,cy=.3,r=.75)=>`<radialGradient id="${id}" cx="${cx}" cy="${cy}" r="${r}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`;
+const shine=(id)=>`<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
+const ground=(id,cx=32,cy=58,rx=18)=>`<radialGradient id="${id}"><stop offset="0" stop-color="#0b1a24" stop-opacity=".32"/><stop offset="1" stop-color="#0b1a24" stop-opacity="0"/></radialGradient><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="4.2" fill="url(#${id})"/>`;
+
+const D={
+  luz:u=>`<defs>${lg(u+"a","#FFE58A","#F5A000")}${lg(u+"b","#D98300","#A85C00")}${shine(u+"s")}</defs>${ground(u+"g",32,58,15)}
+    <path d="M37 4 15 36h14l-5 22 26-34H35z" transform="translate(2.2 2.4)" fill="url(#${u}b)"/>
+    <path d="M37 4 15 36h14l-5 22 26-34H35z" fill="url(#${u}a)"/>
+    <path d="M36 7 19 33h9l1-2h-6l11-17z" fill="url(#${u}s)" opacity=".9"/>`,
+  agua:u=>`<defs>${lg(u+"a","#8BE0FF","#1F7FE0")}${lg(u+"b","#1663C2","#0D4693")}${shine(u+"s")}</defs>${ground(u+"g",32,59,14)}
+    <path d="M32 5C32 5 13 27 13 39a19 19 0 0 0 38 0C51 27 32 5 32 5z" transform="translate(1.6 1.8)" fill="url(#${u}b)"/>
+    <path d="M32 5C32 5 13 27 13 39a19 19 0 0 0 38 0C51 27 32 5 32 5z" fill="url(#${u}a)"/>
+    <ellipse cx="23.5" cy="37" rx="4.2" ry="8" fill="url(#${u}s)" transform="rotate(18 23.5 37)"/><circle cx="25" cy="49" r="2" fill="#fff" opacity=".55"/>`,
+  internet:u=>`<defs>${rg(u+"a","#8CC8FF","#1E4FD0")}${shine(u+"s")}</defs>${ground(u+"g",32,59,17)}
+    <circle cx="33.5" cy="32.5" r="22" fill="#163C9E"/><circle cx="32" cy="31" r="22" fill="url(#${u}a)"/>
+    <g fill="none" stroke="#CFE6FF" stroke-opacity=".55" stroke-width="1.8"><ellipse cx="32" cy="31" rx="9" ry="22"/><path d="M10 31h44M13.5 20h37M13.5 42h37"/></g>
+    <ellipse cx="24" cy="19" rx="10" ry="6" fill="url(#${u}s)" transform="rotate(-25 24 19)"/>`,
+  celular:u=>`<defs>${lg(u+"a","#46566A","#141C26")}${lg(u+"c","#7BF0E4","#2F7BEA",0,0,1,1)}${shine(u+"s")}</defs>${ground(u+"g",32,59,13)}
+    <rect x="20" y="5" width="26" height="50" rx="6" fill="#0B1118"/><rect x="18" y="4" width="26" height="50" rx="6" fill="url(#${u}a)"/>
+    <rect x="21" y="9" width="20" height="38" rx="2.5" fill="url(#${u}c)"/><rect x="27.5" y="49.5" width="7" height="1.8" rx=".9" fill="#8796A8"/>
+    <path d="M21 9h20v11L21 33z" fill="url(#${u}s)" opacity=".55"/>`,
+  gas:u=>`<defs>${lg(u+"a","#FFB45C","#E8331C")}${lg(u+"c","#FFF2B0","#FFC53D")}${lg(u+"b","#B82410","#8A1A0B")}</defs>${ground(u+"g",32,59,13)}
+    <path d="M32 4c4 10 15 15 15 30a15 15 0 0 1-30 0c0-8 5-12 6-19 3 4 4 7 4 10 3-6 5-12 5-21z" transform="translate(1.6 1.6)" fill="url(#${u}b)"/>
+    <path d="M32 4c4 10 15 15 15 30a15 15 0 0 1-30 0c0-8 5-12 6-19 3 4 4 7 4 10 3-6 5-12 5-21z" fill="url(#${u}a)"/>
+    <path d="M32 27c3 6 8 8 8 15a8 8 0 0 1-16 0c0-4 3-6 3-9 2 2 3 3 3 5 1-3 2-7 2-11z" fill="url(#${u}c)"/>`,
+  streaming:u=>`<defs>${lg(u+"a","#FF6B7E","#C9183C")}${lg(u+"b","#9E1230","#7A0C24")}${shine(u+"s")}</defs>${ground(u+"g",32,58,18)}
+    <rect x="9" y="13" width="48" height="38" rx="11" fill="url(#${u}b)"/><rect x="7" y="11" width="48" height="38" rx="11" fill="url(#${u}a)"/>
+    <path d="M27 21v20l16-10z" fill="#fff"/><path d="M12 15h38a6 6 0 0 1 3 1v8H10v-6a4 4 0 0 1 2-3z" fill="url(#${u}s)" opacity=".7"/>`,
+  academia:u=>`<defs>${lg(u+"a","#7E8FA3","#2B3644")}${lg(u+"c","#E6EBF0","#9AA7B5")}${shine(u+"s")}</defs>${ground(u+"g",32,57,22)}
+    <rect x="14" y="28" width="36" height="6" rx="3" fill="url(#${u}c)"/>
+    <rect x="6" y="19" width="9" height="24" rx="3.5" fill="url(#${u}a)"/><rect x="49" y="19" width="9" height="24" rx="3.5" fill="url(#${u}a)"/>
+    <rect x="13" y="22" width="5" height="18" rx="2.2" fill="#556477"/><rect x="46" y="22" width="5" height="18" rx="2.2" fill="#556477"/>
+    <rect x="7.5" y="20.5" width="3" height="12" rx="1.5" fill="url(#${u}s)"/><rect x="50.5" y="20.5" width="3" height="12" rx="1.5" fill="url(#${u}s)"/>`,
+  combustivel:u=>`<defs>${lg(u+"a","#5BE38F","#16874A")}${lg(u+"b","#0F6A39","#0A4D29")}${lg(u+"c","#E9FFF1","#A6E8C1")}${shine(u+"s")}</defs>${ground(u+"g",30,59,16)}
+    <rect x="14" y="10" width="28" height="46" rx="5" fill="url(#${u}b)"/><rect x="12" y="8" width="28" height="46" rx="5" fill="url(#${u}a)"/>
+    <rect x="17" y="13" width="18" height="13" rx="2.5" fill="url(#${u}c)"/>
+    <path d="M40 18h4a4 4 0 0 1 4 4v20a3 3 0 0 0 6 0V24l-5-6" fill="none" stroke="#2C3B4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="14" y="10" width="5" height="40" rx="2.5" fill="url(#${u}s)" opacity=".7"/>`,
+  mercado:u=>`<defs>${lg(u+"a","#FFC266","#E27100")}${lg(u+"b","#B85A00","#8F4500")}${shine(u+"s")}</defs>${ground(u+"g",32,59,18)}
+    <path d="M24 20v-4a8 8 0 0 1 16 0v4" fill="none" stroke="#7A3D00" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M14 19h38l-3 36H17z" transform="translate(1.8 1.6)" fill="url(#${u}b)"/><path d="M14 19h38l-3 36H17z" fill="url(#${u}a)"/>
+    <path d="M24 20v-4a8 8 0 0 1 16 0v4" fill="none" stroke="#5C2E00" stroke-width="3.2" stroke-linecap="round" transform="translate(0 6)" opacity=".0"/>
+    <circle cx="24" cy="25" r="2" fill="#7A3D00"/><circle cx="40" cy="25" r="2" fill="#7A3D00"/><path d="M17 22h9l-3 30h-5z" fill="url(#${u}s)" opacity=".6"/>`,
+  saude:u=>`<defs>${lg(u+"a","#FF8C9B","#DB1F48")}${lg(u+"b","#A6122F","#7D0B22")}${shine(u+"s")}</defs>${ground(u+"g",32,59,17)}
+    <path d="M32 54S8 40 8 23a12 12 0 0 1 24-4 12 12 0 0 1 24 4c0 17-24 31-24 31z" transform="translate(1.6 1.8)" fill="url(#${u}b)"/>
+    <path d="M32 54S8 40 8 23a12 12 0 0 1 24-4 12 12 0 0 1 24 4c0 17-24 31-24 31z" fill="url(#${u}a)"/>
+    <path d="M29 24h6v6h6v6h-6v6h-6v-6h-6v-6h6z" fill="#fff"/><ellipse cx="18" cy="19" rx="6" ry="4" fill="url(#${u}s)" transform="rotate(-30 18 19)"/>`,
+  condominio:u=>`<defs>${lg(u+"a","#9FB6CC","#43607D",0,0,1,0)}${lg(u+"b","#5F7A95","#2E4560")}${lg(u+"w","#E8F6FF","#9ED3FF")}</defs>${ground(u+"g",32,59,18)}
+    <path d="M18 10 34 4v52H18z" fill="url(#${u}a)"/><path d="M34 4l14 6v46H34z" fill="url(#${u}b)"/>
+    <g fill="url(#${u}w)">${[14,22,30,38].map(y=>`<rect x="21" y="${y}" width="4" height="5" rx="1"/><rect x="27.5" y="${y-1}" width="4" height="5" rx="1"/>`).join("")}</g>
+    <g fill="#9ED3FF" opacity=".55">${[14,22,30,38].map(y=>`<rect x="37.5" y="${y}" width="3.5" height="5" rx="1"/><rect x="43" y="${y+1}" width="3" height="5" rx="1"/>`).join("")}</g>
+    <rect x="24" y="47" width="6" height="9" rx="1" fill="#2E4560"/>`,
+  aluguel:u=>`<defs>${lg(u+"a","#FFF4E3","#E6CFA8")}${lg(u+"b","#D2B88E","#B09168")}${lg(u+"r","#FF7A59","#C8381D")}${lg(u+"d","#7A4A2A","#4F2E19")}</defs>${ground(u+"g",32,59,19)}
+    <path d="M14 30h36v26H14z" fill="url(#${u}a)"/><path d="M44 30h6v26h-6z" fill="url(#${u}b)"/>
+    <path d="M8 32 32 11l24 21-3 3L32 17 11 35z" fill="url(#${u}r)"/><path d="M11 35 32 17l21 18" fill="none" stroke="#8E2410" stroke-width="1.2" opacity=".5"/>
+    <rect x="27" y="40" width="10" height="16" rx="1.5" fill="url(#${u}d)"/><rect x="17.5" y="37" width="7" height="7" rx="1" fill="#8ED0FF"/><circle cx="34.5" cy="48.5" r="1" fill="#F2C14E"/>`,
+  outro:u=>`<defs>${lg(u+"a","#6FE3B0","#0F8F5B")}${lg(u+"b","#0B6B44","#074F32")}${shine(u+"s")}</defs>${ground(u+"g",32,59,18)}
+    <rect x="9" y="17" width="48" height="34" rx="8" fill="url(#${u}b)"/><rect x="7" y="15" width="48" height="34" rx="8" fill="url(#${u}a)"/>
+    <rect x="38" y="26" width="17" height="12" rx="4" fill="#0B6B44"/><circle cx="44" cy="32" r="2.6" fill="#E9FFF4"/><path d="M11 18h40a4 4 0 0 1 3 2v6H8v-5a3 3 0 0 1 3-3z" fill="url(#${u}s)" opacity=".6"/>`,
+  /* estados do semáforo: esferas */
+  ok:u=>orb(u,"#9CF5BE","#16A34A","#0E6B31"), atencao:u=>orb(u,"#FFE59A","#F2A900","#9C6A00"), risco:u=>orb(u,"#FFA3A3","#E5322D","#8E1512"), semdados:u=>orb(u,"#E6EBF0","#9AA7B5","#5D6B7A"),
+  trofeu:u=>`<defs>${lg(u+"a","#FFE48A","#E0A100",0,0,1,0)}${lg(u+"b","#B57E00","#8A5F00")}${shine(u+"s")}</defs>${ground(u+"g",32,59,14)}
+    <path d="M17 10h-6v5a10 10 0 0 0 10 10M47 10h6v5a10 10 0 0 1-10 10" fill="none" stroke="#C99000" stroke-width="3.5"/>
+    <path d="M17 6h30v14a15 15 0 0 1-30 0z" fill="url(#${u}a)"/><rect x="28.5" y="34" width="7" height="9" fill="#C99000"/>
+    <path d="M21 43h22l3 9H18z" fill="url(#${u}b)"/><path d="M20 8h7v14a10 10 0 0 0 3 7c-6-1-10-7-10-12z" fill="url(#${u}s)" opacity=".8"/>`,
+  calendario:u=>`<defs>${lg(u+"a","#FFFFFF","#DCE3EA")}${lg(u+"t","#FF6B6B","#D32F2F")}</defs>${ground(u+"g",32,59,18)}
+    <rect x="10" y="12" width="46" height="44" rx="8" fill="#A9B6C3"/><rect x="8" y="10" width="46" height="44" rx="8" fill="url(#${u}a)"/>
+    <path d="M8 18a8 8 0 0 1 8-8h30a8 8 0 0 1 8 8v4H8z" fill="url(#${u}t)"/><rect x="18" y="5" width="4" height="10" rx="2" fill="#5D6B7A"/><rect x="40" y="5" width="4" height="10" rx="2" fill="#5D6B7A"/>
+    <g fill="#B8C4D0">${[0,1,2,3].map(c=>[0,1,2].map(r=>`<rect x="${14+c*9}" y="${28+r*8}" width="6" height="5" rx="1.2"/>`).join("")).join("")}</g><rect x="23" y="36" width="6" height="5" rx="1.2" fill="#16A34A"/>`,
+  moedas:u=>`<defs>${lg(u+"a","#FFE58A","#E8A800",0,0,1,0)}${lg(u+"b","#C48B00","#9A6B00")}</defs>${ground(u+"g",32,59,19)}
+    ${[0,1,2,3].map(i=>`<ellipse cx="28" cy="${50-i*7}" rx="15" ry="5" fill="url(#${u}b)"/><rect x="13" y="${44-i*7}" width="30" height="6" fill="url(#${u}b)"/><ellipse cx="28" cy="${44-i*7}" rx="15" ry="5" fill="url(#${u}a)"/>`).join("")}
+    <circle cx="44" cy="24" r="12" fill="#B07C00"/><circle cx="43" cy="23" r="12" fill="url(#${u}a)"/><text x="43" y="28" font-family="Montserrat,Arial" font-weight="800" font-size="13" text-anchor="middle" fill="#9A6B00">$</text>`,
+  ampulheta:u=>`<defs>${lg(u+"a","#C7A27A","#7A5634")}${lg(u+"v","#E8F6FF","#BFE3FF",0,0,1,0)}${lg(u+"s","#FFD36B","#E8A800")}</defs>${ground(u+"g",32,59,14)}
+    <path d="M20 10h24c0 12-9 16-9 22s9 10 9 22H20c0-12 9-16 9-22s-9-10-9-22z" fill="url(#${u}v)" opacity=".9"/>
+    <path d="M24 16h16c-2 6-8 8-8 13-0-5-6-7-8-13zM22 52h20c-1-6-6-9-10-9s-9 3-10 9z" fill="url(#${u}s)"/>
+    <rect x="16" y="6" width="32" height="5" rx="2.5" fill="url(#${u}a)"/><rect x="16" y="52" width="32" height="5" rx="2.5" fill="url(#${u}a)"/>`,
+  chama:u=>D.gas(u),
+  alerta:u=>`<defs>${lg(u+"a","#FFD66B","#F09A00")}${lg(u+"b","#B86F00","#8C5400")}</defs>${ground(u+"g",32,59,19)}
+    <path d="M32 6 58 52H6z" transform="translate(1.6 1.8)" fill="url(#${u}b)" stroke="url(#${u}b)" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M32 6 58 52H6z" fill="url(#${u}a)" stroke="url(#${u}a)" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="29.5" y="21" width="5" height="17" rx="2.5" fill="#3B2600"/><circle cx="32" cy="44.5" r="3" fill="#3B2600"/>`,
+  info:u=>`<defs>${rg(u+"a","#9CC9FF","#1E5FD8")}${shine(u+"s")}</defs>${ground(u+"g",32,59,17)}
+    <circle cx="33.5" cy="32.5" r="22" fill="#163F99"/><circle cx="32" cy="31" r="22" fill="url(#${u}a)"/>
+    <rect x="29" y="27" width="6" height="17" rx="3" fill="#fff"/><circle cx="32" cy="20" r="3.4" fill="#fff"/><ellipse cx="24" cy="18" rx="9" ry="5" fill="url(#${u}s)" transform="rotate(-25 24 18)"/>`,
+  cofre:u=>`<defs>${lg(u+"a","#5C6E82","#222D3A")}${lg(u+"c","#E9EEF3","#A8B5C2")}${shine(u+"s")}</defs>${ground(u+"g",32,59,19)}
+    <rect x="10" y="10" width="46" height="44" rx="8" fill="#141B24"/><rect x="8" y="8" width="46" height="44" rx="8" fill="url(#${u}a)"/>
+    <circle cx="31" cy="30" r="11" fill="url(#${u}c)"/><circle cx="31" cy="30" r="5" fill="#5C6E82"/><path d="M31 19v5M31 36v5M20 30h5M37 30h5" stroke="#5C6E82" stroke-width="2.2"/>
+    <rect x="11" y="11" width="40" height="6" rx="3" fill="url(#${u}s)" opacity=".35"/>`,
+  grafico:u=>`<defs>${lg(u+"a","#6FE3B0","#0F8F5B")}${lg(u+"b","#9CC9FF","#2A62D8")}${lg(u+"c","#FFD66B","#E59A00")}</defs>${ground(u+"g",32,59,20)}
+    <rect x="10" y="34" width="11" height="20" rx="3" fill="url(#${u}c)"/><rect x="26" y="24" width="11" height="30" rx="3" fill="url(#${u}b)"/><rect x="42" y="12" width="11" height="42" rx="3" fill="url(#${u}a)"/>
+    <path d="M9 30 24 19l10 5 18-16" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/><path d="M9 30 24 19l10 5 18-16" fill="none" stroke="#0C1F2B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="52" cy="8" r="3.2" fill="#0C1F2B" stroke="#fff" stroke-width="1.6"/>`
+};
+function orb(u,a,b,c){return `<defs>${rg(u+"a",a,b,.38,.32,.8)}${shine(u+"s")}</defs>${ground(u+"g",32,58,15)}
+  <circle cx="33" cy="32" r="20" fill="${c}"/><circle cx="32" cy="31" r="20" fill="url(#${u}a)"/>
+  <ellipse cx="26" cy="22" rx="9" ry="6" fill="url(#${u}s)" transform="rotate(-25 26 22)"/>`;}
+window.ic3d=(nome,tam)=>{const f=D[nome]||D.outro; const u="i3"+(++N)+"_"; return `<svg class="ic3d" viewBox="0 0 64 64" width="${tam||40}" height="${tam||40}" aria-hidden="true">${f(u)}</svg>`;};
+window.IC3D_NOMES=Object.keys(D);
+})();
+</script>
 <script>/* qrcode-generator 1.4.4 (Kazuhiko Arase, licença MIT): QR code do Pix */
 var qrcode = function() {
 /**
@@ -2270,7 +2503,7 @@ function parseDate(s){
   m=s.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m) return m[0];
   return "";
 }
-function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2800);}
+function toast(m,ic){const t=$("#toast");t.innerHTML=(window.ic3d?ic3d(ic||(/^(erro|falha|não foi|n[aã]o consegui)/i.test(m)?"alerta":"ok"),22):"")+"<span></span>";t.lastChild.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2800);}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 /* ======================= CRIPTOGRAFIA (mesmo padrão do CruzOn Planner) ======================= */
@@ -2283,7 +2516,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-19c";
+const APP_VER="2026-11-19d";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -2944,8 +3177,9 @@ function saude(p,C){
   const lv=f.some(x=>x.lv==="r")?"r":f.some(x=>x.lv==="y")?"y":(semAval||(f.length&&f.every(x=>x.lv==="n")&&m.price==null&&isListed(a.cls)))?"n":"g";
   return {lv,f};
 }
-const LVL={g:["g","Saudável","🟢"],y:["y","Atenção","🟡"],r:["r","Risco","🔴"],n:["n","Sem dados","⚪"]};
-const pill=lv=>`<span class="pill ${LVL[lv][0]}">${LVL[lv][2]} ${LVL[lv][1]}</span>`;
+const ORB={g:"ok",y:"atencao",r:"risco",n:"semdados"}, orb=(lv,t)=>ic3d(ORB[lv]||"semdados",t||16);
+const LVL={g:["g","Saudável","ok"],y:["y","Atenção","atencao"],r:["r","Risco","risco"],n:["n","Sem dados","semdados"]};
+const pill=lv=>`<span class="pill ${LVL[lv][0]}">${orb(lv,17)} ${LVL[lv][1]}</span>`;
 
 /* ======================= TOOLTIP ======================= */
 const TIP=$("#tip");
@@ -3011,8 +3245,14 @@ function hbars(rows){ /* rows: [{nm,v,color,tip,right}] */
 
 /* ======================= NAVEGAÇÃO ======================= */
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-v]"); if(b) go(b.dataset.v);});
-function go(v){VIEW=v; $$("#tabs button,#bnav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false")); render(); scrollTo({top:0,behavior:"instant"});}
-$("#bnav").addEventListener("click",e=>{const b=e.target.closest("button[data-v]"); if(b){ if(navigator.vibrate) try{navigator.vibrate(8);}catch(x){} go(b.dataset.v);} });
+function go(v){VIEW=v; $$("#tabs button,#bnav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v||(b.dataset.v==="mais"&&(v==="lanc"||v==="ajustes"))?"true":"false")); render(); scrollTo({top:0,behavior:"instant"});}
+$("#bnav").addEventListener("click",e=>{const b=e.target.closest("button[data-v]"); if(b){ if(navigator.vibrate) try{navigator.vibrate(8);}catch(x){} if(b.dataset.v==="mais") abreMais(); else go(b.dataset.v);} });
+function abreMais(){
+  const it=(id,ic,t,sub)=>`<button data-m="${id}">${ic3d(ic,32)}<span>${t}<small>${sub}</small></span></button>`;
+  modal(`<div class="mh"><h3>Mais opções</h3><button class="x" data-close aria-label="Fechar">×</button></div><div class="maisl">
+    ${it("lanc","calendario","Lançamentos","Compras, vendas e importação da B3")}${it("ajustes","cofre","Ajustes","Conta, segurança, limites e tema")}${it("rec","info","Recarregar app","Busca a versão nova sem sair da conta")}</div>`,
+  (ov,close)=>ov.querySelectorAll("[data-m]").forEach(b=>b.addEventListener("click",()=>{close(); const m=b.dataset.m; if(m==="rec") recarregarApp(); else go(m);})));
+}
 function render(){
   if(!V) return; tipOff();
   $("#upd").textContent=V.meta.upd?"Atualizado "+new Date(V.meta.upd).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
@@ -3023,8 +3263,8 @@ function render(){
 }
 function avisos(){
   let h="";
-  if(V._aviso==="token") h+=`<div class="banner warn">⚠️ <div>Não foi possível obter a cotação de alguns ativos agora. Tente atualizar de novo em instantes; se persistir, confira os tickers em <b>Lançamentos</b>.</div></div>`;
-  else if((V.prefs.nivel||0)>0&&!(V.provMan||[]).length) h+=`<div class="banner warn">ℹ️ <div>O plano gratuito da brapi ${(V.prefs.nivel===2)?"libera só cotações (sem indicadores nem proventos)":"não inclui proventos"}. Registre ou importe seus dividendos e rendimentos na aba <b>Proventos</b> para calcular DY e renda passiva. <button class="lnk" onclick="go('proventos')">Ir para Proventos</button></div></div>`;
+  if(V._aviso==="token") h+=`<div class="banner warn">${ic3d("alerta",24)}<div>Não foi possível obter a cotação de alguns ativos agora. Tente atualizar de novo em instantes; se persistir, confira os tickers em <b>Lançamentos</b>.</div></div>`;
+  else if((V.prefs.nivel||0)>0&&!(V.provMan||[]).length) h+=`<div class="banner warn">${ic3d("info",24)}<div>O plano gratuito da brapi ${(V.prefs.nivel===2)?"libera só cotações (sem indicadores nem proventos)":"não inclui proventos"}. Registre ou importe seus dividendos e rendimentos na aba <b>Proventos</b> para calcular DY e renda passiva. <button class="lnk" onclick="go('proventos')">Ir para Proventos</button></div></div>`;
   return h;
 }
 function emptyState(){return `<div class="card empty"><b>Sua carteira está vazia</b>Cadastre seus ativos em <b>Lançamentos</b>: o jeito mais fácil é <b>Importar da B3</b> com os extratos em Excel da Área do Investidor.<div style="margin-top:14px"><button class="btn primary" onclick="go('lanc')">Adicionar ativos</button></div></div>`;}
@@ -3036,14 +3276,23 @@ function vPainel(){
   if(!C.lista.length) return head+avisos()+emptyState();
   const cmp=cdiCompare(C); const S=C.lista.map(p=>({p,s:saude(p,C)}));
   const nR=S.filter(x=>x.s.lv==="r").length, nY=S.filter(x=>x.s.lv==="y").length, nG=S.filter(x=>x.s.lv==="g").length;
-  const kp=(lb,vl,sm,cls)=>`<div class="card kpi"><div class="lb">${lb}</div><div class="vl num ${cls||""}">${vl}</div><div class="sm">${sm||""}</div></div>`;
-  let h=head+avisos()+`<div class="grid kpis">
-    ${kp("Patrimônio",money0(C.total),`Hoje: <span class="${sgn(C.diaVar)}">${C.diaVar?(C.diaVar>0?"+":"")+money(C.diaVar)+" ("+spct(C.diaPct)+")":"—"}</span>`)}
-    ${kp("Valor investido",money0(C.custo),C.lista.length+" ativos em carteira")}
-    ${kp("Rentabilidade",spct(C.retTotalPct),`<span class="${sgn(C.retTotal)}">${money(C.retTotal)}</span> com proventos`,sgn(C.retTotal))}
-    ${kp("Proventos 12 meses",money0(C.prov12),`DY ${pct(C.dyCart)} · YoC ${pct(C.yoc)}`)}
-    ${kp("vs. CDI",cmp?((cmp.dif>=0?"+":"")+money0(cmp.dif)):"—",cmp?`No CDI teria ${money0(cmp.cdi)}`:"Atualize para comparar",cmp?sgn(cmp.dif):"")}
-    ${kp("Saúde da carteira",`${nR?`<span class="neg">${nR} 🔴</span> `:""}${nY?`<span style="color:var(--warn)">${nY} 🟡</span> `:""}<span class="pos">${nG} 🟢</span>`,"risco · atenção · saudável")}
+  const kp=(lb,vl,sm,cls,ic)=>`<div class="card kpi"><div class="lb">${ic?ic3d(ic,24):""}${lb}</div><div class="vl num ${cls||""}">${vl}</div><div class="sm">${sm||""}</div></div>`;
+  const hp=V.hist.filter(x=>x.v>0).slice(-90); let sp="";
+  if(hp.length>=2){ const vs=hp.map(x=>x.v), mn=Math.min(...vs), mx=Math.max(...vs), W=320, H=56, k=mx>mn?(H-8)/(mx-mn):0;
+    const pts=vs.map((v,i)=>[(i/(vs.length-1))*W, H-4-(v-mn)*k]); const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+    sp=`<svg class="sp" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="hsg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#39E875" stop-opacity=".35"/><stop offset="1" stop-color="#39E875" stop-opacity="0"/></linearGradient></defs><path d="${d} L${W} ${H} L0 ${H}Z" fill="url(#hsg)"/><path d="${d}" fill="none" stroke="#39E875" stroke-width="2.4" vector-effect="non-scaling-stroke"/></svg>`; }
+  const dv=C.diaVar, hcls=dv>0?"up":dv<0?"dn":"nt";
+  let h=head+avisos()+`<div class="hero"><div class="hl"><span>Patrimônio</span><span>${C.lista.length} ativos</span></div>
+      <div class="hv num">${money(C.total)}</div>
+      <div class="hs"><span class="hpill ${hcls}">${dv?(dv>0?"▲ ":"▼ ")+spct(C.diaPct).replace(/^[+-]/,"")+" hoje":"Sem variação hoje"}</span>${dv?`<span>${dv>0?"+":""}${money(dv)}</span>`:""}</div>
+      ${sp}
+      <div class="hgrid"><div><small>Investido</small><b>${money0(C.custo)}</b></div><div><small>Resultado</small><b style="color:${C.retTotal>=0?"#5CF29A":"#FF9C9C"}">${spct(C.retTotalPct)}</b></div><div><small>Proventos 12m</small><b>${money0(C.prov12)}</b></div></div></div>
+    <div class="qa"><button onclick="go('carteira')">${ic3d("grafico",34)}Carteira</button><button onclick="go('proventos')">${ic3d("moedas",34)}Proventos</button><button onclick="go('saude')">${ic3d("ok",34)}Saúde</button><button onclick="go('lanc')">${ic3d("calendario",34)}Lançamentos</button></div>
+    <div class="grid kpis">
+    ${kp("Rentabilidade",spct(C.retTotalPct),`<span class="${sgn(C.retTotal)}">${money(C.retTotal)}</span> com proventos`,sgn(C.retTotal),"grafico")}
+    ${kp("Proventos 12 meses",money0(C.prov12),`DY ${pct(C.dyCart)} · YoC ${pct(C.yoc)}`,"","moedas")}
+    ${kp("vs. CDI",cmp?((cmp.dif>=0?"+":"")+money0(cmp.dif)):"—",cmp?`No CDI teria ${money0(cmp.cdi)}`:"Atualize para comparar",cmp?sgn(cmp.dif):"","trofeu")}
+    ${kp("Saúde da carteira",`<span class="semaf"><span>${orb("r",20)}${nR}</span><span>${orb("y",20)}${nY}</span><span>${orb("g",20)}${nG}</span></span>`,"risco · atenção · saudável","","cofre")}
   </div>`;
   /* alertas */
   const alertas=S.filter(x=>x.s.lv==="r"||x.s.lv==="y").sort((a,b)=>(a.s.lv==="r"?0:1)-(b.s.lv==="r"?0:1)||b.p.peso-a.p.peso).slice(0,6);
@@ -3057,7 +3306,7 @@ function vPainel(){
   h+=`<div class="grid two" style="margin-top:14px">
     <div class="card"><h3>Alertas prioritários</h3><p class="cap">Ativos com indicadores fora dos limites definidos em Ajustes.</p>
       ${alertas.length?`<div class="alist">${alertas.map(x=>`<div class="arow" data-tk="${x.p.tk}"><div class="hd">${tkCell(x.p)}${pill(x.s.lv)}</div><div class="atx">${esc((x.s.f.find(f=>f.lv===x.s.lv)||x.s.f[0]).t)}${x.s.f.filter(f=>f.lv!=="n").length>1?` <span class="mut">+${x.s.f.filter(f=>f.lv!=="n").length-1} alerta(s)</span>`:""}</div></div>`).join("")}</div>`
-        :`<div class="empty" style="padding:22px">✅ Nenhum alerta no momento.</div>`}
+        :`<div class="empty" style="padding:22px">${ic3d("ok",40)}Nenhum alerta no momento.</div>`}
       <div style="margin-top:10px"><button class="btn" onclick="go('saude')">Ver análise completa</button></div></div>
     <div class="card"><h3>Alocação por classe</h3><p class="cap">Distribuição do patrimônio atual.</p>${hbars(clsRows)}
       <h3 style="margin-top:18px">Maiores posições</h3><p class="cap">Cor indica a classe do ativo.</p>
@@ -3074,11 +3323,11 @@ function vPainel(){
     <div class="card"><h3>Evolução do patrimônio</h3><p class="cap">Registrada a cada atualização dos dados.</p>${evo}</div>
     <div class="card"><h3>Proventos por mês</h3><p class="cap">Por data de pagamento, valor bruto. Barras claras: a receber.</p>${provChart(12)}</div>
   </div>`;
-  if(V.macro) h+=`<div class="banner info" style="margin-top:14px">📊 <div>Selic meta: <b>${n2(V.macro.selic)}%</b> · IPCA 12 meses: <b>${n2(V.macro.ipca12)}%</b> (ref. ${esc(V.macro.ipcaRef)}) · DY da carteira: <b>${pct(C.dyCart)}</b> ${C.dyCart*100>V.macro.ipca12?"(acima da inflação)":"(abaixo da inflação)"}</div></div>`;
+  if(V.macro) h+=`<div class="banner info" style="margin-top:14px">${ic3d("grafico",26)}<div>Selic meta: <b>${n2(V.macro.selic)}%</b> · IPCA 12 meses: <b>${n2(V.macro.ipca12)}%</b> (ref. ${esc(V.macro.ipcaRef)}) · DY da carteira: <b>${pct(C.dyCart)}</b> ${C.dyCart*100>V.macro.ipca12?"(acima da inflação)":"(abaixo da inflação)"}</div></div>`;
   return h;
 }
 vPainel.after=m=>m.querySelectorAll("[data-tk]").forEach(r=>r.addEventListener("click",()=>detalhe(r.dataset.tk)));
-function tkCell(p){const m=mk(p.tk);return `<div class="tk">${m.logo?`<img src="${esc(m.logo)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph'}))">`:`<span class="ph"></span>`}<div>${esc(p.tk)}<small>${esc(m.name||ativo(p.tk).nome||ativo(p.tk).cls)}</small></div></div>`;}
+function tkCell(p){const m=mk(p.tk);return `<div class="tk">${m.logo?`<img src="${esc(m.logo)}" alt="" loading="lazy" onerror="this.remove()">`:""}<span class="ph" style="--cc:${clsColor(ativo(p.tk).cls)}">${esc(p.tk.slice(0,4))}</span><div>${esc(p.tk)}<small>${esc(m.name||ativo(p.tk).nome||ativo(p.tk).cls)}</small></div></div>`;}
 function provMensal(meses,fut){
   const all=provTks().flatMap(proventosDe); const now=new Date(); const out=[];
   for(let i=meses-1;i>=-(fut||0);i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1); const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
@@ -3136,10 +3385,10 @@ function vSaude(){
     if(!isListed(a.cls)) return [["Valor",money(p.valor)],["Investido",money(p.custo)],["Resultado",spct(p.ganhoPct)],["Peso",pct(p.peso,1)]];
     return [["P/L",n2(m.pl)],["P/VP",n2(m.pvp)],["ROE",pct(m.roe,1)],["DY 12m",pct(m.dy12)]];};
   return `<div class="pghead"><div><h2>Saúde da carteira</h2><p>Semáforo por ativo com base em indicadores e limites que você define em <b>Ajustes</b>.</p></div>
-    <div class="seg" id="fsau">${[["todos","Todos ("+S.length+")"],["r","🔴 Risco ("+cnt("r")+")"],["y","🟡 Atenção ("+cnt("y")+")"],["g","🟢 Saudável ("+cnt("g")+")"]].map(([k,t])=>`<button aria-pressed="${FSAU===k}" data-k="${k}">${t}</button>`).join("")}</div></div>${avisos()}
+    <div class="seg" id="fsau">${[["todos","Todos ("+S.length+")"],["r",orb("r",15)+"Risco ("+cnt("r")+")"],["y",orb("y",15)+"Atenção ("+cnt("y")+")"],["g",orb("g",15)+"Saudável ("+cnt("g")+")"]].map(([k,t])=>`<button aria-pressed="${FSAU===k}" data-k="${k}">${t}</button>`).join("")}</div></div>${avisos()}
     <div class="health">${L.map(({p,s})=>`<div class="hc ${s.lv}" data-tk="${p.tk}"><div class="hd">${tkCell(p)}${pill(s.lv)}</div>
       <div class="ind">${ind(p).map(([a,b])=>`<div>${a}<b>${b}</b></div>`).join("")}</div>
-      <ul>${s.f.length?s.f.map(f=>`<li><span class="d">${LVL[f.lv][2]}</span><span>${esc(f.t)}</span></li>`).join(""):`<li><span class="d">🟢</span><span>Nenhum indicador fora dos limites.</span></li>`}</ul></div>`).join("")}</div>
+      <ul>${s.f.length?s.f.map(f=>`<li><span class="d">${orb(f.lv,15)}</span><span>${esc(f.t)}</span></li>`).join(""):`<li><span class="d">${orb("g",15)}</span><span>Nenhum indicador fora dos limites.</span></li>`}</ul></div>`).join("")}</div>
     <p class="mut" style="font-size:12px;margin-top:14px">Os alertas indicam onde vale olhar com mais cuidado (relatórios, fatos relevantes, notícias). Não são recomendação de compra ou venda.</p>`;
 }
 vSaude.after=m=>{m.querySelectorAll("#fsau button").forEach(b=>b.addEventListener("click",()=>{FSAU=b.dataset.k;render();}));
@@ -3167,9 +3416,12 @@ function vProventos(){
 
 /* ---------- MAPA DE DIVIDENDOS e O QUE SEUS PROVENTOS PAGAM ---------- */
 let MAPA_ANO=null, PAGA_P="media";
-const CONTAS_PADRAO=[{e:"⚡",n:"Conta de luz",v:200},{e:"🌐",n:"Internet",v:100},{e:"💧",n:"Conta de água",v:50},{e:"📱",n:"Celular",v:50},
-  {e:"🔥",n:"Gás",v:120},{e:"🎬",n:"Streaming",v:40},{e:"🏋️",n:"Academia",v:100},{e:"⛽",n:"Combustível",v:400},{e:"🛒",n:"Mercado do mês",v:800},
-  {e:"🩺",n:"Plano de saúde",v:600},{e:"🏢",n:"Condomínio",v:600},{e:"🏠",n:"Aluguel",v:1800}];
+const CONTAS_PADRAO=[{i:"luz",n:"Conta de luz",v:200},{i:"internet",n:"Internet",v:100},{i:"agua",n:"Conta de água",v:50},{i:"celular",n:"Celular",v:50},
+  {i:"gas",n:"Gás",v:120},{i:"streaming",n:"Streaming",v:40},{i:"academia",n:"Academia",v:100},{i:"combustivel",n:"Combustível",v:400},{i:"mercado",n:"Mercado do mês",v:800},
+  {i:"saude",n:"Plano de saúde",v:600},{i:"condominio",n:"Condomínio",v:600},{i:"aluguel",n:"Aluguel",v:1800}];
+const ICONES_CONTA=[["luz","Luz"],["agua","Água"],["internet","Internet"],["celular","Celular"],["gas","Gás"],["streaming","Streaming"],["academia","Academia"],["combustivel","Combustível"],["mercado","Mercado"],["saude","Saúde"],["condominio","Condomínio"],["aluguel","Moradia"],["outro","Outra"]];
+const EMOJI_IC={"⚡":"luz","🌐":"internet","💧":"agua","📱":"celular","🔥":"gas","🎬":"streaming","🏋️":"academia","⛽":"combustivel","🛒":"mercado","🩺":"saude","🏢":"condominio","🏠":"aluguel"};
+const contaIc=c=>c.i||EMOJI_IC[c.e]||"outro";
 const contasLista=()=>(V.prefs.contas&&V.prefs.contas.length?V.prefs.contas:CONTAS_PADRAO);
 const dataProv=x=>x.pay||x.com;
 /* paga as contas na ordem da lista; uma que não cabe é pulada e a sobra tenta as seguintes */
@@ -3188,23 +3440,23 @@ function cardPaga(C){
   const op={media:["Média 12 meses","Média mensal dos últimos 12 meses",C.prov12/12],passado:["Mês passado","Mês passado ("+passado.lb+")",passado.v],melhor:["Melhor mês","Melhor mês dos últimos 12 ("+melhor.lb+")",melhor.v]};
   if(!op[PAGA_P]) PAGA_P="media";
   const [,rot,valor]=op[PAGA_P], R=pagaCalc(valor);
-  const nomes=R.pagas.map(c=>c.e+" "+esc(c.n.toLowerCase()));
+  const nomes=R.pagas.map(c=>"<b>"+esc(c.n.toLowerCase())+"</b>");
   const junta=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a[a.length-1];
   let msg;
   if(!(valor>0)) msg=`Ainda não há proventos recebidos nesse período. Assim que eles entrarem, você vê aqui quais contas eles pagam.`;
-  else if(!R.pagas.length) msg=`Ainda não cobre uma conta inteira da lista. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar ${R.prox.e} ${esc(R.prox.n.toLowerCase())}.`;
-  else if(!R.prox) msg=`🎉 Seus proventos pagam <b>todas as contas da lista</b> e ainda sobram <b>${money(R.resto)}</b> por mês.`;
-  else msg=`Seus proventos já pagam ${junta(nomes)}${R.resto>=1?` e sobram <b>${money(R.resto)}</b>`:""}. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar também ${R.prox.e} ${esc(R.prox.n.toLowerCase())}.`;
+  else if(!R.pagas.length) msg=`Ainda não cobre uma conta inteira da lista. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar <b>${esc(R.prox.n.toLowerCase())}</b>.`;
+  else if(!R.prox) msg=`${ic3d("trofeu",22)} Seus proventos pagam <b>todas as contas da lista</b> e ainda sobram <b>${money(R.resto)}</b> por mês.`;
+  else msg=`Seus proventos já pagam ${junta(nomes)}${R.resto>=1?` e sobram <b>${money(R.resto)}</b>`:""}. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar também <b>${esc(R.prox.n.toLowerCase())}</b>.`;
   const cob=R.totalContas?Math.min(1,valor/R.totalContas):0;
   const anoMeses=R.totalContas?C.prov12/R.totalContas:0;
-  const tiles=R.it.map(c=>`<div class="conta ${c.ok?"ok":c===R.prox?"prox":""}" data-tip="${esc(`<b>${c.e} ${c.n}</b>${money(c.v)} por mês`+(c.ok?"<br>✅ coberta pelos proventos":c===R.prox?`<br>${pct(c.parc,0)} coberto · faltam ${money(c.v-R.resto)}`:""))}"><span class="em">${esc(c.e)}</span><b>${esc(c.n)}</b><small class="num">${money0(c.v)}/mês</small>${c===R.prox?`<div class="pb"><i style="width:${(c.parc*100).toFixed(1)}%"></i></div>`:""}</div>`).join("");
+  const tiles=R.it.map(c=>`<div class="conta ${c.ok?"ok":c===R.prox?"prox":""}" data-tip="${esc(`<b>${c.n}</b>${money(c.v)} por mês`+(c.ok?"<br>Coberta pelos proventos":c===R.prox?`<br>${pct(c.parc,0)} coberto · faltam ${money(c.v-R.resto)}`:""))}">${ic3d(contaIc(c),40)}<b>${esc(c.n)}</b><small class="num">${money0(c.v)}/mês</small>${c===R.prox?`<div class="pb"><i style="width:${(c.parc*100).toFixed(1)}%"></i></div>`:""}</div>`).join("");
   return `<div class="card" style="margin-top:14px"><div class="paga-top"><div><h3>O que seus proventos pagam</h3><p class="cap">Sua renda passiva convertida em contas do dia a dia. Toque em <b>Editar contas</b> para usar os seus valores.</p></div>
       <div class="toolbar"><div class="seg" id="fpaga">${Object.entries(op).map(([k,[t]])=>`<button aria-pressed="${PAGA_P===k}" data-k="${k}">${esc(t)}</button>`).join("")}</div><button class="btn" id="bContas">Editar contas</button></div></div>
     <div class="paga-top" style="margin-top:8px"><div><div class="mut" style="font-size:12px">${esc(rot)}</div><div class="paga-v num">${money(valor)}</div></div>
       <div class="mut" style="font-size:12.5px;text-align:right">Cobre <b>${pct(cob,0)}</b> das contas da lista (${money0(R.totalContas)}/mês)</div></div>
     <div class="cobre" role="img" aria-label="Cobre ${pct(cob,0)} das contas"><i style="width:${(cob*100).toFixed(1)}%"></i></div>
     <p class="paga-msg">${msg}</p>
-    ${C.prov12>0&&R.totalContas?`<p class="mut" style="font-size:12.5px;margin:2px 0 0">📆 Nos últimos 12 meses você recebeu ${money(C.prov12)}: o bastante para pagar <b>${anoMeses.toLocaleString("pt-BR",{maximumFractionDigits:1})} ${anoMeses>=0.95&&anoMeses<1.05?"mês":"meses"}</b> de todas as contas da lista.</p>`:""}
+    ${C.prov12>0&&R.totalContas?`<p class="mut" style="font-size:12.5px;margin:2px 0 0;display:flex;gap:8px;align-items:center">${ic3d("calendario",22)}<span>Nos últimos 12 meses você recebeu ${money(C.prov12)}: o bastante para pagar <b>${anoMeses.toLocaleString("pt-BR",{maximumFractionDigits:1})} ${anoMeses>=0.95&&anoMeses<1.05?"mês":"meses"}</b> de todas as contas da lista.</span></p>`:""}
     <div class="contas">${tiles}</div></div>`;
 }
 function cardMapa(){
@@ -3230,28 +3482,28 @@ function cardMapa(){
     const tip=`<b>${g.tk} · ${MES[i]}/${MAPA_ANO}</b>`+c.it.map(x=>`${esc(x.label||"Provento")}: ${money(x.rate)} × ${N0.format(x.qtd)} = <b>${money(x.valor)}</b>${x.recebido?" · pago "+brDate(x.pay):" · a receber"+(x.pay?" em "+brDate(x.pay):"")}`).join("<br>");
     return `<td class="${isCur(i)?"cur":""}"><span class="coin${c.v?"":" fut"}" style="--s:${sz}px;--cc:${cor}" data-tip="${esc(tip)}"></span><span class="cv">${v>=1000?shortBRL(v).replace("R$ ",""):N0.format(Math.round(v))}</span></td>`;};
   return `<div class="card" style="margin-top:14px"><div class="paga-top"><div>${head}</div>${anos.length>1?`<div class="seg" id="fano">${anos.map(a=>`<button aria-pressed="${a===MAPA_ANO}" data-a="${a}">${a}</button>`).join("")}</div>`:""}</div>
-    <div class="chips">${totAno?`<span>🏆 Melhor mês: <b>${MES[melhorM]}</b> · ${money(tot[melhorM])}</span>`:""}<span>📅 <b>${comProv}</b> de 12 meses com proventos</span>${seq>1?`<span>🔥 <b>${seq}</b> meses seguidos recebendo</span>`:""}<span>💰 Recebido em ${MAPA_ANO}: <b>${money(totAno)}</b></span>${totF.some(v=>v)?`<span>⏳ A receber: <b>${money(totF.reduce((a,b)=>a+b,0))}</b></span>`:""}</div>
+    <div class="chips">${totAno?`<span>${ic3d("trofeu",20)}Melhor mês: <b>${MES[melhorM]}</b> · ${money(tot[melhorM])}</span>`:""}<span>${ic3d("calendario",20)}<b>${comProv}</b> de 12 meses com proventos</span>${seq>1?`<span>${ic3d("chama",20)}<b>${seq}</b> meses seguidos recebendo</span>`:""}<span>${ic3d("moedas",20)}Recebido em ${MAPA_ANO}: <b>${money(totAno)}</b></span>${totF.some(v=>v)?`<span>${ic3d("ampulheta",20)}A receber: <b>${money(totF.reduce((a,b)=>a+b,0))}</b></span>`:""}</div>
     <div class="tbl-wrap"><table class="mapa"><thead><tr><th>Ativo</th>${MES.map((m,i)=>`<th class="${isCur(i)?"cur":""}">${m}</th>`).join("")}<th>Total</th></tr></thead>
     <tbody>${rows.map(g=>`<tr><td><span class="tkd" style="background:${clsColor(ativo(g.tk).cls)}"></span><b>${esc(g.tk)}</b></td>${g.m.map((_,i)=>cel(g,i)).join("")}<td class="num"><b>${money0(g.t)}</b></td></tr>`).join("")}</tbody>
-    <tfoot><tr><td>Total do mês</td>${tot.map((v,i)=>`<td class="num ${isCur(i)?"cur":""}">${v||totF[i]?(i===melhorM&&v?"🏆<br>":"")+N0.format(Math.round(v+totF[i])):"·"}</td>`).join("")}<td class="num">${money0(totAno+totF.reduce((a,b)=>a+b,0))}</td></tr></tfoot></table></div>
+    <tfoot><tr><td>Total do mês</td>${tot.map((v,i)=>`<td class="num ${isCur(i)?"cur":""}">${v||totF[i]?(i===melhorM&&v?ic3d("trofeu",16)+"<br>":"")+N0.format(Math.round(v+totF[i])):"·"}</td>`).join("")}<td class="num">${money0(totAno+totF.reduce((a,b)=>a+b,0))}</td></tr></tfoot></table></div>
     <p class="mut" style="font-size:11.5px;margin:8px 0 0">Valores brutos em reais, pela quantidade que você tinha na data com. Toque numa moeda para ver o detalhe.</p></div>`;
 }
 function formContas(){
   let L=contasLista().map(c=>({...c}));
-  const linha=(c,i)=>`<div class="crow" data-i="${i}"><input class="ce" value="${esc(c.e)}" maxlength="4" aria-label="Ícone"><input class="cn" value="${esc(c.n)}" placeholder="Nome da conta" aria-label="Conta"><input class="cv2" inputmode="decimal" value="${c.v?String(c.v).replace(".",","):""}" placeholder="R$/mês" aria-label="Valor por mês (R$)"><button type="button" class="btn" data-up title="Subir na lista" aria-label="Subir">↑</button><button type="button" class="btn" data-rm title="Remover" aria-label="Remover">×</button></div>`;
+  const linha=(c,i)=>`<div class="crow" data-i="${i}"><select class="ce" aria-label="Ícone">${ICONES_CONTA.map(([k,t])=>`<option value="${k}" ${k===contaIc(c)?"selected":""}>${t}</option>`).join("")}</select><input class="cn" value="${esc(c.n)}" placeholder="Nome da conta" aria-label="Conta"><input class="cv2" inputmode="decimal" value="${c.v?String(c.v).replace(".",","):""}" placeholder="R$/mês" aria-label="Valor por mês (R$)"><button type="button" class="btn" data-up title="Subir na lista" aria-label="Subir">↑</button><button type="button" class="btn" data-rm title="Remover" aria-label="Remover">×</button></div>`;
   modal(`<div class="mh"><h3>Suas contas do mês</h3><button class="x" data-close aria-label="Fechar">×</button></div>
     <p class="mut" style="font-size:12.5px;margin-top:0">Os proventos pagam as contas de cima para baixo. Deixe no topo as que você quer cobrir primeiro. Use os valores das suas contas.</p>
     <div id="clist"></div>
     <div class="acts" style="justify-content:space-between;flex-wrap:wrap"><div style="display:flex;gap:8px"><button class="btn" id="cAdd">+ Conta</button><button class="btn" id="cPad">Restaurar padrão</button></div><div style="display:flex;gap:8px"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="cOk">Salvar</button></div></div>`,
   (ov,close)=>{
     const box=ov.querySelector("#clist");
-    const ler=()=>{L=[...box.querySelectorAll(".crow")].map(r=>({e:r.querySelector(".ce").value.trim()||"💸",n:r.querySelector(".cn").value.trim(),v:parseNum(r.querySelector(".cv2").value)||0}));};
+    const ler=()=>{L=[...box.querySelectorAll(".crow")].map(r=>({i:r.querySelector(".ce").value||"outro",n:r.querySelector(".cn").value.trim(),v:parseNum(r.querySelector(".cv2").value)||0}));};
     const pinta=()=>{box.innerHTML=L.map(linha).join("");};
     pinta();
     box.addEventListener("click",e=>{const r=e.target.closest(".crow"); if(!r) return; const i=+r.dataset.i;
       if(e.target.closest("[data-up]")&&i>0){ler(); [L[i-1],L[i]]=[L[i],L[i-1]]; pinta();}
       else if(e.target.closest("[data-rm]")){ler(); L.splice(i,1); pinta();}});
-    ov.querySelector("#cAdd").addEventListener("click",()=>{ler(); L.push({e:"💸",n:"",v:0}); pinta(); box.lastElementChild.querySelector(".cn").focus();});
+    ov.querySelector("#cAdd").addEventListener("click",()=>{ler(); L.push({i:"outro",n:"",v:0}); pinta(); box.lastElementChild.querySelector(".cn").focus();});
     ov.querySelector("#cPad").addEventListener("click",()=>{L=CONTAS_PADRAO.map(c=>({...c})); pinta();});
     ov.querySelector("#cOk").addEventListener("click",()=>{ler(); V.prefs.contas=L.filter(c=>c.n&&c.v>0); save(); close(); render(); toast("Contas salvas.");});
   });
@@ -3454,12 +3706,12 @@ function importarB3(){
       plan=planoB3(P,sub);
       const chP=d=>d.tk+"|"+d.pay+"|"+(+d.rate).toFixed(6), temP=new Set(sub?[]:V.provMan.map(chP));
       const provNovos=P.provs.filter(d=>!temP.has(chP(d))).length, provDup=P.provs.length-provNovos;
-      res.innerHTML=`<div class="banner info" style="margin:0 0 10px;display:block">${P.lidos.map(l=>`📄 <b>${esc(l.nome)}</b>: ${esc(l.tipos)}`).join("<br>")}</div>
+      res.innerHTML=`<div class="banner info" style="margin:0 0 10px;display:block">${P.lidos.map(l=>`<b>${esc(l.nome)}</b>: ${esc(l.tipos)}`).join("<br>")}</div>
         <label class="chk" style="margin:0 0 10px"><input type="checkbox" id="bSub" ${sub?"checked":""}> Substituir os lançamentos e proventos atuais (use com o extrato completo e o consolidado mensal)</label>
-        ${!sub&&V.lanc.length?`<p class="mut" style="margin:0 0 8px">➕ Modo <b>acrescentar</b>: só entra o que ainda não está no app; o que já existe é mantido.</p>`:""}
+        ${!sub&&V.lanc.length?`<p class="mut" style="margin:0 0 8px">Modo <b>acrescentar</b>: só entra o que ainda não está no app; o que já existe é mantido.</p>`:""}
         <p style="margin:0 0 8px"><b class="pos">${plan.novos.length} lançamento(s)</b> e <b class="pos">${provNovos} provento(s)</b> serão importados${plan.dup||provDup?` · já estavam no app: ${[plan.dup?plan.dup+" lançamento(s)":"",provDup?provDup+" provento(s)":""].filter(Boolean).join(" e ")}`:""}${P.rf.length?` · ${P.rf.length} título(s) de renda fixa`:""}.</p>
-        ${!P.pos&&(sub||!V.lanc.length)?`<div class="banner warn" style="margin:0 0 8px">⚠️ <div>Sem relatório de posição: ativos comprados antes de <b>${brDate(plan.inicio)}</b> ficariam de fora. Inclua o <b>Consolidado mensal</b> mais recente.</div></div>`:""}
-        ${plan.ini.length?`<div class="banner warn" style="margin:0 0 8px;display:block">✍️ <b>${plan.ini.length} ativo(s) têm cotas compradas antes de ${brDate(plan.inicio)}</b>, fora do período das negociações. Informe o <b>preço médio atual</b> (o que aparece na corretora ou no Investidor10). Para ativos já vendidos, informe o preço médio que você pagou. Em branco, o app usa uma estimativa.</div>
+        ${!P.pos&&(sub||!V.lanc.length)?`<div class="banner warn" style="margin:0 0 8px">${ic3d("alerta",24)}<div>Sem relatório de posição: ativos comprados antes de <b>${brDate(plan.inicio)}</b> ficariam de fora. Inclua o <b>Consolidado mensal</b> mais recente.</div></div>`:""}
+        ${plan.ini.length?`<div class="banner warn" style="margin:0 0 8px;display:block"><b>${plan.ini.length} ativo(s) têm cotas compradas antes de ${brDate(plan.inicio)}</b>, fora do período das negociações. Informe o <b>preço médio atual</b> (o que aparece na corretora ou no Investidor10). Para ativos já vendidos, informe o preço médio que você pagou. Em branco, o app usa uma estimativa.</div>
           <div class="tbl-wrap"><table><thead><tr><th>Ativo</th><th class="r">Cotas antes</th><th class="r">Cotas hoje</th><th class="r">Preço médio (R$)</th></tr></thead><tbody>
           ${plan.ini.map((x,i)=>`<tr><td><b>${x.tk}</b></td><td class="r">${N0.format(x.qtd)}</td><td class="r">${N0.format(x.qHoje)}</td><td class="r"><input data-ini="${i}" inputmode="decimal" placeholder="${n2(x.sug)}" style="width:110px;padding:6px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--surface-2);text-align:right"></td></tr>`).join("")}</tbody></table></div>`:""}
         ${P.avisos.length?`<details><summary>Observações (${P.avisos.length})</summary><ul style="margin:6px 0 0;padding-left:18px">${P.avisos.map(a=>`<li>${esc(a)}</li>`).join("")}</ul></details>`:""}`;
@@ -3619,7 +3871,7 @@ function detalhe(tk){
     ${a.cls==="Ação"&&m.cvmRef?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">Indicadores calculados com o balanço oficial entregue à CVM (referência ${esc(m.cvmRef.split("-").reverse().join("/"))}, últimos 12 meses) e a cotação atual. Payout e DY: dividendos e JCP efetivamente pagos no período.</p>`:""}
     ${fii?`<p class="mut" style="font-size:11.5px;margin:6px 0 0">${m.dySrc==="hist"?"DY 12m calculado com o histórico de rendimentos por cota do fundo (últimos 12 meses), completado com os seus proventos da B3"+(m.dyParcial?`. <b>O rendimento mais recente ainda não apareceu na fonte</b> (último registrado com data-ex em ${esc((m.dyUlt||"").split("-").reverse().join("/"))}); o DY pode estar um pouco abaixo do real`:""):m.dySrc==="cvm"?"DY 12m estimado com os rendimentos informados pelo fundo à CVM":"DY 12m calculado com os seus proventos"}${m.cvm?` · VP por cota: ${a.vp?"informado por você":"CVM, informe de "+esc((m.cvm.vpMes||"").split("-").reverse().join("/"))}`:""}.</p>`:""}
     <h3 style="font-size:14px;margin:12px 0 6px">Análise</h3>
-    <ul style="margin:0;padding:0;list-style:none;font-size:13px;display:flex;flex-direction:column;gap:5px">${s.f.length?s.f.map(f=>`<li>${LVL[f.lv][2]} ${esc(f.t)}</li>`).join(""):"<li>🟢 Nenhum indicador fora dos limites.</li>"}</ul>
+    <ul style="margin:0;padding:0;list-style:none;font-size:13px;display:flex;flex-direction:column;gap:5px">${s.f.length?s.f.map(f=>`<li style="display:flex;gap:7px;align-items:center">${orb(f.lv,15)} ${esc(f.t)}</li>`).join(""):`<li style="display:flex;gap:7px;align-items:center">${orb("g",15)} Nenhum indicador fora dos limites.</li>`}</ul>
     <div class="links" style="margin-top:12px"><a href="${i10}" target="_blank" rel="noopener">Investidor10 ↗</a><a href="${si}" target="_blank" rel="noopener">Status Invest ↗</a>${fii?`<a href="https://fnet.bmfbovespa.com.br/fnet/publico/abrirGerenciadorDocumentosCVM" target="_blank" rel="noopener">Relatórios (Fundos.NET) ↗</a>`:`<a href="https://www.rad.cvm.gov.br/ENET/frmConsultaExternaCVM.aspx" target="_blank" rel="noopener">Fatos relevantes (CVM) ↗</a>`}</div>
     <details ${!isListed(a.cls)||fii?"open":""}><summary>Configurações do ativo</summary><div class="frm" style="margin-top:4px">
       <div class="fld"><label>Classe</label><select id="dCls">${CLASSES.map(c=>`<option ${a.cls===c?"selected":""}>${c}</option>`).join("")}</select></div>
@@ -3659,13 +3911,13 @@ function vAjustes(){
       <div class="fld"><label>Atualizar automaticamente ao abrir, se os dados tiverem mais de</label><select id="aAuto">${[1,3,6,12,24].map(h=>`<option value="${h}" ${V.prefs.autoHoras==h?"selected":""}>${h} hora${h>1?"s":""}</option>`).join("")}</select></div>
       <div class="acts"><button class="btn" id="aTestar">Testar conexão</button><button class="btn primary" id="aSalvaTok">Salvar</button></div>
       ${V._erros&&V._erros.length?`<details><summary>Pendências da atualização de ${new Date(V._errosTs||Date.now()).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})} neste aparelho (${V._erros.length})</summary><ul style="font-size:12px;margin:6px 0 0;padding-left:18px">${V._erros.slice(0,20).map(e=>`<li>${esc(e)}</li>`).join("")}</ul></details>`:""}</div>
-    <div class="card"><h3>Conta e segurança</h3><p class="cap">Conta: <b>${esc((ME&&ME.email)||V.perfil.email||"")}</b> (a mesma do CruzOn Planner) · ${!ME?"⚠️ só neste aparelho":NUVEM?"☁️ sincronizada entre aparelhos":"⚠️ nuvem indisponível"}.<br>A carteira é criptografada com AES-256 antes de ir para a nuvem. A chave vem da sua senha (PBKDF2, ${N0.format(ITERS)} iterações) e nunca é gravada.<br><span class="mut">Versão do app: ${APP_VER}</span></p>
+    <div class="card"><h3>Conta e segurança</h3><p class="cap">Conta: <b>${esc((ME&&ME.email)||V.perfil.email||"")}</b> (a mesma do CruzOn Planner) · ${!ME?"só neste aparelho":NUVEM?"sincronizada entre aparelhos":"nuvem indisponível"}.<br>A carteira é criptografada com AES-256 antes de ir para a nuvem. A chave vem da sua senha (PBKDF2, ${N0.format(ITERS)} iterações) e nunca é gravada.<br><span class="mut">Versão do app: ${APP_VER}</span></p>
       <div class="fld"><label>Bloquear após inatividade</label><select id="aLock">${[5,10,15,30,60].map(m=>`<option value="${m}" ${V.prefs.lock==m?"selected":""}>${m} minutos</option>`).join("")}</select></div>
       <div class="fld"><label>Seu nome</label><input id="aNome" value="${esc(V.perfil.nome)}" maxlength="60"></div>
       <div class="acts"><button class="btn" id="aSair">Sair da conta neste aparelho</button><button class="btn" id="aSenha">Trocar senha</button><button class="btn primary" id="aSalvaSeg">Salvar</button></div></div>
     <div class="card"><h3>Instalar o app</h3><p class="cap">Tenha o CruzInvest com ícone próprio no computador e no celular, abrindo em tela cheia, sem precisar do navegador.</p>
-      ${instalado()?`<p style="font-size:13px">✅ Você já está usando o app instalado.</p>`:`<button class="btn primary" data-instalar>Instalar neste aparelho</button>`}</div>
-    <div class="card"><h3>Limites da análise de saúde</h3><p class="cap">Quando um indicador passa destes valores, o ativo recebe um alerta 🟡 ou 🔴.</p>
+      ${instalado()?`<p style="font-size:13px;display:flex;gap:8px;align-items:center">${ic3d("ok",22)} Você já está usando o app instalado.</p>`:`<button class="btn primary" data-instalar>Instalar neste aparelho</button>`}</div>
+    <div class="card"><h3>Limites da análise de saúde</h3><p class="cap">Quando um indicador passa destes valores, o ativo recebe um alerta de atenção ou de risco.</p>
       ${["Ações","FIIs","Carteira"].map(g=>`<h4 style="margin:12px 0 6px;font-size:12.5px;color:var(--ink-2)">${g}</h4><div class="lims">${grp(g)}</div>`).join("")}
       <div class="acts"><button class="btn" id="aLimRes">Restaurar padrões</button><button class="btn primary" id="aLimOk">Salvar limites</button></div></div>
     ${assinaturaInvHtml()}
@@ -3690,8 +3942,8 @@ vAjustes.after=m=>{
   $("#aTestar").addEventListener("click",async()=>{const old=V.prefs.token; V.prefs.token=$("#aTok").value.trim(); const tk=tickers().find(t=>isListed(ativo(t).cls))||"BBAS3";
     const oldN=V.prefs.nivel; V.prefs.nivel=0;
     try{const x=await brapiNivel(tk); const n=V.prefs.nivel||0;
-      toast("✅ Conexão ok: "+tk+" "+money(x.regularMarketPrice)+[" · indicadores e proventos liberados"," · indicadores ok; proventos: registre ou importe na aba Proventos"," · só cotações no seu plano"][n]);}
-    catch(e){V.prefs.nivel=oldN; toast("❌ "+e.message);} V.prefs.token=old; save();});
+      toast("Conexão ok: "+tk+" "+money(x.regularMarketPrice)+[" · indicadores e proventos liberados"," · indicadores ok; proventos: registre ou importe na aba Proventos"," · só cotações no seu plano"][n]);}
+    catch(e){V.prefs.nivel=oldN; toast(e.message,"risco");} V.prefs.token=old; save();});
   $("#aSalvaSeg").addEventListener("click",()=>{V.prefs.lock=+$("#aLock").value; V.perfil.nome=$("#aNome").value.trim()||V.perfil.nome; save(); armLock(); toast("Salvo.");});
   $("#aSair").addEventListener("click",()=>{ if(confirm("Sair da conta neste aparelho? A carteira continua salva na nuvem; é só entrar de novo.")) sairConta(); });
   $("#aSenha").addEventListener("click",()=>modal(`<div class="mh"><h3>Trocar senha</h3><button class="x" data-close>×</button></div>
