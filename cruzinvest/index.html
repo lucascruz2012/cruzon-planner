@@ -462,12 +462,13 @@ details{border-radius:14px}
 .mesnav .btn:disabled{opacity:.35;box-shadow:none}
 .mesnav-t{flex:1;text-align:center;line-height:1.25}.mesnav-t b{display:block;font-size:15px}.mesnav-t small{color:var(--muted);font-size:11.5px}
 .notaw{display:inline-block;line-height:0;cursor:default;transition:transform .15s}.notaw:hover{transform:scale(1.12) rotate(-3deg)}
-.nota{display:inline-block;vertical-align:middle;filter:drop-shadow(0 2px 2px rgba(14,90,48,.35))}
-.nota .n1{fill:#1DB45E;stroke:#0B7A3B;stroke-width:1.4}.nota .n2{fill:none;stroke:#9BF0BE;stroke-width:1;opacity:.75}
-.nota .n3{fill:#57D88C;stroke:#0B7A3B;stroke-width:.8}.nota .n4{fill:#0B5E2E;font:800 10px var(--fn)}.nota .n5{fill:#fff;opacity:.18}
-.nota.fut{filter:drop-shadow(0 1px 1.5px rgba(14,90,48,.18))}
-.nota.fut .n1{fill:#CFF3DD;stroke:#86D3A5}.nota.fut .n2{stroke:#fff;opacity:.9}.nota.fut .n3{fill:#E9FAF0;stroke:#9ADDB6}.nota.fut .n4{fill:#5DB683}
-html[data-theme="dark"] .nota.fut .n1{fill:#2B5A43;stroke:#4F9C74}html[data-theme="dark"] .nota.fut .n3{fill:#3C7457;stroke:#5FAF85}html[data-theme="dark"] .nota.fut .n4{fill:#A8E6C3}html[data-theme="dark"] .nota.fut .n2{stroke:#7FC8A0}
+.nota{display:inline-block;vertical-align:middle;filter:drop-shadow(0 2px 2.5px rgba(10,70,38,.32))}
+.nota .b{fill:url(#notaPg);stroke:#0A6A35;stroke-width:1.2}.nota .i{fill:none;stroke:#BFF5D5;stroke-width:.8;opacity:.8}
+.nota .w{fill:none;stroke:#A6EEC4;stroke-width:.7;opacity:.55}.nota .o{fill:url(#notaPo);stroke:#0A6A35;stroke-width:.9}.nota .e{fill:#0B6033;opacity:.85}
+.nota .t{fill:#F2FFF7;font:800 13px var(--fn);letter-spacing:-.3px}.nota .c{fill:#E6FFEF;font:800 6px var(--fn)}.nota .s{fill:#0B5E2E;opacity:.35}.nota .h{fill:#fff;opacity:.16}
+.nota.fut{filter:drop-shadow(0 1px 1.5px rgba(10,70,38,.16))}
+.nota.fut .b{fill:url(#notaFg);stroke:#8ACFA7}.nota.fut .i{stroke:#fff}.nota.fut .w{stroke:#fff;opacity:.8}.nota.fut .o{fill:url(#notaFo);stroke:#8ACFA7}.nota.fut .e{fill:#7CC79E;opacity:.7}
+.nota.fut .t{fill:#4FAE7C}.nota.fut .c{fill:#5DB683}.nota.fut .s{fill:#9ADDB6;opacity:.5}
 .hc .tk{gap:13px;font-size:16px}
 .hc .tk img,.hc .tk .ph{width:54px;height:54px;border-radius:16px}
 .hc .tk img{background:#fff;padding:5px;border:1px solid var(--line);box-shadow:0 8px 18px -12px rgba(12,31,43,.55)}
@@ -475,6 +476,33 @@ html[data-theme="dark"] .nota.fut .n1{fill:#2B5A43;stroke:#4F9C74}html[data-them
 .hc .tk small{font-size:11.5px}
 .hc .hd .tk{flex:1;min-width:0}.hc .hd .pill{flex:0 0 auto}.hc .tk small{max-width:100%}
 @media(max-width:760px){ .mesnav{margin-top:10px} }
+
+/* conheça a empresa / o fundo */
+.conhecabtn{display:inline-flex;align-items:center;gap:5px;margin-top:6px;border:1px solid color-mix(in srgb,var(--em1) 40%,var(--line));background:color-mix(in srgb,var(--em1) 8%,var(--surface));color:var(--em2);border-radius:999px;padding:3px 10px 3px 4px;font-weight:700;font-size:11.5px;white-space:nowrap;transition:background .15s}
+.conhecabtn:hover{background:color-mix(in srgb,var(--em1) 16%,var(--surface))}
+html[data-theme="dark"] .conhecabtn{color:var(--glow)}
+.cn-fotos{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -4px 12px;padding:0 4px 4px}
+.cn-fotos figure{margin:0;flex:0 0 min(86%,460px);scroll-snap-align:start}
+.cn-fotos img{width:100%;height:230px;object-fit:cover;border-radius:16px;background:var(--surface-3);box-shadow:var(--shadow)}
+.cn-fotos figcaption{font-size:10.5px;margin-top:4px}.cn-fotos a,.cn-src a{color:var(--muted)}
+.cn-h{margin:16px 0 6px;font-size:14px}.cn-p{margin:0;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.cn-src{font-size:11px;color:var(--muted);margin:6px 0 0}
+.cn-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:14px}
+.cn-info div{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0}
+.cn-info small{display:block;font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}.cn-info b{font-size:12.5px;word-break:break-word}
+.cn-mapa{border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--surface-3)}
+.cn-mapa iframe{display:block;width:100%;height:300px;border:0}
+.cn-tipo{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:12px 14px;background:var(--surface-2);border:1px solid var(--line)}
+.cn-tipo b{font-size:15px}.cn-tipo p{margin:3px 0 0;font-size:12.8px;line-height:1.5;color:var(--ink-2)}
+.cn-tipo.papel{background:color-mix(in srgb,#eda100 10%,var(--surface));border-color:color-mix(in srgb,#eda100 35%,var(--line))}
+.cn-tipo.tijolo{background:color-mix(in srgb,#2a78d6 8%,var(--surface));border-color:color-mix(in srgb,#2a78d6 30%,var(--line))}
+.cn-bar{display:flex;height:14px;border-radius:8px;overflow:hidden;background:var(--surface-3)}.cn-bar i{display:block;height:100%}
+.cn-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12px;color:var(--ink-2)}.cn-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.cn-imv{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:10px}
+.cn-imv button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:9px 11px;display:flex;flex-direction:column;gap:2px}
+.cn-imv button[aria-pressed="true"]{border-color:var(--em1);box-shadow:0 0 0 3px color-mix(in srgb,var(--em1) 18%,transparent)}
+.cn-imv b{font-size:12.5px}.cn-imv small{font-size:11px;color:var(--muted)}.cn-imv span{font-size:11px;color:var(--ink-2);font-weight:600}
+@media(max-width:760px){ .cn-fotos img{height:190px} .cn-mapa iframe{height:240px} }
 </style>
 </head>
 <body>
@@ -560,6 +588,11 @@ html[data-theme="dark"] .nota.fut .n1{fill:#2B5A43;stroke:#4F9C74}html[data-them
   <footer>CruzInvest é uma ferramenta de acompanhamento. Os alertas são filtros de atenção baseados em indicadores públicos e <b>não constituem recomendação de compra ou venda</b>. Dados: brapi.dev e Banco Central (SGS). Proventos exibidos em valor bruto.</footer>
 </div>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="notaPg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34C878"/><stop offset=".55" stop-color="#1A9E55"/><stop offset="1" stop-color="#0F7F42"/></linearGradient>
+<radialGradient id="notaPo" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#9CEBC0"/><stop offset="1" stop-color="#3DBB76"/></radialGradient>
+<linearGradient id="notaFg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E4F8EC"/><stop offset="1" stop-color="#BFEAD0"/></linearGradient>
+<radialGradient id="notaFo" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D3F2E0"/></radialGradient></defs></svg>
 <div id="tip"></div>
 <div id="toast"></div>
 
@@ -2536,7 +2569,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-19e";
+const APP_VER="2026-11-19f";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -3358,6 +3391,62 @@ function provMensal(meses,fut){
 function provChart(m){const d=provMensal(m,3); if(!d.some(x=>x.v||x.v2)) return `<div class="empty" style="padding:26px">Sem proventos registrados. Atualize os dados para buscar o histórico de cada ativo.</div>`;
   return `<div class="legend"><span><i style="background:var(--c3)"></i>Recebido</span><span><i style="background:var(--c3);opacity:.38"></i>A receber</span></div>`+barChart(d,{color:"var(--c3)",aria:"Proventos por mês"});}
 
+
+/* ======================= CONHEÇA A EMPRESA / O FUNDO ======================= */
+let PERFIS=null, PERFIS_P=null;
+function carregaPerfis(){ if(PERFIS) return Promise.resolve(PERFIS); if(PERFIS_P) return PERFIS_P;
+  PERFIS_P=fetch("dados/perfis.json",{cache:"no-cache"}).then(r=>{if(!r.ok) throw new Error("HTTP "+r.status); return r.json();}).then(j=>PERFIS=j).finally(()=>{PERFIS_P=null;}); return PERFIS_P; }
+const temConheca=tk=>["Ação","FII"].includes(ativo(tk).cls);
+const conhecaBtn=tk=>temConheca(tk)?`<button type="button" class="conhecabtn" data-conheca="${esc(tk)}">${ic3d(ativo(tk).cls==="FII"?"condominio":"grafico",18)}${ativo(tk).cls==="FII"?"Conheça o fundo":"Conheça a empresa"}</button>`:"";
+const mapaUrl=end=>"https://maps.google.com/maps?q="+encodeURIComponent(end+", Brasil")+"&t=k&z=17&output=embed";
+const fotoUrl=f=>"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(f)+"?width=900";
+const tipoFii=f=>{const c=f.comp||{}, papel=(c.cri||0)+(c.lci||0);
+  if(papel>=.5) return ["papel","Fundo de papel","Investe principalmente em <b>títulos de dívida do setor imobiliário</b> (CRI e LCI). Na prática, empresta dinheiro a incorporadoras, construtoras e empresas e recebe <b>juros</b>, em geral corrigidos pelo IPCA ou pelo CDI. Não é dono dos imóveis: o risco principal é o de <b>atraso ou calote dos devedores</b>, reduzido pelas garantias de cada operação."];
+  if((c.fii||0)>=.5) return ["fof","Fundo de fundos","Compra <b>cotas de outros FIIs</b>, montando uma carteira diversificada. A renda vem dos rendimentos e dos ganhos na venda dessas cotas; há duas camadas de taxas (a deste fundo e a dos fundos investidos)."];
+  if((c.imoveis||0)>=.5||(f.nImoveis&&!papel)) return ["tijolo","Fundo de tijolo","É <b>dono de imóveis</b> e recebe <b>aluguel</b> dos inquilinos. A renda depende da ocupação (vacância), dos reajustes dos contratos e da saúde dos inquilinos."];
+  return ["hibrido","Fundo híbrido","Combina <b>imóveis</b>, <b>títulos de dívida imobiliária</b> e <b>cotas de outros fundos</b>. A renda vem de aluguéis, juros e rendimentos dessas cotas."];};
+const COMP_L=[["imoveis","Imóveis","#2a78d6"],["cri","CRI/CRA (dívida)","#eda100"],["lci","LCI/LCA","#e87ba4"],["fii","Cotas de FIIs","#6250d6"],["acoes","Ações e SPEs","#eb6834"],["caixa","Caixa e renda fixa","#1baf7a"],["outros","Outros","#8a99a6"]];
+function conheca(tk){
+  const a=ativo(tk), fii=a.cls==="FII", m=mk(tk);
+  const close=modal(`<div class="mh"><div class="tk" style="font-size:18px">${m.logo?`<img src="${esc(m.logo)}" alt="" onerror="this.remove()">`:""}<span class="ph" style="--cc:${clsColor(a.cls)}">${esc(tk.slice(0,4))}</span><div>${esc(tk)}<small>${fii?"Conheça o fundo":"Conheça a empresa"}</small></div></div><button class="x" data-close aria-label="Fechar">×</button></div>
+    <div id="cnBox"><div class="empty" style="padding:30px">Carregando…</div></div>`,(ov)=>{
+    carregaPerfis().then(P=>{
+      const box=ov.querySelector("#cnBox"); const d=(fii?P.fiis:P.acoes)||{}; const f=d[tk];
+      if(!f){ box.innerHTML=`<div class="empty">${ic3d("info",40)}Ainda não há informações públicas reunidas para <b>${esc(tk)}</b>.</div>`; return; }
+      const info=(l,v)=>v?`<div><small>${l}</small><b>${v}</b></div>`:"";
+      const site=f.site?`<a href="${esc(f.site)}" target="_blank" rel="noopener">${esc(f.site.replace(/^https?:\/\//,"").replace(/\/$/,"").slice(0,40))}</a>`:"";
+      let h="";
+      if(!fii){
+        const fotos=(f.fotos||[]);
+        if(fotos.length) h+=`<div class="cn-fotos">${fotos.map(x=>`<figure><img src="${fotoUrl(x)}" alt="${esc(x.replace(/\.[a-z]+$/i,"").replace(/_/g," "))}" loading="lazy" onerror="this.closest('figure').remove()"><figcaption><a href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(x)}" target="_blank" rel="noopener">Foto: Wikimedia Commons</a></figcaption></figure>`).join("")}</div>`;
+        h+=`<h4 class="cn-h">Sobre a empresa</h4><p class="cn-p">${esc(f.resumo||f.ativ||"Descrição não informada.")}</p>${f.wiki?`<p class="cn-src"><a href="https://pt.wikipedia.org/wiki/${encodeURIComponent(f.wiki.replace(/ /g,"_"))}" target="_blank" rel="noopener">Ler mais na Wikipédia</a></p>`:""}
+          ${f.resumo&&f.ativ?`<h4 class="cn-h">Atividade (declarada à CVM)</h4><p class="cn-p">${esc(f.ativ)}</p>`:""}
+          <div class="cn-info">${info("Razão social",esc(f.nome))}${info("Setor",esc(f.setor))}${info("Fundada em",esc(f.desde))}${info("Site",site)}${info("Sede",esc(f.sede))}</div>`;
+        if(f.sede) h+=`<h4 class="cn-h">Sede vista de cima</h4><div class="cn-mapa"><iframe src="${mapaUrl(f.sede)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa da sede"></iframe></div><p class="cn-src">Imagem de satélite: Google Maps, pelo endereço da sede informado à CVM.</p>`;
+      } else {
+        const [tp,tn,tx]=tipoFii(f), c=f.comp||{};
+        h+=`<div class="cn-tipo ${tp}">${ic3d(tp==="papel"?"info":tp==="fof"?"grafico":tp==="tijolo"?"condominio":"cofre",34)}<div><b>${tn}</b><p>${tx}</p></div></div>`;
+        if(Object.keys(c).length) h+=`<h4 class="cn-h">Onde o dinheiro está aplicado</h4><div class="cn-bar">${COMP_L.filter(([k])=>c[k]>=.005).map(([k,l,cor])=>`<i style="width:${(c[k]*100).toFixed(1)}%;background:${cor}" data-tip="${esc(`<b>${l}</b>${pct(c[k],1)}`)}"></i>`).join("")}</div>
+          <div class="cn-leg">${COMP_L.filter(([k])=>c[k]>=.005).map(([k,l,cor])=>`<span><i style="background:${cor}"></i>${l} <b>${pct(c[k],0)}</b></span>`).join("")}</div><p class="cn-src">Informe mensal à CVM (${esc(f.refComp||"")}).</p>`;
+        const im=f.imoveis||[];
+        if(im.length){
+          h+=`<h4 class="cn-h">Imóveis do fundo${f.nImoveis>im.length?` <span class="mut">(${im.length} de ${f.nImoveis})</span>`:""}</h4>
+            <div class="cn-mapa"><iframe id="cnMap" src="${mapaUrl(im[0].end)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Vista aérea do imóvel"></iframe></div>
+            <p class="cn-src" id="cnMapT">Vista aérea: <b>${esc(im[0].nome)}</b> · imagem de satélite do Google Maps pelo endereço informado à CVM.</p>
+            <div class="cn-imv">${im.map((x,i)=>`<button type="button" data-im="${i}" aria-pressed="${i===0}"><b>${esc(x.nome)}</b><small>${esc(x.end)}</small><span>${x.area?N0.format(x.area)+" m²":""}${x.rec?` · ${pct(x.rec,0)} da receita`:""}${x.vac!=null&&x.area?` · vacância ${pct(x.vac,0)}`:""}</span></button>`).join("")}</div>`;
+        } else if(tp==="papel") h+=`<p class="cn-p mut">Por ser um fundo de papel, não há imóveis próprios para mostrar no mapa: os ativos são títulos de dívida.</p>`;
+        h+=`<div class="cn-info">${info("Nome",esc(f.nome))}${info("Segmento",esc(f.seg))}${info("Mandato",esc(f.mandato))}${info("Gestão",esc(f.gestao))}${info("Administrador",esc(f.adm))}${info("Em funcionamento desde",esc(f.desde))}${info("Site",site)}</div>`;
+      }
+      h+=`<p class="cn-src" style="margin-top:12px">Fontes públicas: ${fii?"informes da CVM":"CVM (formulário cadastral), Wikidata e Wikipédia"}${fii?"":"; fotos da Wikimedia Commons, de uso livre"}. Atualizado em ${new Date(P.gerado).toLocaleDateString("pt-BR")}.</p>`;
+      box.innerHTML=h; bindTips(box);
+      box.querySelectorAll("[data-im]").forEach(b=>b.addEventListener("click",()=>{const x=(f.imoveis||[])[+b.dataset.im]; box.querySelector("#cnMap").src=mapaUrl(x.end);
+        box.querySelector("#cnMapT").innerHTML=`Vista aérea: <b>${esc(x.nome)}</b> · imagem de satélite do Google Maps pelo endereço informado à CVM.`;
+        box.querySelectorAll("[data-im]").forEach(o=>o.setAttribute("aria-pressed",o===b?"true":"false")); box.querySelector(".cn-mapa").scrollIntoView({behavior:"smooth",block:"nearest"});}));
+    }).catch(()=>{ ov.querySelector("#cnBox").innerHTML=`<div class="empty">${ic3d("alerta",40)}Não foi possível carregar agora. Verifique a internet e tente de novo.</div>`; });
+  });
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-conheca]"); if(b){ e.stopPropagation(); e.preventDefault(); conheca(b.dataset.conheca);} },true);
+
 /* ---------- CARTEIRA ---------- */
 let SORT={k:"valor",d:-1}, FCLS="Todas";
 function vCarteira(){
@@ -3373,12 +3462,12 @@ function vCarteira(){
     <div class="toolbar"><div class="seg" id="fcls">${clsUsadas.map(c=>`<button aria-pressed="${c===FCLS}" data-c="${c}">${c}</button>`).join("")}</div></div></div>${avisos()}
     <div class="mob">
       <div class="sortbar" id="msort">${[["valor","Valor"],["ganhoPct","Valorização"],["chg","Dia"],["dy12","DY"],["sv","Saúde"],["tk","A-Z"]].map(([k,t])=>`<button aria-pressed="${SORT.k===k}" data-k="${k}">${t}${SORT.k===k?(SORT.d<0?" ↓":" ↑"):""}</button>`).join("")}</div>
-      <div class="mlist">${L.map(p=>`<div class="mcard" data-tk="${p.tk}"><div>${tkCell(p)}</div><div class="r"><div class="big">${money(p.valor)}</div><div class="sub ${sgn(p.ganho)}">${spct(p.ganhoPct)} · ${money(p.ganho)}</div></div>
+      <div class="mlist">${L.map(p=>`<div class="mcard" data-tk="${p.tk}"><div>${tkCell(p)}${conhecaBtn(p.tk)}</div><div class="r"><div class="big">${money(p.valor)}</div><div class="sub ${sgn(p.ganho)}">${spct(p.ganhoPct)} · ${money(p.ganho)}</div></div>
         <div class="foot"><span>${N0.format(p.qtd)} × ${p.semPreco?"—":money(p.preco)}${p.chg!=null?` <b class="${sgn(p.chg)}">${spct(p.chg)}</b>`:""}</span><span>DY ${p.dy12!=null?pct(p.dy12,1):"—"}${p.dyParcial?`<span title="Falta o rendimento mais recente na fonte; o DY pode estar um pouco abaixo do real">*</span>`:""} · ${pct(p.peso,1)}</span>${pill(p.sv)}</div></div>`).join("")}</div>
       <div class="card" style="margin-top:10px;display:flex;justify-content:space-between;gap:8px;font-size:13px"><b>Total ${FCLS==="Todas"?"":FCLS}</b><span class="num"><b>${money(sub.v)}</b> · <span class="${sgn(sub.g)}">${spct(sub.c?sub.g/sub.c:0)}</span></span></div>
     </div>
     <div class="card desk"><div class="tbl-wrap"><table><thead><tr>${th("tk","Ativo")}${th("sv","Saúde")}${th("qtd","Qtd",1)}${th("pm","Preço médio",1)}${th("preco","Cotação",1)}${th("chg","Dia",1)}${th("valor","Valor",1)}${th("ganhoPct","Valorização",1)}${th("dy12","DY 12m",1)}${th("prov12","Proventos 12m",1)}${th("peso","% carteira",1)}</tr></thead>
-    <tbody>${L.map(p=>`<tr class="click" data-tk="${p.tk}"><td>${tkCell(p)}</td><td>${pill(p.sv)}</td><td class="r num">${N0.format(p.qtd)}</td><td class="r num">${money(p.pm)}</td>
+    <tbody>${L.map(p=>`<tr class="click" data-tk="${p.tk}"><td>${tkCell(p)}${conhecaBtn(p.tk)}</td><td>${pill(p.sv)}</td><td class="r num">${N0.format(p.qtd)}</td><td class="r num">${money(p.pm)}</td>
       <td class="r num">${p.semPreco?'<span class="mut">—</span>':money(p.preco)}</td><td class="r num ${sgn(p.chg)}">${p.chg==null?"—":spct(p.chg)}</td><td class="r num"><b>${money(p.valor)}</b></td>
       <td class="r num ${sgn(p.ganho)}">${spct(p.ganhoPct)}<br><small>${money(p.ganho)}</small></td><td class="r num">${p.dy12!=null?pct(p.dy12):"—"}${p.dyParcial?`<span title="Falta o rendimento mais recente na fonte; o DY pode estar um pouco abaixo do real">*</span>`:""}</td><td class="r num">${money(p.prov12)}</td><td class="r num">${pct(p.peso,1)}</td></tr>`).join("")}</tbody>
     <tfoot><tr><td colspan="6"><b>Total ${FCLS==="Todas"?"":FCLS}</b></td><td class="r num"><b>${money(sub.v)}</b></td><td class="r num ${sgn(sub.g)}"><b>${spct(sub.c?sub.g/sub.c:0)}</b><br><small>${money(sub.g)}</small></td><td></td><td class="r num"><b>${money(sub.pr)}</b></td><td class="r num">${pct(C.total?sub.v/C.total:0,1)}</td></tr></tfoot></table></div></div>
@@ -3490,10 +3579,12 @@ function cardPaga(C){
     ${C.prov12>0&&R.totalContas?`<p class="mut" style="font-size:12.5px;margin:2px 0 0;display:flex;gap:8px;align-items:center">${ic3d("calendario",22)}<span>Nos últimos 12 meses você recebeu ${money(C.prov12)}: o bastante para pagar <b>${anoMeses.toLocaleString("pt-BR",{maximumFractionDigits:1})} ${anoMeses>=0.95&&anoMeses<1.05?"mês":"meses"}</b> de todas as contas da lista.</span></p>`:""}
     <div class="contas">${tiles}</div></div>`;
 }
-/* nota de dinheiro: verde vivo = pago, verde claro = a receber */
-function nota(w,fut){const h=Math.round(w*.54);
-  return `<svg class="nota${fut?" fut":""}" width="${w}" height="${h}" viewBox="0 0 60 32" aria-hidden="true"><rect class="n1" x="1" y="1" width="58" height="30" rx="4"/><rect class="n2" x="4.5" y="4.5" width="51" height="23" rx="2.5"/>
-    <circle class="n3" cx="30" cy="16" r="7.5"/><text class="n4" x="30" y="19.6" text-anchor="middle">$</text><circle class="n3" cx="11" cy="16" r="2.2"/><circle class="n3" cx="49" cy="16" r="2.2"/><path class="n5" d="M5 2h50a3 3 0 0 1 3 3v6H2V5a3 3 0 0 1 3-3z"/></svg>`;}
+/* nota de dinheiro no estilo da cédula do Real: verde vivo = pago, verde claro = a receber */
+function nota(w,fut){const h=Math.round(w*.5);
+  return `<svg class="nota${fut?" fut":""}" width="${w}" height="${h}" viewBox="0 0 80 40" aria-hidden="true"><rect class="b" x="1" y="1" width="78" height="38" rx="4.5"/>
+    <path class="w" d="M4 13c6-4 12 4 18 0s12-4 18 0M4 20c6-4 12 4 18 0s12-4 18 0M4 27c6-4 12 4 18 0s12-4 18 0"/><rect class="i" x="4" y="4" width="72" height="32" rx="2.5"/><rect class="s" x="44" y="4" width="3" height="32"/>
+    <ellipse class="o" cx="62" cy="20" rx="11" ry="13"/><path class="e" d="M62 9.5a4.6 4.6 0 0 1 4.6 4.8c0 2.2-1.2 4-2.6 4.8 3.6 1 6 3.5 6.6 8.2-2.4 2.6-5.3 4-8.6 4s-6.2-1.4-8.6-4c.6-4.7 3-7.2 6.6-8.2-1.4-.8-2.6-2.6-2.6-4.8A4.6 4.6 0 0 1 62 9.5z"/>
+    <text class="t" x="24" y="25" text-anchor="middle">R$</text><text class="c" x="9" y="11.5">$</text><text class="c" x="34.5" y="34.5">$</text><path class="h" d="M6 2h68a4 4 0 0 1 4 4v7H2V6a4 4 0 0 1 4-4z"/></svg>`;}
 const CLS_PL={"Ação":"Ações","FII":"FIIs","ETF":"ETFs","BDR":"BDRs","Renda fixa":"Renda fixa","Outro":"Outros"};
 function cardMapa(){
   const todosP=provTks().flatMap(proventosDe).filter(dataProv);
@@ -3518,7 +3609,7 @@ function cardMapa(){
   const temMes=new Set(rec.map(x=>x.pay.slice(0,7))); let seq=0; { const d=new Date(); d.setDate(1); if(!temMes.has(chave(d))) d.setMonth(d.getMonth()-1); while(temMes.has(chave(d))){seq++; d.setMonth(d.getMonth()-1);} }
   const isCur=i=>MAPA_ANO===anoAtual&&i===mesAtual;
   const cel=(g,i)=>{const c=g.m[i], v=c.v+c.f; if(!v) return `<td class="${isCur(i)?"cur":""}"><span class="dot"></span></td>`;
-    const sz=Math.round(22+22*Math.sqrt(v/max));
+    const sz=Math.round(34+22*Math.sqrt(v/max));
     const tip=`<b>${g.tk} · ${MES[i]}/${MAPA_ANO}</b>`+c.it.map(x=>`${esc(x.label||"Provento")}: ${money(x.rate)} × ${N0.format(x.qtd)} = <b>${money(x.valor)}</b>${x.recebido?" · pago "+brDate(x.pay):" · a receber"+(x.pay?" em "+brDate(x.pay):"")}`).join("<br>");
     return `<td class="${isCur(i)?"cur":""}"><span class="notaw" data-tip="${esc(tip)}">${nota(sz,!c.v)}</span><span class="cv">${v>=1000?shortBRL(v).replace("R$ ",""):N0.format(Math.round(v))}</span></td>`;};
   return `<div class="card" style="margin-top:14px"><div class="paga-top"><div>${head}</div><div class="toolbar">${filtro}${anos.length>1?`<div class="seg" id="fano">${anos.map(a=>`<button aria-pressed="${a===MAPA_ANO}" data-a="${a}">${a}</button>`).join("")}</div>`:""}</div></div>
@@ -3904,7 +3995,7 @@ function detalhe(tk){
     :isListed(a.cls)?[cell("Cotação",money(m.price)),cell("P/L",n2(m.pl)),cell("P/VP",n2(m.pvp)),cell("ROE",pct(m.roe,1)),cell("Margem líq.",pct(m.margem,1)),cell("Dív.líq/EBITDA",m.divEbitda!=null?n2(m.divEbitda)+"x":"—"),cell("DY 12m",pct(m.dy12)),cell("Liq. corrente",n2(m.liq)),cell("LPA",money(m.eps)),cell("Payout",m.payout!=null?pct(m.payout,0):"—"),cell("Mín. 52s",money(m.low52)),cell("Máx. 52s",money(m.high52)),cell("Peso",pct(p.peso,1))]:[];
   const provs=proventosDe(tk).sort((x,y)=>(y.pay||y.com)<(x.pay||x.com)?-1:1).slice(0,12);
   const lan=V.lanc.filter(l=>l.tk===tk).sort((x,y)=>y.data<x.data?-1:1);
-  modal(`<div class="mh"><div>${tkCell(p)}${m.setor?`<div class="mut" style="font-size:12px;margin-top:4px">${esc(m.setor)}${m.industria?" · "+esc(m.industria):""}</div>`:""}</div><div style="display:flex;gap:8px;align-items:center">${pill(s.lv)}<button class="x" data-close aria-label="Fechar">×</button></div></div>
+  modal(`<div class="mh"><div>${tkCell(p)}${conhecaBtn(tk)}${m.setor?`<div class="mut" style="font-size:12px;margin-top:4px">${esc(m.setor)}${m.industria?" · "+esc(m.industria):""}</div>`:""}</div><div style="display:flex;gap:8px;align-items:center">${pill(s.lv)}<button class="x" data-close aria-label="Fechar">×</button></div></div>
     <div class="grid kpis" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px">
       <div class="card kpi" style="padding:10px"><div class="lb">Posição</div><div class="vl num" style="font-size:17px">${money(p.valor)}</div><div class="sm">${N0.format(p.qtd)} × ${money(p.preco||p.pm)}</div></div>
       <div class="card kpi" style="padding:10px"><div class="lb">Preço médio</div><div class="vl num" style="font-size:17px">${money(p.pm)}</div><div class="sm">Investido ${money(p.custo)}</div></div>
