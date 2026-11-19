@@ -288,6 +288,45 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
 @media(max-width:560px){ .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px} .kpi{padding:12px} .kpi .lb{font-size:10.5px} .kpi .sm{font-size:11px}
   .tk small{max-width:96px} td,th{padding:8px 7px} main{padding:14px 12px 50px} .pghead h2{font-size:18px} .seg{overflow-x:auto;max-width:100%} }
 @media(max-width:560px){ .ind{grid-template-columns:repeat(2,1fr)} .kpi .vl{font-size:19px} .hbar .vv{min-width:76px} }
+/* mapa de dividendos e "o que seus proventos pagam" */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.chips span{background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:12.5px;color:var(--ink-2)}
+.chips b{color:var(--ink)}
+.mapa{border-collapse:separate;border-spacing:0;width:100%;min-width:660px}
+.mapa th,.mapa td{padding:7px 2px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+.mapa thead th{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:capitalize}
+.mapa th:first-child,.mapa td:first-child{position:sticky;left:0;background:var(--surface);text-align:left;padding:7px 10px 7px 4px;z-index:1}
+.mapa td:last-child,.mapa th:last-child{text-align:right;padding-right:6px}
+.mapa .tkd{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.mapa .coin{display:inline-block;width:var(--s);height:var(--s);border-radius:50%;background:var(--cc);vertical-align:middle;cursor:default;
+  box-shadow:inset -2px -3px 0 rgba(0,0,0,.20),inset 2px 2px 0 rgba(255,255,255,.38),0 1px 2px rgba(0,0,0,.15);transition:transform .15s}
+.mapa .coin:hover{transform:scale(1.18)}
+.mapa .coin.fut{background:transparent;border:2px dashed var(--cc);box-shadow:none}
+.mapa .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--line-2)}
+.mapa .cv{display:block;font-size:10px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.mapa tfoot td{font-weight:700;font-size:11.5px;border-bottom:0;padding-top:9px}
+.mapa .cur{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.paga-top{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}
+.paga-v{font-size:30px;font-weight:800;letter-spacing:-.5px}
+.paga-msg{font-size:15px;margin:6px 0 2px;line-height:1.45}
+.cobre{height:10px;border-radius:5px;background:var(--surface-3);overflow:hidden;margin:8px 0 4px}
+.cobre i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--good))}
+.contas{display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));gap:10px;margin-top:14px}
+.conta{border:1px solid var(--line);border-radius:var(--r);padding:11px 11px 10px;background:var(--surface-2);position:relative;opacity:.55}
+.conta .em{font-size:28px;line-height:1;display:inline-block}
+.conta b{display:block;font-size:12.5px;margin-top:7px;line-height:1.25}
+.conta small{color:var(--muted);font-size:11.5px}
+.conta.ok{opacity:1;background:var(--good-bg);border-color:var(--good)}
+.conta.ok::after{content:"✓ paga";position:absolute;top:9px;right:10px;color:var(--good);font-weight:800;font-size:11px}
+.conta.prox{opacity:1;border:1.5px dashed var(--warn)}
+.conta .pb{height:6px;border-radius:3px;background:var(--surface-3);margin-top:8px;overflow:hidden}
+.conta .pb i{display:block;height:100%;background:var(--warn)}
+@keyframes ci-pop{0%{transform:scale(.4) rotate(-12deg);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.conta.ok .em{animation:ci-pop .45s ease-out both}
+.crow{display:grid;grid-template-columns:46px 1fr 92px 34px 34px;gap:6px;margin-bottom:6px}
+.crow input{min-width:0}.crow .ce{text-align:center;font-size:18px;padding-left:2px;padding-right:2px}
+.crow button{padding:0}
+@media (prefers-reduced-motion:reduce){ .conta.ok .em{animation:none} .mapa .coin{transition:none} }
 </style>
 </head>
 <body>
@@ -2243,7 +2282,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-18d";
+const APP_VER="2026-11-19a";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -3091,14 +3130,109 @@ function vProventos(){
   const head=`<thead><tr><th>Ativo</th><th>Tipo</th><th>Data com</th><th>Pagamento</th><th class="r">Qtd</th><th class="r">Valor/cota</th><th class="r">Total</th></tr></thead>`;
   return `<div class="pghead"><div><h2>Proventos</h2><p>Calculados pela quantidade que você tinha na data com. Valores brutos (JCP tem 15% de IR retido). ✎ = registrado por você.</p></div>
     <div class="toolbar"><button class="btn primary" id="bProv">+ Registrar provento</button><button class="btn" id="bProvImp">Importar planilha</button></div></div>${avisos()}
-    <div class="grid kpis">${kp("Últimos 12 meses",money(C.prov12),"Média mensal "+money(C.prov12/12))}${kp("Em "+ano,money(noAno))}${kp("A receber",money(C.provAReceber),fut.length+" pagamentos anunciados")}${kp("Total recebido",money(C.provRec),"Desde o primeiro lançamento")}${kp("DY da carteira",pct(C.dyCart),"Yield on cost "+pct(C.yoc))}</div>
+    <div class="grid kpis">${kp("Últimos 12 meses",money(C.prov12),"Média mensal "+money(C.prov12/12))}${kp("Em "+ano,money(noAno))}${kp("A receber",money(C.provAReceber),fut.length+" pagamentos anunciados")}${kp("Total recebido",money(C.provRec),"Desde o primeiro lançamento")}${kp("DY da carteira",pct(C.dyCart),"Yield on cost "+pct(C.yoc))}</div>${cardPaga(C)}${cardMapa()}
     <div class="grid two" style="margin-top:14px"><div class="card"><h3>Proventos por mês</h3><p class="cap">Últimos 24 meses e próximos 3.</p>${(()=>{const d=provMensal(24,3);return d.some(x=>x.v||x.v2)?`<div class="legend"><span><i style="background:var(--c3)"></i>Recebido</span><span><i style="background:var(--c3);opacity:.38"></i>A receber</span></div>`+barChart(d,{color:"var(--c3)",aria:"Proventos por mês"}):`<div class="empty">Sem proventos.</div>`;})()}</div>
       <div class="card"><h3>Quem mais pagou (12 meses)</h3><p class="cap">Total bruto recebido por ativo.</p>${rk.length?hbars(rk.map(([tk,v])=>({nm:tk,v,color:clsColor(ativo(tk).cls),right:money(v),tip:`<b>${tk}</b>${money(v)} · ${pct(C.prov12?v/C.prov12:0,1)} dos proventos`}))):`<div class="empty">Sem dados.</div>`}</div></div>
     ${fut.length?`<div class="card" style="margin-top:14px"><h3>Próximos pagamentos</h3><div class="tbl-wrap"><table>${head}<tbody>${fut.map(row).join("")}</tbody></table></div></div>`:""}
     <div class="card" style="margin-top:14px"><h3>Histórico</h3><div class="tbl-wrap"><table>${head}<tbody>${all.filter(x=>x.recebido).slice(0,200).map(row).join("")||`<tr><td colspan="7" class="mut">Nada ainda.</td></tr>`}</tbody></table></div></div>`;
 }
 
+/* ---------- MAPA DE DIVIDENDOS e O QUE SEUS PROVENTOS PAGAM ---------- */
+let MAPA_ANO=null, PAGA_P="media";
+const CONTAS_PADRAO=[{e:"⚡",n:"Conta de luz",v:200},{e:"🌐",n:"Internet",v:100},{e:"💧",n:"Conta de água",v:50},{e:"📱",n:"Celular",v:50},
+  {e:"🔥",n:"Gás",v:120},{e:"🎬",n:"Streaming",v:40},{e:"🏋️",n:"Academia",v:100},{e:"⛽",n:"Combustível",v:400},{e:"🛒",n:"Mercado do mês",v:800},
+  {e:"🩺",n:"Plano de saúde",v:600},{e:"🏢",n:"Condomínio",v:600},{e:"🏠",n:"Aluguel",v:1800}];
+const contasLista=()=>(V.prefs.contas&&V.prefs.contas.length?V.prefs.contas:CONTAS_PADRAO);
+const dataProv=x=>x.pay||x.com;
+/* paga as contas na ordem da lista; uma que não cabe é pulada e a sobra tenta as seguintes */
+function pagaCalc(valor){
+  let resto=valor; const it=contasLista().map(c=>({...c,ok:false,parc:0}));
+  for(const c of it) if(c.v>0&&c.v<=resto+1e-9){c.ok=true; resto-=c.v;}
+  const prox=it.filter(c=>!c.ok&&c.v>0).sort((a,b)=>a.v-b.v)[0]||null; if(prox) prox.parc=Math.min(1,resto/prox.v);
+  return {it,resto,prox,pagas:it.filter(c=>c.ok),totalContas:it.reduce((s,c)=>s+(c.v||0),0)};
+}
+function cardPaga(C){
+  const rec=provTks().flatMap(proventosDe).filter(x=>x.recebido);
+  const now=new Date(), meses=[];
+  for(let i=0;i<=12;i++){const d=new Date(now.getFullYear(),now.getMonth()-i,1), k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+    meses.push({k,lb:MES[d.getMonth()]+"/"+String(d.getFullYear()).slice(2),v:rec.filter(x=>x.pay.slice(0,7)===k).reduce((s,x)=>s+x.valor,0)});}
+  const passado=meses[1], melhor=meses.slice(0,12).reduce((a,b)=>b.v>a.v?b:a,meses[0]);
+  const op={media:["Média 12 meses","Média mensal dos últimos 12 meses",C.prov12/12],passado:["Mês passado","Mês passado ("+passado.lb+")",passado.v],melhor:["Melhor mês","Melhor mês dos últimos 12 ("+melhor.lb+")",melhor.v]};
+  if(!op[PAGA_P]) PAGA_P="media";
+  const [,rot,valor]=op[PAGA_P], R=pagaCalc(valor);
+  const nomes=R.pagas.map(c=>c.e+" "+esc(c.n.toLowerCase()));
+  const junta=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a[a.length-1];
+  let msg;
+  if(!(valor>0)) msg=`Ainda não há proventos recebidos nesse período. Assim que eles entrarem, você vê aqui quais contas eles pagam.`;
+  else if(!R.pagas.length) msg=`Ainda não cobre uma conta inteira da lista. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar ${R.prox.e} ${esc(R.prox.n.toLowerCase())}.`;
+  else if(!R.prox) msg=`🎉 Seus proventos pagam <b>todas as contas da lista</b> e ainda sobram <b>${money(R.resto)}</b> por mês.`;
+  else msg=`Seus proventos já pagam ${junta(nomes)}${R.resto>=1?` e sobram <b>${money(R.resto)}</b>`:""}. Faltam <b>${money(R.prox.v-R.resto)}</b> para pagar também ${R.prox.e} ${esc(R.prox.n.toLowerCase())}.`;
+  const cob=R.totalContas?Math.min(1,valor/R.totalContas):0;
+  const anoMeses=R.totalContas?C.prov12/R.totalContas:0;
+  const tiles=R.it.map(c=>`<div class="conta ${c.ok?"ok":c===R.prox?"prox":""}" data-tip="${esc(`<b>${c.e} ${c.n}</b>${money(c.v)} por mês`+(c.ok?"<br>✅ coberta pelos proventos":c===R.prox?`<br>${pct(c.parc,0)} coberto · faltam ${money(c.v-R.resto)}`:""))}"><span class="em">${esc(c.e)}</span><b>${esc(c.n)}</b><small class="num">${money0(c.v)}/mês</small>${c===R.prox?`<div class="pb"><i style="width:${(c.parc*100).toFixed(1)}%"></i></div>`:""}</div>`).join("");
+  return `<div class="card" style="margin-top:14px"><div class="paga-top"><div><h3>O que seus proventos pagam</h3><p class="cap">Sua renda passiva convertida em contas do dia a dia. Toque em <b>Editar contas</b> para usar os seus valores.</p></div>
+      <div class="toolbar"><div class="seg" id="fpaga">${Object.entries(op).map(([k,[t]])=>`<button aria-pressed="${PAGA_P===k}" data-k="${k}">${esc(t)}</button>`).join("")}</div><button class="btn" id="bContas">Editar contas</button></div></div>
+    <div class="paga-top" style="margin-top:8px"><div><div class="mut" style="font-size:12px">${esc(rot)}</div><div class="paga-v num">${money(valor)}</div></div>
+      <div class="mut" style="font-size:12.5px;text-align:right">Cobre <b>${pct(cob,0)}</b> das contas da lista (${money0(R.totalContas)}/mês)</div></div>
+    <div class="cobre" role="img" aria-label="Cobre ${pct(cob,0)} das contas"><i style="width:${(cob*100).toFixed(1)}%"></i></div>
+    <p class="paga-msg">${msg}</p>
+    ${C.prov12>0&&R.totalContas?`<p class="mut" style="font-size:12.5px;margin:2px 0 0">📆 Nos últimos 12 meses você recebeu ${money(C.prov12)}: o bastante para pagar <b>${anoMeses.toLocaleString("pt-BR",{maximumFractionDigits:1})} ${anoMeses>=0.95&&anoMeses<1.05?"mês":"meses"}</b> de todas as contas da lista.</p>`:""}
+    <div class="contas">${tiles}</div></div>`;
+}
+function cardMapa(){
+  const all=provTks().flatMap(proventosDe).filter(dataProv);
+  const anos=[...new Set(all.map(x=>dataProv(x).slice(0,4)))].sort();
+  const head=`<h3>Mapa de dividendos</h3><p class="cap">O que cada ativo pagou mês a mês, pela data de pagamento. Moeda maior = valor maior · cor = classe · tracejada = a receber.</p>`;
+  if(!anos.length) return `<div class="card" style="margin-top:14px">${head}<div class="empty">Sem proventos ainda.</div></div>`;
+  const anoAtual=String(new Date().getFullYear()), mesAtual=new Date().getMonth();
+  if(!MAPA_ANO||!anos.includes(MAPA_ANO)) MAPA_ANO=anos.includes(anoAtual)?anoAtual:anos[anos.length-1];
+  const G={}, tot=Array(12).fill(0), totF=Array(12).fill(0);
+  all.filter(x=>dataProv(x).startsWith(MAPA_ANO)).forEach(x=>{const m=+dataProv(x).slice(5,7)-1;
+    const g=G[x.tk]||(G[x.tk]={tk:x.tk,m:Array.from({length:12},()=>({v:0,f:0,it:[]})),t:0}); const c=g.m[m];
+    if(x.recebido){c.v+=x.valor; tot[m]+=x.valor;} else {c.f+=x.valor; totF[m]+=x.valor;} c.it.push(x); g.t+=x.valor;});
+  const rows=Object.values(G).sort((a,b)=>b.t-a.t);
+  const max=Math.max(...rows.flatMap(g=>g.m.map(c=>c.v+c.f)),0.01);
+  const melhorM=tot.reduce((bi,v,i)=>v>tot[bi]?i:bi,0), comProv=tot.filter(v=>v>0).length, totAno=tot.reduce((a,b)=>a+b,0);
+  /* sequência de meses seguidos recebendo, terminando no mês atual ou no anterior */
+  const rec=all.filter(x=>x.recebido), chave=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+  const temMes=new Set(rec.map(x=>x.pay.slice(0,7))); let seq=0; { const d=new Date(); d.setDate(1); if(!temMes.has(chave(d))) d.setMonth(d.getMonth()-1); while(temMes.has(chave(d))){seq++; d.setMonth(d.getMonth()-1);} }
+  const isCur=i=>MAPA_ANO===anoAtual&&i===mesAtual;
+  const cel=(g,i)=>{const c=g.m[i], v=c.v+c.f; if(!v) return `<td class="${isCur(i)?"cur":""}"><span class="dot"></span></td>`;
+    const sz=Math.round(12+24*Math.sqrt(v/max)), cor=clsColor(ativo(g.tk).cls);
+    const tip=`<b>${g.tk} · ${MES[i]}/${MAPA_ANO}</b>`+c.it.map(x=>`${esc(x.label||"Provento")}: ${money(x.rate)} × ${N0.format(x.qtd)} = <b>${money(x.valor)}</b>${x.recebido?" · pago "+brDate(x.pay):" · a receber"+(x.pay?" em "+brDate(x.pay):"")}`).join("<br>");
+    return `<td class="${isCur(i)?"cur":""}"><span class="coin${c.v?"":" fut"}" style="--s:${sz}px;--cc:${cor}" data-tip="${esc(tip)}"></span><span class="cv">${v>=1000?shortBRL(v).replace("R$ ",""):N0.format(Math.round(v))}</span></td>`;};
+  return `<div class="card" style="margin-top:14px"><div class="paga-top"><div>${head}</div>${anos.length>1?`<div class="seg" id="fano">${anos.map(a=>`<button aria-pressed="${a===MAPA_ANO}" data-a="${a}">${a}</button>`).join("")}</div>`:""}</div>
+    <div class="chips">${totAno?`<span>🏆 Melhor mês: <b>${MES[melhorM]}</b> · ${money(tot[melhorM])}</span>`:""}<span>📅 <b>${comProv}</b> de 12 meses com proventos</span>${seq>1?`<span>🔥 <b>${seq}</b> meses seguidos recebendo</span>`:""}<span>💰 Recebido em ${MAPA_ANO}: <b>${money(totAno)}</b></span>${totF.some(v=>v)?`<span>⏳ A receber: <b>${money(totF.reduce((a,b)=>a+b,0))}</b></span>`:""}</div>
+    <div class="tbl-wrap"><table class="mapa"><thead><tr><th>Ativo</th>${MES.map((m,i)=>`<th class="${isCur(i)?"cur":""}">${m}</th>`).join("")}<th>Total</th></tr></thead>
+    <tbody>${rows.map(g=>`<tr><td><span class="tkd" style="background:${clsColor(ativo(g.tk).cls)}"></span><b>${esc(g.tk)}</b></td>${g.m.map((_,i)=>cel(g,i)).join("")}<td class="num"><b>${money0(g.t)}</b></td></tr>`).join("")}</tbody>
+    <tfoot><tr><td>Total do mês</td>${tot.map((v,i)=>`<td class="num ${isCur(i)?"cur":""}">${v||totF[i]?(i===melhorM&&v?"🏆<br>":"")+N0.format(Math.round(v+totF[i])):"·"}</td>`).join("")}<td class="num">${money0(totAno+totF.reduce((a,b)=>a+b,0))}</td></tr></tfoot></table></div>
+    <p class="mut" style="font-size:11.5px;margin:8px 0 0">Valores brutos em reais, pela quantidade que você tinha na data com. Toque numa moeda para ver o detalhe.</p></div>`;
+}
+function formContas(){
+  let L=contasLista().map(c=>({...c}));
+  const linha=(c,i)=>`<div class="crow" data-i="${i}"><input class="ce" value="${esc(c.e)}" maxlength="4" aria-label="Ícone"><input class="cn" value="${esc(c.n)}" placeholder="Nome da conta" aria-label="Conta"><input class="cv2" inputmode="decimal" value="${c.v?String(c.v).replace(".",","):""}" placeholder="R$/mês" aria-label="Valor por mês (R$)"><button type="button" class="btn" data-up title="Subir na lista" aria-label="Subir">↑</button><button type="button" class="btn" data-rm title="Remover" aria-label="Remover">×</button></div>`;
+  modal(`<div class="mh"><h3>Suas contas do mês</h3><button class="x" data-close aria-label="Fechar">×</button></div>
+    <p class="mut" style="font-size:12.5px;margin-top:0">Os proventos pagam as contas de cima para baixo. Deixe no topo as que você quer cobrir primeiro. Use os valores das suas contas.</p>
+    <div id="clist"></div>
+    <div class="acts" style="justify-content:space-between;flex-wrap:wrap"><div style="display:flex;gap:8px"><button class="btn" id="cAdd">+ Conta</button><button class="btn" id="cPad">Restaurar padrão</button></div><div style="display:flex;gap:8px"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="cOk">Salvar</button></div></div>`,
+  (ov,close)=>{
+    const box=ov.querySelector("#clist");
+    const ler=()=>{L=[...box.querySelectorAll(".crow")].map(r=>({e:r.querySelector(".ce").value.trim()||"💸",n:r.querySelector(".cn").value.trim(),v:parseNum(r.querySelector(".cv2").value)||0}));};
+    const pinta=()=>{box.innerHTML=L.map(linha).join("");};
+    pinta();
+    box.addEventListener("click",e=>{const r=e.target.closest(".crow"); if(!r) return; const i=+r.dataset.i;
+      if(e.target.closest("[data-up]")&&i>0){ler(); [L[i-1],L[i]]=[L[i],L[i-1]]; pinta();}
+      else if(e.target.closest("[data-rm]")){ler(); L.splice(i,1); pinta();}});
+    ov.querySelector("#cAdd").addEventListener("click",()=>{ler(); L.push({e:"💸",n:"",v:0}); pinta(); box.lastElementChild.querySelector(".cn").focus();});
+    ov.querySelector("#cPad").addEventListener("click",()=>{L=CONTAS_PADRAO.map(c=>({...c})); pinta();});
+    ov.querySelector("#cOk").addEventListener("click",()=>{ler(); V.prefs.contas=L.filter(c=>c.n&&c.v>0); save(); close(); render(); toast("Contas salvas.");});
+  });
+}
+
 vProventos.after=m=>{
+  const fp=$("#fpaga"); if(fp) fp.addEventListener("click",e=>{const b=e.target.closest("button[data-k]"); if(b){PAGA_P=b.dataset.k; render();}});
+  const fa=$("#fano"); if(fa) fa.addEventListener("click",e=>{const b=e.target.closest("button[data-a]"); if(b){MAPA_ANO=b.dataset.a; render();}});
+  const bc=$("#bContas"); if(bc) bc.addEventListener("click",formContas);
   $("#bProv").addEventListener("click",()=>formProv());
   $("#bProvImp").addEventListener("click",importarProv);
   m.querySelectorAll("tr[data-pm]").forEach(r=>r.addEventListener("click",()=>formProv(V.provMan.find(x=>x.id===r.dataset.pm))));
