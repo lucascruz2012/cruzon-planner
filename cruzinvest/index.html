@@ -400,6 +400,7 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
         <span class="upd" id="sync" title="Estado da sincronização entre aparelhos"></span><span class="upd" id="upd"></span>
         <button class="iconbtn hidden" data-instalar title="Instalar o CruzInvest neste aparelho" aria-label="Instalar app"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
         <button class="iconbtn" id="bAtualizar" title="Atualizar cotações e indicadores" aria-label="Atualizar dados"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
+        <button class="iconbtn" id="bRecarregar" title="Recarregar o app (busca a versão nova sem sair da conta)" aria-label="Recarregar app"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.66-5.66L20 8.5"/><path d="M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.66 5.66L4 15.5"/><path d="M4 20v-4.5h4.5"/></svg></button>
         <button class="iconbtn" id="bTema" title="Trocar tema" aria-label="Trocar tema"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
         <button class="iconbtn" id="bSair" title="Bloquear" aria-label="Bloquear"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
       </div>
@@ -2282,7 +2283,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-19b";
+const APP_VER="2026-11-19c";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -2438,13 +2439,39 @@ async function abrirOffline(email,pass){
   KEY=await deriveKey(pass,w.salt,w.iter); V=await unseal(w.box,KEY); SALT=w.salt; ITERS=w.iter; TS_REMOTO=w.ts||null; normV();
   ME=SESSION&&SESSION.user?{id:SESSION.user.id,email:SESSION.user.email}:null; OFFLINE=true;
 }
+/* ---------- continuar conectado ao recarregar ----------
+   A chave AES fica guardada no IndexedDB do aparelho como CryptoKey NÃO exportável (o navegador nunca entrega
+   os bytes da chave ao código). Vale só enquanto não passar o tempo de bloqueio por inatividade (Ajustes). */
+const KDB="cruzinvest_chave";
+function kdb(){return new Promise((ok,ko)=>{const r=indexedDB.open(KDB,1); r.onupgradeneeded=()=>r.result.createObjectStore("k"); r.onsuccess=()=>ok(r.result); r.onerror=()=>ko(r.error);});}
+async function kdbOp(modo,fn){ const db=await kdb(); return new Promise((ok,ko)=>{const tx=db.transaction("k",modo), st=tx.objectStore("k"); const r=fn(st); tx.oncomplete=()=>{db.close(); ok(r&&r.result);}; tx.onerror=()=>{db.close(); ko(tx.error);};}); }
+const lockMs=()=>(+(V&&V.prefs.lock)||15)*60000;
+let KSAVE=0;
+async function guardaChave(){ if(!KEY||!V) return; KSAVE=Date.now();
+  try{ await kdbOp("readwrite",st=>st.put({key:KEY,salt:SALT,iter:ITERS,me:ME,nuvem:NUVEM,ate:Date.now()+lockMs()},"s")); }catch(e){} }
+async function apagaChave(){ try{ await kdbOp("readwrite",st=>st.delete("s")); }catch(e){} }
+async function retomar(){
+  try{
+    const s=await kdbOp("readonly",st=>st.get("s")); if(!s||!s.key||!(s.ate>Date.now())) return false;
+    const w=readVault(); if(!w||w.salt!==s.salt) return false;
+    if(s.me&&(!SESSION||!SESSION.user||SESSION.user.id!==s.me.id)) return false;
+    KEY=s.key; V=await unseal(w.box,KEY); SALT=w.salt; ITERS=w.iter; TS_REMOTO=w.ts||null; ME=s.me||null; NUVEM=s.nuvem!==false; OFFLINE=false; normV();
+    enterApp(); return true;
+  }catch(e){ KEY=null; V=null; return false; }
+}
+function recarregarApp(){
+  const vai=()=>{ guardaChave().finally(()=>{ const r=navigator.serviceWorker&&navigator.serviceWorker.getRegistration?navigator.serviceWorker.getRegistration().then(g=>g&&g.update()).catch(()=>{}):Promise.resolve();
+    Promise.race([r,new Promise(ok=>setTimeout(ok,1500))]).finally(()=>location.reload()); }); };
+  toast("Recarregando…"); (DIRTY?save(true):Promise.resolve()).finally(vai);
+}
 function lock(){
-  clearTimeout(LOCKT); clearInterval(POLL);
+  clearTimeout(LOCKT); clearInterval(POLL); apagaChave();
   const fim=()=>{KEY=null;V=null;RO=false;ACESSO=null;CruzonAssinatura.limpa();$("#main").innerHTML="";$("#app").classList.add("hidden");showLogin();};
   (DIRTY?save(true):Promise.resolve()).finally(fim);
 }
 async function sairConta(){ try{ await sb("/auth/v1/logout",{method:"POST"}); }catch(e){} clearSession(); localStorage.removeItem(VKEY); ME=null; lock(); }
-function armLock(){ clearTimeout(LOCKT); if(!V) return; const m=+V.prefs.lock||15; LOCKT=setTimeout(lock,m*60000); }
+function armLock(){ clearTimeout(LOCKT); if(!V) return; const m=+V.prefs.lock||15; LOCKT=setTimeout(lock,m*60000); if(KEY&&Date.now()-KSAVE>60000) guardaChave(); }
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden"&&KEY) guardaChave(); });
 ["click","keydown","touchstart","scroll"].forEach(e=>addEventListener(e,()=>{if(KEY)armLock();},{passive:true}));
 
 /* ======================= TELAS DE LOGIN ======================= */
@@ -2566,7 +2593,7 @@ function assinaturaInvHtml(){
 }
 function enterApp(){
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
-  applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
+  applyTheme(V.prefs.tema); armLock(); guardaChave(); go(VIEW||"painel");
   marca(!ME?"Só neste aparelho":!NUVEM?"Nuvem indisponível":OFFLINE?"Sem conexão":"Sincronizado ✓",!ME||!NUVEM||OFFLINE);
   clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); verificaAcessoInv(); iniciaTicker(); mostraInstalar(); carregaFiis(); carregaAcoes(); carregaMax52(); carregaRend();
   const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
@@ -2582,6 +2609,7 @@ $("#bTema").addEventListener("click",()=>{const i=(TEMAS.indexOf(V.prefs.tema)+1
   toast("Tema: "+({brand:"CruzOn",light:"Claro",dark:"Escuro"})[V.prefs.tema]);});
 $("#bSair").addEventListener("click",lock);
 $("#bAtualizar").addEventListener("click",()=>atualizar(false));
+$("#bRecarregar").addEventListener("click",recarregarApp);
 
 /* ======================= CLASSES DE ATIVO ======================= */
 const CLASSES=["Ação","FII","ETF","BDR","Renda fixa","Outro"];
@@ -3731,7 +3759,8 @@ document.addEventListener("click",e=>{ if(e.target.closest("[data-instalar]")) i
 
 /* ======================= INÍCIO ======================= */
 if(!window.crypto||!crypto.subtle){document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">Este navegador não suporta criptografia segura. Abra o CruzInvest pelo endereço https:// em um navegador atualizado.</p>';}
-else { wireEyes($("#login")); showLogin(); mostraInstalar(); if(/[?&]cadastro=1/.test(location.search)){ mostra("#fCriar"); setTimeout(()=>$("#cNome").focus(),60); } }
+else { wireEyes($("#login")); mostraInstalar();
+  (/[?&]cadastro=1/.test(location.search)?Promise.resolve(false):retomar()).then(ok=>{ if(ok) return; showLogin(); if(/[?&]cadastro=1/.test(location.search)){ mostra("#fCriar"); setTimeout(()=>$("#cNome").focus(),60); } }); }
 if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
