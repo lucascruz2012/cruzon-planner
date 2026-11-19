@@ -400,6 +400,7 @@ tbody tr.click:hover td:first-child{background:var(--surface-2)}
         <span class="upd" id="sync" title="Estado da sincronização entre aparelhos"></span><span class="upd" id="upd"></span>
         <button class="iconbtn hidden" data-instalar title="Instalar o CruzInvest neste aparelho" aria-label="Instalar app"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button>
         <button class="iconbtn" id="bAtualizar" title="Atualizar cotações e indicadores" aria-label="Atualizar dados"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
+        <button class="iconbtn" id="bRecarregar" title="Recarregar o app (busca a versão nova sem sair da conta)" aria-label="Recarregar app"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.66-5.66L20 8.5"/><path d="M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.66 5.66L4 15.5"/><path d="M4 20v-4.5h4.5"/></svg></button>
         <button class="iconbtn" id="bTema" title="Trocar tema" aria-label="Trocar tema"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
         <button class="iconbtn" id="bSair" title="Bloquear" aria-label="Bloquear"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
       </div>
@@ -2282,7 +2283,7 @@ async function deriveKey(pass,saltB64,iter){
   const km=await SUB.importKey("raw",ENC.encode(pass),{name:"PBKDF2"},false,["deriveKey"]);
   return SUB.deriveKey({name:"PBKDF2",salt:ub64(saltB64),iterations:iter||ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
 }
-const APP_VER="2026-11-19a";
+const APP_VER="2026-11-19c";
 async function seal(obj,key){ /* campos que começam com "_" (pendências, avisos) são deste aparelho e não vão para a nuvem */
   const o=obj&&obj.perfil?Object.fromEntries(Object.entries(obj).filter(([k])=>k[0]!=="_")):obj;
   const iv=rnd(12);const ct=await SUB.encrypt({name:"AES-GCM",iv},key,ENC.encode(JSON.stringify(o)));return{iv:b64(iv),ct:b64(ct)};}
@@ -2438,13 +2439,39 @@ async function abrirOffline(email,pass){
   KEY=await deriveKey(pass,w.salt,w.iter); V=await unseal(w.box,KEY); SALT=w.salt; ITERS=w.iter; TS_REMOTO=w.ts||null; normV();
   ME=SESSION&&SESSION.user?{id:SESSION.user.id,email:SESSION.user.email}:null; OFFLINE=true;
 }
+/* ---------- continuar conectado ao recarregar ----------
+   A chave AES fica guardada no IndexedDB do aparelho como CryptoKey NÃO exportável (o navegador nunca entrega
+   os bytes da chave ao código). Vale só enquanto não passar o tempo de bloqueio por inatividade (Ajustes). */
+const KDB="cruzinvest_chave";
+function kdb(){return new Promise((ok,ko)=>{const r=indexedDB.open(KDB,1); r.onupgradeneeded=()=>r.result.createObjectStore("k"); r.onsuccess=()=>ok(r.result); r.onerror=()=>ko(r.error);});}
+async function kdbOp(modo,fn){ const db=await kdb(); return new Promise((ok,ko)=>{const tx=db.transaction("k",modo), st=tx.objectStore("k"); const r=fn(st); tx.oncomplete=()=>{db.close(); ok(r&&r.result);}; tx.onerror=()=>{db.close(); ko(tx.error);};}); }
+const lockMs=()=>(+(V&&V.prefs.lock)||15)*60000;
+let KSAVE=0;
+async function guardaChave(){ if(!KEY||!V) return; KSAVE=Date.now();
+  try{ await kdbOp("readwrite",st=>st.put({key:KEY,salt:SALT,iter:ITERS,me:ME,nuvem:NUVEM,ate:Date.now()+lockMs()},"s")); }catch(e){} }
+async function apagaChave(){ try{ await kdbOp("readwrite",st=>st.delete("s")); }catch(e){} }
+async function retomar(){
+  try{
+    const s=await kdbOp("readonly",st=>st.get("s")); if(!s||!s.key||!(s.ate>Date.now())) return false;
+    const w=readVault(); if(!w||w.salt!==s.salt) return false;
+    if(s.me&&(!SESSION||!SESSION.user||SESSION.user.id!==s.me.id)) return false;
+    KEY=s.key; V=await unseal(w.box,KEY); SALT=w.salt; ITERS=w.iter; TS_REMOTO=w.ts||null; ME=s.me||null; NUVEM=s.nuvem!==false; OFFLINE=false; normV();
+    enterApp(); return true;
+  }catch(e){ KEY=null; V=null; return false; }
+}
+function recarregarApp(){
+  const vai=()=>{ guardaChave().finally(()=>{ const r=navigator.serviceWorker&&navigator.serviceWorker.getRegistration?navigator.serviceWorker.getRegistration().then(g=>g&&g.update()).catch(()=>{}):Promise.resolve();
+    Promise.race([r,new Promise(ok=>setTimeout(ok,1500))]).finally(()=>location.reload()); }); };
+  toast("Recarregando…"); (DIRTY?save(true):Promise.resolve()).finally(vai);
+}
 function lock(){
-  clearTimeout(LOCKT); clearInterval(POLL);
+  clearTimeout(LOCKT); clearInterval(POLL); apagaChave();
   const fim=()=>{KEY=null;V=null;RO=false;ACESSO=null;CruzonAssinatura.limpa();$("#main").innerHTML="";$("#app").classList.add("hidden");showLogin();};
   (DIRTY?save(true):Promise.resolve()).finally(fim);
 }
 async function sairConta(){ try{ await sb("/auth/v1/logout",{method:"POST"}); }catch(e){} clearSession(); localStorage.removeItem(VKEY); ME=null; lock(); }
-function armLock(){ clearTimeout(LOCKT); if(!V) return; const m=+V.prefs.lock||15; LOCKT=setTimeout(lock,m*60000); }
+function armLock(){ clearTimeout(LOCKT); if(!V) return; const m=+V.prefs.lock||15; LOCKT=setTimeout(lock,m*60000); if(KEY&&Date.now()-KSAVE>60000) guardaChave(); }
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden"&&KEY) guardaChave(); });
 ["click","keydown","touchstart","scroll"].forEach(e=>addEventListener(e,()=>{if(KEY)armLock();},{passive:true}));
 
 /* ======================= TELAS DE LOGIN ======================= */
@@ -2566,7 +2593,7 @@ function assinaturaInvHtml(){
 }
 function enterApp(){
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
-  applyTheme(V.prefs.tema); armLock(); go(VIEW||"painel");
+  applyTheme(V.prefs.tema); armLock(); guardaChave(); go(VIEW||"painel");
   marca(!ME?"Só neste aparelho":!NUVEM?"Nuvem indisponível":OFFLINE?"Sem conexão":"Sincronizado ✓",!ME||!NUVEM||OFFLINE);
   clearInterval(POLL); POLL=setInterval(verificaRemoto,15000); verificaAcessoInv(); iniciaTicker(); mostraInstalar(); carregaFiis(); carregaAcoes(); carregaMax52(); carregaRend();
   const old=!V.meta.upd||(Date.now()-new Date(V.meta.upd).getTime())>(V.prefs.autoHoras||6)*3600000;
@@ -2582,6 +2609,7 @@ $("#bTema").addEventListener("click",()=>{const i=(TEMAS.indexOf(V.prefs.tema)+1
   toast("Tema: "+({brand:"CruzOn",light:"Claro",dark:"Escuro"})[V.prefs.tema]);});
 $("#bSair").addEventListener("click",lock);
 $("#bAtualizar").addEventListener("click",()=>atualizar(false));
+$("#bRecarregar").addEventListener("click",recarregarApp);
 
 /* ======================= CLASSES DE ATIVO ======================= */
 const CLASSES=["Ação","FII","ETF","BDR","Renda fixa","Outro"];
@@ -3356,11 +3384,11 @@ async function lerArquivosB3(files){
           else if(/grupamento/.test(mv)) P.avisos.push("Grupamento em "+tk+" ("+brDate(d)+"): confira a quantidade depois de importar.");
         });
         tipos.push(np+" proventos"+(ne?", "+ne+" eventos (bonificação/desdobro)":""));
-      } else if(H.includes("tipo de evento")&&H.includes("pagamento")){ /* Proventos recebidos */
-        const iPr=col(H,"produto"),iPg=col(H,"pagamento"),iT=col(H,"tipo de evento"),iQ=col(H,"quantidade"),iU=col(H,"preco unitario"),iV=col(H,"valor liquido");
+      } else if(H.includes("tipo de evento")&&(H.includes("pagamento")||H.includes("previsao de pagamento"))){ /* Proventos recebidos / Eventos: proventos a receber */
+        const iPr=col(H,"produto"),iPg=col(H,"pagamento","previsao de pagamento"),iT=col(H,"tipo de evento"),iQ=col(H,"quantidade"),iU=col(H,"preco unitario"),iV=col(H,"valor liquido");
         let n=0; body.forEach(r=>{const tk=tkB3(r[iPr]), d=dataB3(r[iPg]), q=numB3(r[iQ]); let u=numB3(r[iU]); const v=numB3(r[iV]); if(!(u>0)&&v>0&&q>0) u=v/q;
           if(tk&&d&&u>0&&q>0){P.provs.push({tk,label:labelProv(r[iT]),pay:d,rate:u,qtd:q}); n++;}});
-        tipos.push(n+" proventos");
+        tipos.push(n+(H.includes("previsao de pagamento")?" proventos a receber":" proventos"));
       } else if(H.includes("codigo de negociacao")&&H.includes("quantidade")&&!H.some(h=>h.startsWith("periodo"))){ /* Posição */
         const iC=col(H,"codigo de negociacao"),iQ=col(H,"quantidade"),iF=col(H,"preco de fechamento"),iPr=col(H,"produto");
         posArq=posArq||{data:dArq,q:{},preco:{},cls:{},nome:{}}; let n=0;
@@ -3413,26 +3441,30 @@ function importarB3(){
     <ol style="font-size:12.5px;color:var(--ink-2);margin:0 0 10px;padding-left:18px;line-height:1.6">
       <li><b>Extratos → Negociação</b>, no maior período disponível: compras e vendas.</li>
       <li><b>Relatórios → Consolidado mensal</b> mais recente (ou <b>Extratos → Posição</b>): confere a quantidade de cada ativo.</li>
-      <li><b>Extratos → Movimentação</b>, opcional: proventos, bonificações e desdobramentos.</li></ol>
+      <li><b>Extratos → Movimentação</b>, opcional: proventos, bonificações e desdobramentos.</li>
+      <li><b>Extratos → Eventos</b>, opcional: proventos já anunciados e a receber.</li></ol>
+    <p class="mut" style="font-size:12px;margin:0 0 10px">Para atualizar uma carteira já cadastrada, basta mandar os extratos do período novo: o app acrescenta só o que falta.</p>
     <div class="fld"><label>Arquivos Excel da B3</label><input type="file" id="bFiles" accept=".xlsx,.xls" multiple></div>
     <div id="bRes" style="margin-top:12px;font-size:12.5px"></div>
     <div class="acts"><button class="btn" data-close>Cancelar</button><button class="btn primary" id="bOk" disabled>Importar</button></div>`,
   (ov,close)=>{
     let P=null, plan=null; const res=ov.querySelector("#bRes"), ok=ov.querySelector("#bOk");
     const desenha=()=>{
-      const sub=ov.querySelector("#bSub")?ov.querySelector("#bSub").checked:true;
+      const sub=ov.querySelector("#bSub")?ov.querySelector("#bSub").checked:(!V.lanc.length||!!P.pos);
       plan=planoB3(P,sub);
-      const provNovos=P.provs.length;
+      const chP=d=>d.tk+"|"+d.pay+"|"+(+d.rate).toFixed(6), temP=new Set(sub?[]:V.provMan.map(chP));
+      const provNovos=P.provs.filter(d=>!temP.has(chP(d))).length, provDup=P.provs.length-provNovos;
       res.innerHTML=`<div class="banner info" style="margin:0 0 10px;display:block">${P.lidos.map(l=>`📄 <b>${esc(l.nome)}</b>: ${esc(l.tipos)}`).join("<br>")}</div>
-        <label class="chk" style="margin:0 0 10px"><input type="checkbox" id="bSub" ${sub?"checked":""}> Substituir os lançamentos e proventos atuais (recomendado: a B3 tem o histórico oficial)</label>
-        <p style="margin:0 0 8px"><b class="pos">${plan.novos.length} lançamento(s)</b> e <b class="pos">${provNovos} provento(s)</b> serão importados${plan.dup?` · ${plan.dup} já existiam`:""}${P.rf.length?` · ${P.rf.length} título(s) de renda fixa`:""}.</p>
-        ${!P.pos?`<div class="banner warn" style="margin:0 0 8px">⚠️ <div>Sem relatório de posição: ativos comprados antes de <b>${brDate(plan.inicio)}</b> ficariam de fora. Inclua o <b>Consolidado mensal</b> mais recente.</div></div>`:""}
+        <label class="chk" style="margin:0 0 10px"><input type="checkbox" id="bSub" ${sub?"checked":""}> Substituir os lançamentos e proventos atuais (use com o extrato completo e o consolidado mensal)</label>
+        ${!sub&&V.lanc.length?`<p class="mut" style="margin:0 0 8px">➕ Modo <b>acrescentar</b>: só entra o que ainda não está no app; o que já existe é mantido.</p>`:""}
+        <p style="margin:0 0 8px"><b class="pos">${plan.novos.length} lançamento(s)</b> e <b class="pos">${provNovos} provento(s)</b> serão importados${plan.dup||provDup?` · já estavam no app: ${[plan.dup?plan.dup+" lançamento(s)":"",provDup?provDup+" provento(s)":""].filter(Boolean).join(" e ")}`:""}${P.rf.length?` · ${P.rf.length} título(s) de renda fixa`:""}.</p>
+        ${!P.pos&&(sub||!V.lanc.length)?`<div class="banner warn" style="margin:0 0 8px">⚠️ <div>Sem relatório de posição: ativos comprados antes de <b>${brDate(plan.inicio)}</b> ficariam de fora. Inclua o <b>Consolidado mensal</b> mais recente.</div></div>`:""}
         ${plan.ini.length?`<div class="banner warn" style="margin:0 0 8px;display:block">✍️ <b>${plan.ini.length} ativo(s) têm cotas compradas antes de ${brDate(plan.inicio)}</b>, fora do período das negociações. Informe o <b>preço médio atual</b> (o que aparece na corretora ou no Investidor10). Para ativos já vendidos, informe o preço médio que você pagou. Em branco, o app usa uma estimativa.</div>
           <div class="tbl-wrap"><table><thead><tr><th>Ativo</th><th class="r">Cotas antes</th><th class="r">Cotas hoje</th><th class="r">Preço médio (R$)</th></tr></thead><tbody>
           ${plan.ini.map((x,i)=>`<tr><td><b>${x.tk}</b></td><td class="r">${N0.format(x.qtd)}</td><td class="r">${N0.format(x.qHoje)}</td><td class="r"><input data-ini="${i}" inputmode="decimal" placeholder="${n2(x.sug)}" style="width:110px;padding:6px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--surface-2);text-align:right"></td></tr>`).join("")}</tbody></table></div>`:""}
         ${P.avisos.length?`<details><summary>Observações (${P.avisos.length})</summary><ul style="margin:6px 0 0;padding-left:18px">${P.avisos.map(a=>`<li>${esc(a)}</li>`).join("")}</ul></details>`:""}`;
       ov.querySelector("#bSub").addEventListener("change",desenha);
-      ok.disabled=!(plan.novos.length||plan.ini.length||P.provs.length||P.rf.length);
+      ok.disabled=!(plan.novos.length||plan.ini.length||provNovos||P.rf.length);
     };
     ov.querySelector("#bFiles").addEventListener("change",async e=>{
       const fs=[...e.target.files]; if(!fs.length) return; res.innerHTML="Lendo arquivos…"; ok.disabled=true;
@@ -3727,7 +3759,8 @@ document.addEventListener("click",e=>{ if(e.target.closest("[data-instalar]")) i
 
 /* ======================= INÍCIO ======================= */
 if(!window.crypto||!crypto.subtle){document.body.innerHTML='<p style="padding:30px;font-family:sans-serif">Este navegador não suporta criptografia segura. Abra o CruzInvest pelo endereço https:// em um navegador atualizado.</p>';}
-else { wireEyes($("#login")); showLogin(); mostraInstalar(); if(/[?&]cadastro=1/.test(location.search)){ mostra("#fCriar"); setTimeout(()=>$("#cNome").focus(),60); } }
+else { wireEyes($("#login")); mostraInstalar();
+  (/[?&]cadastro=1/.test(location.search)?Promise.resolve(false):retomar()).then(ok=>{ if(ok) return; showLogin(); if(/[?&]cadastro=1/.test(location.search)){ mostra("#fCriar"); setTimeout(()=>$("#cNome").focus(),60); } }); }
 if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
